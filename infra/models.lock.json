@@ -1,5 +1,5 @@
 {
-  "_nota": "llama_cpp preenchido na F0.2 (27/10/2026); modelos e llama_swap ficam para F0.3 e F0.6. sha256 conferido por infra/verify_models.ps1.",
+  "_nota": "llama_cpp preenchido na F0.2; modelos na F0.3 (27/10/2026); llama_swap fica para a F0.6. sha256 conferido por infra/verify_models.ps1.",
   "llama_cpp": {
     "versao": "b11932",
     "publicado": "2026-10-27",
@@ -37,41 +37,48 @@
     {
       "papel": "llm-principal",
       "repo": "unsloth/Qwen3.6-35B-A3B-GGUF",
-      "arquivo": null,
+      "arquivo": "Qwen3.6-35B-A3B-UD-Q4_K_XL.gguf",
       "quantizacao": "UD-Q4_K_XL",
-      "sha256": null
+      "bytes": 22360456160,
+      "sha256": "707a55a8a4397ecde44de0c499d3e68c1ad1d240d1da65826b4949d1043f4450",
+      "arquitetura": "qwen35moe"
     },
     {
       "papel": "llm-rapido",
-      "repo": null,
-      "arquivo": null,
-      "quantizacao": null,
-      "sha256": null,
-      "_alvo": "gpt-oss-20b"
+      "repo": "ggml-org/gpt-oss-20b-GGUF",
+      "arquivo": "gpt-oss-20b-MXFP4.gguf",
+      "quantizacao": "MXFP4",
+      "bytes": 12109566624,
+      "sha256": "27cd6c432c7672cb812a92f611cf3ba7bbc35928262bb1e1253ff4ee6ae35901",
+      "arquitetura": "gpt-oss"
     },
     {
       "papel": "juiz",
-      "repo": null,
-      "arquivo": null,
+      "repo": "google/gemma-4-26B-A4B-it-qat-q4_0-gguf",
+      "arquivo": "gemma-4-26B_q4_0-it.gguf",
       "quantizacao": "QAT Q4_0",
-      "sha256": null,
-      "_alvo": "Gemma 4 26B-A4B"
+      "bytes": 14439363584,
+      "sha256": "3eca3b8f6d7baf218a7dd6bba5fb59a56ee25fe2d567b6f5f589b4f697eca51d",
+      "arquitetura": "gemma4"
     },
     {
       "papel": "embeddings",
-      "repo": null,
-      "arquivo": null,
+      "repo": "Qwen/Qwen3-Embedding-0.6B-GGUF",
+      "arquivo": "Qwen3-Embedding-0.6B-Q8_0.gguf",
       "quantizacao": "Q8_0",
-      "sha256": null,
-      "_alvo": "Qwen3-Embedding-0.6B"
+      "bytes": 639150592,
+      "sha256": "06507c7b42688469c4e7298b0a1e16deff06caf291cf0a5b278c308249c3e439",
+      "arquitetura": "qwen3 (pooling last, 1024 dims)"
     },
     {
       "papel": "reranker",
-      "repo": null,
-      "arquivo": null,
+      "repo": "ggml-org/Qwen3-Reranker-0.6B-Q8_0-GGUF",
+      "arquivo": "qwen3-reranker-0.6b-q8_0.gguf",
       "quantizacao": "Q8_0",
-      "sha256": null,
-      "_alvo": "Qwen3-Reranker-0.6B"
+      "bytes": 639153184,
+      "sha256": "22c9979ce4fbcdc5acdc310c6641c32797eff1aa980b8f7a2db8a8ea23429a48",
+      "arquitetura": "qwen3 (pooling rank, cls.output.weight)"
     }
-  ]
+  ],
+  "dir_modelos": "C:/modelos"
 }

@@ -28,8 +28,9 @@
 - [x] **F0.2** Instalar o llama.cpp em dois builds (Vulkan e HIP/ROCm) e fixar a versão em `infra/models.lock.json`
   - aceite: `llama-server --list-devices` mostra a RX 9070 nos dois builds
   - nota: llama.cpp b11932 (27/10/2026), SHA-256 conferido; Vulkan e HIP listam a RX 9070. O HIP precisa das DLLs hipblas/rocblas, que vêm de wheels `rocm-sdk` 10.0.0 em `infra/bin/rocm-venv` (~1,1 GB); `infra/hip-env.ps1` ajusta o PATH do processo
-- [~] **F0.3** Baixar os GGUF da matriz (§8) e registrar repositório, arquivo, quantização e SHA-256
+- [x] **F0.3** Baixar os GGUF da matriz (§8) e registrar repositório, arquivo, quantização e SHA-256
   - aceite: `infra/verify_models.ps1` confere todos os hashes sem erro
+  - nota: 5 GGUF (50,19 GB) em `C:\modelos`, SHA-256 do Hugging Face conferido no download e por `infra/verify_models.ps1`; alternativas da matriz ficam para a F9
 - [ ] **F0.4** Medir cada LLM com `llama-bench` (pp512 e tg128) nos dois backends
   - aceite: tabela em `docs/adr/ADR-001-backend.md`; backend escolhido para `indexar` e para `consultar`
   - depende: F0.2, F0.3
