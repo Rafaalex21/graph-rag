@@ -25,7 +25,7 @@
   - aceite: commit inicial com README apontando para os documentos
   - depende: F0.0
   - nota: repositório privado `Rafaalex21/graph-rag`; 11 marcos, 72 issues e workflows CI e ETAPAS conferidos em 27/10/2026
-- [ ] **F0.2** Instalar o llama.cpp em dois builds (Vulkan e HIP/ROCm) e fixar a versão em `infra/models.lock.json`
+- [~] **F0.2** Instalar o llama.cpp em dois builds (Vulkan e HIP/ROCm) e fixar a versão em `infra/models.lock.json`
   - aceite: `llama-server --list-devices` mostra a RX 9070 nos dois builds
 - [ ] **F0.3** Baixar os GGUF da matriz (§8) e registrar repositório, arquivo, quantização e SHA-256
   - aceite: `infra/verify_models.ps1` confere todos os hashes sem erro
