@@ -35,7 +35,7 @@
   - aceite: tabela em `docs/adr/ADR-001-backend.md`; backend escolhido para `indexar` e para `consultar`
   - nota: 14 corridas (3 LLMs × Vulkan e HIP; Qwen3.6 com `--n-cpu-moe` 20 a 40). Decisão proposta: `indexar` em HIP, `consultar` e `consultar-rapido` em Vulkan; achados que contrariam a ARQUITETURA.md aguardam revisão
   - depende: F0.2, F0.3
-- [ ] **F0.5** Calibrar `--n-cpu-moe` do Qwen3.6-35B-A3B para 2 × 16K de contexto
+- [~] **F0.5** Calibrar `--n-cpu-moe` do Qwen3.6-35B-A3B para 2 × 16K de contexto
   - aceite: pico de VRAM ≤ 15,2 GB e de RAM ≤ 28 GB; geração ≥ 20 tok/s
   - depende: F0.4
 - [ ] **F0.6** Configurar o `llama-swap` com os perfis `indexar`, `vetorizar`, `consultar`, `consultar-rapido` e `avaliar`
