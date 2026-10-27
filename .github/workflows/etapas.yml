@@ -9,6 +9,11 @@ on:
     paths: ["docs/ETAPAS.md", "tools/**"]
   workflow_dispatch:
 
+# Duas sincronias simultâneas leem a mesma lista e criam issues em dobro: uma de cada vez.
+concurrency:
+  group: etapas-sync
+  cancel-in-progress: false
+
 jobs:
   validar:
     runs-on: ubuntu-latest

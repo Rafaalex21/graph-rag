@@ -137,6 +137,10 @@ def main() -> int:
                        "--json", "number,title,state,labels")
         for it in json.loads(saida or "[]"):
             if m := TITULO_RE.match(it["title"]):
+                if m[1] in numeros:  # duplicata: vale a issue mais antiga
+                    print(f"aviso: {m[1]} tem mais de uma issue (#{numeros[m[1]]} e #{it['number']})")
+                    if it["number"] > numeros[m[1]]:
+                        continue
                 numeros[m[1]] = it["number"]
                 estado[m[1]] = it["state"]
                 rotulos_atuais[m[1]] = {x["name"] for x in it["labels"]}

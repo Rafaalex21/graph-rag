@@ -72,23 +72,29 @@ if (-not $SoIssues) {
     if ($LASTEXITCODE -ne 0) { Falhar "git commit falhou." }
   }
 
+  # O push fica para depois da sincronia: ele dispara a ação ETAPAS, que, rodando ao mesmo tempo, duplicaria as issues.
   Passo "Repositório no GitHub ($Nome, $Visibilidade)"
   gh repo view $Nome *> $null
   if ($LASTEXITCODE -eq 0) {
-    Write-Host "O repositório já existe; apenas enviando a branch main."
+    Write-Host "O repositório já existe."
     $dono = gh repo view $Nome --json owner --jq .owner.login
     if (-not (git remote)) { git remote add origin "https://github.com/$dono/$Nome.git" }
-    git push -u origin main
   } else {
-    gh repo create $Nome "--$Visibilidade" --source . --remote origin --push `
+    gh repo create $Nome "--$Visibilidade" --source . --remote origin `
       --description "GraphRAG 100% local (llama.cpp + Neo4j + Angular) sobre um documento financeiro"
   }
-  if ($LASTEXITCODE -ne 0) { Falhar "Falha ao criar ou enviar o repositório." }
+  if ($LASTEXITCODE -ne 0) { Falhar "Falha ao criar o repositório." }
 }
 
 Passo "Marcos, rótulos e issues a partir do ETAPAS.md"
 & $py tools/etapas_to_issues.py
 if ($LASTEXITCODE -ne 0) { Falhar "A sincronia terminou com erro (rode de novo: ela é idempotente)." }
+
+if (-not $SoIssues) {
+  Passo "Enviando a branch main"
+  git push -u origin main
+  if ($LASTEXITCODE -ne 0) { Falhar "git push falhou." }
+}
 
 Passo "Pronto"
 gh repo view --web
