@@ -1,0 +1,1 @@
+﻿C:\Users\Rafael\Documents\Graph Rag\infra\bin\llama-b11932-vulkan\llama-server.exe --host 127.0.0.1 --port 8099 -m C:\modelos\Qwen3.6-35B-A3B-UD-Q4_K_XL.gguf -c 32768 -np 2 -ngl 99 -ncmoe 24 -fa on -ctk q8_0 -ctv q8_0 --jinja

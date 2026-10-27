@@ -13,7 +13,8 @@
 param(
   [Parameter(Mandatory)][ValidateSet("vulkan", "hip")][string]$Backend,
   [string]$So = "",
-  [int]$TimeoutMin = 25
+  [int]$TimeoutMin = 25,
+  [string]$LoadMode = ""      # "none" = sem mmap (-lm none); vazio = padrão do llama.cpp (mmap)
 )
 
 $raiz = Split-Path $PSScriptRoot -Parent
@@ -60,8 +61,10 @@ $amb = Join-Path $out "ambiente_$Backend.txt"
 
 foreach ($c in $cfgs) {
   $m = Modelo $c.papel
-  $base = Join-Path $out "${Backend}_$($c.nome)"
+  $sufixo = if ($LoadMode) { "_lm$LoadMode" } else { "" }
+  $base = Join-Path $out "${Backend}_$($c.nome)$sufixo"
   $args = @("-m", $m) + $c.extra + $fixas
+  if ($LoadMode) { $args += @("-lm", $LoadMode) }
   Write-Host "[$(Get-Date -Format HH:mm:ss)] $Backend / $($c.nome)" -ForegroundColor Cyan
   "$bench $($args -join ' ')" | Set-Content "$base.cmd.txt" -Encoding UTF8
 
@@ -81,7 +84,7 @@ foreach ($c in $cfgs) {
   $seg = [math]::Round(((Get-Date) - $t0).TotalSeconds, 0)
   $ok = ($p.ExitCode -eq 0) -and (-not $estourou)
   $linha = [ordered]@{
-    backend = $Backend; config = $c.nome; exit = $p.ExitCode; timeout = $estourou; segundos = $seg
+    backend = $Backend; config = "$($c.nome)$sufixo"; exit = $p.ExitCode; timeout = $estourou; segundos = $seg
     vram_base_mb = [math]::Round($v0, 0); vram_pico_mb = [math]::Round($vPico, 0)
     ram_livre_base_mb = [math]::Round($r0, 0); ram_livre_min_mb = [math]::Round($rMin, 0)
     comando = "llama-bench $($args -join ' ')"

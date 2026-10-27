@@ -1,7 +1,7 @@
-﻿data: 2026-10-27T13:14:53
+﻿data: 2026-10-27T14:20:24
 backend: hip  build: b11932
 driver: 32.0.32015.7029
 cpu: AMD Ryzen 5 5600X 6-Core Processor             
-ram total GB: 31.9  livre GB: 20.1
-vram em uso antes MB: 4409
+ram total GB: 31.9  livre GB: 22.6
+vram em uso antes MB: 3541
 energia: GUID do Esquema de Energia: 3ff9831b-6f80-4830-8178-736cd4229e7b  (Revision - Ultra Performance)

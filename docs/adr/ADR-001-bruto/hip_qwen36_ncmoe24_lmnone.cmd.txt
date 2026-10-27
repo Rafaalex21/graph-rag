@@ -1,0 +1,1 @@
+﻿C:\Users\Rafael\Documents\Graph Rag\infra\bin\llama-b11932-hip\llama-bench.exe -m C:\modelos\Qwen3.6-35B-A3B-UD-Q4_K_XL.gguf -ngl 99 -ncmoe 24 -fa 1 -ctk q8_0 -ctv q8_0 -ub 512 -t 6 -p 512,2048 -n 128 -r 3 --delay 5 -o jsonl -lm none

@@ -1,7 +1,7 @@
-﻿data: 2026-10-27T13:04:50
+﻿data: 2026-10-27T14:04:32
 backend: vulkan  build: b11932
 driver: 32.0.32015.7029
 cpu: AMD Ryzen 5 5600X 6-Core Processor             
-ram total GB: 31.9  livre GB: 15.8
-vram em uso antes MB: 4530
+ram total GB: 31.9  livre GB: 21.8
+vram em uso antes MB: 3555
 energia: GUID do Esquema de Energia: 3ff9831b-6f80-4830-8178-736cd4229e7b  (Revision - Ultra Performance)
