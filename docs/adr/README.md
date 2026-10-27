@@ -4,7 +4,7 @@ Uma decisão por arquivo: `ADR-NNN-assunto.md`. As nove decisões iniciais estã
 
 | ADR | Assunto | Onde se fecha |
 |---|---|---|
-| 001 | Backend de inferência (Vulkan × HIP) | F0.4 — com as medições |
+| [001](ADR-001-backend.md) | Backend de inferência (Vulkan × HIP) | F0.4 — proposta, com as medições |
 | 009 | Documento escolhido | F1.1 |
 
 Modelo em [`ADR-000-modelo.md`](ADR-000-modelo.md).
