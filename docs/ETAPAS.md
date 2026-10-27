@@ -21,10 +21,10 @@
 
 - [x] **F0.0** Redigir a especificação v0.1 (`ARQUITETURA.md`, `ETAPAS.md`) e publicar o painel
   - aceite: documentos revisados por Primo
-- [~] **F0.1** Criar o repositório com a estrutura da §10 e mover os documentos para `docs/`
+- [x] **F0.1** Criar o repositório com a estrutura da §10 e mover os documentos para `docs/`
   - aceite: commit inicial com README apontando para os documentos
   - depende: F0.0
-  - nota: esqueleto e `tools/bootstrap-github.ps1` prontos; falta rodar o script e conferir o repositório no GitHub
+  - nota: repositório privado `Rafaalex21/graph-rag`; 11 marcos, 72 issues e workflows CI e ETAPAS conferidos em 27/10/2026
 - [ ] **F0.2** Instalar o llama.cpp em dois builds (Vulkan e HIP/ROCm) e fixar a versão em `infra/models.lock.json`
   - aceite: `llama-server --list-devices` mostra a RX 9070 nos dois builds
 - [ ] **F0.3** Baixar os GGUF da matriz (§8) e registrar repositório, arquivo, quantização e SHA-256
