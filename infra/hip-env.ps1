@@ -1,4 +1,4 @@
-<#
+﻿<#
 .SYNOPSIS
   Prepara o PATH do processo atual para rodar o llama.cpp build HIP/ROCm (infra\bin\llama-*-hip).
   O zip do llama.cpp não traz hipblas/rocblas; elas vêm das wheels rocm-sdk instaladas em infra\bin\rocm-venv.
