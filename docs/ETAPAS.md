@@ -31,7 +31,7 @@
 - [x] **F0.3** Baixar os GGUF da matriz (§8) e registrar repositório, arquivo, quantização e SHA-256
   - aceite: `infra/verify_models.ps1` confere todos os hashes sem erro
   - nota: 5 GGUF (50,19 GB) em `C:\modelos`, SHA-256 do Hugging Face conferido no download e por `infra/verify_models.ps1`; alternativas da matriz ficam para a F9
-- [ ] **F0.4** Medir cada LLM com `llama-bench` (pp512 e tg128) nos dois backends
+- [~] **F0.4** Medir cada LLM com `llama-bench` (pp512 e tg128) nos dois backends
   - aceite: tabela em `docs/adr/ADR-001-backend.md`; backend escolhido para `indexar` e para `consultar`
   - depende: F0.2, F0.3
 - [ ] **F0.5** Calibrar `--n-cpu-moe` do Qwen3.6-35B-A3B para 2 × 16K de contexto
