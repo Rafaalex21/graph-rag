@@ -1,6 +1,6 @@
 # ADR-001 · Backend de inferência: Vulkan × HIP
 
-- **Estado:** proposta (aguarda revisão das correções da ARQUITETURA.md listadas abaixo)
+- **Estado:** aceita (27/10/2026); ARQUITETURA.md atualizada para a v0.2 com as correções que as medições impuseram (§0, §2, §5.2, §8, §9, §14 e §15)
 - **Data:** 2026-10-27
 - **Tarefa(s):** F0.2, F0.4
 
@@ -33,7 +33,7 @@ Consequência prática: o `llama-swap` terá entradas separadas para o mesmo arq
 ## Consequências
 
 - O perfil `indexar` ganha tempo de prompt, mas depende do venv ROCm local e de uma cópia extra do `llama-server`.
-- A estimativa de tempo de indexação da ARQUITETURA §5.2 (hipóteses de ~400 tok/s de prompt e ~30 tok/s de geração) precisa ser refeita com os números medidos aqui (`pp2048` de 304 a 478 tok/s no HIP, `tg128` de 25 a 38 tok/s).
+- A estimativa de tempo de indexação da ARQUITETURA §5.2 (hipóteses de ~400 tok/s de prompt e ~30 tok/s de geração) foi refeita na ARQUITETURA v0.2 com os números medidos aqui (`pp2048` de 304 a 478 tok/s no HIP, `tg128` de 25 a 38 tok/s): ~5,3 h com o Qwen3.6, como limite inferior.
 - A F0.5 (calibração do `--n-cpu-moe`) deve medir também o cache `--moe-cache-mib` do llama.cpp v0.7.0, que o `llama-bench` não expõe.
 - O juiz (Gemma 4) deve ser reconfirmado com o desktop mais leve (ver ressalvas).
 

@@ -4,7 +4,7 @@
 >
 > **Base teórica:** *Essential GraphRAG* — Tomaž Bratanič & Oskar Hane (Manning, 2025).
 >
-> **Versão:** 0.1 · 27/10/2026 · **Status:** rascunho para validação
+> **Versão:** 0.2 · 27/10/2026 · **Status:** rascunho para validação — §0, §2, §5.2, §8, §9, §14 e §15 revisadas com as medições da F0.4 ([ADR-001](./adr/ADR-001-backend.md))
 >
 > **Documento irmão:** [`ETAPAS.md`](./ETAPAS.md) — plano executável, tarefa a tarefa, que alimenta o painel de acompanhamento.
 
@@ -20,13 +20,13 @@
 
 Um **agente** (cap. 5) escolhe a rota, executa as ferramentas, submete o resultado a um crítico e redige a resposta com citação de página. A **avaliação** (cap. 8) vem antes do grafo: cada camada só entra se provar, em números, o que acrescenta à linha de base vetorial.
 
-**Onde.** Tudo local: Radeon RX 9070 (16 GB) + 32 GB de RAM, Windows. Modelos GGUF servidos pelo `llama-server` (llama.cpp, backend Vulkan) atrás do `llama-swap`, que expõe uma API compatível com a da OpenAI. Grafo em Neo4j 2026.10 com APOC e GDS.
+**Onde.** Tudo local: Radeon RX 9070 (16 GB) + 32 GB de RAM, Windows. Modelos GGUF servidos pelo `llama-server` (llama.cpp, builds Vulkan e HIP, escolhidos por perfil) atrás do `llama-swap`, que expõe uma API compatível com a da OpenAI. Grafo em Neo4j 2026.10 com APOC e GDS.
 
 **Decisões-chave.**
 
 | Tema | Decisão | Alternativa mantida em teste |
 |---|---|---|
-| Runtime de inferência | `llama-server` (build Vulkan) + `llama-swap` para perfis | build ROCm/HIP (melhor em processamento de prompt) |
+| Runtime de inferência | `llama-server` + `llama-swap` para perfis: **HIP** no perfil `indexar`, **Vulkan** nos demais (ADR-001, medido na F0.4) | Vulkan também na indexação (mais simples; custa −34% a −41% de processamento de prompt) |
 | LLM principal | **Qwen3.6-35B-A3B** (MoE, 3B ativos), experts parcialmente na RAM | gpt-oss-20b · Gemma 4 26B-A4B |
 | Embeddings | **Qwen3-Embedding-0.6B** (1024 dims, multilíngue) | Qwen3-Embedding-4B · EmbeddingGemma 2 |
 | Reranker | **Qwen3-Reranker-0.6B** | bge-reranker-v2-m3 |
@@ -84,14 +84,14 @@ Um **agente** (cap. 5) escolhe a rota, executa as ferramentas, submete o resulta
 | GPU | Radeon RX 9070 · RDNA 4 (gfx1201) · 16 GB GDDR6 · ~640 GB/s | A geração de tokens é limitada pela banda de memória; modelos densos acima de ~14B em Q4 já apertam |
 | RAM | 32 GB | Permite manter parte dos experts de um MoE fora da GPU |
 | CPU | Ryzen 5 5600X (6 núcleos / 12 threads) | Expert na CPU custa velocidade; DDR4 dual-channel entrega ~40–50 GB/s |
-| SO | Windows 11 | ROCm existe no Windows, mas o ecossistema é estreito; Vulkan primeiro |
+| SO | Windows 11 | O Vulkan funciona direto com o driver; o HIP exige as DLLs hipblas/rocblas, obtidas das wheels `rocm-sdk` num venv local (`infra/hip-env.ps1`) |
 
 > A RX 9070 e a 9070 XT têm o mesmo barramento de 256 bits e a mesma banda; como a geração é limitada por banda, os números publicados para a XT servem de referência próxima (espere de 10 a 20% a menos no processamento de prompt, que depende de computação, não de banda).
 
 ### 2.2 Backend de GPU
 
-- **Padrão: llama.cpp com Vulkan.** Testes de 2026 no RDNA 4 mostram o Vulkan gerando tokens 12–18% mais rápido que o HIP, enquanto o ROCm processa prompts cerca de 40% mais rápido.
-- **Consequência prática:** a *indexação* é dominada por processamento de prompt (trechos longos entram, pouco texto sai); a *consulta* é dominada por geração. Pode compensar ROCm no perfil de indexação e Vulkan no de consulta — a etapa F0 mede e decide (ADR-001).
+- **Dois builds do llama.cpp (b11932), Vulkan e HIP.** Medido nesta máquina na F0.4: no Qwen3.6-35B-A3B o HIP processa prompt de 34% a 41% mais rápido (`pp2048`) e o Vulkan gera 7% a 10% mais rápido (`tg128`, com `--n-cpu-moe` de 24 a 40). No gpt-oss-20b o Vulkan vence nos dois: ~4× em prompt e +32% em geração. No Gemma 4 26B o HIP vence (+46% em prompt, +10% em geração), com a ressalva de pressão de VRAM do ADR-001. As estimativas de terceiros (Vulkan +12–18% em geração, ROCm ~+40% em prompt) valiam só em parte.
+- **Consequência prática:** a *indexação* é dominada por processamento de prompt (trechos longos entram, pouco texto sai); a *consulta* é dominada por geração. Decidido no ADR-001: **HIP no perfil `indexar`; Vulkan em `consultar` e `consultar-rapido`**; o juiz (`avaliar`) fica em HIP, provisoriamente. O `llama-swap` tem entradas separadas para o mesmo arquivo do Qwen3.6, uma por backend (§9).
 - **Por que não Ollama:** no Windows o suporte a AMD passa pelo Vulkan e não expõe o controle fino de *offload* de experts (`--n-cpu-moe`), de que este projeto depende. LM Studio fica como bancada visual de testes.
 - **Por que não vLLM:** no Windows só roda em contêiner Linux, e o suporte a gfx1201 vinha incompleto.
 
@@ -100,9 +100,11 @@ Um **agente** (cap. 5) escolhe a rota, executa as ferramentas, submete o resulta
 Para cada perfil de execução:
 
 ```
-VRAM:  Σ pesos na GPU + KV cache + buffers de computação + ~0,8 GB do desktop ≤ 16 GB
+VRAM:  Σ pesos na GPU + KV cache + buffers de computação + desktop (3,5 a 4,5 GB medidos aqui) ≤ 16 GB
 RAM:   Σ experts na CPU + Windows (~7 GB) + Neo4j/WSL2 (~4 GB) + apps e navegador (~3 GB) ≤ 30 GB
 ```
+
+O desktop é a parcela mais subestimada: a F0.4 mediu 3,5 a 4,5 GB de VRAM em uso **antes** de qualquer modelo (Firefox, SignalRGB, app do Claude e o Windows), contra os ~0,8 GB supostos na v0.1. O orçamento deve ser feito com o valor medido, e o pico do RNF-8 (≤ 15,2 GB) é o total do adaptador (contador `GPU Adapter Memory`, desktop incluído). Fechar aplicativos pesados antes de indexar ou avaliar devolve parte desse espaço.
 
 O botão de ajuste é o `--n-cpu-moe N` do llama.cpp: quantas camadas de experts do MoE ficam na CPU. Cada camada movida libera VRAM e custa alguma velocidade.
 
@@ -115,6 +117,8 @@ O botão de ajuste é o `--n-cpu-moe N` do llama.cpp: quantas camadas de experts
 | `consultar` *(padrão)* | Qwen3.6-35B-A3B (mais experts na CPU) + Reranker-0.6B na GPU + Embedding-0.6B na CPU | ~14,5 GB | ~12 GB |
 | `consultar-rapido` | gpt-oss-20b MXFP4 (~12 GB) + Reranker-0.6B na GPU + Embedding-0.6B na CPU | ~14 GB | ~1 GB |
 | `avaliar` | Juiz Gemma 4 26B-A4B QAT Q4_0 (14,4 GB) | ~15 GB | — |
+
+Medido na F0.4 (sem contexto longo, total do adaptador com o desktop): Qwen3.6-35B-A3B com `--n-cpu-moe 24` → pico de 14,3 GB (HIP) e 14,7 GB (Vulkan); com 20 → 15,7 GB, perto do teto; com 28 → 12,5 GB e 12,9 GB. A F0.5 recalibra o valor final com 2 × 16K de contexto.
 
 Tamanhos de arquivo não são consumo em execução: KV cache e buffers somam de 0,5 a 2 GB conforme o contexto. Embutir uma pergunta na CPU custa milissegundos; reranquear na CPU, não — por isso o reranker fica na GPU.
 
@@ -309,18 +313,18 @@ Criação dos índices da §6.3; consultas de sanidade (§6.4); *dump* do banco 
 
 ### 5.2 Estimativa de tempo de indexação
 
-Hipóteses: documento de ~300 páginas (~200 mil tokens) → ~170 Pais e ~40 tabelas. Qwen3.6-35B-A3B com *offload*: ~400 tok/s de processamento de prompt e ~30 tok/s de geração. São ordens de grandeza a substituir pelos números da F0.
+Hipóteses: documento de ~300 páginas (~200 mil tokens) → ~170 Pais e ~40 tabelas. Throughput medido na F0.4 (Qwen3.6-35B-A3B no HIP, `--n-cpu-moe 24`, profundidade 0): 478 tok/s de processamento de prompt (`pp2048`) e 35 tok/s de geração. É um limite inferior do tempo: ignora o custo da gramática JSON, o *decode* mais lento com contexto longo e o paralelismo de 2 slots, que a F0.5 mede.
 
 | Etapa | Chamadas | Custo por chamada | Total |
 |---|---|---|---|
-| Extração dirigida a esquema | ~210 | ~2,5K entrada / 0,6K saída | ~1,5 h |
-| Extração aberta (sem *gleaning*) | ~170 | ~3K / 1K | ~2 h |
-| Perguntas hipotéticas das tabelas | ~40 | ~2K / 0,3K | ~10 min |
-| Resumos de entidades e relações | ~600 | ~1K / 0,2K | ~1,5 h |
-| Relatórios de comunidade | ~80 | ~6K / 1K | ~1 h |
-| **Total** | | | **~6 h — uma noite** |
+| Extração dirigida a esquema | ~210 | ~2,5K entrada / 0,6K saída | ~1,3 h |
+| Extração aberta (sem *gleaning*) | ~170 | ~3K / 1K | ~1,6 h |
+| Perguntas hipotéticas das tabelas | ~40 | ~2K / 0,3K | ~9 min |
+| Resumos de entidades e relações | ~600 | ~1K / 0,2K | ~1,3 h |
+| Relatórios de comunidade | ~80 | ~6K / 1K | ~55 min |
+| **Total** | | | **~5,3 h — uma noite** |
 
-Com gpt-oss-20b (~90 tok/s de geração) o total cai para algo como 2–3 h; o bake-off da F9 dirá se a qualidade acompanha. Antes do documento inteiro, todo o ciclo F1–F5 roda num recorte de até 80 páginas.
+Com gpt-oss-20b no Vulkan (4.402 tok/s de prompt e 170 tok/s de geração medidos) o mesmo cálculo dá cerca de 1 h; o bake-off da F9 dirá se a qualidade acompanha. Antes do documento inteiro, todo o ciclo F1–F5 roda num recorte de até 80 páginas.
 
 ---
 
@@ -496,7 +500,7 @@ sequenceDiagram
 | Embeddings | **Qwen3-Embedding-0.6B** | GGUF Q8_0 (~0,6 GB) | GPU no lote · CPU na consulta | ~1 GB | Qwen3-Embedding-4B (2560 d); EmbeddingGemma 2 (740M, out/2026 — confirmar suporte no llama.cpp) | Família no topo do MTEB-BR entre os abertos; multilíngue e translíngue; 32K de contexto |
 | Reranker | **Qwen3-Reranker-0.6B** | GGUF Q8_0 convertido para `--pooling rank` | GPU | ~1 GB | bge-reranker-v2-m3 (568M); Qwen3-Reranker-4B | Apache 2.0; no estudo com FinanceBench, reranking e reescrita (HyDE) foram as técnicas genéricas que mais ajudaram |
 | LLM de extração (indexação) | **Qwen3.6-35B-A3B**, sem raciocínio | Unsloth UD-Q4_K_XL (22,4 GB) | GPU + RAM (`--n-cpu-moe`) | ~12,5 GB VRAM + ~10 GB RAM | Gemma 4 26B-A4B QAT Q4_0 (14,4 GB, cabe inteiro na GPU); gpt-oss-20b; Qwen3.8-27B denso em IQ3 | MoE com 3B ativos: qualidade de modelo grande na velocidade de um pequeno; forte em português e em JSON; Apache 2.0 |
-| LLM do agente e redator | **Qwen3.6-35B-A3B** (mesmo processo) | idem | idem | idem | gpt-oss-20b (perfil `consultar-rapido`, ~90 tok/s na 9070 XT); Gemma 4 12B | Um único modelo residente evita trocas; o perfil rápido cobre a latência |
+| LLM do agente e redator | **Qwen3.6-35B-A3B** (mesmo processo) | idem | idem | idem | gpt-oss-20b (perfil `consultar-rapido`, ~170 tok/s de geração medidos no Vulkan); Gemma 4 12B | Um único modelo residente evita trocas; o perfil rápido cobre a latência |
 | Text2Cypher | LLM do agente + *few-shot* | — | — | — | neo4j Text2Cypher Gemma 3 4B (2025.04) | Especialista pequeno pode competir em agregações simples |
 | Juiz da avaliação | **Gemma 4 26B-A4B** | QAT Q4_0 (14,4 GB) | GPU | ~15 GB | Qwen3.6-35B-A3B com raciocínio; gpt-oss-20b | Família diferente do gerador reduz o viés de autopreferência |
 
@@ -525,40 +529,49 @@ O raciocínio liga e desliga por requisição com `chat_template_kwargs: {"enabl
 O `llama-swap` fica na porta 8080, sobe e derruba instâncias do `llama-server` conforme o campo `model` da requisição, e usa *groups* para manter modelos coexistindo. A API e o indexador só conhecem `http://localhost:8080/v1`.
 
 ```yaml
-# infra/llama-swap.yaml — valores de --n-cpu-moe e -c são pontos de partida; calibrar na F0
+# infra/llama-swap.yaml — --n-cpu-moe e -c são pontos de partida (a F0.5 calibra); caminhos e a sintaxe de env/macros serão validados na F0.6
+# Backend por perfil (ADR-001): o mesmo GGUF do Qwen3.6 aparece duas vezes — HIP para indexar, Vulkan para consultar.
 healthCheckTimeout: 300
 startPort: 10001
 
 models:
-  qwen36-35b-a3b:
+  qwen36-35b-a3b:                       # consultar: Vulkan
     cmd: >
-      llama-server --port ${PORT}
+      ${LLAMA_VULKAN}/llama-server --port ${PORT}
       -m C:/modelos/Qwen3.6-35B-A3B-UD-Q4_K_XL.gguf
-      -c 32768 -np 2 -ngl 99 --n-cpu-moe 20
+      -c 32768 -np 2 -ngl 99 --n-cpu-moe 24
+      -fa on -ctk q8_0 -ctv q8_0 --jinja
+    ttl: 0
+
+  qwen36-35b-a3b-indexar:               # indexar: HIP (precisa das DLLs de infra/hip-env.ps1 no PATH)
+    cmd: >
+      ${LLAMA_HIP}/llama-server --port ${PORT}
+      -m C:/modelos/Qwen3.6-35B-A3B-UD-Q4_K_XL.gguf
+      -c 32768 -np 2 -ngl 99 --n-cpu-moe 24
       -fa on -ctk q8_0 -ctv q8_0 --jinja
     ttl: 0
 
   gpt-oss-20b:
     cmd: >
-      llama-server --port ${PORT}
+      ${LLAMA_VULKAN}/llama-server --port ${PORT}
       -m C:/modelos/gpt-oss-20b-mxfp4.gguf
       -c 16384 -ngl 99 -fa on --jinja
 
   qwen3-embed-0.6b:
     cmd: >
-      llama-server --port ${PORT}
+      ${LLAMA_VULKAN}/llama-server --port ${PORT}
       -m C:/modelos/Qwen3-Embedding-0.6B-Q8_0.gguf
       --embedding --pooling last -ngl 0 -c 8192 -ub 8192
 
   qwen3-rerank-0.6b:
     cmd: >
-      llama-server --port ${PORT}
+      ${LLAMA_VULKAN}/llama-server --port ${PORT}
       -m C:/modelos/Qwen3-Reranker-0.6B-Q8_0.gguf
       --reranking --pooling rank -ngl 99 -c 8192 -ub 8192
 
-  gemma4-26b-a4b-juiz:
+  gemma4-26b-a4b-juiz:                  # avaliar: HIP (provisório, ADR-001)
     cmd: >
-      llama-server --port ${PORT}
+      ${LLAMA_HIP}/llama-server --port ${PORT}
       -m C:/modelos/gemma-4-26B-A4B-it-qat-Q4_0.gguf
       -c 16384 -ngl 99 -fa on --jinja
 
@@ -567,6 +580,10 @@ groups:
     swap: false        # os três convivem
     exclusive: true    # derruba quem estiver fora do grupo
     members: [qwen36-35b-a3b, qwen3-embed-0.6b, qwen3-rerank-0.6b]
+  indexar:
+    swap: true
+    exclusive: true
+    members: [qwen36-35b-a3b-indexar]
   avaliar:
     swap: true
     exclusive: true
@@ -733,7 +750,7 @@ A tabela final A0–A6 é a peça central do README: mostra, camada a camada, o 
 
 | Risco | Prob. | Impacto | Mitigação |
 |---|---|---|---|
-| VRAM estoura com contexto longo | Alta | Médio | `--n-cpu-moe`, KV em q8_0, contexto 16K por slot, perfis |
+| VRAM estoura com contexto longo ou com o desktop aberto (3,5–4,5 GB medidos) | Alta | Médio | `--n-cpu-moe`, KV em q8_0, contexto 16K por slot, perfis, fechar aplicativos pesados |
 | Instabilidade de Vulkan/ROCm no RDNA 4 | Média | Alto | Manter os dois builds; fixar versão; `llama-bench` antes de atualizar |
 | Indexação lenta (horas) | Alta | Médio | Cache por hash, retomada, recorte de 80 páginas primeiro, perfil rápido se o bake-off permitir |
 | Número alucinado ou escala errada | Média | Alto | Lastro numérico, normalizador testado, escala obrigatória no esquema |
@@ -750,7 +767,7 @@ A tabela final A0–A6 é a peça central do README: mostra, camada a camada, o 
 
 | ADR | Decisão | Motivo principal |
 |---|---|---|
-| 001 | `llama-server` + `llama-swap`, Vulkan por padrão | Controle de *offload* MoE, API OpenAI, embeddings e rerank no mesmo runtime |
+| [001](./adr/ADR-001-backend.md) | `llama-server` + `llama-swap`; HIP no `indexar`, Vulkan nos demais perfis *(aceita, F0.4)* | Controle de *offload* MoE, API OpenAI, embeddings e rerank no mesmo runtime; backend escolhido por medição (prompt × geração) |
 | 002 | Neo4j como único repositório (como no livro), não o pacote `microsoft/graphrag` | Vetores, full-text, Cypher e GDS no mesmo lugar; consultas estruturadas que arquivos parquet não oferecem |
 | 003 | MoE com *offload* parcial como LLM principal | Único jeito de ter modelo de ~35B em 16 GB sem colapsar a velocidade |
 | 004 | JSON Schema com gramática em vez das tuplas delimitadas do MS GraphRAG | Robustez de formato com modelos locais |
