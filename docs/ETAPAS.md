@@ -25,9 +25,9 @@
   - aceite: commit inicial com README apontando para os documentos
   - depende: F0.0
   - nota: repositório privado `Rafaalex21/graph-rag`; 11 marcos, 72 issues e workflows CI e ETAPAS conferidos em 27/10/2026
-- [~] **F0.2** Instalar o llama.cpp em dois builds (Vulkan e HIP/ROCm) e fixar a versão em `infra/models.lock.json`
+- [x] **F0.2** Instalar o llama.cpp em dois builds (Vulkan e HIP/ROCm) e fixar a versão em `infra/models.lock.json`
   - aceite: `llama-server --list-devices` mostra a RX 9070 nos dois builds
-  - nota: b11932 (27/10/2026) baixado e com SHA-256 conferido; Vulkan lista a RX 9070. HIP lista (none): falta `hipblas.dll` (runtime ROCm); aguardando decisão sobre as wheels `rocm-sdk` (~1,1 GB, venv local)
+  - nota: llama.cpp b11932 (27/10/2026), SHA-256 conferido; Vulkan e HIP listam a RX 9070. O HIP precisa das DLLs hipblas/rocblas, que vêm de wheels `rocm-sdk` 10.0.0 em `infra/bin/rocm-venv` (~1,1 GB); `infra/hip-env.ps1` ajusta o PATH do processo
 - [ ] **F0.3** Baixar os GGUF da matriz (§8) e registrar repositório, arquivo, quantização e SHA-256
   - aceite: `infra/verify_models.ps1` confere todos os hashes sem erro
 - [ ] **F0.4** Medir cada LLM com `llama-bench` (pp512 e tg128) nos dois backends
