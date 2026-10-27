@@ -1,0 +1,77 @@
+name: CI
+
+# Cada job só roda quando o app correspondente existe (F0.8 cria os esqueletos).
+on:
+  pull_request:
+  push:
+    branches: [main]
+
+permissions:
+  contents: read
+
+jobs:
+  indexer:
+    runs-on: ubuntu-latest
+    defaults:
+      run:
+        working-directory: indexer
+    steps:
+      - uses: actions/checkout@v4
+      - name: Ignorar enquanto o app não existe
+        id: existe
+        run: test -f pyproject.toml && echo "ok=true" >> "$GITHUB_OUTPUT" || echo "ok=false" >> "$GITHUB_OUTPUT"
+        working-directory: .
+        shell: bash
+      - if: steps.existe.outputs.ok == 'true'
+        uses: astral-sh/setup-uv@v5
+      - if: steps.existe.outputs.ok == 'true'
+        run: |
+          uv sync --all-extras
+          uv run ruff check .
+          uv run pytest -q
+
+  api:
+    runs-on: ubuntu-latest
+    defaults:
+      run:
+        working-directory: api
+    steps:
+      - uses: actions/checkout@v4
+      - id: existe
+        run: test -f package.json && echo "ok=true" >> "$GITHUB_OUTPUT" || echo "ok=false" >> "$GITHUB_OUTPUT"
+        working-directory: .
+        shell: bash
+      - if: steps.existe.outputs.ok == 'true'
+        uses: actions/setup-node@v4
+        with:
+          node-version: lts/*
+          cache: npm
+          cache-dependency-path: api/package-lock.json
+      - if: steps.existe.outputs.ok == 'true'
+        run: |
+          npm ci
+          npm run lint --if-present
+          npm test
+
+  web:
+    runs-on: ubuntu-latest
+    defaults:
+      run:
+        working-directory: web
+    steps:
+      - uses: actions/checkout@v4
+      - id: existe
+        run: test -f package.json && echo "ok=true" >> "$GITHUB_OUTPUT" || echo "ok=false" >> "$GITHUB_OUTPUT"
+        working-directory: .
+        shell: bash
+      - if: steps.existe.outputs.ok == 'true'
+        uses: actions/setup-node@v4
+        with:
+          node-version: lts/*
+          cache: npm
+          cache-dependency-path: web/package-lock.json
+      - if: steps.existe.outputs.ok == 'true'
+        run: |
+          npm ci
+          npx ng test --watch=false --browsers=ChromeHeadless
+          npx ng build

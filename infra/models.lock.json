@@ -1,0 +1,15 @@
+{
+  "_nota": "Preenchido nas tarefas F0.2 e F0.3. sha256 conferido por infra/verify_models.ps1.",
+  "llama_cpp": {
+    "versao": null,
+    "builds": { "vulkan": null, "hip": null }
+  },
+  "llama_swap": { "versao": null },
+  "modelos": [
+    { "papel": "llm-principal", "repo": "unsloth/Qwen3.6-35B-A3B-GGUF", "arquivo": null, "quantizacao": "UD-Q4_K_XL", "sha256": null },
+    { "papel": "llm-rapido", "repo": null, "arquivo": null, "quantizacao": null, "sha256": null, "_alvo": "gpt-oss-20b" },
+    { "papel": "juiz", "repo": null, "arquivo": null, "quantizacao": "QAT Q4_0", "sha256": null, "_alvo": "Gemma 4 26B-A4B" },
+    { "papel": "embeddings", "repo": null, "arquivo": null, "quantizacao": "Q8_0", "sha256": null, "_alvo": "Qwen3-Embedding-0.6B" },
+    { "papel": "reranker", "repo": null, "arquivo": null, "quantizacao": "Q8_0", "sha256": null, "_alvo": "Qwen3-Reranker-0.6B" }
+  ]
+}

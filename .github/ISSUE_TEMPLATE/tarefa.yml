@@ -1,0 +1,28 @@
+name: Tarefa avulsa
+description: Algo que surgiu fora do plano (as tarefas do plano nascem do docs/ETAPAS.md)
+labels: []
+body:
+  - type: dropdown
+    id: fase
+    attributes:
+      label: Fase relacionada
+      options: ["F0", "F1", "F2", "F3", "F4", "F5", "F6", "F7", "F8", "F9", "F10", "Nenhuma"]
+    validations:
+      required: true
+  - type: textarea
+    id: descricao
+    attributes:
+      label: O que precisa ser feito
+    validations:
+      required: true
+  - type: textarea
+    id: aceite
+    attributes:
+      label: Critério de aceite (verificável)
+      description: Um comando, uma métrica ou um arquivo que prove que acabou.
+    validations:
+      required: true
+  - type: textarea
+    id: notas
+    attributes:
+      label: Notas

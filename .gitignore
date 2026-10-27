@@ -1,0 +1,35 @@
+# dados e artefatos pesados
+data/*
+!data/README.md
+*.gguf
+*.safetensors
+infra/bin/
+infra/neo4j/
+
+# segredos
+.env
+.env.*
+!.env.example
+
+# Python
+.venv/
+__pycache__/
+*.pyc
+.pytest_cache/
+.ruff_cache/
+
+# Node / Angular
+node_modules/
+dist/
+.angular/
+coverage/
+
+# editores e sistema
+.vscode/*
+!.vscode/extensions.json
+.idea/
+Thumbs.db
+.DS_Store
+
+# painel gerado
+*.tmp
