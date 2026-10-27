@@ -4,7 +4,7 @@
 >
 > **Base teórica:** *Essential GraphRAG* — Tomaž Bratanič & Oskar Hane (Manning, 2025).
 >
-> **Versão:** 0.3 · 27/10/2026 · **Status:** rascunho para validação — revisada com as medições da F0.4 e da F0.5 ([ADR-001](./adr/ADR-001-backend.md), [ADR-010](./adr/ADR-010-offload-moe.md))
+> **Versão:** 0.4 · 27/10/2026 · **Status:** rascunho para validação — revisada com as medições da F0.4, F0.5 e F0.6 ([ADR-001](./adr/ADR-001-backend.md), [ADR-010](./adr/ADR-010-offload-moe.md), [ADR-011](./adr/ADR-011-perfis-swap.md))
 >
 > **Documento irmão:** [`ETAPAS.md`](./ETAPAS.md) — plano executável, tarefa a tarefa, que alimenta o painel de acompanhamento.
 
@@ -114,8 +114,8 @@ O botão de ajuste é o `--n-cpu-moe N` do llama.cpp: quantas camadas de experts
 |---|---|---|---|
 | `indexar` | Qwen3.6-35B-A3B UD-Q4_K_XL (22,4 GB), `--n-cpu-moe 28 -lm none` · ctx 2×16K | 12,4 GB *(medido)* | ~14,5 GB *(medido)* |
 | `vetorizar` | Qwen3-Embedding-0.6B Q8_0 em lote (LLM descarregado) | ~2 GB | — |
-| `consultar` *(padrão)* | Qwen3.6-35B-A3B (igual ao `indexar`) + Reranker-0.6B na GPU + Embedding-0.6B na CPU | ~13,4 GB *(12,4 medido + ~1 do reranker)* | ~15 GB *(estimado)* |
-| `consultar-rapido` | gpt-oss-20b MXFP4 (12,1 GB) + Reranker-0.6B na GPU + Embedding-0.6B na CPU | ~15 a 16 GB: 15,9 GB medidos só com o gpt-oss e o desktop em 4,4 GB; **sem folga para o reranker** (a F0.6 decide se ele vai para a CPU neste perfil) | ~1 GB |
+| `consultar` *(padrão)* | Qwen3.6-35B-A3B (igual ao `indexar`) + Reranker-0.6B (`-c 4096`) na GPU + Embedding-0.6B na CPU | 13,6 GB *(medido na F0.6, em regime)* | ~25 GB do sistema *(medido; 25,3 GB com ~15K de contexto na F0.5)* |
+| `consultar-rapido` | gpt-oss-20b MXFP4 com `--n-cpu-moe 4 -lm none` (~75 tok/s) + Reranker-0.6B na GPU + Embedding-0.6B na CPU | 14,8 GB *(medido; inteiro na GPU o gpt-oss sozinho chega a 15,1 GB)* | ~14 GB do sistema *(medido)* |
 | `avaliar` | Juiz Gemma 4 26B-A4B QAT Q4_0 (14,4 GB), build HIP | 15,9 a 16,0 GB *(medido; no teto da placa, reconfirmar com o desktop leve)* | — |
 
 Medido na F0.5 (Vulkan, `-c 32768 -np 2`, dois prompts de ~15K tokens, pico do sistema inteiro): Qwen3.6-35B-A3B com `-lm none` e `--n-cpu-moe 24` → VRAM 14,2 GB e RAM 23,5 GB; com `--n-cpu-moe 28` → VRAM 12,4 GB e RAM 25,3 GB. Com o mmap padrão, a RAM chegava a ~32,5 GB. O `ncmoe 24` rende ~8% a mais de geração, mas deixa só ~1 GB de folga de VRAM com o desktop em 3,5 GB (e menos com o desktop maior), por isso o padrão é 28. O cache `--moe-cache-mib` não compensou (ADR-010).
@@ -324,7 +324,7 @@ Hipóteses: documento de ~300 páginas (~200 mil tokens) → ~170 Pais e ~40 tab
 | Relatórios de comunidade | ~80 | ~6K / 1K | ~46 min |
 | **Total** | | | **~4,6 h — uma noite** |
 
-Com gpt-oss-20b no Vulkan (4.402 tok/s de prompt e 170 tok/s de geração medidos) o mesmo cálculo dá cerca de 1 h; o bake-off da F9 dirá se a qualidade acompanha. Antes do documento inteiro, todo o ciclo F1–F5 roda num recorte de até 80 páginas.
+Com gpt-oss-20b no Vulkan (4.402 tok/s de prompt e 170 tok/s de geração medidos) o mesmo cálculo dá cerca de 1 h inteiro na GPU (cerca de 2 h com o `--n-cpu-moe 4` do perfil rápido); o bake-off da F9 dirá se a qualidade acompanha. Antes do documento inteiro, todo o ciclo F1–F5 roda num recorte de até 80 páginas.
 
 ---
 
@@ -500,7 +500,7 @@ sequenceDiagram
 | Embeddings | **Qwen3-Embedding-0.6B** | GGUF Q8_0 (~0,6 GB) | GPU no lote · CPU na consulta | ~1 GB | Qwen3-Embedding-4B (2560 d); EmbeddingGemma 2 (740M, out/2026 — confirmar suporte no llama.cpp) | Família no topo do MTEB-BR entre os abertos; multilíngue e translíngue; 32K de contexto |
 | Reranker | **Qwen3-Reranker-0.6B** | GGUF Q8_0 convertido para `--pooling rank` | GPU | ~1 GB | bge-reranker-v2-m3 (568M); Qwen3-Reranker-4B | Apache 2.0; no estudo com FinanceBench, reranking e reescrita (HyDE) foram as técnicas genéricas que mais ajudaram |
 | LLM de extração (indexação) | **Qwen3.6-35B-A3B**, sem raciocínio | Unsloth UD-Q4_K_XL (22,4 GB) | GPU + RAM (`--n-cpu-moe`) | ~12,5 GB VRAM + ~10 GB RAM | Gemma 4 26B-A4B QAT Q4_0 (14,4 GB, cabe inteiro na GPU); gpt-oss-20b; Qwen3.8-27B denso em IQ3 | MoE com 3B ativos: qualidade de modelo grande na velocidade de um pequeno; forte em português e em JSON; Apache 2.0 |
-| LLM do agente e redator | **Qwen3.6-35B-A3B** (mesmo processo) | idem | idem | idem | gpt-oss-20b (perfil `consultar-rapido`, ~170 tok/s de geração medidos no Vulkan); Gemma 4 12B | Um único modelo residente evita trocas; o perfil rápido cobre a latência |
+| LLM do agente e redator | **Qwen3.6-35B-A3B** (mesmo processo) | idem | idem | idem | gpt-oss-20b (perfil `consultar-rapido`: ~170 tok/s inteiro na GPU, ~75 tok/s com 4 camadas de experts na CPU, medidos no Vulkan); Gemma 4 12B | Um único modelo residente evita trocas; o perfil rápido cobre a latência |
 | Text2Cypher | LLM do agente + *few-shot* | — | — | — | neo4j Text2Cypher Gemma 3 4B (2025.04) | Especialista pequeno pode competir em agregações simples |
 | Juiz da avaliação | **Gemma 4 26B-A4B** | QAT Q4_0 (14,4 GB) | GPU | ~15 GB | Qwen3.6-35B-A3B com raciocínio; gpt-oss-20b | Família diferente do gerador reduz o viés de autopreferência |
 
@@ -529,60 +529,94 @@ O raciocínio liga e desliga por requisição com `chat_template_kwargs: {"enabl
 O `llama-swap` fica na porta 8080, sobe e derruba instâncias do `llama-server` conforme o campo `model` da requisição, e usa *groups* para manter modelos coexistindo. A API e o indexador só conhecem `http://localhost:8080/v1`.
 
 ```yaml
-# infra/llama-swap.yaml — pontos de partida calibrados na F0.5 (ADR-010); caminhos e a sintaxe de env/macros serão validados na F0.6
-# Backend por perfil (ADR-001 revisada): Vulkan em tudo, exceto o juiz (HIP, provisório).
+# llama-swap v267 — perfis do GraphRAG local (ARQUITETURA §9, ADR-001 revisada, ADR-010)
+# Sobe por infra/swap.ps1, que define GRAG_ROOT (barras normais) e GRAG_ROOT_WIN (barras invertidas).
+# Perfis (matrix.sets): indexar · vetorizar · consultar · consultar-rapido · avaliar
 healthCheckTimeout: 300
 startPort: 10001
+logLevel: info
+globalTTL: 0                # modelos ficam residentes até serem expulsos por outro perfil
+
+macros:
+  "vk":      "${env.GRAG_ROOT}/infra/bin/llama-b11932-vulkan/llama-server.exe"
+  "hip":     "${env.GRAG_ROOT}/infra/bin/llama-b11932-hip/llama-server.exe"
+  "modelos": "C:/modelos"
 
 models:
-  qwen36-35b-a3b:                       # consultar e indexar: Vulkan, sem mmap
-    cmd: >
-      ${LLAMA_VULKAN}/llama-server --port ${PORT}
-      -m C:/modelos/Qwen3.6-35B-A3B-UD-Q4_K_XL.gguf
+  # LLM principal: indexar e consultar. Vulkan, sem mmap, experts das 28 primeiras camadas na CPU (ADR-010).
+  "qwen36-35b-a3b":
+    name: "Qwen3.6-35B-A3B UD-Q4_K_XL"
+    cmd: |
+      "${vk}" --host 127.0.0.1 --port ${PORT}
+      -m ${modelos}/Qwen3.6-35B-A3B-UD-Q4_K_XL.gguf
       -c 32768 -np 2 -ngl 99 --n-cpu-moe 28 -lm none
       -fa on -ctk q8_0 -ctv q8_0 --jinja
-    ttl: 0
 
-  gpt-oss-20b:
-    cmd: >
-      ${LLAMA_VULKAN}/llama-server --port ${PORT}
-      -m C:/modelos/gpt-oss-20b-MXFP4.gguf
-      -c 16384 -ngl 99 -fa on --jinja
+  # LLM rápido (consultar-rapido). Inteiro na GPU ele sozinho chega a 15,1 GB com o desktop atual; com 4 camadas
+  # de experts na CPU a geração cai de 170 para ~75 tok/s e sobra espaço para embedding e reranker (ADR-011).
+  "gpt-oss-20b":
+    name: "gpt-oss-20b MXFP4"
+    cmd: |
+      "${vk}" --host 127.0.0.1 --port ${PORT}
+      -m ${modelos}/gpt-oss-20b-MXFP4.gguf
+      -c 16384 -ngl 99 --n-cpu-moe 4 -lm none -fa on -ctk q8_0 -ctv q8_0 --jinja
 
-  qwen3-embed-0.6b:
-    cmd: >
-      ${LLAMA_VULKAN}/llama-server --port ${PORT}
-      -m C:/modelos/Qwen3-Embedding-0.6B-Q8_0.gguf
+  # Embeddings na CPU: perguntas, uma por vez (milissegundos).
+  "qwen3-embed-0.6b":
+    name: "Qwen3-Embedding-0.6B Q8_0 (CPU)"
+    cmd: |
+      "${vk}" --host 127.0.0.1 --port ${PORT}
+      -m ${modelos}/Qwen3-Embedding-0.6B-Q8_0.gguf
       --embedding --pooling last -ngl 0 -c 8192 -ub 8192
 
-  qwen3-rerank-0.6b:
-    cmd: >
-      ${LLAMA_VULKAN}/llama-server --port ${PORT}
-      -m C:/modelos/qwen3-reranker-0.6b-q8_0.gguf
-      --reranking --pooling rank -ngl 99 -c 8192 -ub 8192
+  # Embeddings na GPU: lote da indexação (perfil vetorizar, LLM descarregado).
+  "qwen3-embed-0.6b-lote":
+    name: "Qwen3-Embedding-0.6B Q8_0 (GPU, lote)"
+    cmd: |
+      "${vk}" --host 127.0.0.1 --port ${PORT}
+      -m ${modelos}/Qwen3-Embedding-0.6B-Q8_0.gguf
+      --embedding --pooling last -ngl 99 -c 8192 -ub 8192
 
-  gemma4-26b-a4b-juiz:                  # avaliar: HIP (provisório, ADR-001); precisa das DLLs de infra/hip-env.ps1 no PATH
-    cmd: >
-      ${LLAMA_HIP}/llama-server --port ${PORT}
-      -m C:/modelos/gemma-4-26B_q4_0-it.gguf
+  # Reranker na GPU: POST /v1/rerank
+  "qwen3-rerank-0.6b":
+    name: "Qwen3-Reranker-0.6B Q8_0"
+    cmd: |
+      "${vk}" --host 127.0.0.1 --port ${PORT}
+      -m ${modelos}/qwen3-reranker-0.6b-q8_0.gguf
+      --reranking --pooling rank -ngl 99 -c 4096 -ub 2048
+
+  # Juiz da avaliação: HIP (provisório, ADR-001). As DLLs hipblas/rocblas vêm do venv ROCm.
+  "gemma4-26b-a4b-juiz":
+    name: "Gemma 4 26B-A4B QAT Q4_0 (juiz, HIP)"
+    env:
+      - "PATH=${env.GRAG_ROOT_WIN}\\infra\\bin\\rocm-venv\\Lib\\site-packages\\_rocm_sdk_libraries\\bin;${env.GRAG_ROOT_WIN}\\infra\\bin\\rocm-venv\\Lib\\site-packages\\_rocm_sdk_core\\bin;${env.PATH}"
+    cmd: |
+      "${hip}" --host 127.0.0.1 --port ${PORT}
+      -m ${modelos}/gemma-4-26B_q4_0-it.gguf
       -c 16384 -ngl 99 -fa on --jinja
 
-groups:
-  consultar:
-    swap: false        # os três convivem
-    exclusive: true    # derruba quem estiver fora do grupo
-    members: [qwen36-35b-a3b, qwen3-embed-0.6b, qwen3-rerank-0.6b]
-  indexar:
-    swap: true         # só o LLM: sem reranker nem embedding residentes
-    exclusive: true
-    members: [qwen36-35b-a3b]
-  avaliar:
-    swap: true
-    exclusive: true
-    members: [gemma4-26b-a4b-juiz]
+routing:
+  router:
+    use: matrix
+    settings:
+      matrix:
+        vars:
+          q:  qwen36-35b-a3b
+          g:  gpt-oss-20b
+          e:  qwen3-embed-0.6b
+          el: qwen3-embed-0.6b-lote
+          r:  qwen3-rerank-0.6b
+          j:  gemma4-26b-a4b-juiz
+        # Modelos fora de qualquer conjunto rodam sozinhos (expulsam os demais): é o caso de el e j.
+        sets:
+          indexar:           "q"
+          consultar:         "q & e & r"
+          consultar-rapido:  "g & e & r"
+          vetorizar:         "el"
+          avaliar:           "j"
 ```
 
-Notas: `-np 2` divide o contexto entre dois slots (2 × 16K); `-ctk/-ctv q8_0` reduz o KV cache à metade; **`-lm none` é obrigatório no Qwen3.6**: sem ele o mmap leva o pico de RAM a ~32,5 GB e o prompt a ~350 tok/s (ADR-010); `--n-cpu-moe 24` é uma opção com o desktop leve; `--moe-cache-mib` fica desligado. No perfil `indexar` o embedding roda com `-ngl 99` num passo separado, depois que o LLM é descarregado. Os perfis `vetorizar` e `consultar-rapido` (§2.4) entram no `infra/llama-swap.yaml` na F0.6.
+Notas: o motor `matrix` (ADR-011) permite que o embedding e o reranker participem de dois perfis, o que o motor de grupos não faz; um modelo fora de qualquer conjunto (`el`, `j`) roda sozinho e expulsa os demais. `-np 2` divide o contexto entre dois slots (2 × 16K); `-ctk/-ctv q8_0` reduz o KV cache à metade; **`-lm none` é obrigatório no Qwen3.6**: sem ele o mmap leva o pico de RAM a ~32,5 GB e o prompt a ~350 tok/s (ADR-010); `--n-cpu-moe 24` é uma opção com o desktop leve; `--moe-cache-mib` fica desligado. No `consultar-rapido`, o gpt-oss usa `--n-cpu-moe 4` porque inteiro ele consome 15,1 GB sozinho; o reranker usa `-c 4096`, suficiente para um trecho de até 2.048 tokens. O YAML sobe por `infra/swap.ps1` (que define `GRAG_ROOT`) e é conferido por `infra/testar-swap.ps1`. No perfil `indexar` o embedding roda com `-ngl 99` (modelo `el`) num passo separado, depois que o LLM é descarregado.
 
 ---
 

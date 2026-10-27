@@ -1,0 +1,2 @@
+GPU (-ngl 99)  24 trechos x ~1200 tokens: 2,17 / 1,88 / 1,85 s  (6 resultados)  VRAM +4.577 MB (config de teste: -c 32768 -np 24)
+CPU (-ngl 0)   24 trechos x ~1200 tokens: 4,45 / 4,07 / 4,18 s  (6 resultados)  VRAM +433 MB

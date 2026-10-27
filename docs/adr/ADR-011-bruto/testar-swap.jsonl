@@ -1,0 +1,11 @@
+﻿["gemma4-26b-a4b-juiz","gpt-oss-20b","qwen3-embed-0.6b","qwen3-embed-0.6b-lote","qwen3-rerank-0.6b","qwen36-35b-a3b"]
+{"perfil":"consultar","passo":"embeddings (CPU)","ok":true,"segundos":1.3,"vram_mb":3562,"ram_usada_mb":10583,"detalhe":"dim=1024"}
+{"perfil":"consultar","passo":"rerank (GPU)","ok":true,"segundos":1.3,"vram_mb":4870,"ram_usada_mb":11349,"detalhe":"0:1,00 1:0,00 2:0,00"}
+{"perfil":"consultar","passo":"LLM Qwen3.6 (carga + resposta)","ok":true,"segundos":13.6,"vram_mb":13597,"ram_usada_mb":25220,"detalhe":"pronto."}
+{"perfil":"consultar","passo":"embeddings com Qwen residente","ok":true,"segundos":0,"vram_mb":13597,"ram_usada_mb":25224,"detalhe":"dim=1024"}
+{"perfil":"vetorizar","passo":"embeddings em lote (GPU)","ok":true,"segundos":2.6,"vram_mb":5101,"ram_usada_mb":9618,"detalhe":"dim=1024"}
+{"perfil":"consultar-rapido","passo":"LLM gpt-oss-20b","ok":true,"segundos":7,"vram_mb":13238,"ram_usada_mb":11399,"detalhe":""}
+{"perfil":"consultar-rapido","passo":"embeddings (CPU)","ok":true,"segundos":1.3,"vram_mb":13476,"ram_usada_mb":12908,"detalhe":"dim=1024"}
+{"perfil":"consultar-rapido","passo":"rerank (GPU) com gpt-oss","ok":true,"segundos":1.3,"vram_mb":14782,"ram_usada_mb":13691,"detalhe":"0:0,83 1:0,00"}
+{"perfil":"avaliar","passo":"juiz Gemma 4 (HIP)","ok":true,"segundos":14.8,"vram_mb":15940,"ram_usada_mb":26125,"detalhe":"pronto."}
+{"perfil":"indexar","passo":"LLM Qwen3.6 (volta do juiz)","ok":true,"segundos":16,"vram_mb":12050,"ram_usada_mb":22825,"detalhe":"pronto."}

@@ -1,5 +1,5 @@
 {
-  "_nota": "llama_cpp preenchido na F0.2; modelos na F0.3 (27/10/2026); llama_swap fica para a F0.6. sha256 conferido por infra/verify_models.ps1.",
+  "_nota": "llama_cpp na F0.2; modelos na F0.3; llama_swap na F0.6 (27/10/2026). sha256 dos modelos conferido por infra/verify_models.ps1.",
   "llama_cpp": {
     "versao": "b11932",
     "publicado": "2026-10-27",
@@ -31,7 +31,11 @@
     }
   },
   "llama_swap": {
-    "versao": null
+    "versao": "v267",
+    "arquivo": "llama-swap_267_windows_amd64.zip",
+    "sha256": "6ead3207eb0247e68ecc2bd67c0405d4cb434e08cba43816eacb33cae7882bca",
+    "pasta": "infra/bin/llama-swap-v267",
+    "fonte": "https://github.com/mostlygeek/llama-swap/releases/tag/v267"
   },
   "modelos": [
     {

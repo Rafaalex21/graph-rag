@@ -39,8 +39,9 @@
   - aceite: pico de VRAM ≤ 15,2 GB e de RAM ≤ 28 GB; geração ≥ 20 tok/s
   - nota: Qwen3.6 com `-lm none` e `--n-cpu-moe 28`: VRAM 12,4 GB, RAM 25,3 GB, geração 35 tok/s (1 fluxo, ~15K de contexto); com 2 slots saturados o slot que divide tempo com o prefill do outro cai a ~10 tok/s. O mmap (padrão) dava RAM de 32,5 GB. ADR-010 propõe revisar o ADR-001 (backend do `indexar`)
   - depende: F0.4
-- [~] **F0.6** Configurar o `llama-swap` com os perfis `indexar`, `vetorizar`, `consultar`, `consultar-rapido` e `avaliar`
+- [x] **F0.6** Configurar o `llama-swap` com os perfis `indexar`, `vetorizar`, `consultar`, `consultar-rapido` e `avaliar`
   - aceite: `/v1/models` lista todos; `/v1/embeddings` e `/v1/rerank` respondem; troca de perfil ≤ 60 s
+  - nota: llama-swap v267 com motor `matrix` (ADR-011); 6 modelos, embeddings e rerank ok, pior troca de perfil 16.0 s; `consultar-rapido` fecha em 14,8 GB com o gpt-oss em `--n-cpu-moe 4`; o juiz (`avaliar`) fica em 15,9 GB, acima do teto de 15,2 GB: pendência para a F3
   - depende: F0.5
 - [ ] **F0.7** Subir o Neo4j 2026.10 com APOC e GDS no Docker, volume persistente e `.wslconfig` limitando o WSL2
   - aceite: `RETURN gds.version(), apoc.version()` responde; WSL2 ≤ 8 GB

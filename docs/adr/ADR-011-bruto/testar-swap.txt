@@ -1,0 +1,13 @@
+﻿/v1/models lista 6 modelos: gemma4-26b-a4b-juiz, gpt-oss-20b, qwen3-embed-0.6b, qwen3-embed-0.6b-lote, qwen3-rerank-0.6b, qwen36-35b-a3b
+VRAM em repouso: 3324 MB  RAM usada: 9037 MB
+consultar         embeddings (CPU)                   ok        1,3s  VRAM   3562 MB  RAM  10583 MB  dim=1024
+consultar         rerank (GPU)                       ok        1,3s  VRAM   4870 MB  RAM  11349 MB  0:1,00 1:0,00 2:0,00
+consultar         LLM Qwen3.6 (carga + resposta)     ok       13,6s  VRAM  13597 MB  RAM  25220 MB  pronto.
+consultar         embeddings com Qwen residente      ok          0s  VRAM  13597 MB  RAM  25224 MB  dim=1024
+vetorizar         embeddings em lote (GPU)           ok        2,6s  VRAM   5101 MB  RAM   9618 MB  dim=1024
+consultar-rapido  LLM gpt-oss-20b                    ok          7s  VRAM  13238 MB  RAM  11399 MB  
+consultar-rapido  embeddings (CPU)                   ok        1,3s  VRAM  13476 MB  RAM  12908 MB  dim=1024
+consultar-rapido  rerank (GPU) com gpt-oss           ok        1,3s  VRAM  14782 MB  RAM  13691 MB  0:0,83 1:0,00
+avaliar           juiz Gemma 4 (HIP)                 ok       14,8s  VRAM  15940 MB  RAM  26125 MB  pronto.
+indexar           LLM Qwen3.6 (volta do juiz)        ok         16s  VRAM  12050 MB  RAM  22825 MB  pronto.
+Resultado bruto em C:\Users\Rafael\Documents\Graph Rag\docs\adr\ADR-011-bruto\testar-swap.jsonl

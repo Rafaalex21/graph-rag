@@ -1,0 +1,85 @@
+# llama-swap v267 — perfis do GraphRAG local (ARQUITETURA §9, ADR-001 revisada, ADR-010)
+# Sobe por infra/swap.ps1, que define GRAG_ROOT (barras normais) e GRAG_ROOT_WIN (barras invertidas).
+# Perfis (matrix.sets): indexar · vetorizar · consultar · consultar-rapido · avaliar
+healthCheckTimeout: 300
+startPort: 10001
+logLevel: info
+globalTTL: 0                # modelos ficam residentes até serem expulsos por outro perfil
+
+macros:
+  "vk":      "${env.GRAG_ROOT}/infra/bin/llama-b11932-vulkan/llama-server.exe"
+  "hip":     "${env.GRAG_ROOT}/infra/bin/llama-b11932-hip/llama-server.exe"
+  "modelos": "C:/modelos"
+
+models:
+  # LLM principal: indexar e consultar. Vulkan, sem mmap, experts das 28 primeiras camadas na CPU (ADR-010).
+  "qwen36-35b-a3b":
+    name: "Qwen3.6-35B-A3B UD-Q4_K_XL"
+    cmd: |
+      "${vk}" --host 127.0.0.1 --port ${PORT}
+      -m ${modelos}/Qwen3.6-35B-A3B-UD-Q4_K_XL.gguf
+      -c 32768 -np 2 -ngl 99 --n-cpu-moe 28 -lm none
+      -fa on -ctk q8_0 -ctv q8_0 --jinja
+
+  # LLM rápido (consultar-rapido). Inteiro na GPU ele sozinho chega a 15,1 GB com o desktop atual; com 4 camadas
+  # de experts na CPU a geração cai de 170 para ~75 tok/s e sobra espaço para embedding e reranker (ADR-011).
+  "gpt-oss-20b":
+    name: "gpt-oss-20b MXFP4"
+    cmd: |
+      "${vk}" --host 127.0.0.1 --port ${PORT}
+      -m ${modelos}/gpt-oss-20b-MXFP4.gguf
+      -c 16384 -ngl 99 --n-cpu-moe 4 -lm none -fa on -ctk q8_0 -ctv q8_0 --jinja
+
+  # Embeddings na CPU: perguntas, uma por vez (milissegundos).
+  "qwen3-embed-0.6b":
+    name: "Qwen3-Embedding-0.6B Q8_0 (CPU)"
+    cmd: |
+      "${vk}" --host 127.0.0.1 --port ${PORT}
+      -m ${modelos}/Qwen3-Embedding-0.6B-Q8_0.gguf
+      --embedding --pooling last -ngl 0 -c 8192 -ub 8192
+
+  # Embeddings na GPU: lote da indexação (perfil vetorizar, LLM descarregado).
+  "qwen3-embed-0.6b-lote":
+    name: "Qwen3-Embedding-0.6B Q8_0 (GPU, lote)"
+    cmd: |
+      "${vk}" --host 127.0.0.1 --port ${PORT}
+      -m ${modelos}/Qwen3-Embedding-0.6B-Q8_0.gguf
+      --embedding --pooling last -ngl 99 -c 8192 -ub 8192
+
+  # Reranker na GPU: POST /v1/rerank
+  "qwen3-rerank-0.6b":
+    name: "Qwen3-Reranker-0.6B Q8_0"
+    cmd: |
+      "${vk}" --host 127.0.0.1 --port ${PORT}
+      -m ${modelos}/qwen3-reranker-0.6b-q8_0.gguf
+      --reranking --pooling rank -ngl 99 -c 4096 -ub 2048
+
+  # Juiz da avaliação: HIP (provisório, ADR-001). As DLLs hipblas/rocblas vêm do venv ROCm.
+  "gemma4-26b-a4b-juiz":
+    name: "Gemma 4 26B-A4B QAT Q4_0 (juiz, HIP)"
+    env:
+      - "PATH=${env.GRAG_ROOT_WIN}\\infra\\bin\\rocm-venv\\Lib\\site-packages\\_rocm_sdk_libraries\\bin;${env.GRAG_ROOT_WIN}\\infra\\bin\\rocm-venv\\Lib\\site-packages\\_rocm_sdk_core\\bin;${env.PATH}"
+    cmd: |
+      "${hip}" --host 127.0.0.1 --port ${PORT}
+      -m ${modelos}/gemma-4-26B_q4_0-it.gguf
+      -c 16384 -ngl 99 -fa on --jinja
+
+routing:
+  router:
+    use: matrix
+    settings:
+      matrix:
+        vars:
+          q:  qwen36-35b-a3b
+          g:  gpt-oss-20b
+          e:  qwen3-embed-0.6b
+          el: qwen3-embed-0.6b-lote
+          r:  qwen3-rerank-0.6b
+          j:  gemma4-26b-a4b-juiz
+        # Modelos fora de qualquer conjunto rodam sozinhos (expulsam os demais): é o caso de el e j.
+        sets:
+          indexar:           "q"
+          consultar:         "q & e & r"
+          consultar-rapido:  "g & e & r"
+          vetorizar:         "el"
+          avaliar:           "j"

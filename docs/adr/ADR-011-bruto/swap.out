@@ -1,0 +1,17 @@
+[INFO] llama-swap listening on http://127.0.0.1:8080
+[INFO] using PDH performance counters for GPU utilization
+[INFO] using D3DKMT for GPU monitoring
+[INFO] matrix: model=qwen3-embed-0.6b starting (no models running)
+[INFO] <qwen3-embed-0.6b> Health check passed on http://localhost:10003/health
+[INFO] <qwen3-rerank-0.6b> Health check passed on http://localhost:10005/health
+[INFO] <qwen36-35b-a3b> Health check passed on http://localhost:10006/health
+[INFO] matrix: model=qwen3-embed-0.6b-lote set=vetorizar dsl="el" evict=[qwen3-embed-0.6b qwen3-rerank-0.6b qwen36-35b-a3b] target=[qwen3-embed-0.6b-lote] cost=3
+[INFO] <qwen3-embed-0.6b-lote> Health check passed on http://localhost:10004/health
+[INFO] matrix: model=gpt-oss-20b set=consultar-rapido dsl="g & e & r" evict=[qwen3-embed-0.6b-lote] target=[gpt-oss-20b qwen3-embed-0.6b qwen3-rerank-0.6b] cost=1
+[INFO] <gpt-oss-20b> Health check passed on http://localhost:10002/health
+[INFO] <qwen3-embed-0.6b> Health check passed on http://localhost:10003/health
+[INFO] <qwen3-rerank-0.6b> Health check passed on http://localhost:10005/health
+[INFO] matrix: model=gemma4-26b-a4b-juiz set=avaliar dsl="j" evict=[gpt-oss-20b qwen3-embed-0.6b qwen3-rerank-0.6b] target=[gemma4-26b-a4b-juiz] cost=3
+[INFO] <gemma4-26b-a4b-juiz> Health check passed on http://localhost:10001/health
+[INFO] matrix: model=qwen36-35b-a3b set=consultar dsl="q & e & r" evict=[gemma4-26b-a4b-juiz] target=[qwen3-embed-0.6b qwen3-rerank-0.6b qwen36-35b-a3b] cost=1
+[INFO] <qwen36-35b-a3b> Health check passed on http://localhost:10006/health
