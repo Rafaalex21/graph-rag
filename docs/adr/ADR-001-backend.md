@@ -1,41 +1,56 @@
 # ADR-001 · Backend de inferência: Vulkan × HIP
 
-- **Estado:** aceita (27/10/2026); ARQUITETURA.md atualizada para a v0.2 com as correções que as medições impuseram (§0, §2, §5.2, §8, §9, §14 e §15)
+- **Estado:** aceita em 27/10/2026 e **revisada no mesmo dia** pela F0.5 (ver "Revisão"); ARQUITETURA.md na v0.3
 - **Data:** 2026-10-27
-- **Tarefa(s):** F0.2, F0.4
+- **Tarefa(s):** F0.2, F0.4, F0.5
 
 ## Contexto
 
 A ARQUITETURA §2.2 adotava o Vulkan como padrão e o ROCm/HIP como alternativa, com base em estimativas de terceiros medidas na RX 9070 XT: Vulkan geraria tokens 12–18% mais rápido e o ROCm processaria prompt ~40% mais rápido. A F0.4 troca essas estimativas por medições nesta máquina (RX 9070, Ryzen 5 5600X, 32 GB DDR4, driver 32.0.32015.7029, llama.cpp b11932).
 
-Regra de decisão, definida antes de ver os números: `indexar` é dominado por processamento de prompt (escolhe-se pelo `pp2048` do Qwen3.6); `consultar` é dominado por geração (escolhe-se pelo `tg128`); o HIP só vence com ganho **≥ 5%** na métrica dominante, e em empate fica o Vulkan (dispensa as wheels `rocm-sdk` de ~1,1 GB).
+Regra de decisão: o HIP só vence com ganho **≥ 5%** na métrica dominante do perfil, e em empate fica o Vulkan (dispensa as wheels `rocm-sdk` de ~1,1 GB). Na versão original eu assumi que `indexar` era dominado por processamento de prompt (escolha pelo `pp2048`) e `consultar` por geração (`tg128`); a F0.5 mostrou que essa premissa estava errada para a indexação (ver "Revisão").
 
 ## Decisão
 
-Manter **os dois builds** do llama.cpp b11932 e escolher o backend por perfil do `llama-swap`:
+Manter **os dois builds** do llama.cpp b11932, com o **Vulkan como padrão** e o HIP apenas no juiz:
 
 | Perfil / modelo | Backend | Base da escolha |
 |---|---|---|
-| `indexar` (Qwen3.6-35B-A3B) | **HIP** | `pp2048` +34% a +41% sobre o Vulkan em todos os `--n-cpu-moe` medidos |
-| `consultar` (Qwen3.6-35B-A3B) | **Vulkan** | `tg128` +7% a +10% sobre o HIP com `--n-cpu-moe` 24 a 40 (em 20 o ganho é de 3%, abaixo do limite, e o empate fica com o Vulkan) |
+| `indexar` (Qwen3.6-35B-A3B) | **Vulkan** | A geração domina o tempo por chamada (~85%) e o Vulkan gera ~8% mais rápido sem mmap; no total, ~5% a 6% menos tempo (4,6 h contra 4,9 h, ADR-010). *(Revisado: era HIP.)* |
+| `consultar` (Qwen3.6-35B-A3B) | **Vulkan** | `tg128` +8% sobre o HIP sem mmap (`ncmoe` 24 e 28); medições com mmap deram +7% a +10% |
 | `consultar-rapido` (gpt-oss-20b) | **Vulkan** | `pp` ~4× e `tg128` +32% sobre o HIP |
 | `avaliar` (juiz Gemma 4) | **HIP, provisório** | `pp` +46% a +49% e `tg128` +10%; ver ressalva de pressão de VRAM |
 | `vetorizar` / reranker | a medir na F0.6 | modelos pequenos, não medidos aqui |
 
-Consequência prática: o `llama-swap` terá entradas separadas para o mesmo arquivo do Qwen3.6 (uma com o `llama-server` Vulkan, outra com o HIP), e o HIP exige `infra/hip-env.ps1` no ambiente do processo.
+Consequência prática: o `llama-swap` usa **uma só entrada** para o Qwen3.6 (Vulkan) nos perfis `indexar` e `consultar`; o HIP e `infra/hip-env.ps1` servem apenas ao juiz Gemma 4. Se a reconfirmação do juiz não mostrar vantagem relevante do HIP, as wheels `rocm-sdk` (~1,1 GB) e o build HIP podem ser dispensados.
 
 ## Alternativas consideradas
 
-- **Só Vulkan (padrão original da ARQUITETURA).** Mais simples, mas abre mão de +34% a +41% de processamento de prompt na indexação, a etapa de várias horas.
-- **Só HIP.** Perde 7% a 10% de geração no Qwen3.6 e, no gpt-oss-20b, 4× de prompt e 32% de geração.
+- **Só Vulkan, inclusive no juiz.** É a direção natural; fica pendente só a reconfirmação do Gemma 4 com o desktop leve (HIP +46% de prompt e +10% de geração nas medições atuais).
+- **HIP também no `indexar` (decisão original).** Revertida: com o carregamento sem mmap a vantagem do HIP em prompt cai de +34% a +41% para +8% a +10%, e o Vulkan gera ~8% mais rápido.
 - **Ollama, vLLM:** já descartados na ARQUITETURA §2.2 e §8; esta medição não os reabre.
 
 ## Consequências
 
-- O perfil `indexar` ganha tempo de prompt, mas depende do venv ROCm local e de uma cópia extra do `llama-server`.
-- A estimativa de tempo de indexação da ARQUITETURA §5.2 (hipóteses de ~400 tok/s de prompt e ~30 tok/s de geração) foi refeita na ARQUITETURA v0.2 com os números medidos aqui (`pp2048` de 304 a 478 tok/s no HIP, `tg128` de 25 a 38 tok/s): ~5,3 h com o Qwen3.6, como limite inferior.
-- A F0.5 (calibração do `--n-cpu-moe`) deve medir também o cache `--moe-cache-mib` do llama.cpp v0.7.0, que o `llama-bench` não expõe.
+- O build HIP e o venv ROCm passam a ser opcionais: só o juiz os usa.
+- A estimativa de tempo de indexação da ARQUITETURA §5.2 foi refeita duas vezes (v0.2 com mmap, v0.3 sem mmap): **~4,6 h** com o Qwen3.6 no Vulkan, como limite inferior.
+- A F0.5 mediu o cache `--moe-cache-mib` e o descartou (ADR-010).
 - O juiz (Gemma 4) deve ser reconfirmado com o desktop mais leve (ver ressalvas).
+
+## Revisão (F0.5)
+
+Duas falhas da decisão original, ambas descobertas na F0.5:
+
+1. **Premissa errada sobre a indexação.** A ARQUITETURA v0.1 dizia que a indexação é dominada por prompt ("trechos longos entram, pouco texto sai"), e eu usei isso como regra de decisão. As contas do próprio §5.2 já indicavam o contrário: numa chamada de extração, a saída (~600 tokens a ~35 tok/s) leva ~17 s e a entrada (~2,5K tokens) leva poucos segundos.
+2. **Medições com mmap.** O `llama-bench` do Qwen3.6 foi rodado com o carregamento padrão (mmap), que penaliza o prompt quando há experts na CPU. Repetido com `-lm none`, o `pp2048` sobe de 2,4× a 3,1× nos dois backends, a geração fica igual, e a vantagem do HIP em prompt cai para +8% a +10% (tabela no ADR-010).
+
+| Perfil | Decisão original | Decisão revisada |
+|---|---|---|
+| `indexar` | HIP | Vulkan |
+| `consultar`, `consultar-rapido` | Vulkan | Vulkan |
+| `avaliar` (Gemma 4) | HIP, provisório | HIP, provisório |
+
+As tabelas da seção "Evidência" abaixo são as da F0.4 **com mmap** e foram mantidas como registro; os números sem mmap estão no ADR-010 e nos arquivos `*_lmnone.*` de `ADR-001-bruto/`.
 
 ## Ressalvas sobre as medições
 
@@ -67,7 +82,7 @@ vram em uso antes MB: 4409
 energia: GUID do Esquema de Energia: 3ff9831b-6f80-4830-8178-736cd4229e7b  (Revision - Ultra Performance)
 ```
 
-### Resultados (média ± desvio de 3 repetições)
+### Resultados com mmap, a F0.4 original (média ± desvio de 3 repetições)
 
 "VRAM líquida" é o pico menos a VRAM em uso antes da corrida.
 

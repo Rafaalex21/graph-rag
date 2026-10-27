@@ -4,8 +4,8 @@ Uma decisão por arquivo: `ADR-NNN-assunto.md`. As nove decisões iniciais estã
 
 | ADR | Assunto | Onde se fecha |
 |---|---|---|
-| [001](ADR-001-backend.md) | Backend de inferência (Vulkan × HIP) | F0.4 — aceita, com as medições |
-| [010](ADR-010-offload-moe.md) | Offload de experts do Qwen3.6 (`-lm none`, `--n-cpu-moe`) | F0.5 — proposta, com as medições |
+| [001](ADR-001-backend.md) | Backend de inferência (Vulkan × HIP) | F0.4 — aceita, revisada na F0.5 |
+| [010](ADR-010-offload-moe.md) | Offload de experts do Qwen3.6 (`-lm none`, `--n-cpu-moe`) | F0.5 — aceita, com as medições |
 | 009 | Documento escolhido | F1.1 |
 
 Modelo em [`ADR-000-modelo.md`](ADR-000-modelo.md).

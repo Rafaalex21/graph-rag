@@ -1,6 +1,6 @@
 # ADR-010 · Offload de experts do Qwen3.6 no `llama-server`: `-lm none` e `--n-cpu-moe`
 
-- **Estado:** proposta (a configuração do Qwen3.6 está medida; a revisão do ADR-001 que ela impõe aguarda aprovação)
+- **Estado:** aceita (27/10/2026); a revisão do ADR-001 que ela impõe foi aplicada e a ARQUITETURA.md está na v0.3
 - **Data:** 2026-10-27
 - **Tarefa(s):** F0.5
 
@@ -41,7 +41,7 @@ O último ponto é interferência de prefill sobre decode (o outro slot processa
 - O pico de RAM de 25,3 GB deixa pouca folga para o embedding na CPU e o navegador. No perfil `consultar` o total estimado é ~26,5 GB.
 - A VRAM do desktop (3,5 a 4,5 GB) segue sendo a principal fonte de incerteza dos picos.
 
-### Proposta de revisão do ADR-001 (aguarda aprovação)
+### Revisão do ADR-001 (aplicada)
 
 | Perfil / modelo | ADR-001 (aceita) | Proposta |
 |---|---|---|
@@ -50,7 +50,7 @@ O último ponto é interferência de prefill sobre decode (o outro slot processa
 | `consultar-rapido` (gpt-oss-20b) | Vulkan | Vulkan (sem mudança; modelo cabe inteiro na GPU, o mmap não pesa) |
 | `avaliar` (Gemma 4) | HIP, provisório | HIP, provisório (sem mudança; reconfirmar com o desktop leve) |
 
-Efeito: o HIP e as wheels `rocm-sdk` de ~1,1 GB passam a servir só ao juiz. Se a reconfirmação do Gemma não mostrar vantagem relevante, dá para dispensar o HIP. A ARQUITETURA v0.2 (§0, §2.2, §5.2 e §9) seria ajustada de acordo; o §5.2 passaria a ~4.6 h no Vulkan (tabela abaixo).
+Efeito: o HIP e as wheels `rocm-sdk` de ~1,1 GB passam a servir só ao juiz. Se a reconfirmação do Gemma não mostrar vantagem relevante, dá para dispensar o HIP. A ARQUITETURA v0.3 (§0, §2.2, §2.4, §5.2 e §9) foi ajustada de acordo; o §5.2 passaria a ~4.6 h no Vulkan (tabela abaixo).
 
 ## Ressalvas
 
