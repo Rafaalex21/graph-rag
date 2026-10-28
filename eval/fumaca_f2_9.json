@@ -1,0 +1,45 @@
+{
+  "descricao": "Perguntas de fumaça da F2.9 (não é o golden set da F3.1). As páginas corretas foram achadas por busca de texto no PDF original (docs/adr/ADR-026-bruto/gold_paginas_pdf.py), não pelo sistema. Página = física, a mesma do pdf.js.",
+  "casos": [
+    {
+      "id": "caixa-operacional",
+      "pergunta": "Qual foi o caixa líquido proveniente das atividades operacionais em 2025?",
+      "paginas_corretas": [91],
+      "fato": "159\\.254"
+    },
+    {
+      "id": "emprestimo-ndb",
+      "pergunta": "Qual o valor do contrato de empréstimo formalizado em dezembro de 2022 com o New Development Bank?",
+      "paginas_corretas": [90],
+      "fato": "200 milh"
+    },
+    {
+      "id": "programa-de-integridade",
+      "pergunta": "Em que ano foi criado o Programa de Compliance e Integridade do Banco do Brasil?",
+      "paginas_corretas": [194],
+      "fato": "2017"
+    },
+    {
+      "id": "auditor",
+      "pergunta": "Qual empresa de auditoria independente audita o Banco do Brasil?",
+      "paginas_corretas": [62, 363],
+      "fato": "KPMG"
+    },
+    {
+      "id": "processos-cgu",
+      "pergunta": "Quantos processos foram julgados com aplicação de sanção de multa em 2023 por atos contra a administração pública?",
+      "paginas_corretas": [200],
+      "fato": "quatro|\\b4\\b"
+    }
+  ],
+  "negativos": [
+    {
+      "id": "fora-do-documento",
+      "pergunta": "Qual foi o lucro líquido do Itaú Unibanco em 2025?"
+    },
+    {
+      "id": "cotacao-hoje",
+      "pergunta": "Qual é a cotação da ação do Banco do Brasil hoje?"
+    }
+  ]
+}

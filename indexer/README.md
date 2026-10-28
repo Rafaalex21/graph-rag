@@ -104,3 +104,10 @@ Reescritas opcionais da consulta (F2.8, ADR-025); precisam do LLM no llama-swap 
 uv run python -m indexer.reranker buscar "sua pergunta" --stepback --hyde
 uv run python -m indexer.recuperador comparar-reescritas
 ```
+
+CLI `ask` (F2.9, ADR-026); precisa do llama-swap (perfil `consultar`) e do Neo4j no ar:
+
+```powershell
+uv run python -m indexer.ask "Qual foi o caixa líquido proveniente das atividades operacionais em 2025?"
+uv run python -m indexer.ask avaliar
+```

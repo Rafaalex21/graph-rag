@@ -22,5 +22,6 @@ Uma decisão por arquivo: `ADR-NNN-assunto.md`. As nove decisões iniciais estã
 | [023](ADR-023-rerank-dos-pais.md) | Rerank dos Pais com o Qwen3-Reranker-0.6B | F2.6 — aceita |
 | [024](ADR-024-tabelas-e-perguntas-hipoteticas.md) | Tabelas: descrição, perguntas hipotéticas e `question_vec` | F2.7 — aceita |
 | [025](ADR-025-reescritas-da-consulta.md) | Reescritas opcionais da consulta: step-back e HyDE | F2.8 — aceita |
+| [026](ADR-026-cli-ask.md) | CLI `ask`: resposta só com o contexto e citação `[p. N]` | F2.9 — aceita |
 
 Modelo em [`ADR-000-modelo.md`](ADR-000-modelo.md).

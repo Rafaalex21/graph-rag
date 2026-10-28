@@ -1,0 +1,116 @@
+﻿{
+  "casos": 5,
+  "pagina_correta": 5,
+  "fato_na_resposta": 5,
+  "citacoes_invalidas": 0,
+  "negativos_recusados": "2 de 2",
+  "detalhe": [
+    {
+      "id": "caixa-operacional",
+      "pagina_correta": true,
+      "fato_na_resposta": true,
+      "citacoes": [
+        "[p. 91]"
+      ],
+      "citacoes_invalidas": 0,
+      "paginas_dos_trechos": [
+        "p. 91",
+        "p. 91",
+        "p. 91",
+        "p. 99",
+        "p. 80",
+        "p. 97"
+      ],
+      "latencia_ms": 4027.5,
+      "resposta": "O caixa líquido proveniente das atividades operacionais totalizou R$ 159.254 milhões no exercício encerrado em 31 de dezembro de 2025 [p. 91]."
+    },
+    {
+      "id": "emprestimo-ndb",
+      "pagina_correta": true,
+      "fato_na_resposta": true,
+      "citacoes": [
+        "[p. 90]"
+      ],
+      "citacoes_invalidas": 0,
+      "paginas_dos_trechos": [
+        "p. 90",
+        "p. 6-7",
+        "p. 85-86",
+        "p. 370",
+        "p. 363",
+        "p. 91"
+      ],
+      "latencia_ms": 6017.8,
+      "resposta": "O valor do contrato de empréstimo formalizado em dezembro de 2022 com o New Development Bank (NDB) foi de US$ 200 milhões [p. 90]."
+    },
+    {
+      "id": "programa-de-integridade",
+      "pagina_correta": true,
+      "fato_na_resposta": true,
+      "citacoes": [
+        "[p. 194]"
+      ],
+      "citacoes_invalidas": 0,
+      "paginas_dos_trechos": [
+        "p. 194",
+        "p. 195-196",
+        "p. 196-197",
+        "p. 197-199",
+        "p. 199",
+        "p. 194"
+      ],
+      "latencia_ms": 7443.900000000001,
+      "resposta": "O Programa de Compliance e Integridade do Banco do Brasil foi criado em 2017 [p. 194]."
+    },
+    {
+      "id": "auditor",
+      "pagina_correta": true,
+      "fato_na_resposta": true,
+      "citacoes": [
+        "[p. 363]"
+      ],
+      "citacoes_invalidas": 0,
+      "paginas_dos_trechos": [
+        "p. 197-199",
+        "p. 364",
+        "p. 363",
+        "p. 199",
+        "p. 196-197",
+        "p. 195-196"
+      ],
+      "latencia_ms": 6875.900000000001,
+      "resposta": "A empresa de auditoria independente que audita o Banco do Brasil é a KPMG Auditores Independentes Ltda [p. 363]."
+    },
+    {
+      "id": "processos-cgu",
+      "pagina_correta": true,
+      "fato_na_resposta": true,
+      "citacoes": [
+        "[p. 200]"
+      ],
+      "citacoes_invalidas": 0,
+      "paginas_dos_trechos": [
+        "p. 200",
+        "p. 199",
+        "p. 195-196",
+        "p. 197-199",
+        "p. 308",
+        "p. 307"
+      ],
+      "latencia_ms": 6047.3,
+      "resposta": "Em 2023, quatro processos foram julgados com aplicação de sanção de multa [p. 200]."
+    }
+  ],
+  "negativos": [
+    {
+      "id": "fora-do-documento",
+      "recusou": true,
+      "resposta": "Não encontrei essa informação nos trechos recuperados."
+    },
+    {
+      "id": "cotacao-hoje",
+      "recusou": true,
+      "resposta": "Não encontrei essa informação nos trechos recuperados."
+    }
+  ]
+}
