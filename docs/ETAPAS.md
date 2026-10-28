@@ -104,7 +104,7 @@
   - aceite: índice ONLINE; autoteste trecho → si mesmo com recall@1 ≥ 0,98
   - nota: ADR-020; 166 Filhos embutidos em 2,4 s (GPU, lote); `child_vec` ONLINE 1024 dims cosseno; autoteste GPU→CPU recall@1 = 1,00 (166/166); sonda de trecho 0,89 @1 e 0,98 @5
   - depende: F2.2
-- [ ] **F2.4** Criar `child_ft` e a busca híbrida em duas variantes: normalização pelo máximo (cap. 2) e RRF
+- [~] **F2.4** Criar `child_ft` e a busca híbrida em duas variantes: normalização pelo máximo (cap. 2) e RRF
   - aceite: vetor, híbrido-máximo e híbrido-RRF selecionáveis por flag
   - depende: F2.3
 - [ ] **F2.5** Retriever parent-document: k×4 filhos → deduplicação por Pai → top-k
