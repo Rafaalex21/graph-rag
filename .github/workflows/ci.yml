@@ -1,6 +1,6 @@
 name: CI
 
-# Cada job só roda quando o app correspondente existe (F0.8 cria os esqueletos).
+# Três jobs independentes, um por app. Os esqueletos existem desde a F0.8.
 on:
   pull_request:
   push:
@@ -17,18 +17,13 @@ jobs:
         working-directory: indexer
     steps:
       - uses: actions/checkout@v4
-      - name: Ignorar enquanto o app não existe
-        id: existe
-        run: test -f pyproject.toml && echo "ok=true" >> "$GITHUB_OUTPUT" || echo "ok=false" >> "$GITHUB_OUTPUT"
-        working-directory: .
-        shell: bash
-      - if: steps.existe.outputs.ok == 'true'
-        uses: astral-sh/setup-uv@v5
-      - if: steps.existe.outputs.ok == 'true'
-        run: |
-          uv sync --all-extras
-          uv run ruff check .
-          uv run pytest -q
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.12"
+      - uses: astral-sh/setup-uv@v5
+      - run: uv sync --frozen
+      - run: uv run ruff check .
+      - run: uv run pytest
 
   api:
     runs-on: ubuntu-latest
@@ -37,21 +32,16 @@ jobs:
         working-directory: api
     steps:
       - uses: actions/checkout@v4
-      - id: existe
-        run: test -f package.json && echo "ok=true" >> "$GITHUB_OUTPUT" || echo "ok=false" >> "$GITHUB_OUTPUT"
-        working-directory: .
-        shell: bash
-      - if: steps.existe.outputs.ok == 'true'
-        uses: actions/setup-node@v4
+      - uses: actions/setup-node@v4
         with:
-          node-version: lts/*
+          node-version: "24"
           cache: npm
           cache-dependency-path: api/package-lock.json
-      - if: steps.existe.outputs.ok == 'true'
-        run: |
-          npm ci
-          npm run lint --if-present
-          npm test
+      - run: npm ci
+      - run: npm run lint
+      - run: npm run typecheck
+      - run: npm test
+      - run: npm run build
 
   web:
     runs-on: ubuntu-latest
@@ -60,18 +50,12 @@ jobs:
         working-directory: web
     steps:
       - uses: actions/checkout@v4
-      - id: existe
-        run: test -f package.json && echo "ok=true" >> "$GITHUB_OUTPUT" || echo "ok=false" >> "$GITHUB_OUTPUT"
-        working-directory: .
-        shell: bash
-      - if: steps.existe.outputs.ok == 'true'
-        uses: actions/setup-node@v4
+      - uses: actions/setup-node@v4
         with:
-          node-version: lts/*
+          node-version: "24"
           cache: npm
           cache-dependency-path: web/package-lock.json
-      - if: steps.existe.outputs.ok == 'true'
-        run: |
-          npm ci
-          npx ng test --watch=false --browsers=ChromeHeadless
-          npx ng build
+      - run: npm ci
+      - run: npx ng lint
+      - run: npx ng test --watch=false
+      - run: npx ng build

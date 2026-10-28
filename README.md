@@ -37,6 +37,8 @@ Uma tarefa só vira `[x]` quando o **critério de aceite** foi verificado.
 
 Requisitos para o passo 1: Git, GitHub CLI (`gh`) e Python 3.10+.
 
+Desenvolvimento (Node 24 e uv portáteis, sem instalar nada no sistema): `. .\infra\dev-env.ps1` e, em cada app, `uv run pytest` (indexer), `npm test` (api) e `npx ng test --watch=false` (web).
+
 ## Estrutura
 
 ```

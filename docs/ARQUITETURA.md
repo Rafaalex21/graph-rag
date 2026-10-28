@@ -626,9 +626,9 @@ Notas: o motor `matrix` (ADR-011) permite que o embedding e o reranker participe
 |---|---|---|
 | Inferência | llama.cpp (`llama-server`, builds Vulkan e HIP), `llama-swap` | Versão fixada no *lock* |
 | Banco | Neo4j 2026.10 Community + APOC + GDS 2026.10 | Nativo no Windows com JDK 21 portátil, sem Docker nem WSL2 (ADR-012); GDS Community limita a 4 núcleos — suficiente |
-| Indexador | Python 3.12, `uv`, Docling, Pydantic v2, `neo4j`, `openai`, `graphdatascience` | `neo4j-graphrag` como referência, não como dependência central |
-| API | Node LTS, TypeScript, Fastify, `neo4j-driver`, `openai`, Zod, Pino | Esquemas de ferramenta gerados a partir do Zod |
-| Web | Angular 22 (standalone, signals), `marked` + DOMPurify, `pdfjs-dist`, NVL ou Cytoscape.js | SSE via `fetch` + `ReadableStream` (o `EventSource` não aceita POST) |
+| Indexador | Python 3.12, `uv` 0.13, pytest e ruff; depois Docling, Pydantic v2, `neo4j`, `openai`, `graphdatascience` | `neo4j-graphrag` como referência, não como dependência central |
+| API | Node 24 LTS, **TypeScript 6.0.x**, Fastify 5, Vitest e ESLint; depois `neo4j-driver`, `openai`, Zod, Pino | Esquemas de ferramenta gerados a partir do Zod; TypeScript fixado em 6.0.x (ADR-013) |
+| Web | Angular 22 (standalone, signals, sem zone.js), Vitest + jsdom, `angular-eslint`; depois `marked` + DOMPurify, `pdfjs-dist`, NVL ou Cytoscape.js | SSE via `fetch` + `ReadableStream` (o `EventSource` não aceita POST) |
 | Avaliação | Python, pandas, RAGAS opcional | Métricas do cap. 8 implementadas também à mão, com os prompts do livro |
 
 ```

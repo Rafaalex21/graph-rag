@@ -1,0 +1,29 @@
+F0.8 - aceite do esqueleto dos três apps (28/10/2026), com infra\dev-env.ps1 (node v24.22.1, uv 0.13.6)
+
+== indexer (Python 3.12.0 do sistema, via uv)
+$ uv run pytest
+.                                                                        [100%]
+1 passed in 0.01s
+$ uv run ruff check .
+All checks passed!
+
+== api (Node 24.22.1, TypeScript 6.0.3)
+$ npm test
+ RUN  v5.0.5
+ Test Files  1 passed (1)
+      Tests  1 passed (1)
+$ npm run lint        -> sem saída, código 0
+$ npm run typecheck   -> sem saída, código 0
+$ npm run build       -> dist/app.js, dist/server.js (+ .map)
+
+== web (Angular CLI 22.2.5, core 22.2.3, TypeScript 6.0.3)
+$ ng test --watch=false
+ RUN  v5.0.5
+ Test Files  1 passed (1)
+      Tests  2 passed (2)
+$ ng lint
+All files pass linting.
+$ ng build
+Initial chunk files | Names | Raw size  | Estimated transfer size
+main-DRKGKZ2Z.js    | main  | 190.40 kB | 52.03 kB
+Application bundle generation complete.

@@ -1,5 +1,5 @@
 {
-  "_nota": "llama_cpp na F0.2; modelos na F0.3; llama_swap na F0.6; neo4j na F0.7. sha256 dos modelos conferido por infra/verify_models.ps1.",
+  "_nota": "llama_cpp na F0.2; modelos na F0.3; llama_swap na F0.6; neo4j na F0.7; node, uv e dev na F0.8. sha256 dos modelos conferido por infra/verify_models.ps1.",
   "llama_cpp": {
     "versao": "b11932",
     "publicado": "2026-10-27",
@@ -117,5 +117,38 @@
     },
     "dados": "infra/neo4j/data",
     "script": "infra/neo4j.ps1"
+  },
+  "node": {
+    "versao": "24.22.1",
+    "arquivo": "node-v24.22.1-win-x64.zip",
+    "bytes": 37748064,
+    "sha256": "d2046d28c2c3dcd211ac5145c0bf30e2047ef9dfb306693c8c6e2eccd8b95fa5",
+    "fonte": "https://nodejs.org/dist/v24.22.1/node-v24.22.1-win-x64.zip",
+    "pasta": "infra/bin/node-v24.22.1-win-x64"
+  },
+  "uv": {
+    "versao": "0.13.6",
+    "arquivo": "uv-x86_64-pc-windows-msvc.zip",
+    "bytes": 15239500,
+    "sha256": "a2a8820d5eea32f08ef467ef3b7f66883a9b076d5737a2fc2fbb5f458d1bb50f",
+    "fonte": "https://github.com/astral-sh/uv/releases/tag/0.13.6",
+    "pasta": "infra/bin/uv-0.13.6"
+  },
+  "dev": {
+    "ambiente": "infra/dev-env.ps1",
+    "typescript": "6.0.3",
+    "nota_typescript": "fixado em 6.0.x: o Angular 22 exige >=6.0 <6.1 e o typescript-eslint aceita <6.1.0 (o latest do npm é 7.0.2)",
+    "angular": "22.2.x",
+    "fastify": "5.12.7",
+    "vitest": "5.0.5",
+    "eslint": "10.13.0",
+    "python": "3.12 (do sistema)",
+    "pytest": "9.2.0",
+    "ruff": "0.17.3",
+    "travas": [
+      "indexer/uv.lock",
+      "api/package-lock.json",
+      "web/package-lock.json"
+    ]
   }
 }

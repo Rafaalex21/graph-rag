@@ -46,8 +46,9 @@
 - [x] **F0.7** Subir o Neo4j 2026.10 com APOC e GDS, nativo no Windows (JDK portátil, sem Docker nem WSL2), com dados persistentes fora do pacote
   - aceite: `RETURN gds.version(), apoc.version()` responde; processo do Neo4j com ≤ 2 GB de RAM; escuta só em 127.0.0.1
   - nota: Docker e WSL2 não estão instalados e a virtualização está desligada na BIOS; plano alterado de Docker para nativo (ADR-012). Medido: gds e apoc 2026.10.1, processo com ~1,4 GB, escuta só em 127.0.0.1, dados persistem após reiniciar; Leiden exige projeção não direcionada
-- [~] **F0.8** Esqueleto dos três apps (indexador em Python com `uv`, API em TypeScript, web em Angular 22) com lint e testes vazios
+- [x] **F0.8** Esqueleto dos três apps (indexador em Python com `uv`, API em TypeScript, web em Angular 22) com lint e testes vazios
   - aceite: `uv run pytest`, `npm test` e `ng test` verdes
+  - nota: Node 24.22.1 e uv 0.13.6 portáteis (não estavam instalados, ADR-013); TypeScript fixado em 6.0.3 (o Angular 22 não aceita a 7.x); `ng test` usa Vitest + jsdom; CI corrigido (os jobs antigos eram pulados em silêncio)
   - depende: F0.1
 
 ## F1 · Corpus e parsing
