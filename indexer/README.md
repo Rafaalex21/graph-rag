@@ -41,3 +41,9 @@ uv run --group parse python -m indexer.auditoria ..\data\parsed\bb_fre_2026_reco
     --pdf ..\data\raw\bb_fre_2026_recorte.pdf --mapa ..\data\raw\bb_fre_2026_recorte_mapa.json `
     --saida ..\data\parsed\auditoria --n 15 --semente 20261028
 ```
+
+Normalizador numérico (F1.7, ADR-017); resume as células das tabelas de um `DoclingDocument`:
+
+```powershell
+uv run python -m indexer.numeros ..\data\parsed\bb_fre_2026_recorte.docling.json
+```

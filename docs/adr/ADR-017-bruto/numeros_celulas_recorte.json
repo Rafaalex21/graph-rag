@@ -1,0 +1,28 @@
+{
+  "celulas": 4180,
+  "formato_detectado": "pt",
+  "numero": 2577,
+  "faixa": 64,
+  "ausente": 287,
+  "texto": 1249,
+  "nao_interpretado": 3,
+  "nao_interpretado_descricao": [
+    "referência de seção '3.1'",
+    "linha pontilhada de sumário",
+    "par de páginas '346 347'"
+  ],
+  "identidades_contabeis_tabela_12": {
+    "A+B+C=D": {
+      "2023": true,
+      "2024": true,
+      "2025": true
+    },
+    "componentes_de_A=A": {
+      "2023": true,
+      "2024": true,
+      "2025": true
+    },
+    "B_entre_parenteses": true,
+    "escala_do_cabecalho": "R$ milhões (1.000.000, BRL)"
+  }
+}

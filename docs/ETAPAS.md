@@ -81,8 +81,9 @@
   - aceite: ≥ 13 de 15 sem erro de valor; achados em `docs/auditoria-tabelas.md`
   - nota: 15 de 15 sem erro de valor (748 números nas células, idênticos ao PDF); 3 tabelas com problema de estrutura ou cabeçalho (4, 9, 12); legenda "Obs:" passou a ser nota da tabela
   - depende: F1.3
-- [~] **F1.7** Implementar o normalizador numérico (pt-BR e EN, parênteses, "em milhões", %, p.b.)
+- [x] **F1.7** Implementar o normalizador numérico (pt-BR e EN, parênteses, "em milhões", %, p.b.)
   - aceite: ≥ 30 testes unitários passando
+  - nota: ADR-017; 83 testes do normalizador (Decimal; pt-BR, EN, parênteses, escala, %, p.b., faixas); nas 4.180 células do recorte, 2.577 números, 64 faixas, 287 ausentes e 3 não interpretadas; A+B+C=D fecha nos três anos. Fecha a fase F1
 
 ## F2 · Linha de base vetorial
 > objetivo: Uma linha de base honesta — do RAG ingênuo ao avançado — contra a qual o grafo será medido.
