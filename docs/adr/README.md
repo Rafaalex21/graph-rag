@@ -10,7 +10,10 @@ Uma decisão por arquivo: `ADR-NNN-assunto.md`. As nove decisões iniciais estã
 | [012](ADR-012-neo4j-nativo.md) | Neo4j nativo no Windows, sem Docker nem WSL2 | F0.7 — aceita |
 | [013](ADR-013-ferramentas-dev.md) | Ferramentas de desenvolvimento portáteis e TypeScript 6.0 fixado | F0.8 — aceita |
 | [009](ADR-009-documento.md) | Documento escolhido | F1.1: aceita (Banco do Brasil, FRE 2026 v7) |
+| [014](ADR-014-parsing-docling.md) | Docling: versão, modelos e configuração do parsing | F1.3 — aceita |
+| [015](ADR-015-normalizacao.md) | Normalização do DoclingDocument (repetidas, figuras decorativas, notas) | F1.4 — aceita, com dois adendos |
+| [016](ADR-016-secoes.md) | Árvore de seções pela numeração do documento | F1.5 — aceita |
+| [017](ADR-017-numeros.md) | Normalizador numérico | F1.7 — aceita |
+| [018](ADR-018-pais-e-filhos.md) | Segmentação em Pais e Filhos | F2.1 — aceita |
 
 Modelo em [`ADR-000-modelo.md`](ADR-000-modelo.md).
-
-| [014](ADR-014-parsing-docling.md) | Docling: versão, modelos e configuração do parsing | F1.3 — aceita |

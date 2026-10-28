@@ -1,0 +1,29 @@
+﻿{
+  "secoes": 170,
+  "secoes_com_pai": 112,
+  "pais": 116,
+  "filhos": 166,
+  "tabelas_fora": 62,
+  "figuras_fora": 7,
+  "tokens_pai": {
+    "min": 8,
+    "p50": 104,
+    "p90": 422,
+    "max": 1189,
+    "media": 180.9
+  },
+  "tokens_filho": {
+    "min": 17,
+    "p50": 176,
+    "p90": 303,
+    "max": 320,
+    "media": 193.2
+  },
+  "pais_acima_de_1600": 0,
+  "pais_abaixo_de_200": 91,
+  "filhos_acima_de_alvo_mais_25pct": 0,
+  "sobreposicao_media_dos_filhos_com_sobreposicao": 0.1244,
+  "filhos_orfaos": 0,
+  "pais_sem_filho": 0,
+  "pais_que_cruzam_secao": 0
+}

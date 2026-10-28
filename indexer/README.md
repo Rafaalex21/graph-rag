@@ -47,3 +47,9 @@ Normalizador numérico (F1.7, ADR-017); resume as células das tabelas de um `Do
 ```powershell
 uv run python -m indexer.numeros ..\data\parsed\bb_fre_2026_recorte.docling.json
 ```
+
+Pais e Filhos (F2.1, ADR-018); precisa do llama-swap no ar (`infra\swap.ps1`) para contar tokens por `/tokenize`:
+
+```powershell
+uv run python -m indexer.chunks ..\data\parsedb_fre_2026_recorte.normalizado.json ..\data\parsedb_fre_2026_recorte.secoes.json --saida ..\data\parsed
+```

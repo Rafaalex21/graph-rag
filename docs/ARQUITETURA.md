@@ -4,7 +4,7 @@
 >
 > **Base teórica:** *Essential GraphRAG* — Tomaž Bratanič & Oskar Hane (Manning, 2025).
 >
-> **Versão:** 0.5 · 28/10/2026 · **Status:** rascunho para validação — revisada com as medições da F0.4 a F0.6 e com o ambiente real na F0.7 ([ADR-001](./adr/ADR-001-backend.md), [ADR-010](./adr/ADR-010-offload-moe.md), [ADR-011](./adr/ADR-011-perfis-swap.md), [ADR-012](./adr/ADR-012-neo4j-nativo.md))
+> **Versão:** 0.6 · 28/10/2026 · **Status:** rascunho para validação — revisada com as medições da F0.4 a F0.6, com o ambiente real na F0.7 e com a segmentação da F2.1 ([ADR-018](./adr/ADR-018-pais-e-filhos.md); [ADR-001](./adr/ADR-001-backend.md), [ADR-010](./adr/ADR-010-offload-moe.md), [ADR-011](./adr/ADR-011-perfis-swap.md), [ADR-012](./adr/ADR-012-neo4j-nativo.md))
 >
 > **Documento irmão:** [`ETAPAS.md`](./ETAPAS.md) — plano executável, tarefa a tarefa, que alimenta o painel de acompanhamento.
 
@@ -221,12 +221,14 @@ flowchart TB
 | Unidade | Tamanho inicial | Regra | Uso |
 |---|---|---|---|
 | **Seção** | variável | Árvore de títulos do Docling (ex.: *Item 1A Risk Factors*, *4. Fatores de Risco*) | Navegação, filtro, contexto |
-| **Pai** (*parent*) | ≈ 1.200 tokens (máx. 1.600) | Nunca atravessa seção; guarda `pageStart`/`pageEnd` | Unidade de extração e de contexto para o LLM |
-| **Filho** (*child*) | ≈ 320 tokens, sobreposição de 12% | Prefixado com o caminho da seção ("Fatores de Risco › Câmbio") | Unidade de embedding e full-text |
+| **Pai** (*parent*) | até ≈ 1.200 tokens (máx. 1.600) | Corpo de uma seção, nunca atravessa seção (a seção que cabe em 1.600 vira um Pai só; as maiores são divididas em partes parecidas, em fronteira de parágrafo); sem tabelas; guarda `pageStart`/`pageEnd` | Unidade de extração e de contexto para o LLM |
+| **Filho** (*child*) | ≈ 320 tokens (prefixo incluído), sobreposição de 12% | Em fronteira de frase; prefixado com o caminho da seção ("Fatores de Risco › Câmbio") | Unidade de embedding e full-text |
 | **Tabela** | atômica | Markdown integral + legenda + página | Fonte de fatos numéricos e de citação |
 | **Pergunta hipotética** | 3–5 por tabela | Geradas pelo LLM (estratégia do cap. 3) | Embedding que representa a tabela na busca |
 
-Tokens contados com o tokenizador do próprio modelo (endpoint `/tokenize` do `llama-server`), não com `tiktoken`. A escolha de ~1.200 tokens para o Pai segue o achado do MS GraphRAG (cap. 7, fig. 7.2): trechos menores rendem mais entidades extraídas, e algo entre 600 e 1.200 tokens equilibra rendimento e custo.
+Tokens contados com o tokenizador do próprio modelo (endpoint `/tokenize` do `llama-server`), não com `tiktoken`: o Pai com o do Qwen3.6 (quem o consome) e o Filho com o do Qwen3-Embedding. Os vocabulários diferem (a mesma frase em português deu 24 tokens num e 30 no outro), então um só contador erraria um dos dois em ~25%.
+
+**Medido na F2.1 (recorte de 79 páginas, [ADR-018](./adr/ADR-018-pais-e-filhos.md)):** o texto corrido soma só ~21 mil tokens (o resto são 62 tabelas) e está repartido em 112 seções com texto; como o Pai não atravessa seção, saem 116 Pais de **mediana 104 tokens** (máximo 1.189) e 166 Filhos. Os ≈ 1.200 são, portanto, um teto-alvo, não o tamanho típico; seções sem texto (58 de 170) não geram Pai. A alternativa de juntar seções irmãs pequenas foi descartada para manter o Pai alinhado a Seção e página (citação, §6). A escolha de ~1.200 tokens para o Pai segue o achado do MS GraphRAG (cap. 7, fig. 7.2): trechos menores rendem mais entidades extraídas, e algo entre 600 e 1.200 tokens equilibra rendimento e custo.
 
 ### I-4 · Embeddings
 
@@ -313,7 +315,7 @@ Criação dos índices da §6.3; consultas de sanidade (§6.4); *dump* do banco 
 
 ### 5.2 Estimativa de tempo de indexação
 
-Hipóteses: documento de ~300 páginas (~200 mil tokens) → ~170 Pais e ~40 tabelas. Throughput medido na F0.4 sem mmap (Qwen3.6-35B-A3B no Vulkan, `--n-cpu-moe 28 -lm none`, profundidade 0): 957 tok/s de processamento de prompt (`pp2048`) e 35,4 tok/s de geração. É um limite inferior do tempo: ignora o custo da gramática JSON, o *decode* mais lento com contexto longo e a interferência entre os 2 slots (a F0.5 mediu a geração de um slot caindo a ~10 tok/s enquanto o outro processa um prompt de 15K).
+Hipóteses: documento de ~300 páginas (~200 mil tokens) → ~170 Pais e ~40 tabelas. **Ressalva (F2.1):** no recorte real o texto corrido é bem menor e mais fragmentado (116 Pais, mediana 104 tokens, em 79 páginas; extrapolando linearmente, ~620 Pais nas 423 páginas, estimativa a refazer na F5.8). A contagem de ~170 Pais, e as chamadas de extração aberta que dela derivam, deve ser refeita com a medição; a tabela abaixo ainda usa a hipótese original. Throughput medido na F0.4 sem mmap (Qwen3.6-35B-A3B no Vulkan, `--n-cpu-moe 28 -lm none`, profundidade 0): 957 tok/s de processamento de prompt (`pp2048`) e 35,4 tok/s de geração. É um limite inferior do tempo: ignora o custo da gramática JSON, o *decode* mais lento com contexto longo e a interferência entre os 2 slots (a F0.5 mediu a geração de um slot caindo a ~10 tok/s enquanto o outro processa um prompt de 15K).
 
 | Etapa | Chamadas | Custo por chamada | Total |
 |---|---|---|---|

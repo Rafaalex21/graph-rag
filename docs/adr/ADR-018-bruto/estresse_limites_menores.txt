@@ -1,0 +1,7 @@
+﻿alvo=300 max=400: pais=144 max_medido=360 acima_do_max=0 filhos=170
+alvo=150 max=200: pais=202 max_medido=196 acima_do_max=0 filhos=202
+['Programa de integridade', 'regras, políticas, procedimentos ou práticas voltadas para a prevenção, detecção e remediação de desvios, fraudes, irregularidades e atos ilícitos praticados contra a administração pública'] 1189 196 197 filhos: [(295, 0, 196, 196), (314, 27, 196, 196), (316, 24, 196, 197), (300, 31, 197, 197), (314, 28, 197, 197), (293, 37, 197, 197), (214, 36, 197, 197)]
+'Programa de integridade › regras, políticas, procedimentos ou práticas voltadas para a prevenção, detecção e remediação de desvios, fraudes, irregularidades e atos ilícitos praticados contra a administração pública\n… a que se reportam, e os mecanismos de garan'
+... 'oi formalmente aprovada, órgãos do emissor a que se reportam, e os mecanismos de garantia da independência de seus dirigentes, se existentes'
+sobreposto? True
+filhos fora das paginas do pai: 0
