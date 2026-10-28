@@ -1,0 +1,72 @@
+﻿{
+  "contagens": {
+    "documentos": 1,
+    "secoes": 170,
+    "pais": 116,
+    "filhos": 166,
+    "tem_secao": 17,
+    "tem_subsecao": 153,
+    "tem_pai": 116,
+    "tem_filho": 166,
+    "next": 115,
+    "constraints_de_unicidade": 10
+  },
+  "problemas": {
+    "filhos_orfaos": 0,
+    "pais_sem_filho": 0,
+    "pais_sem_secao": 0,
+    "pais_em_mais_de_uma_secao": 0,
+    "filhos_em_mais_de_um_pai": 0,
+    "secoes_fora_do_documento": 0,
+    "pai_fora_das_paginas_da_secao": 0,
+    "filho_fora_das_paginas_do_pai": 0,
+    "next_mal_formado": 0
+  },
+  "conferencia": {
+    "secoes": {
+      "banco": 170,
+      "arquivo": 170,
+      "ok": true
+    },
+    "pais": {
+      "banco": 116,
+      "arquivo": 116,
+      "ok": true
+    },
+    "filhos": {
+      "banco": 166,
+      "arquivo": 166,
+      "ok": true
+    },
+    "tem_pai": {
+      "banco": 116,
+      "arquivo": 116,
+      "ok": true
+    },
+    "tem_filho": {
+      "banco": 166,
+      "arquivo": 166,
+      "ok": true
+    },
+    "next": {
+      "banco": 115,
+      "arquivo": 115,
+      "ok": true
+    },
+    "tem_secao": {
+      "banco": 17,
+      "arquivo": 17,
+      "ok": true
+    },
+    "tem_subsecao": {
+      "banco": 153,
+      "arquivo": 153,
+      "ok": true
+    },
+    "constraints_de_unicidade": {
+      "banco": 10,
+      "arquivo": 10,
+      "ok": true
+    }
+  }
+}

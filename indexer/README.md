@@ -53,3 +53,11 @@ Pais e Filhos (F2.1, ADR-018); precisa do llama-swap no ar (`infra\swap.ps1`) pa
 ```powershell
 uv run python -m indexer.chunks ..\data\parsedb_fre_2026_recorte.normalizado.json ..\data\parsedb_fre_2026_recorte.secoes.json --saida ..\data\parsed
 ```
+
+Carga no Neo4j (F2.2, ADR-019); precisa do Neo4j no ar (`infra
+eo4j.ps1 iniciar`) e de `NEO4J_PASSWORD` no `.env`:
+
+```powershell
+uv run python -m indexer.grafo carregar ..\data\parsedb_fre_2026_recorte.chunks.json ..\data\parsedb_fre_2026_recorte.secoes.json --doc-id bb-fre-2026-v7 --titulo "Formulário de Referência 2026 (ano-base 2025), v7" --emissor "Banco do Brasil S.A." --ano 2025 --arquivo banco_do_brasil_formulario_referencia_2026.pdf --paginas 423 --paginas-indexadas 79
+uv run python -m indexer.grafo sanidade --esperado ..\data\parsedb_fre_2026_recorte.chunks.json --secoes ..\data\parsedb_fre_2026_recorte.secoes.json
+```

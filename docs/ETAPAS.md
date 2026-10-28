@@ -96,8 +96,9 @@
   - aceite: tokens contados via `/tokenize`; nenhum Pai acima de 1.600 tokens
   - nota: ADR-018; recorte: 116 Pais (mediana 104 tokens, máx. 1.189, 0 acima de 1.600) e 166 Filhos (máx. 320, sobreposição 12,4%); Pai conta com o tokenizador do Qwen3.6, Filho com o do embedding (30 × 24 tokens na mesma frase); regra estrita mantida por decisão do usuário e ARQUITETURA corrigida (v0.6)
   - depende: F1.5
-- [~] **F2.2** Aplicar as *constraints* da §6.3 e carregar Document, Section, Parent e Child
+- [x] **F2.2** Aplicar as *constraints* da §6.3 e carregar Document, Section, Parent e Child
   - aceite: consultas de sanidade da §6.4 sem órfãos
+  - nota: ADR-019; 10 constraints da §6.3 (duplicata barrada); 1 Document, 170 Section, 116 Parent, 166 Child, 115 NEXT; 2ª carga sem mudar contagem; 9 consultas de sanidade = 0; driver neo4j 6.4.1
   - depende: F0.7, F2.1
 - [ ] **F2.3** Embutir os Filhos e criar `child_vec` (1024 dims, cosseno)
   - aceite: índice ONLINE; autoteste trecho → si mesmo com recall@1 ≥ 0,98
