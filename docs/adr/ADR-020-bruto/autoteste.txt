@@ -1,0 +1,12 @@
+﻿{"existe": true, "tipo": "VECTOR", "estado": "ONLINE", "populado_pct": 100.0, "dimensoes": 1024, "similaridade": "COSINE"}
+{
+  "filhos": 166,
+  "recall_at_1": 1.0,
+  "acertos": 166,
+  "falhas": [],
+  "aprovado": true,
+  "sonda_trecho_do_meio": {
+    "recall_at_1": 0.8916,
+    "recall_at_5": 0.9819
+  }
+}

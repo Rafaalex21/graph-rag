@@ -61,3 +61,10 @@ eo4j.ps1 iniciar`) e de `NEO4J_PASSWORD` no `.env`:
 uv run python -m indexer.grafo carregar ..\data\parsedb_fre_2026_recorte.chunks.json ..\data\parsedb_fre_2026_recorte.secoes.json --doc-id bb-fre-2026-v7 --titulo "Formulário de Referência 2026 (ano-base 2025), v7" --emissor "Banco do Brasil S.A." --ano 2025 --arquivo banco_do_brasil_formulario_referencia_2026.pdf --paginas 423 --paginas-indexadas 79
 uv run python -m indexer.grafo sanidade --esperado ..\data\parsedb_fre_2026_recorte.chunks.json --secoes ..\data\parsedb_fre_2026_recorte.secoes.json
 ```
+
+Embeddings e índice vetorial (F2.3, ADR-020); precisa do llama-swap e do Neo4j no ar:
+
+```powershell
+uv run python -m indexer.embeddings embutir
+uv run python -m indexer.embeddings autoteste
+```

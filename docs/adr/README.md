@@ -16,5 +16,6 @@ Uma decisão por arquivo: `ADR-NNN-assunto.md`. As nove decisões iniciais estã
 | [017](ADR-017-numeros.md) | Normalizador numérico | F1.7 — aceita |
 | [018](ADR-018-pais-e-filhos.md) | Segmentação em Pais e Filhos | F2.1 — aceita |
 | [019](ADR-019-camada-lexica-neo4j.md) | Camada léxica no Neo4j: constraints e carga | F2.2 — aceita |
+| [020](ADR-020-embeddings-e-child-vec.md) | Embeddings dos Filhos e índice `child_vec` | F2.3 — aceita |
 
 Modelo em [`ADR-000-modelo.md`](ADR-000-modelo.md).

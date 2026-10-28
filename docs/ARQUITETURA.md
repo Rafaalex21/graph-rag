@@ -378,7 +378,7 @@ Todo nó de domínio (`Organization`, `Person`, `Segment`, `RiskFactor`, `Event`
 | `Document` | `id`, `title`, `issuer`, `fiscalYear`, `language`, `sourceFile`, `pages`, `pagesIndexed` (páginas do recorte, enquanto houver) |
 | `Section` | `id` (`<documento>:s<n>`), `number` (numeração do documento, se houver), `title`, `level`, `path`, `pageStart`, `pageEnd`, `order` |
 | `Parent` | `id`, `text`, `tokens`, `pageStart`, `pageEnd`, `ordinal` (posição na seção) |
-| `Child` | `id`, `text` (já com o prefixo do caminho da seção; é o que se embute e se indexa no full-text), `tokens`, `pageStart`, `pageEnd`, `ordinal`, `embedding` (F2.3) |
+| `Child` | `id`, `text` (já com o prefixo do caminho da seção; é o que se embute e se indexa no full-text), `tokens`, `pageStart`, `pageEnd`, `ordinal`, `embedding`, `embeddingModel`, `embeddingDims` (F2.3) |
 | `Table` | `id`, `caption`, `markdown`, `page`, `description`, `scale`, `currency` |
 | `FinancialFact` | `id`, `metric`, `value`, `unit`, `currency`, `scale`, `period`, `periodType`, `evidence`, `page` |
 | `Metric` | `name` (canônico), `aliases`, `definition` |

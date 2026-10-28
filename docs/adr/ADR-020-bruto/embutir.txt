@@ -1,0 +1,23 @@
+﻿uv : Received notification from DBMS server: <GqlStatusObject gql_status='01N52', status_description='warn: property 
+key does not exist. The property `embedding` does not exist in database `neo4j`. Verify that the spelling is 
+correct.', position=<SummaryInputPosition line=1, column=25, offset=24>, raw_classification='UNRECOGNIZED', 
+classification=<NotificationClassification.UNRECOGNIZED: 'UNRECOGNIZED'>, raw_severity='WARNING', 
+severity=<NotificationSeverity.WARNING: 'WARNING'>, diagnostic_record={'_classification': 'UNRECOGNIZED', '_severity': 
+'WARNING', '_position': {'offset': 24, 'line': 1, 'column': 25}, 'OPERATION': '', 'OPERATION_CODE': '0', 
+'CURRENT_SCHEMA': '/'}> for query: 'MATCH (c:Child) WHERE c.embedding IS NULL RETURN c.id AS id, c.text AS text ORDER 
+BY c.id'
+No linha:3 caractere:20
++ ... mbutir ==="; uv run python -m indexer.embeddings embutir 2>&1 | Tee-O ...
++                  ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+    + CategoryInfo          : NotSpecified: (Received notifi... ORDER BY c.id':String) [], RemoteException
+    + FullyQualifiedErrorId : NativeCommandError
+ 
+{"embutidos": 166, "segundos": 2.44, "filhos_por_segundo": 68.2}
+{
+  "existe": true,
+  "tipo": "VECTOR",
+  "estado": "ONLINE",
+  "populado_pct": 100.0,
+  "dimensoes": 1024,
+  "similaridade": "COSINE"
+}
