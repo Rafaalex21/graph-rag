@@ -68,3 +68,10 @@ Embeddings e índice vetorial (F2.3, ADR-020); precisa do llama-swap e do Neo4j 
 uv run python -m indexer.embeddings embutir
 uv run python -m indexer.embeddings autoteste
 ```
+
+Busca por vetor, texto ou híbrida (F2.4, ADR-021); precisa do llama-swap e do Neo4j no ar:
+
+```powershell
+uv run python -m indexer.busca criar-indice
+uv run python -m indexer.busca buscar "sua pergunta" --modo hibrido-rrf --k 5
+```

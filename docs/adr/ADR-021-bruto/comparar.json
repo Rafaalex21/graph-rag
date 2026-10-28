@@ -1,0 +1,40 @@
+﻿{
+  "filhos": 166,
+  "k": 5,
+  "trecho_do_meio": {
+    "vetor": {
+      "recall_at_1": 0.8916,
+      "recall_at_5": 0.9819
+    },
+    "texto": {
+      "recall_at_1": 0.994,
+      "recall_at_5": 1.0
+    },
+    "hibrido-max": {
+      "recall_at_1": 1.0,
+      "recall_at_5": 1.0
+    },
+    "hibrido-rrf": {
+      "recall_at_1": 0.9398,
+      "recall_at_5": 0.994
+    }
+  },
+  "palavras_raras": {
+    "vetor": {
+      "recall_at_1": 0.3735,
+      "recall_at_5": 0.5723
+    },
+    "texto": {
+      "recall_at_1": 0.9699,
+      "recall_at_5": 0.994
+    },
+    "hibrido-max": {
+      "recall_at_1": 0.759,
+      "recall_at_5": 0.9518
+    },
+    "hibrido-rrf": {
+      "recall_at_1": 0.5843,
+      "recall_at_5": 0.9458
+    }
+  }
+}

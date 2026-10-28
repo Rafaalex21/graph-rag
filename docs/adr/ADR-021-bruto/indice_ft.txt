@@ -1,0 +1,7 @@
+﻿{
+  "existe": true,
+  "tipo": "FULLTEXT",
+  "estado": "ONLINE",
+  "populado_pct": 100.0,
+  "analisador": "brazilian"
+}
