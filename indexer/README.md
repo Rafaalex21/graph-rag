@@ -18,3 +18,10 @@ uv sync --group parse      # um `uv sync` puro remove o Docling
 uv run --group parse python -m indexer.parse ..\data\raw\bb_fre_2026_recorte.pdf `
     --artefatos ..\infra\bin\modelos-docling --saida ..\data\parsed
 ```
+
+Normalização (F1.4, ADR-015), sem precisar do grupo `parse`:
+
+```powershell
+uv run python -m indexer.normalize ..\data\parsed\bb_fre_2026_recorte.docling.json `
+    --mapa ..\data\raw\bb_fre_2026_recorte_mapa.json --saida ..\data\parsed
+```

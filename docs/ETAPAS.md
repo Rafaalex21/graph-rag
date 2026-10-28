@@ -69,8 +69,9 @@
   - aceite: 100% das páginas com texto; tempo de conversão registrado
   - nota: Docling 2.144.0 (grupo `parse`, ADR-014); recorte de 79 páginas: 79/79 com texto, 66 tabelas, 201.0 s (2.54 s/página, CPU, offline); ~18 min estimados para as 423 páginas
   - depende: F1.2
-- [~] **F1.4** Remover cabeçalhos e rodapés repetidos e associar notas de rodapé
+- [x] **F1.4** Remover cabeçalhos e rodapés repetidos e associar notas de rodapé
   - aceite: nenhuma linha repetida em mais de 30% das páginas
+  - nota: ADR-015; recorte: linhas repetidas 3 → 0, 803 elementos, 24 notas associadas por posição (0 sem âncora), 66 de 66 tabelas preservadas
   - depende: F1.3
 - [ ] **F1.5** Construir a árvore de seções (título, nível, páginas)
   - aceite: o sumário gerado bate com o índice do PDF em ≥ 95% das entradas

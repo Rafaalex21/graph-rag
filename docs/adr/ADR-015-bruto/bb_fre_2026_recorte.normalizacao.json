@@ -1,0 +1,16 @@
+{
+  "paginas": 79,
+  "itens_lidos": 1060,
+  "elementos": 803,
+  "removidos": {
+    "rotulo_cabecalho_rodape": 231,
+    "regra_das_repetidas": 1,
+    "rotulo_notas": 1
+  },
+  "linhas_repetidas_antes": 3,
+  "notas_associadas": 24,
+  "notas_sem_ancora": 0,
+  "tabelas": 62,
+  "limiar": 0.3,
+  "linhas_repetidas_depois": 0
+}
