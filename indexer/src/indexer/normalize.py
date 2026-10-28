@@ -6,6 +6,8 @@ elementos na ordem de leitura:
 * remove cabeçalhos e rodapés de página (rótulos do Docling) e qualquer linha curta cujo texto,
   com os números trocados por `#`, apareça em mais de 30% das páginas (por exemplo o número da página
   que o Docling rotulou como `text`);
+* remove figuras decorativas (ícones e logotipos de mesmo tamanho e altura em mais de 30% das páginas do
+  mesmo formato), que no topo da página seriam atribuídas à seção anterior;
 * associa as notas (`footnote` ou parágrafos que começam com `(n)`) à tabela ou à figura que as precede.
 
 Uso (a partir de indexer/):
@@ -90,6 +92,44 @@ def linhas_repetidas(elementos: list[dict], total_paginas: int, limiar: float = 
     )
 
 
+def _chave_de_tamanho_pagina(doc: dict, pagina: int) -> tuple[int, int]:
+    tamanho = doc.get("pages", {}).get(str(pagina), {}).get("size", {})
+    return round(tamanho.get("width", 0)), round(tamanho.get("height", 0))
+
+
+def figuras_decorativas(doc: dict, limiar: float = LIMIAR_PADRAO) -> set[str]:
+    """`self_ref` das figuras com mesmo tamanho e mesma altura na página (arredondados a 5 pt; o eixo x é
+    ignorado porque o ícone muda de lado entre seções) em mais de `limiar` das páginas do mesmo formato
+    (e em pelo menos MINIMO_PAGINAS): ícones e logotipos de página."""
+    paginas_por_formato: dict[tuple[int, int], int] = defaultdict(int)
+    for numero in doc.get("pages", {}):
+        paginas_por_formato[_chave_de_tamanho_pagina(doc, int(numero))] += 1
+
+    paginas_por_chave: dict[tuple, set[int]] = defaultdict(set)
+    chaves: dict[str, tuple] = {}
+    for figura in doc.get("pictures", []):
+        if not figura.get("prov"):
+            continue
+        prov = figura["prov"][0]
+        b = prov["bbox"]
+        formato = _chave_de_tamanho_pagina(doc, prov["page_no"])
+        chave = (
+            formato,
+            round(abs(b["r"] - b["l"]) / 5),
+            round(abs(b["t"] - b["b"]) / 5),
+            round(max(b["t"], b["b"]) / 5),
+        )
+        chaves[figura["self_ref"]] = chave
+        paginas_por_chave[chave].add(prov["page_no"])
+
+    return {
+        ref
+        for ref, chave in chaves.items()
+        if len(paginas_por_chave[chave]) > limiar * paginas_por_formato[chave[0]]
+        and len(paginas_por_chave[chave]) >= MINIMO_PAGINAS
+    }
+
+
 def normalizar(doc: dict, mapa_paginas: dict[int, int] | None = None, limiar: float = LIMIAR_PADRAO) -> dict:
     """Devolve {'elementos': [...], 'estatisticas': {...}} a partir do DoclingDocument em dict."""
     total_paginas = len(doc.get("pages", {}))
@@ -107,7 +147,13 @@ def normalizar(doc: dict, mapa_paginas: dict[int, int] | None = None, limiar: fl
         if len(v) > limiar * total_paginas and len(v) >= MINIMO_PAGINAS
     }
 
-    removidos = {"rotulo_cabecalho_rodape": 0, "regra_das_repetidas": 0, "rotulo_notas": 0}
+    decorativas = figuras_decorativas(doc, limiar)
+    removidos = {
+        "rotulo_cabecalho_rodape": 0,
+        "regra_das_repetidas": 0,
+        "figura_decorativa_repetida": 0,
+        "rotulo_notas": 0,
+    }
     elementos: list[dict] = []
     # última tabela/figura, enquanto só houver notas (ou o rótulo "Notas:") depois dela
     ancora: dict | None = None
@@ -131,6 +177,9 @@ def normalizar(doc: dict, mapa_paginas: dict[int, int] | None = None, limiar: fl
         texto = (item.get("text") or "").strip()
         rotulo = item.get("label")
 
+        if colecao == "pictures" and item.get("self_ref") in decorativas:
+            removidos["figura_decorativa_repetida"] += 1
+            continue
         if colecao == "texts" and rotulo in ROTULOS_ESTRUTURAIS:
             removidos["rotulo_cabecalho_rodape"] += 1
             continue

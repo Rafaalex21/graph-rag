@@ -71,10 +71,11 @@
   - depende: F1.2
 - [x] **F1.4** Remover cabeçalhos e rodapés repetidos e associar notas de rodapé
   - aceite: nenhuma linha repetida em mais de 30% das páginas
-  - nota: ADR-015; recorte: linhas repetidas 3 → 0, 803 elementos, 24 notas associadas por posição (0 sem âncora), 66 de 66 tabelas preservadas
+  - nota: ADR-015; recorte: linhas repetidas 3 → 0, 24 notas associadas por posição (0 sem âncora), 66 de 66 tabelas preservadas; adendo da F1.5: 78 figuras decorativas removidas, 725 elementos
   - depende: F1.3
-- [~] **F1.5** Construir a árvore de seções (título, nível, páginas)
+- [x] **F1.5** Construir a árvore de seções (título, nível, páginas)
   - aceite: o sumário gerado bate com o índice do PDF em ≥ 95% das entradas
+  - nota: ADR-016; 30 de 30 entradas do sumário presentes no recorte batem (número, título e página); 170 nós, fim de seção pelo primeiro não descendente; 140 títulos sem numeração têm hierarquia heurística
   - depende: F1.3
 - [ ] **F1.6** Auditar 15 tabelas sorteadas contra o PDF (valores, sinais, escala, cabeçalhos)
   - aceite: ≥ 13 de 15 sem erro de valor; achados em `docs/auditoria-tabelas.md`

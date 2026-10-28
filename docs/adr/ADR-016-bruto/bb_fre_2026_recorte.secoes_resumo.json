@@ -1,0 +1,235 @@
+{
+  "entradas_no_sumario": 107,
+  "entradas_presentes_no_recorte": 30,
+  "encontradas": 30,
+  "titulo_ok": 30,
+  "pagina_ok": 30,
+  "batem": 30,
+  "taxa": 1.0,
+  "secoes_numeradas_fora_do_sumario": [],
+  "nos": 170,
+  "por_tipo": {
+    "numerada": 30,
+    "letra": 25,
+    "sem_marca": 115
+  },
+  "niveis": {
+    "1": 10,
+    "2": 25,
+    "3": 84,
+    "4": 51
+  },
+  "raizes": 17,
+  "secoes_numeradas": [
+    {
+      "numero": "1",
+      "titulo": "ATIVIDADES DO EMISSOR",
+      "nivel": 1,
+      "pagina_inicio": 6,
+      "pagina_fim": 13
+    },
+    {
+      "numero": "1.1",
+      "titulo": "Histórico do emissor",
+      "nivel": 2,
+      "pagina_inicio": 6,
+      "pagina_fim": 8
+    },
+    {
+      "numero": "1.2",
+      "titulo": "Descrição das principais atividades do emissor e de suas controladas",
+      "nivel": 2,
+      "pagina_inicio": 9,
+      "pagina_fim": 9
+    },
+    {
+      "numero": "1.3",
+      "titulo": "Informações relacionadas aos segmentos operacionais",
+      "nivel": 2,
+      "pagina_inicio": 10,
+      "pagina_fim": 13
+    },
+    {
+      "numero": "2",
+      "titulo": "COMENTÁRIOS DOS DIRETORES",
+      "nivel": 1,
+      "pagina_inicio": 80,
+      "pagina_fim": 100
+    },
+    {
+      "numero": "2.1",
+      "titulo": "Condições financeiras e patrimoniais",
+      "nivel": 2,
+      "pagina_inicio": 80,
+      "pagina_fim": 92
+    },
+    {
+      "numero": "2.2",
+      "titulo": "Resultados operacional e financeiro",
+      "nivel": 2,
+      "pagina_inicio": 93,
+      "pagina_fim": 100
+    },
+    {
+      "numero": "3",
+      "titulo": "PROJEÇÕES",
+      "nivel": 1,
+      "pagina_inicio": 111,
+      "pagina_fim": 116
+    },
+    {
+      "numero": "3.1",
+      "titulo": "Projeções divulgadas e premissas",
+      "nivel": 2,
+      "pagina_inicio": 111,
+      "pagina_fim": 113
+    },
+    {
+      "numero": "3.2",
+      "titulo": "Acompanhamento das Projeções",
+      "nivel": 2,
+      "pagina_inicio": 114,
+      "pagina_fim": 116
+    },
+    {
+      "numero": "4.2",
+      "titulo": "Descrição dos 5 principais fatores de risco",
+      "nivel": 2,
+      "pagina_inicio": 155,
+      "pagina_fim": 155
+    },
+    {
+      "numero": "4.3",
+      "titulo": "Descrição dos principais riscos de mercado",
+      "nivel": 2,
+      "pagina_inicio": 156,
+      "pagina_fim": 158
+    },
+    {
+      "numero": "5.3",
+      "titulo": "Programa de integridade",
+      "nivel": 2,
+      "pagina_inicio": 194,
+      "pagina_fim": 200
+    },
+    {
+      "numero": "6",
+      "titulo": "CONTROLE E GRUPO ECONÔMICO",
+      "nivel": 1,
+      "pagina_inicio": 203,
+      "pagina_fim": 209
+    },
+    {
+      "numero": "6.3",
+      "titulo": "Distribuição de capital",
+      "nivel": 2,
+      "pagina_inicio": 204,
+      "pagina_fim": 204
+    },
+    {
+      "numero": "6.4",
+      "titulo": "Participações em sociedades",
+      "nivel": 2,
+      "pagina_inicio": 205,
+      "pagina_fim": 205
+    },
+    {
+      "numero": "6.5",
+      "titulo": "Organograma dos acionistas e do grupo econômico",
+      "nivel": 2,
+      "pagina_inicio": 206,
+      "pagina_fim": 208
+    },
+    {
+      "numero": "6.6",
+      "titulo": "Outras informações relevantes",
+      "nivel": 2,
+      "pagina_inicio": 209,
+      "pagina_fim": 209
+    },
+    {
+      "numero": "7.5",
+      "titulo": "Relações familiares",
+      "nivel": 2,
+      "pagina_inicio": 302,
+      "pagina_fim": 302
+    },
+    {
+      "numero": "7.6",
+      "titulo": "Relações de subordinação, prestação de serviço ou controle",
+      "nivel": 2,
+      "pagina_inicio": 303,
+      "pagina_fim": 308
+    },
+    {
+      "numero": "8.2",
+      "titulo": "Remuneração total por órgão",
+      "nivel": 2,
+      "pagina_inicio": 332,
+      "pagina_fim": 335
+    },
+    {
+      "numero": "8.15",
+      "titulo": "Remuneração mínima, média e máxima",
+      "nivel": 2,
+      "pagina_inicio": 352,
+      "pagina_fim": 352
+    },
+    {
+      "numero": "9",
+      "titulo": "AUDITORES",
+      "nivel": 1,
+      "pagina_inicio": 363,
+      "pagina_fim": 365
+    },
+    {
+      "numero": "9.3",
+      "titulo": "Independência e conflito de interesses dos auditores",
+      "nivel": 2,
+      "pagina_inicio": 364,
+      "pagina_fim": 364
+    },
+    {
+      "numero": "9.4",
+      "titulo": "Outras informações relevantes",
+      "nivel": 2,
+      "pagina_inicio": 365,
+      "pagina_fim": 365
+    },
+    {
+      "numero": "10",
+      "titulo": "RECURSOS HUMANOS",
+      "nivel": 1,
+      "pagina_inicio": 366,
+      "pagina_fim": 370
+    },
+    {
+      "numero": "10.1",
+      "titulo": "Descrição dos recursos humanos",
+      "nivel": 2,
+      "pagina_inicio": 366,
+      "pagina_fim": 369
+    },
+    {
+      "numero": "10.2",
+      "titulo": "Alterações relevantes",
+      "nivel": 2,
+      "pagina_inicio": 370,
+      "pagina_fim": 370
+    },
+    {
+      "numero": "12",
+      "titulo": "CAPITAL SOCIAL E VALORES MOBILIÁRIOS",
+      "nivel": 1,
+      "pagina_inicio": 405,
+      "pagina_fim": 405
+    },
+    {
+      "numero": "12.1",
+      "titulo": "Informações sobre o capital social",
+      "nivel": 2,
+      "pagina_inicio": 405,
+      "pagina_fim": 405
+    }
+  ]
+}

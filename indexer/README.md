@@ -25,3 +25,11 @@ Normalização (F1.4, ADR-015), sem precisar do grupo `parse`:
 uv run python -m indexer.normalize ..\data\parsed\bb_fre_2026_recorte.docling.json `
     --mapa ..\data\raw\bb_fre_2026_recorte_mapa.json --saida ..\data\parsed
 ```
+
+Árvore de seções e comparação com o sumário do PDF (F1.5, ADR-016):
+
+```powershell
+uv run --group parse python -m indexer.sections ..\data\parsed\bb_fre_2026_recorte.normalizado.json `
+    --pdf-original ..\data\raw\banco_do_brasil_formulario_referencia_2026.pdf `
+    --mapa ..\data\raw\bb_fre_2026_recorte_mapa.json --saida ..\data\parsed
+```

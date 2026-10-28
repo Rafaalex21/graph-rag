@@ -40,7 +40,7 @@ A ARQUITETURA §5 (I-2) manda remover cabeçalhos e rodapés repetidos (linhas p
 | Critério | Resultado |
 |---|---|
 | Nenhuma linha repetida em mais de 30% das páginas | linhas repetidas **3 antes, 0 depois**; verificação independente sobre o arquivo gravado (525 linhas distintas, a maior repetição restante em 6 de 79 páginas) |
-| Itens | 1060 lidos; 231 cabeçalhos/rodapés por rótulo, 1 pela regra das repetidas, 1 rótulo "Notas:"; **803 elementos** na saída |
+| Itens | 1060 lidos; 231 cabeçalhos/rodapés por rótulo, 1 pela regra das repetidas, 1 rótulo "Notas:"; **803 elementos** na saída (**725** depois do adendo da F1.5, abaixo) |
 | Notas associadas | **24** associadas, **0** sem âncora |
 | Tabelas preservadas | 66 de 66 (62 `table` e 4 `document_index`) |
 | Testes | 8 passam (cobrem remoção, regra com mínimo de páginas, notas, rótulo "Notas:", nota sem âncora e mapa de páginas) |
@@ -56,3 +56,11 @@ Exemplo: as quatro notas da página 23 do recorte (original p. 89), três com `(
 ## Evidência
 
 Estatísticas em [`ADR-015-bruto/bb_fre_2026_recorte.normalizacao.json`](ADR-015-bruto/bb_fre_2026_recorte.normalizacao.json); entrada: `data/parsed/bb_fre_2026_recorte.docling.json` (ADR-014).
+
+## Adendo (F1.5, 28/10/2026): figuras decorativas repetidas
+
+Ao montar a árvore de seções (ADR-016), os intervalos de páginas saíram errados: o fim de uma seção ia parar na página do título seguinte. A causa era uma **figura decorativa de ~30×30 pt** (um ícone) no topo de quase todas as páginas, que na ordem de leitura vem **antes** do título da página e por isso era atribuída à seção anterior. Das 85 figuras do recorte, 78 são esse ícone.
+
+Nova regra em `normalize.py` (`figuras_decorativas`): remover a figura cujo **tamanho e altura na página** (arredondados a 5 pt) se repetem em mais de 30% das páginas **do mesmo formato** (e em pelo menos 3). O eixo x é ignorado, porque o ícone muda de lado conforme a seção (x = 525, 551 ou 523), e o formato da página entra na chave, porque as páginas em paisagem têm o ícone em outra altura. Uma primeira versão, com o x na chave, deixou 8 ícones para trás e foi corrigida.
+
+Efeito no recorte: **78 figuras removidas**, 725 elementos (eram 803), linhas repetidas ainda 3 → 0, 24 notas associadas e 66 de 66 tabelas preservadas. Restam 7 figuras, todas de conteúdo (logotipo da capa, um gráfico e os organogramas das páginas 55 a 57). O critério de aceite da F1.4 não muda (a regra atua em figuras, não em linhas de texto).

@@ -14,8 +14,13 @@ def _item(colecao, i, label=None, text=None, pagina=1, nivel=None):
 
 def _doc(paginas, itens):
     """itens: lista de (colecao, item) na ordem de leitura; monta body/children com referências."""
-    doc = {"pages": {str(p): {} for p in range(1, paginas + 1)}, "texts": [], "tables": [],
-           "pictures": [], "groups": []}
+    doc = {
+        "pages": {str(p): {} for p in range(1, paginas + 1)},
+        "texts": [],
+        "tables": [],
+        "pictures": [],
+        "groups": [],
+    }
     filhos = []
     for colecao, item in itens:
         item["self_ref"] = f"#/{colecao}/{len(doc[colecao])}"
@@ -89,3 +94,24 @@ def test_linhas_repetidas_detecta_acima_do_limiar():
     elementos = [{"texto": f"Rodapé {p}", "paginas_recorte": [p]} for p in range(1, 11)]
     assert linhas_repetidas(elementos, 10)[0]["paginas"] == 10
     assert linhas_repetidas(elementos[:2], 10) == []
+
+
+def test_figura_repetida_no_topo_some_mas_figura_unica_fica():
+    itens = []
+    for p in range(1, 11):
+        icone = _item("pictures", 0, "picture", None, p)
+        x = 525.0 if p % 3 else 551.0  # o ícone muda de lado em algumas páginas
+        icone["prov"][0]["bbox"] = {"l": x, "t": 835.0, "r": x + 30.0, "b": 805.0}
+        corpo = [("pictures", icone)]
+        if p == 5:  # figura de conteúdo, única no documento
+            grafico = _item("pictures", 0, "picture", None, p)
+            grafico["prov"][0]["bbox"] = {"l": 50.0, "t": 500.0, "r": 400.0, "b": 300.0}
+            corpo.append(("pictures", grafico))
+        corpo.append(("texts", _item("texts", 0, "text", f"Assunto {chr(96 + p)} desta página.", p)))
+        itens += corpo
+    doc = _doc(10, itens)
+    for pagina in doc["pages"].values():
+        pagina["size"] = {"width": 595.0, "height": 842.0}
+    r = normalizar(doc)
+    assert r["estatisticas"]["removidos"]["figura_decorativa_repetida"] == 10
+    assert sum(1 for e in r["elementos"] if e["tipo"] == "picture") == 1
