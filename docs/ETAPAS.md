@@ -120,7 +120,7 @@
   - aceite: 100% das tabelas com perguntas; 10 revisadas à mão
   - nota: ADR-024; 62/62 tabelas com 3 a 5 perguntas (275), `question_vec` ONLINE, recall@1 pergunta→si 1,00; revisão de 10 tabelas em 2 rodadas (v1: 3 com defeito → prompt v2: 42/44 perguntas corretas, 2 ambíguas), feita por Claude e não por humano; sonda de vizinhança 0,44 (perguntas de tabelas parecidas se confundem)
   - depende: F2.2
-- [ ] **F2.8** Reescritas opcionais da consulta: step-back e HyDE
+- [~] **F2.8** Reescritas opcionais da consulta: step-back e HyDE
   - aceite: flags `--stepback` e `--hyde` na CLI
 - [ ] **F2.9** CLI `ask` respondendo só com o contexto e citando `[p. N]`
   - aceite: 5 perguntas de fumaça com a página correta
