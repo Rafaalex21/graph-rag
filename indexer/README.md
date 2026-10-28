@@ -124,3 +124,10 @@ Métricas mecânicas (F3.3, ADR-029): page recall@k, acerto numérico (0,5%) e l
 ```powershell
 uv run python -m indexer.avaliar relatorio --nome f3-2-a3-60
 ```
+
+Calibração do juiz (F3.4, ADR-030), sem LLM: gera a planilha de 20 respostas para rotular (não sobrescreve rótulos) e calcula a concordância com `eval/calibracao_juiz.csv`:
+
+```powershell
+uv run python -m indexer.calibrar planilha --nome f3-2-a3-60
+uv run python -m indexer.calibrar concordancia --nome f3-2-a3-60
+```

@@ -150,9 +150,11 @@
   - resultado: ADR-029; `eval/resultados/<nome>.json` junta as métricas do juiz e as mecânicas (`indexer.metricas`, sem LLM; `avaliar relatorio` refaz sem rodar nada); A3 no recorte: page recall@1/3/6 = 0,49/0,58/0,62, acerto numérico 0,20 (21 perguntas de valor), latência p50 4,6 s e p95 10,2 s; a regra numérica concorda com o juiz em 20 de 21
   - depende: F3.2
   - nota: nas numéricas a página certa chega ao LLM em 53% dos casos, mas a certa é citada em só 13%: o valor está em tabelas fora dos Pais; "tokens por resposta" da §13.2 ficou fora (o `ask` ainda não os devolve)
-- [ ] **F3.4** Calibrar o juiz contra 20 rótulos manuais
+- [x] **F3.4** Calibrar o juiz contra 20 rótulos manuais
   - aceite: concordância ≥ 80%
+  - resultado: ADR-030; concordância de 95% (19 de 20; kappa 0,83) na correção, com planilha cega de 20 respostas estratificadas; única divergência: N01 ("R$ 16,8 bilhões" para R$ 16.782 milhões, arredondamento)
   - depende: F3.2
+  - nota: os 20 rótulos foram dados pelo Claude a pedido, não por uma pessoa (ressalva no ADR): conferência humana recomendada; a classe `parcial` não foi exercitada; só a correção foi calibrada, não a fidelidade
 - [ ] **F3.5** Rodar A0, A1, A2 e A3 e publicar a tabela
   - aceite: `eval/resultados/v0.md` com as quatro linhas e as métricas da §13.2
   - depende: F2.9, F3.3

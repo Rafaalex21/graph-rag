@@ -26,5 +26,6 @@ Uma decisão por arquivo: `ADR-NNN-assunto.md`. As nove decisões iniciais estã
 | [027](ADR-027-golden-set.md) | Golden set de 60 perguntas, conferido contra o PDF | F3.1 — aceita |
 | [028](ADR-028-metricas-com-juiz-local.md) | Métricas com o juiz local (recall de contexto, fidelidade, correção) e orçamento de raciocínio | F3.2 — aceita |
 | [029](ADR-029-metricas-mecanicas.md) | Métricas mecânicas: page recall@k, acerto numérico (0,5%) e latência p50/p95 | F3.3 — aceita |
+| [030](ADR-030-calibracao-do-juiz.md) | Calibração do juiz contra 20 rótulos (95% de concordância; rótulos dados pelo Claude) | F3.4 — aceita |
 
 Modelo em [`ADR-000-modelo.md`](ADR-000-modelo.md).

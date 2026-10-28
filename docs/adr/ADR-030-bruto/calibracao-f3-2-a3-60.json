@@ -1,0 +1,27 @@
+{
+ "n": 20,
+ "sem_veredito_do_juiz": 0,
+ "concordancia": 0.95,
+ "concordancia_correta_x_nao": 0.95,
+ "kappa": 0.8276,
+ "matriz_humano_x_juiz": {
+  "correta": {
+   "correta": 16,
+   "parcial": 0,
+   "incorreta": 1
+  },
+  "parcial": {
+   "correta": 0,
+   "parcial": 0,
+   "incorreta": 0
+  },
+  "incorreta": {
+   "correta": 0,
+   "parcial": 0,
+   "incorreta": 3
+  }
+ },
+ "divergencias": [
+  "N01"
+ ]
+}
