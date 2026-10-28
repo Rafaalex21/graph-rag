@@ -100,7 +100,7 @@
   - aceite: consultas de sanidade da §6.4 sem órfãos
   - nota: ADR-019; 10 constraints da §6.3 (duplicata barrada); 1 Document, 170 Section, 116 Parent, 166 Child, 115 NEXT; 2ª carga sem mudar contagem; 9 consultas de sanidade = 0; driver neo4j 6.4.1
   - depende: F0.7, F2.1
-- [ ] **F2.3** Embutir os Filhos e criar `child_vec` (1024 dims, cosseno)
+- [~] **F2.3** Embutir os Filhos e criar `child_vec` (1024 dims, cosseno)
   - aceite: índice ONLINE; autoteste trecho → si mesmo com recall@1 ≥ 0,98
   - depende: F2.2
 - [ ] **F2.4** Criar `child_ft` e a busca híbrida em duas variantes: normalização pelo máximo (cap. 2) e RRF
