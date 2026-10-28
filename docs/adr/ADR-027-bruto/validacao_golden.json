@@ -1,0 +1,329 @@
+{
+ "linhas": 60,
+ "por_categoria": {
+  "factual_textual": 15,
+  "numerica": 15,
+  "agregacao_filtro": 10,
+  "tematica_global": 10,
+  "multi_hop": 5,
+  "fora_do_escopo": 5
+ },
+ "no_recorte": {
+  "sim": 54,
+  "nao": 6
+ },
+ "rotas": {
+  "buscar_trechos": 18,
+  "entidade": 1,
+  "fato_financeiro": 2,
+  "buscar_tabelas": 9,
+  "consultar_grafo": 10,
+  "panorama": 10,
+  "varias": 5,
+  "nenhuma": 5
+ },
+ "conferidas_no_pdf": 60,
+ "erros": [],
+ "detalhe": [
+  {
+   "id": "T01",
+   "evidencia_ok": true,
+   "ausencia_ok": true
+  },
+  {
+   "id": "T02",
+   "evidencia_ok": true,
+   "ausencia_ok": true
+  },
+  {
+   "id": "T03",
+   "evidencia_ok": true,
+   "ausencia_ok": true
+  },
+  {
+   "id": "T04",
+   "evidencia_ok": true,
+   "ausencia_ok": true
+  },
+  {
+   "id": "T05",
+   "evidencia_ok": true,
+   "ausencia_ok": true
+  },
+  {
+   "id": "T06",
+   "evidencia_ok": true,
+   "ausencia_ok": true
+  },
+  {
+   "id": "T07",
+   "evidencia_ok": true,
+   "ausencia_ok": true
+  },
+  {
+   "id": "T08",
+   "evidencia_ok": true,
+   "ausencia_ok": true
+  },
+  {
+   "id": "T09",
+   "evidencia_ok": true,
+   "ausencia_ok": true
+  },
+  {
+   "id": "T10",
+   "evidencia_ok": true,
+   "ausencia_ok": true
+  },
+  {
+   "id": "T11",
+   "evidencia_ok": true,
+   "ausencia_ok": true
+  },
+  {
+   "id": "T12",
+   "evidencia_ok": true,
+   "ausencia_ok": true
+  },
+  {
+   "id": "T13",
+   "evidencia_ok": true,
+   "ausencia_ok": true
+  },
+  {
+   "id": "T14",
+   "evidencia_ok": true,
+   "ausencia_ok": true
+  },
+  {
+   "id": "T15",
+   "evidencia_ok": true,
+   "ausencia_ok": true
+  },
+  {
+   "id": "N01",
+   "evidencia_ok": true,
+   "ausencia_ok": true
+  },
+  {
+   "id": "N02",
+   "evidencia_ok": true,
+   "ausencia_ok": true
+  },
+  {
+   "id": "N03",
+   "evidencia_ok": true,
+   "ausencia_ok": true
+  },
+  {
+   "id": "N04",
+   "evidencia_ok": true,
+   "ausencia_ok": true
+  },
+  {
+   "id": "N05",
+   "evidencia_ok": true,
+   "ausencia_ok": true
+  },
+  {
+   "id": "N06",
+   "evidencia_ok": true,
+   "ausencia_ok": true
+  },
+  {
+   "id": "N07",
+   "evidencia_ok": true,
+   "ausencia_ok": true
+  },
+  {
+   "id": "N08",
+   "evidencia_ok": true,
+   "ausencia_ok": true
+  },
+  {
+   "id": "N09",
+   "evidencia_ok": true,
+   "ausencia_ok": true
+  },
+  {
+   "id": "N10",
+   "evidencia_ok": true,
+   "ausencia_ok": true
+  },
+  {
+   "id": "N11",
+   "evidencia_ok": true,
+   "ausencia_ok": true
+  },
+  {
+   "id": "N12",
+   "evidencia_ok": true,
+   "ausencia_ok": true
+  },
+  {
+   "id": "N13",
+   "evidencia_ok": true,
+   "ausencia_ok": true
+  },
+  {
+   "id": "N14",
+   "evidencia_ok": true,
+   "ausencia_ok": true
+  },
+  {
+   "id": "N15",
+   "evidencia_ok": true,
+   "ausencia_ok": true
+  },
+  {
+   "id": "G01",
+   "evidencia_ok": true,
+   "ausencia_ok": true
+  },
+  {
+   "id": "G02",
+   "evidencia_ok": true,
+   "ausencia_ok": true
+  },
+  {
+   "id": "G03",
+   "evidencia_ok": true,
+   "ausencia_ok": true
+  },
+  {
+   "id": "G04",
+   "evidencia_ok": true,
+   "ausencia_ok": true
+  },
+  {
+   "id": "G05",
+   "evidencia_ok": true,
+   "ausencia_ok": true
+  },
+  {
+   "id": "G06",
+   "evidencia_ok": true,
+   "ausencia_ok": true
+  },
+  {
+   "id": "G07",
+   "evidencia_ok": true,
+   "ausencia_ok": true
+  },
+  {
+   "id": "G08",
+   "evidencia_ok": true,
+   "ausencia_ok": true
+  },
+  {
+   "id": "G09",
+   "evidencia_ok": true,
+   "ausencia_ok": true
+  },
+  {
+   "id": "G10",
+   "evidencia_ok": true,
+   "ausencia_ok": true
+  },
+  {
+   "id": "P01",
+   "evidencia_ok": true,
+   "ausencia_ok": true
+  },
+  {
+   "id": "P02",
+   "evidencia_ok": true,
+   "ausencia_ok": true
+  },
+  {
+   "id": "P03",
+   "evidencia_ok": true,
+   "ausencia_ok": true
+  },
+  {
+   "id": "P04",
+   "evidencia_ok": true,
+   "ausencia_ok": true
+  },
+  {
+   "id": "P05",
+   "evidencia_ok": true,
+   "ausencia_ok": true
+  },
+  {
+   "id": "P06",
+   "evidencia_ok": true,
+   "ausencia_ok": true
+  },
+  {
+   "id": "P07",
+   "evidencia_ok": true,
+   "ausencia_ok": true
+  },
+  {
+   "id": "P08",
+   "evidencia_ok": true,
+   "ausencia_ok": true
+  },
+  {
+   "id": "P09",
+   "evidencia_ok": true,
+   "ausencia_ok": true
+  },
+  {
+   "id": "P10",
+   "evidencia_ok": true,
+   "ausencia_ok": true
+  },
+  {
+   "id": "M01",
+   "evidencia_ok": true,
+   "ausencia_ok": true
+  },
+  {
+   "id": "M02",
+   "evidencia_ok": true,
+   "ausencia_ok": true
+  },
+  {
+   "id": "M03",
+   "evidencia_ok": true,
+   "ausencia_ok": true
+  },
+  {
+   "id": "M04",
+   "evidencia_ok": true,
+   "ausencia_ok": true
+  },
+  {
+   "id": "M05",
+   "evidencia_ok": true,
+   "ausencia_ok": true
+  },
+  {
+   "id": "F01",
+   "evidencia_ok": true,
+   "ausencia_ok": true
+  },
+  {
+   "id": "F02",
+   "evidencia_ok": true,
+   "ausencia_ok": true
+  },
+  {
+   "id": "F03",
+   "evidencia_ok": true,
+   "ausencia_ok": true
+  },
+  {
+   "id": "F04",
+   "evidencia_ok": true,
+   "ausencia_ok": true
+  },
+  {
+   "id": "F05",
+   "evidencia_ok": true,
+   "ausencia_ok": true
+  }
+ ]
+}

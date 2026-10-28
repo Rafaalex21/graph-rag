@@ -1,0 +1,5 @@
+{
+  "descricao": "Páginas físicas do PDF original que fazem parte do recorte de 79 páginas da F1.2 (ADR-009). Cópia das faixas de data/raw/bb_fre_2026_recorte_mapa.json, que não é versionado; eval/validar_golden.py confere as duas quando o mapa existe.",
+  "faixas": [[1, 13], [80, 100], [111, 116], [155, 158], [194, 200], [203, 209], [302, 308], [332, 335], [352, 352], [363, 370], [405, 405]],
+  "total": 79
+}
