@@ -81,7 +81,7 @@
   - aceite: ≥ 13 de 15 sem erro de valor; achados em `docs/auditoria-tabelas.md`
   - nota: 15 de 15 sem erro de valor (748 números nas células, idênticos ao PDF); 3 tabelas com problema de estrutura ou cabeçalho (4, 9, 12); legenda "Obs:" passou a ser nota da tabela
   - depende: F1.3
-- [ ] **F1.7** Implementar o normalizador numérico (pt-BR e EN, parênteses, "em milhões", %, p.b.)
+- [~] **F1.7** Implementar o normalizador numérico (pt-BR e EN, parênteses, "em milhões", %, p.b.)
   - aceite: ≥ 30 testes unitários passando
 
 ## F2 · Linha de base vetorial
