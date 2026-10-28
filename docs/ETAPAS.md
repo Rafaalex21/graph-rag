@@ -135,7 +135,7 @@
 > entrega: golden set, harness de avaliação e tabela A0–A3
 > esforço: M
 
-- [ ] **F3.1** Redigir 60 perguntas com gabarito, na distribuição da §13.1
+- [~] **F3.1** Redigir 60 perguntas com gabarito, na distribuição da §13.1
   - aceite: `eval/golden.csv` com pergunta, gabarito (texto ou Cypher), páginas e rota esperada
   - depende: F1.1
   - nota: incluir a coluna `no_recorte` (sim/não: a evidência está nas páginas do recorte da F1.2); até a F5.8 só as perguntas com `sim` têm resposta possível
