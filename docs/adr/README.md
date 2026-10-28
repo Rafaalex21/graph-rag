@@ -9,6 +9,6 @@ Uma decisão por arquivo: `ADR-NNN-assunto.md`. As nove decisões iniciais estã
 | [011](ADR-011-perfis-swap.md) | Perfis do `llama-swap` (motor `matrix`) e orçamento de VRAM | F0.6 — aceita |
 | [012](ADR-012-neo4j-nativo.md) | Neo4j nativo no Windows, sem Docker nem WSL2 | F0.7 — aceita |
 | [013](ADR-013-ferramentas-dev.md) | Ferramentas de desenvolvimento portáteis e TypeScript 6.0 fixado | F0.8 — aceita |
-| 009 | Documento escolhido | F1.1 |
+| [009](ADR-009-documento.md) | Documento escolhido | F1.1: proposta, aguardando a decisão |
 
 Modelo em [`ADR-000-modelo.md`](ADR-000-modelo.md).

@@ -58,8 +58,9 @@
 > entrega: DoclingDocument fiel, árvore de seções e normalizador numérico testado
 > esforço: M
 
-- [ ] **F1.1** Escolher o documento pelos critérios da §16 e registrar no ADR-009
+- [~] **F1.1** Escolher o documento pelos critérios da §16 e registrar no ADR-009
   - aceite: ADR com fonte, número de páginas, idioma e condições de uso
+  - nota: candidatos levantados e verificados no ADR-009 (proposta); a escolha é do usuário e está pendente
 - [ ] **F1.2** Separar um recorte de até 80 páginas, com narrativa e tabelas, para os ciclos rápidos de F1 a F5
   - aceite: recorte salvo em `data/raw/` e descrito no ADR-009
   - depende: F1.1
