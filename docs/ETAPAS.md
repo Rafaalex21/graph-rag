@@ -73,7 +73,7 @@
   - aceite: nenhuma linha repetida em mais de 30% das páginas
   - nota: ADR-015; recorte: linhas repetidas 3 → 0, 803 elementos, 24 notas associadas por posição (0 sem âncora), 66 de 66 tabelas preservadas
   - depende: F1.3
-- [ ] **F1.5** Construir a árvore de seções (título, nível, páginas)
+- [~] **F1.5** Construir a árvore de seções (título, nível, páginas)
   - aceite: o sumário gerado bate com o índice do PDF em ≥ 95% das entradas
   - depende: F1.3
 - [ ] **F1.6** Auditar 15 tabelas sorteadas contra o PDF (valores, sinais, escala, cabeçalhos)
