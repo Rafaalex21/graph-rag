@@ -61,8 +61,9 @@
 - [x] **F1.1** Escolher o documento pelos critérios da §16 e registrar no ADR-009
   - aceite: ADR com fonte, número de páginas, idioma e condições de uso
   - nota: escolhido o Formulário de Referência 2026 do Banco do Brasil (v7, 21/09/2026, PDF de 423 páginas, PT, SHA-256 no ADR-009); o levantamento teve uma errata (o PDF atribuído à Petrobras era do BB). Citações usam a página física; a impressa é física − 1
-- [~] **F1.2** Separar um recorte de até 80 páginas, com narrativa e tabelas, para os ciclos rápidos de F1 a F5
+- [x] **F1.2** Separar um recorte de até 80 páginas, com narrativa e tabelas, para os ciclos rápidos de F1 a F5
   - aceite: recorte salvo em `data/raw/` e descrito no ADR-009
+  - nota: 79 páginas (19%), mapa em `data/raw/bb_fre_2026_recorte_mapa.json`; citar sempre a página física do original; a F5.8 indexa o documento inteiro (ADR-009)
   - depende: F1.1
 - [ ] **F1.3** Converter com Docling (OCR desligado, TableFormer *accurate*) e salvar o JSON
   - aceite: 100% das páginas com texto; tempo de conversão registrado
@@ -123,6 +124,7 @@
 - [ ] **F3.1** Redigir 60 perguntas com gabarito, na distribuição da §13.1
   - aceite: `eval/golden.csv` com pergunta, gabarito (texto ou Cypher), páginas e rota esperada
   - depende: F1.1
+  - nota: incluir a coluna `no_recorte` (sim/não: a evidência está nas páginas do recorte da F1.2); até a F5.8 só as perguntas com `sim` têm resposta possível
 - [ ] **F3.2** Implementar recall de contexto, fidelidade e correção com o juiz local (prompts do cap. 8); RAGAS como opção
   - aceite: as três métricas rodam no golden set inteiro sem intervenção
   - depende: F3.1, F0.6
@@ -135,6 +137,7 @@
 - [ ] **F3.5** Rodar A0, A1, A2 e A3 e publicar a tabela
   - aceite: `eval/resultados/v0.md` com as quatro linhas e as métricas da §13.2
   - depende: F2.9, F3.3
+  - nota: as métricas valem só para as perguntas com `no_recorte` = sim; a avaliação sobre o documento inteiro vem na F9.1
 
 ## F4 · Grafo de domínio
 > objetivo: Transformar o texto em fatos consultáveis — filtrar, somar e comparar exige estrutura, não similaridade.
@@ -188,6 +191,10 @@
 - [ ] **F5.7** Embutir os resumos de entidade em `entity_vec`
   - aceite: índice ONLINE; busca "entidade → si mesma" com recall@1 ≥ 0,95
   - depende: F5.4
+- [ ] **F5.8** Indexar o documento inteiro (423 páginas) com o pipeline das fases F1 a F5, numa execução noturna
+  - aceite: 423 páginas processadas; contagens do grafo registradas (Parent, Child, Table, FinancialFact, __Entity__, __Community__); consultas de sanidade da §6.4 sem órfãos; reexecutar não repete chamadas ao LLM
+  - depende: F5.6, F5.7, F4.6
+  - nota: ~6,5 h (ARQUITETURA §5.2); até esta tarefa o grafo cobre só o recorte da F1.2 (19% das páginas); rodar com o desktop leve (ADR-010); citações sempre com a página física do original (ADR-009)
 
 ## F6 · Recuperadores de grafo
 > objetivo: Cada pergunta encontra a ferramenta certa — templates para o previsível, Text2Cypher para o resto.
@@ -282,7 +289,7 @@
 
 - [ ] **F9.1** Rodar A4, A5 e A6
   - aceite: `eval/resultados/v1-ablacao.md` com a escada completa
-  - depende: F7.5, F3.5
+  - depende: F7.5, F3.5, F5.8
 - [ ] **F9.2** Bake-off do LLM principal: qualidade × latência × VRAM
   - aceite: ADR com a escolha final por papel
   - depende: F9.1

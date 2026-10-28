@@ -87,6 +87,51 @@ Atende aos critérios da §16: 423 páginas (≥ 200), PDF nativo com texto, mis
 - Tempo de indexação estimado em ~6,5 h para 423 páginas (ARQUITETURA §5.2, escalado); o ciclo F1 a F5 roda antes num recorte de até 80 páginas (F1.2).
 - **Numeração de páginas:** o PDF tem 423 páginas físicas, mas o número impresso é a página física menos 1 (a capa não é numerada; o sumário usa a numeração impressa, por exemplo a seção 1 começa na impressa 5, física 6). **As citações do projeto usam a página física**, a mesma do `pdf.js` (F8.4); a F1.5 deve registrar o deslocamento ao comparar o sumário.
 
+## Recorte da F1.2 (79 páginas)
+
+Para os ciclos rápidos das fases F1 a F5, o projeto trabalha sobre um recorte de **79 páginas** (19% das 423), montado por seções inteiras a partir do sumário e de métricas de densidade de tabelas. O documento original continua sendo a fonte única; **a F5.8 indexa o documento inteiro** numa execução noturna.
+
+| Bloco | Páginas físicas do original | Págs. |
+|---|---|---:|
+| Capa, controle de versões e sumário | 1–5 | 5 |
+| 1.1 a 1.3 Histórico, atividades e segmentos | 6–13 | 8 |
+| 2.1 e 2.2 Condições financeiras e resultados | 80–100 | 21 |
+| 3.1 e 3.2 Projeções e acompanhamento | 111–116 | 6 |
+| 4.2 e 4.3 Principais riscos e riscos de mercado | 155–158 | 4 |
+| 5.3 Programa de integridade | 194–200 | 7 |
+| 6 Controle e grupo econômico | 203–209 | 7 |
+| 7.5 e 7.6 Relações familiares e de subordinação | 302–308 | 7 |
+| 8.2 Remuneração total por órgão | 332–335 | 4 |
+| 8.15 Remuneração mínima, média e máxima | 352 | 1 |
+| 9 Auditores | 363–365 | 3 |
+| 10.1 e 10.2 Recursos humanos | 366–370 | 5 |
+| 12.1 Capital social | 405 | 1 |
+| **Total** | | **79** |
+
+Perfil do recorte: 24% de linhas de tabela (heurística: linha com 3 ou mais números) contra 9% no documento inteiro, e 170 das 449 ocorrências de "R$" (38%) em 19% das páginas. Ficam de fora, de propósito: fatores de risco em texto (4.1, 38 páginas), processos (4.4), gerenciamento de riscos (5.1), órgãos de administração (7.1 e 7.2, 92 páginas) e partes relacionadas (11.2, 24 páginas).
+
+### Arquivos (em `data/raw/`, fora do git)
+
+| Arquivo | Conteúdo | SHA-256 |
+|---|---|---|
+| `bb_fre_2026_recorte.pdf` | 79 páginas, 5,81 MB, com a camada de texto do original | `6fd77937e34fa09de9f42c36cd7f612f662b1392a34f64ddd9d768b3b7feade8` |
+| `bb_fre_2026_recorte_mapa.json` | para cada página do recorte: página física do original, página impressa e bloco; traz o SHA-256 do original | `d60182141ee7795ab8e16ed44ff97cda78d66f1affe22ed5cf8693d854371915` |
+
+### Regras
+
+1. **Citar sempre a página física do original**, nunca a do recorte (que vai de 1 a 79). O pipeline guarda `pageStart` e `pageEnd` já traduzidos pelo mapa; a página impressa é a física menos 1.
+2. **Golden set (F3.1):** cada pergunta tem a coluna `no_recorte` (sim/não). Até a F5.8, só as perguntas com `sim` têm resposta possível, e as métricas da F3.5 valem só para elas.
+3. **Sumário (F1.5):** o sumário do recorte lista as 107 seções do documento, mas só parte delas existe no recorte; a comparação da F1.5 vale para as seções presentes.
+4. O recorte tem um viés conhecido (mais tabelas que o documento); parâmetros calibrados nele são revalidados na F5.8 e na F9.
+
+### Verificação
+
+- 79 páginas no recorte (≤ 80).
+- Texto idêntico ao da página original em **79 de 79** páginas (comparação do texto extraído, normalizando espaços).
+- Camada de texto presente em 78 de 79; a exceção é a capa (4 linhas curtas: "Formulário de Referência 2026, Ano-base 2025").
+- SHA-256 do original conferido contra o registrado acima.
+- Exemplos do mapa: recorte 14 = original 80 (impressa 79, onde começa o item 2); recorte 79 = original 405 (impressa 404, item 12.1).
+
 ## Arquivos baixados (não versionados, em `data/raw/`)
 
 | Arquivo | Conteúdo | Tamanho | SHA-256 |

@@ -324,7 +324,7 @@ Hipóteses: documento de ~300 páginas (~200 mil tokens) → ~170 Pais e ~40 tab
 | Relatórios de comunidade | ~80 | ~6K / 1K | ~46 min |
 | **Total** | | | **~4,6 h — uma noite** |
 
-Com gpt-oss-20b no Vulkan (4.402 tok/s de prompt e 170 tok/s de geração medidos) o mesmo cálculo dá cerca de 1 h inteiro na GPU (cerca de 2 h com o `--n-cpu-moe 4` do perfil rápido); o bake-off da F9 dirá se a qualidade acompanha. Antes do documento inteiro, todo o ciclo F1–F5 roda num recorte de até 80 páginas.
+Com gpt-oss-20b no Vulkan (4.402 tok/s de prompt e 170 tok/s de geração medidos) o mesmo cálculo dá cerca de 1 h inteiro na GPU (cerca de 2 h com o `--n-cpu-moe 4` do perfil rápido); o bake-off da F9 dirá se a qualidade acompanha. Antes do documento inteiro, todo o ciclo F1–F5 roda num recorte de até 80 páginas (F1.2); a F5.8 indexa o documento inteiro numa execução noturna.
 
 ---
 
@@ -774,7 +774,7 @@ A tabela final A0–A6 é a peça central do README: mostra, camada a camada, o 
 |---|---|---|---|
 | VRAM estoura com contexto longo ou com o desktop aberto (3,5–4,5 GB medidos) | Alta | Médio | `--n-cpu-moe`, KV em q8_0, contexto 16K por slot, perfis, fechar aplicativos pesados |
 | Instabilidade de Vulkan/ROCm no RDNA 4 | Média | Alto | Manter os dois builds; fixar versão; `llama-bench` antes de atualizar |
-| Indexação lenta (horas) | Alta | Médio | Cache por hash, retomada, recorte de 80 páginas primeiro, perfil rápido se o bake-off permitir |
+| Indexação lenta (horas) | Alta | Médio | Cache por hash, retomada, recorte de 80 páginas primeiro e indexação completa numa noite (F5.8), perfil rápido se o bake-off permitir |
 | Número alucinado ou escala errada | Média | Alto | Lastro numérico, normalizador testado, escala obrigatória no esquema |
 | Supernó do emissor | Alta | Médio | Rótulo `:Issuer`, exclusão da projeção Leiden, resumo em dois níveis |
 | Text2Cypher gera consulta errada | Alta | Médio | Templates primeiro, *few-shot* crescente, `EXPLAIN` + autocorreção |
