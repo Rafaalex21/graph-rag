@@ -1,0 +1,27 @@
+﻿{
+  "enviados": {
+    "tabelas": 62,
+    "perguntas": 275,
+    "tem_tabela": 62,
+    "tem_pergunta": 275
+  },
+  "embutidas_agora": 0,
+  "indice_question_vec": {
+    "estado": "ONLINE",
+    "populado_pct": 100.0
+  },
+  "contagens": {
+    "tabelas": 62,
+    "perguntas": 275,
+    "tem_tabela": 62,
+    "tem_pergunta": 275
+  },
+  "problemas": {
+    "tabelas_sem_secao": 0,
+    "tabelas_sem_pergunta": 0,
+    "tabelas_com_menos_de_3_ou_mais_de_5": 0,
+    "tabelas_sem_descricao": 0,
+    "perguntas_orfas": 0,
+    "perguntas_sem_vetor": 0
+  }
+}

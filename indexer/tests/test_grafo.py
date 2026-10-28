@@ -141,7 +141,7 @@ def test_constraints_sao_exatamente_as_da_secao_6_3_da_arquitetura():
         ).groups()
         for c in CONSTRAINTS
     ]
-    assert len(do_doc) == 10 and do_codigo == do_doc
+    assert len(do_doc) == 11 and do_codigo == do_doc
 
 
 def test_preparar_liga_secoes_pais_filhos_e_encadeia_os_pais_em_ordem_de_leitura():
@@ -190,9 +190,9 @@ def test_carregar_e_idempotente_na_forma_so_usa_merge_por_id():
         assert "CREATE" not in cypher and "MERGE" in cypher
 
 
-def test_aplicar_constraints_manda_as_dez():
+def test_aplicar_constraints_manda_as_onze():
     driver = DriverFalso()
-    assert aplicar_constraints(driver) == 10 and len(driver.chamadas) == 10
+    assert aplicar_constraints(driver) == 11 and len(driver.chamadas) == 11
 
 
 def test_sanidade_roda_todas_as_consultas_e_conferencia_compara_com_o_arquivo():
@@ -205,7 +205,7 @@ def test_sanidade_roda_todas_as_consultas_e_conferencia_compara_com_o_arquivo():
         "MATCH ()-[r:NEXT]->() RETURN count(r)": 2,
         "MATCH ()-[r:HAS_SECTION]->() RETURN count(r)": 2,
         "MATCH ()-[r:HAS_SUBSECTION]->() RETURN count(r)": 1,
-        "SHOW CONSTRAINTS YIELD type WHERE type CONTAINS 'UNIQUENESS' RETURN count(*)": 10,
+        "SHOW CONSTRAINTS YIELD type WHERE type CONTAINS 'UNIQUENESS' RETURN count(*)": 11,
     }
     resultado = sanidade(DriverFalso(respostas))
     assert set(resultado["problemas"]) == set(SANIDADE) and not any(resultado["problemas"].values())
@@ -223,7 +223,7 @@ def test_conferencia_acusa_diferenca_de_contagem():
             "tem_filho": 3,
             "next": 2,
             "tem_secao": 2,
-            "constraints_de_unicidade": 10,
+            "constraints_de_unicidade": 11,
             "tem_subsecao": 1,
         }
     }

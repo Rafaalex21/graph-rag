@@ -379,7 +379,8 @@ Todo nó de domínio (`Organization`, `Person`, `Segment`, `RiskFactor`, `Event`
 | `Section` | `id` (`<documento>:s<n>`), `number` (numeração do documento, se houver), `title`, `level`, `path`, `pageStart`, `pageEnd`, `order` |
 | `Parent` | `id`, `text`, `tokens`, `pageStart`, `pageEnd`, `ordinal` (posição na seção) |
 | `Child` | `id`, `text` (já com o prefixo do caminho da seção; é o que se embute e se indexa no full-text), `tokens`, `pageStart`, `pageEnd`, `ordinal`, `embedding`, `embeddingModel`, `embeddingDims` (F2.3) |
-| `Table` | `id`, `caption`, `markdown`, `page`, `description`, `scale`, `currency` |
+| `Table` | `id`, `ref`, `markdown`, `page`, `pageStart`, `pageEnd`, `rows`, `cols`, `description`, `scale`, `currency`, `notes` |
+| `HypotheticalQuestion` | `id`, `text`, `ordinal`, `embedding` (relação `Table -[:HAS_QUESTION]-> HypotheticalQuestion`) |
 | `FinancialFact` | `id`, `metric`, `value`, `unit`, `currency`, `scale`, `period`, `periodType`, `evidence`, `page` |
 | `Metric` | `name` (canônico), `aliases`, `definition` |
 | `Period` | `id` (ex.: `2025-FY`, `2025-Q4`), `start`, `end` |
@@ -395,6 +396,7 @@ CREATE CONSTRAINT section_id  IF NOT EXISTS FOR (n:Section)  REQUIRE n.id IS UNI
 CREATE CONSTRAINT parent_id   IF NOT EXISTS FOR (n:Parent)   REQUIRE n.id IS UNIQUE;
 CREATE CONSTRAINT child_id    IF NOT EXISTS FOR (n:Child)    REQUIRE n.id IS UNIQUE;
 CREATE CONSTRAINT table_id    IF NOT EXISTS FOR (n:Table)    REQUIRE n.id IS UNIQUE;
+CREATE CONSTRAINT question_id IF NOT EXISTS FOR (n:HypotheticalQuestion) REQUIRE n.id IS UNIQUE;
 CREATE CONSTRAINT fact_id     IF NOT EXISTS FOR (n:FinancialFact) REQUIRE n.id IS UNIQUE;
 CREATE CONSTRAINT metric_name IF NOT EXISTS FOR (n:Metric)   REQUIRE n.name IS UNIQUE;
 CREATE CONSTRAINT period_id   IF NOT EXISTS FOR (n:Period)   REQUIRE n.id IS UNIQUE;

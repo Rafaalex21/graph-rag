@@ -1,0 +1,6 @@
+﻿{
+  "perguntas": 275,
+  "recall_at_1_pergunta_para_si_mesma": 1.0,
+  "vizinha_mais_proxima_e_da_mesma_tabela": 0.4436,
+  "alguma_das_3_vizinhas_e_da_mesma_tabela": 0.6691
+}

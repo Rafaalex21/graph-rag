@@ -116,8 +116,9 @@
   - aceite: 24 Pais reranqueados em ≤ 2 s
   - nota: ADR-023; 24 Pais reais: p50 583 ms, máx. 751 ms; 24 maiores: 856 ms; teto garantido (24 × 6.000 caracteres) 1,84 s (folga ~8%); sem corte, 24 Pais de 1.600 tokens passariam de 2 s (2,1 s); limite real do servidor é o contexto de 4.096
   - depende: F2.5, F0.6
-- [~] **F2.7** Tabelas: descrição e 3 a 5 perguntas hipotéticas por tabela, embutidas em `question_vec`
+- [x] **F2.7** Tabelas: descrição e 3 a 5 perguntas hipotéticas por tabela, embutidas em `question_vec`
   - aceite: 100% das tabelas com perguntas; 10 revisadas à mão
+  - nota: ADR-024; 62/62 tabelas com 3 a 5 perguntas (275), `question_vec` ONLINE, recall@1 pergunta→si 1,00; revisão de 10 tabelas em 2 rodadas (v1: 3 com defeito → prompt v2: 42/44 perguntas corretas, 2 ambíguas), feita por Claude e não por humano; sonda de vizinhança 0,44 (perguntas de tabelas parecidas se confundem)
   - depende: F2.2
 - [ ] **F2.8** Reescritas opcionais da consulta: step-back e HyDE
   - aceite: flags `--stepback` e `--hyde` na CLI
