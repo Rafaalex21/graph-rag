@@ -6,4 +6,4 @@ Fora do git (ver `.gitignore`). Estrutura esperada:
 - `parsed/` — saída do Docling (JSON) e árvore de seções
 - `cache/` — respostas dos LLMs memorizadas por hash do trecho + versão do prompt
 
-O documento escolhido e sua origem ficam registrados em `docs/adr/ADR-009-documento.md`.
+O documento escolhido e sua origem ficam registrados em `docs/adr/ADR-009-documento.md`. Hoje: `raw/banco_do_brasil_formulario_referencia_2026.pdf` (FRE 2026 do Banco do Brasil, v7, 423 páginas).

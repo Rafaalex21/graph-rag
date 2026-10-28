@@ -1,6 +1,6 @@
 # ADR-009 · Escolha do documento financeiro
 
-- **Estado:** proposta: levantamento de candidatos (28/10/2026), **corrigido por uma errata** (ver abaixo); **a decisão é do usuário e está pendente**
+- **Estado:** aceita (28/10/2026): o usuário escolheu o Formulário de Referência 2026 do **Banco do Brasil** (v7, PDF); o levantamento de candidatos tem uma errata (ver abaixo)
 - **Data:** 2026-10-28
 - **Tarefa(s):** F1.1
 
@@ -56,14 +56,43 @@ Contexto do FinanceBench: 150 perguntas abertas em 84 documentos (no máximo 7 p
 
 ## Decisão
 
-*Pendente.* O usuário havia escolhido o "candidato A" (FRE da Petrobras) com base na atribuição errada da primeira versão. Com a errata, a escolha precisa ser confirmada ou refeita. Quando houver decisão, esta seção registrará fonte, páginas, idioma, versão com hash e condições de uso (critério de aceite da F1.1).
+Usar o **Formulário de Referência 2026 (ano-base 2025) do Banco do Brasil S.A., versão 7, de 21/09/2026**, como documento do projeto. A escolha foi do usuário, depois da errata sobre o PDF da Petrobras.
+
+| Item | Valor |
+|---|---|
+| Emissor | Banco do Brasil S.A. (banco; CNPJ 00.000.000/0001-91) |
+| Documento | Formulário de Referência 2026, ano-base 2025, **versão 7** (a página 2 do PDF lista as 7 versões, de 29/05 a 21/09/2026, idêntico ao índice da CVM: `ID_DOC` 161398, recebido em 21/09/2026) |
+| Fonte do PDF | Site de Relações com Investidores do BB (arquivo hospedado em `api.mziq.com`): `https://api.mziq.com/mzfilemanager/v2/d/5760dff3-15e1-4962-9e81-322a0b3d0bbd/8ddd4264-6e9d-e147-24c6-8941de61c467?origin=2` |
+| Páginas | **423** físicas (confirmado com `pypdf`); PDF 1.7, 8.719.214 bytes, sem criptografia, criado com Adobe Acrobat em 21/09/2026 |
+| Camada de texto | 59 de 60 páginas amostradas com texto (média de ~2.700 caracteres por página) |
+| Idioma | Português do Brasil |
+| Versão congelada | SHA-256 `b0d175661531fdd672a0db7abd44931cb43b05a122264a33cbe9e6186e3432b4` (o FRE é reapresentado a cada atualização; o projeto trabalha sempre sobre este arquivo, RNF-7) |
+| Arquivo local | `data/raw/banco_do_brasil_formulario_referencia_2026.pdf` (fora do git) |
+| Dados estruturados (gabarito) | Dataset de FRE da CVM, `fre_cia_aberta_2026.zip` (ODbL), com as 7 versões do BB; **ainda não baixado** (será pedido o OK na F3.1) |
+
+### Condições de uso
+
+- **Dados estruturados da CVM:** licença **ODbL** (atribuição e compartilhamento sob a mesma licença das bases derivadas).
+- **O PDF:** documento público protocolado na CVM. O site de RI do BB **não declara condições de uso** (só uma política de privacidade, que não li). O arquivo fica **fora do git**, para uso interno do projeto.
+- **Divulgação (F10):** README com GIF, vídeo e artigo exibirão trechos do documento. **Antes de publicar qualquer trecho, pedir autorização à RI do Banco do Brasil**; esta pendência fica registrada na F10.1.
+
+### Por que este documento
+
+Atende aos critérios da §16: 423 páginas (≥ 200), PDF nativo com texto, mistura de narrativa e tabelas, muitas entidades (controladas, administradores, acionistas, partes relacionadas) e gabarito público estruturado nos dados abertos da CVM. É um banco, o que combina com o domínio "financeiro", e está em português, o idioma dos prompts e do índice `brazilian`.
+
+### Contrapartidas assumidas
+
+- O FRE é mais fraco que um 20-F ou 10-K para perguntas sobre demonstrações financeiras completas; a seção de comentários dos diretores traz resultados, não as demonstrações. O golden set (F3.1) terá mais perguntas de entidades, governança e riscos do que de números de balanço.
+- A comparação de vários períodos não foi conferida neste documento.
+- Tempo de indexação estimado em ~6,5 h para 423 páginas (ARQUITETURA §5.2, escalado); o ciclo F1 a F5 roda antes num recorte de até 80 páginas (F1.2).
+- **Numeração de páginas:** o PDF tem 423 páginas físicas, mas o número impresso é a página física menos 1 (a capa não é numerada; o sumário usa a numeração impressa, por exemplo a seção 1 começa na impressa 5, física 6). **As citações do projeto usam a página física**, a mesma do `pdf.js` (F8.4); a F1.5 deve registrar o deslocamento ao comparar o sumário.
 
 ## Arquivos baixados (não versionados, em `data/raw/`)
 
 | Arquivo | Conteúdo | Tamanho | SHA-256 |
 |---|---|---:|---|
 | `banco_do_brasil_formulario_referencia_2026.pdf` | FRE 2026 do Banco do Brasil (v7), PDF de 423 páginas | 8.719.214 bytes | `b0d175661531fdd672a0db7abd44931cb43b05a122264a33cbe9e6186e3432b4` |
-| `petrobras_fre_2026_v12_cvm.zip` | FRE 2026 da Petrobras (v12) em XML, da CVM (`009512FRE31-12-2026v12.xml`, 19.065.346 bytes, e `FormularioCadastral.xml`) | 8.405.591 bytes | `d0c4fd090b954b481a04bce7e701d16f3e3a617a7837bd0bcb87179aced8ca1c` |
+| `petrobras_fre_2026_v12_cvm.zip` | **Não usado.** FRE 2026 da Petrobras (v12) em XML, da CVM (`009512FRE31-12-2026v12.xml`, 19.065.346 bytes, e `FormularioCadastral.xml`); guardado só como material do levantamento | 8.405.591 bytes | `d0c4fd090b954b481a04bce7e701d16f3e3a617a7837bd0bcb87179aced8ca1c` |
 
 ## Evidência
 

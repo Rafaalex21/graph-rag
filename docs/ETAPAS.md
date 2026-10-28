@@ -58,9 +58,9 @@
 > entrega: DoclingDocument fiel, árvore de seções e normalizador numérico testado
 > esforço: M
 
-- [~] **F1.1** Escolher o documento pelos critérios da §16 e registrar no ADR-009
+- [x] **F1.1** Escolher o documento pelos critérios da §16 e registrar no ADR-009
   - aceite: ADR com fonte, número de páginas, idioma e condições de uso
-  - nota: candidatos no ADR-009 (proposta) com errata: o PDF de 423 páginas era do Banco do Brasil, não da Petrobras (cujo FRE a CVM entrega em XML, sem páginas); a escolha do usuário precisa ser reconfirmada
+  - nota: escolhido o Formulário de Referência 2026 do Banco do Brasil (v7, 21/09/2026, PDF de 423 páginas, PT, SHA-256 no ADR-009); o levantamento teve uma errata (o PDF atribuído à Petrobras era do BB). Citações usam a página física; a impressa é física − 1
 - [ ] **F1.2** Separar um recorte de até 80 páginas, com narrativa e tabelas, para os ciclos rápidos de F1 a F5
   - aceite: recorte salvo em `data/raw/` e descrito no ADR-009
   - depende: F1.1
@@ -305,6 +305,7 @@
 
 - [ ] **F10.1** README com arquitetura, tabela de ablações e GIF de demonstração
   - aceite: alguém de fora sobe o projeto seguindo só o README
+  - nota: antes de publicar trechos do documento (GIF, vídeo, artigo), pedir autorização à RI do Banco do Brasil (ADR-009)
   - depende: F9.5
 - [ ] **F10.2** Scripts `infra/up.ps1` (sobe tudo) e `indexer run-all` (indexação completa)
   - aceite: máquina limpa → assistente respondendo com dois comandos (fora o download dos modelos)
