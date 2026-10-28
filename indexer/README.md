@@ -97,3 +97,10 @@ uv run python -m indexer.tabelas gerar ..\data\parsed\bb_fre_2026_recorte.doclin
 uv run python -m indexer.tabelas carregar ..\data\parsed\bb_fre_2026_recorte.tabelas.json --doc-id bb-fre-2026-v7
 uv run python -m indexer.tabelas autoteste
 ```
+
+Reescritas opcionais da consulta (F2.8, ADR-025); precisam do LLM no llama-swap (perfil `consultar`):
+
+```powershell
+uv run python -m indexer.reranker buscar "sua pergunta" --stepback --hyde
+uv run python -m indexer.recuperador comparar-reescritas
+```

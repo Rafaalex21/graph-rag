@@ -98,6 +98,22 @@ def fundir_rrf(
     return sorted(pontos.items(), key=lambda x: -x[1])
 
 
+def fundir_variantes(rankings: list[list[tuple[str, float]]], k: int = RRF_K) -> list[tuple[str, float]]:
+    """RRF sobre N rankings, cada um já na ordem final de uma variante da consulta (original, step-back,
+    HyDE). Com um só ranking, a ordem é a dele."""
+    pontos: Counter[str] = Counter()
+    for ranking in rankings:
+        for posicao, (i, _) in enumerate(ranking, start=1):
+            pontos[i] += 1.0 / (k + posicao)
+    return sorted(pontos.items(), key=lambda x: -x[1])
+
+
+def busca_vetorial(driver: Any, vetor: list[float], n: int, banco: str = "neo4j") -> list[tuple[str, float]]:
+    """Vizinhos de um vetor já calculado em `child_vec` (usado pelo HyDE, que embute um trecho hipotético)."""
+    r, _, _ = driver.execute_query(CONSULTA_VETOR, {"k": n, "v": vetor}, database_=banco)
+    return [(x["id"], x["score"]) for x in r]
+
+
 def fundir(
     modo: str, vetor: list[tuple[str, float]], texto: list[tuple[str, float]], alfa: float = ALFA_PADRAO
 ) -> list[tuple[str, float]]:

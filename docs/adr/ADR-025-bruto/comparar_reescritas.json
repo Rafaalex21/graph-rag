@@ -1,0 +1,30 @@
+﻿{
+  "perguntas": 20,
+  "k": 6,
+  "modo": "hibrido-rrf",
+  "reescritas_com_erro": 0,
+  "ms_da_reescrita": {
+    "stepback": {
+      "p50": 3743.8,
+      "max": 4432.8
+    },
+    "hyde": {
+      "p50": 7295.9,
+      "max": 9207.0
+    },
+    "ambos_em_paralelo": {
+      "p50": 7295.9,
+      "max": 9207.0
+    }
+  },
+  "sobreposicao_media_com_o_baseline": {
+    "stepback": 0.611,
+    "hyde": 0.612,
+    "ambos": 0.564
+  },
+  "perguntas_em_que_o_1o_pai_mudou": {
+    "stepback": 6,
+    "hyde": 6,
+    "ambos": 9
+  }
+}

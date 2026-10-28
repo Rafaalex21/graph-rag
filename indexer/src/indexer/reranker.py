@@ -27,6 +27,7 @@ from indexer.busca import ALFA_PADRAO, MODOS
 from indexer.embeddings import MODELO_CONSULTA, embutidor_llama, trecho_do_meio
 from indexer.grafo import conectar
 from indexer.recuperador import recuperar
+from indexer.reescrita import MODELO_LLM, llm_llama, reescrever
 
 MODELO_RERANK = "qwen3-rerank-0.6b"
 CANDIDATOS = 24  # Pais enviados ao reranker (§5.1)
@@ -96,9 +97,14 @@ def recuperar_e_reranquear(
     top: int = TOP_PADRAO,
     alfa: float = ALFA_PADRAO,
     banco: str = "neo4j",
+    stepback: str | None = None,
+    hyde: str | None = None,
 ) -> dict:
-    """Pipeline do degrau 3 sem reescrita: k×4 Filhos -> até `candidatos` Pais -> rerank -> `top` Pais."""
-    r = recuperar(driver, pergunta, embute_consulta, candidatos, modo, alfa, banco=banco)
+    """Degrau 3: k×4 Filhos (com reescritas opcionais) -> até `candidatos` Pais -> rerank -> `top` Pais.
+    O reranker sempre lê a pergunta ORIGINAL; step-back e HyDE só ampliam a recuperação."""
+    r = recuperar(
+        driver, pergunta, embute_consulta, candidatos, modo, alfa, banco=banco, stepback=stepback, hyde=hyde
+    )
     rr = reranquear_pais(pergunta, r["pais"], notas, top)
     return {
         "pais": rr["pais"],
@@ -190,6 +196,9 @@ def main() -> None:
     b.add_argument("--modo", choices=MODOS, default="hibrido-rrf")
     b.add_argument("--k", type=int, default=CANDIDATOS)
     b.add_argument("--top", type=int, default=TOP_PADRAO)
+    b.add_argument("--stepback", action="store_true", help="busca também com uma pergunta mais geral (LLM)")
+    b.add_argument("--hyde", action="store_true", help="busca também com um trecho hipotético (LLM)")
+    b.add_argument("--llm", default=MODELO_LLM, help="modelo que reescreve a consulta")
     m = sub.add_parser("medir")
     m.add_argument("--perguntas", type=Path, default=Path("../eval/perguntas_latencia.txt"))
     m.add_argument("--sem-sonda", action="store_true")
@@ -204,7 +213,19 @@ def main() -> None:
         embute = embutidor_llama(a.swap, MODELO_CONSULTA)
         notas = reranqueador_llama(a.swap)
         if a.acao == "buscar":
-            r = recuperar_e_reranquear(driver, a.pergunta, embute, notas, a.modo, a.k, a.top, banco=a.banco)
+            rew = reescrever(a.pergunta, llm_llama(a.swap, a.llm), a.stepback, a.hyde)
+            r = recuperar_e_reranquear(
+                driver,
+                a.pergunta,
+                embute,
+                notas,
+                a.modo,
+                a.k,
+                a.top,
+                banco=a.banco,
+                stepback=rew["stepback"],
+                hyde=rew["hyde"],
+            )
             for p in r["pais"]:
                 pag = p["pageStart"] if p["pageStart"] == p["pageEnd"] else f"{p['pageStart']}-{p['pageEnd']}"
                 print(
@@ -212,6 +233,8 @@ def main() -> None:
                     f"{p['caminho'][:80]}"
                 )
             print(f"{r['candidatos']} candidatos -> {len(r['pais'])}; {r['latencia_ms']}")
+            if a.stepback or a.hyde:
+                print(f"reescritas: ms={rew['ms']} erros={rew['erros']}")
         else:
             perguntas = [
                 x.strip()
