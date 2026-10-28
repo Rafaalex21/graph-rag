@@ -123,7 +123,7 @@
 - [x] **F2.8** Reescritas opcionais da consulta: step-back e HyDE
   - aceite: flags `--stepback` e `--hyde` na CLI
   - nota: ADR-025; flags em `recuperador buscar` e `reranker buscar` (teste do --help e execução real); 0 erros em 40 reescritas; custo p50 3,7 s (step-back) e 7,3 s (HyDE) contra ~0,1 s da busca; mudam o 1º Pai em 6 a 9 de 20 perguntas; qualidade só na F3
-- [ ] **F2.9** CLI `ask` respondendo só com o contexto e citando `[p. N]`
+- [~] **F2.9** CLI `ask` respondendo só com o contexto e citando `[p. N]`
   - aceite: 5 perguntas de fumaça com a página correta
   - depende: F2.6
 
