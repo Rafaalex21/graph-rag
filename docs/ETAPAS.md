@@ -77,7 +77,7 @@
   - aceite: o sumário gerado bate com o índice do PDF em ≥ 95% das entradas
   - nota: ADR-016; 30 de 30 entradas do sumário presentes no recorte batem (número, título e página); 170 nós, fim de seção pelo primeiro não descendente; 140 títulos sem numeração têm hierarquia heurística
   - depende: F1.3
-- [ ] **F1.6** Auditar 15 tabelas sorteadas contra o PDF (valores, sinais, escala, cabeçalhos)
+- [~] **F1.6** Auditar 15 tabelas sorteadas contra o PDF (valores, sinais, escala, cabeçalhos)
   - aceite: ≥ 13 de 15 sem erro de valor; achados em `docs/auditoria-tabelas.md`
   - depende: F1.3
 - [ ] **F1.7** Implementar o normalizador numérico (pt-BR e EN, parênteses, "em milhões", %, p.b.)
