@@ -1,0 +1,39 @@
+﻿{
+  "perguntas": 20,
+  "pais_reais_24": {
+    "ms_p50": 583.3,
+    "ms_max": 751.0,
+    "tokens_medios_enviados": 8218,
+    "pais_cortados": 0
+  },
+  "24_maiores_pais": {
+    "tokens": 12968,
+    "ms": [
+      855.5,
+      782.6,
+      769.9,
+      738.8,
+      762.7
+    ],
+    "ms_max": 855.5,
+    "cortados": 0
+  },
+  "teto_sintetico_24_x_limite_de_caracteres": {
+    "ms": [
+      1841.5,
+      1807.3,
+      1843.6,
+      1817.6,
+      1814.2
+    ],
+    "ms_max": 1843.6
+  },
+  "limite_ms": 2000,
+  "dentro_do_limite": true,
+  "sonda_trecho_do_meio": {
+    "pais_testados": 116,
+    "pai_entre_os_24_candidatos": 116,
+    "pai_em_1o_antes_do_rerank": 112,
+    "pai_em_1o_depois_do_rerank": 112
+  }
+}

@@ -112,8 +112,9 @@
   - aceite: nenhum Pai duplicado; ≤ 300 ms sem rerank
   - nota: ADR-022; 480 consultas (4 modos × k=6 e 24): 0 Pais duplicados, máximo 123 ms (p50 ~90 ms, 76 ms de embedding da consulta na CPU); medido com 166 Filhos e o modelo de embedding sozinho
   - depende: F2.3
-- [~] **F2.6** Reranquear os Pais com Qwen3-Reranker-0.6B via `/v1/rerank`
+- [x] **F2.6** Reranquear os Pais com Qwen3-Reranker-0.6B via `/v1/rerank`
   - aceite: 24 Pais reranqueados em ≤ 2 s
+  - nota: ADR-023; 24 Pais reais: p50 583 ms, máx. 751 ms; 24 maiores: 856 ms; teto garantido (24 × 6.000 caracteres) 1,84 s (folga ~8%); sem corte, 24 Pais de 1.600 tokens passariam de 2 s (2,1 s); limite real do servidor é o contexto de 4.096
   - depende: F2.5, F0.6
 - [ ] **F2.7** Tabelas: descrição e 3 a 5 perguntas hipotéticas por tabela, embutidas em `question_vec`
   - aceite: 100% das tabelas com perguntas; 10 revisadas à mão

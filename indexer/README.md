@@ -82,3 +82,10 @@ Retriever parent-document (F2.5, ADR-022); precisa do llama-swap e do Neo4j no a
 uv run python -m indexer.recuperador buscar "sua pergunta" --modo hibrido-rrf --k 6
 uv run python -m indexer.recuperador medir --k 24
 ```
+
+Rerank dos Pais (F2.6, ADR-023); precisa do llama-swap e do Neo4j no ar:
+
+```powershell
+uv run python -m indexer.reranker buscar "sua pergunta" --modo hibrido-rrf --k 24 --top 6
+uv run python -m indexer.reranker medir
+```

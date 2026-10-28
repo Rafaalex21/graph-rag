@@ -45,6 +45,10 @@ O `llama-swap` v267 oferece três motores de roteamento: `group` (padrão), `mat
 3. O fluxo `consultar` foi medido depois da primeira resposta do Qwen3.6, com contexto de 32K alocado, mas sem prompts longos (a F0.5 mediu os picos com ~15K de contexto: 12,4 GB de VRAM e 25,3 GB de RAM para o Qwen3.6 sozinho).
 4. A primeira rodada deste teste (arquivo `testar-swap_1_gptoss_inteiro.jsonl`) usou o gpt-oss inteiro na GPU e o reranker com `-c 8192 -ub 8192`: o `consultar-rapido` chegou a 15,5 GB, o que motivou as decisões 2 e 3.
 
+## Adendo (F2.6, 28/10/2026)
+
+A decisão 3 (reranker com `-c 4096 -ub 2048` "basta para um trecho de até 2.048 tokens") subestimou o limite: medido na F2.6, o servidor aceitou pares de até 4.077 tokens; o limite real é o contexto de 4.096, e não o `-ub`. O que restringe o uso é o tempo, proporcional aos tokens enviados (~22 mil tokens/s na GPU); veja o [ADR-023](ADR-023-rerank-dos-pais.md). A configuração do reranker no `llama-swap.yaml` não mudou.
+
 ## Evidência
 
 Roteiro: `infra/testar-swap.ps1` (com o `llama-swap` no ar via `infra/swap.ps1`). Medição direta do reranker: `ADR-011-bruto/rerank_cpu_gpu.ps1` e `.txt` (24 trechos de ~1.200 tokens: GPU 2,17 / 1,88 / 1,85 s; CPU 4,45 / 4,07 / 4,18 s). `llama-bench` do gpt-oss sem mmap, com 0, 4 e 8 camadas de experts na CPU: geração de 169,9, 74,5 e 50,9 tok/s (`ADR-011-bruto/bench_gptoss_ncmoe_lmnone.jsonl`).
