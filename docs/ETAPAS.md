@@ -96,7 +96,7 @@
   - aceite: tokens contados via `/tokenize`; nenhum Pai acima de 1.600 tokens
   - nota: ADR-018; recorte: 116 Pais (mediana 104 tokens, máx. 1.189, 0 acima de 1.600) e 166 Filhos (máx. 320, sobreposição 12,4%); Pai conta com o tokenizador do Qwen3.6, Filho com o do embedding (30 × 24 tokens na mesma frase); regra estrita mantida por decisão do usuário e ARQUITETURA corrigida (v0.6)
   - depende: F1.5
-- [ ] **F2.2** Aplicar as *constraints* da §6.3 e carregar Document, Section, Parent e Child
+- [~] **F2.2** Aplicar as *constraints* da §6.3 e carregar Document, Section, Parent e Child
   - aceite: consultas de sanidade da §6.4 sem órfãos
   - depende: F0.7, F2.1
 - [ ] **F2.3** Embutir os Filhos e criar `child_vec` (1024 dims, cosseno)
