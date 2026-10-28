@@ -50,8 +50,20 @@ Rodar o **Neo4j Community 2026.10.1 nativo no Windows**, com:
 
 1. **GDS sem hash publicado:** a confiança no JAR vem do domínio oficial (o mesmo que a imagem Docker do Neo4j usa em `versions.json`) e do TLS, não de um hash independente.
 2. **Temurin no Windows 11:** a tabela de plataformas do Neo4j lista Temurin 21/25 nos servidores e OracleJDK/Zulu 21/25 no Windows 11; o Temurin é o mesmo OpenJDK, e o aceite (`gds.version()` e `apoc.version()` respondendo) valida a combinação.
-3. Os nomes das chaves do `neo4j.conf` na 2026.10 são validados na instalação.
+3. As chaves do `neo4j.conf` foram validadas na instalação (`server.default_listen_address`, `server.memory.*`, `server.directories.*`, `dbms.security.procedures.*`).
+4. O Leiden do GDS exige projeção **não direcionada** (`orientation: 'UNDIRECTED'`); a F5.5 precisa projetar assim.
+5. O `Set-Content -Encoding UTF8` do PowerShell 5.1 grava BOM, e o Neo4j rejeita um `neo4j.conf` com BOM; o `infra/neo4j.ps1` grava sem BOM.
+
+## Verificação do aceite da F0.7
+
+| Critério | Resultado |
+|---|---|
+| `RETURN gds.version(), apoc.version()` responde | `"2026.10.1", "2026.10.1"` (Neo4j Kernel 2026.10.1, Community) |
+| Processo do Neo4j com ≤ 2 GB de RAM | conjunto de trabalho 1,38 a 1,43 GB, memória privada 1,43 a 1,53 GB (ocioso e após o teste de GDS; sob carga de indexação a F2.2 e a F4 voltam a medir) |
+| Escuta só em 127.0.0.1 | Bolt 7687 e HTTP 7474 em 127.0.0.1; a porta HTTPS 7473 não está aberta |
+| Dados persistentes fora do pacote | nó gravado sobrevive a parar e iniciar; dados em `infra/neo4j/data` |
+| Subida | Bolt no ar em 8 a 9 s |
 
 ## Evidência
 
-Inspeção feita em 28/10/2026 com `Get-ItemProperty` (registro), `Get-AppxPackage`, `Get-CimInstance Win32_Processor` e `systeminfo`; versões e tamanhos pela API do Docker Hub (tag `neo4j:2026.10.1`, 380 MB), por `graphdatascience.ninja/versions.json` (GDS 2026.10.1 para o Neo4j 2026.10.1), pelo diretório central do zip do Neo4j lido por HTTP Range (contém `labs/apoc-2026.10.1-core.jar`, 15.175.292 bytes) e pela documentação de requisitos do Neo4j (Java SE 21 e 25).
+Saída do aceite em [`ADR-012-bruto/aceite.txt`](ADR-012-bruto/aceite.txt). Inspeção feita em 28/10/2026 com `Get-ItemProperty` (registro), `Get-AppxPackage`, `Get-CimInstance Win32_Processor` e `systeminfo`; versões e tamanhos pela API do Docker Hub (tag `neo4j:2026.10.1`, 380 MB), por `graphdatascience.ninja/versions.json` (GDS 2026.10.1 para o Neo4j 2026.10.1), pelo diretório central do zip do Neo4j lido por HTTP Range (contém `labs/apoc-2026.10.1-core.jar`, 15.175.292 bytes, SHA-256 `0aee9d3f…ab25d03`; hash do JAR do GDS calculado: `1cdc0372…8228c133`) e pela documentação de requisitos do Neo4j (Java SE 21 e 25).

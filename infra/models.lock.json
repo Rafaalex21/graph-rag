@@ -1,5 +1,5 @@
 {
-  "_nota": "llama_cpp na F0.2; modelos na F0.3; llama_swap na F0.6 (27/10/2026). sha256 dos modelos conferido por infra/verify_models.ps1.",
+  "_nota": "llama_cpp na F0.2; modelos na F0.3; llama_swap na F0.6; neo4j na F0.7. sha256 dos modelos conferido por infra/verify_models.ps1.",
   "llama_cpp": {
     "versao": "b11932",
     "publicado": "2026-10-27",
@@ -84,5 +84,38 @@
       "arquitetura": "qwen3 (pooling rank, cls.output.weight)"
     }
   ],
-  "dir_modelos": "C:/modelos"
+  "dir_modelos": "C:/modelos",
+  "neo4j": {
+    "versao": "2026.10.1",
+    "edicao": "community",
+    "zip": {
+      "arquivo": "neo4j-community-2026.10.1-windows.zip",
+      "bytes": 246525398,
+      "sha256": "675655653b16fe2f300dae8686d6afe6fef902ef2550be14d4facd289f6ae295",
+      "fonte": "https://dist.neo4j.org/neo4j-community-2026.10.1-windows.zip",
+      "pasta": "infra/bin/neo4j-community-2026.10.1"
+    },
+    "apoc": {
+      "arquivo": "apoc-2026.10.1-core.jar",
+      "origem": "labs/ dentro do zip do Neo4j",
+      "bytes": 15175292,
+      "sha256": "0aee9d3fd12f286f89320f1462b0d929c1b2b3d3b3bd81a0d7277ab44cd25d03"
+    },
+    "gds": {
+      "arquivo": "neo4j-graph-data-science-2026.10.1.jar",
+      "bytes": 69791957,
+      "fonte": "https://graphdatascience.ninja/neo4j-graph-data-science-2026.10.1.jar",
+      "sha256": "1cdc037231a383f86e283e5652b22c55a1f0a67e6f918bba5538d6008228c133",
+      "nota_sha256": "hash calculado após o download; o host não publica hash"
+    },
+    "jdk": {
+      "arquivo": "OpenJDK21U-jdk_x64_windows_hotspot_21.0.12.1_1.zip",
+      "bytes": 205073461,
+      "sha256": "f9d6e191ab098c0d416e7d588a24420a8621cd2f4720dab2459b8b7b2d2d8b4e",
+      "fonte": "https://github.com/adoptium/temurin21-binaries/releases/tag/jdk-21.0.12.1%2B1",
+      "pasta": "infra/bin/jdk-21.0.12.1+1"
+    },
+    "dados": "infra/neo4j/data",
+    "script": "infra/neo4j.ps1"
+  }
 }

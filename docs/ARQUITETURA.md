@@ -666,18 +666,19 @@ graph-rag/
 ```
 
 ```properties
-# ajustes sobre o neo4j.conf padrão, aplicados por infra/neo4j.ps1 (ADR-012); nomes a validar na instalação (F0.7)
+# ajustes sobre o neo4j.conf padrão, aplicados por infra/neo4j.ps1 (ADR-012); chaves validadas na F0.7
 server.default_listen_address=127.0.0.1         # RNF-1: nada exposto fora da máquina
 server.memory.heap.initial_size=1G
 server.memory.heap.max_size=1G
 server.memory.pagecache.size=512M
 server.directories.data=<repositório>/infra/neo4j/data    # fora da pasta do Neo4j: sobrevive a reinstalações
+server.directories.logs=<repositório>/infra/neo4j/logs
 dbms.security.procedures.unrestricted=apoc.*,gds.*
 dbms.security.procedures.allowlist=apoc.*,gds.*
 # plugins/: apoc-2026.10.1-core.jar (vem em labs/ no zip) e neo4j-graph-data-science-2026.10.1.jar
 ```
 
-O Neo4j roda **nativo no Windows**, com um JDK 21 portátil em `infra/bin/`, porque nesta máquina não há Docker nem WSL2 e a virtualização está desligada na BIOS (ADR-012). A memória é pequena de propósito: com ~25,3 GB de RAM usados no `consultar` (F0.5) e teto de 28 GB, o Neo4j precisa caber em ~2 GB; o grafo de um documento de ~300 páginas é pequeno.
+O Neo4j roda **nativo no Windows** (`infra/neo4j.ps1 instalar | iniciar | parar | estado | cypher`), com um JDK 21 portátil em `infra/bin/`, porque nesta máquina não há Docker nem WSL2 e a virtualização está desligada na BIOS (ADR-012). A memória é pequena de propósito: com ~25,3 GB de RAM usados no `consultar` (F0.5) e teto de 28 GB, o Neo4j precisa caber em ~2 GB; o grafo de um documento de ~300 páginas é pequeno. Medido na F0.7: ~1,4 GB de conjunto de trabalho em repouso. O Leiden do GDS (§5, I-9) exige projeção não direcionada.
 
 ---
 

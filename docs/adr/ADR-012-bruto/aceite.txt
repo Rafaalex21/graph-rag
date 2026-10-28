@@ -1,0 +1,31 @@
+F0.7 - aceite do Neo4j nativo (28/10/2026). Saída copiada dos comandos executados; a senha nunca é impressa.
+
+$ .\infra\neo4j.ps1 iniciar
+Bolt no ar em 9 s.
+
+$ .\infra\neo4j.ps1 cypher "RETURN gds.version() AS gds, apoc.version() AS apoc"
+gds, apoc
+"2026.10.1", "2026.10.1"
+
+$ .\infra\neo4j.ps1 cypher "CALL dbms.components() YIELD name, versions, edition RETURN name, versions[0] AS versao, edition"
+"Neo4j Kernel", "2026.10.1", "community"
+"Cypher", "5", ""
+
+$ Get-NetTCPConnection -State Listen -LocalPort 7687,7474,7473
+127.0.0.1   7687
+127.0.0.1   7474
+
+RAM do processo java dono da porta 7687 (PID 6128), ocioso:   conjunto de trabalho 1.376 MB, privada 1.434 MB
+RAM do mesmo processo depois do teste de GDS e APOC:           conjunto de trabalho 1.427 MB, privada 1.512 MB, pico 1.459 MB
+RAM do mesmo processo (script corrigido, 2a rodada):           conjunto de trabalho 1.422 MB, privada 1.534 MB
+
+Teste funcional do GDS em grafo descartável (6 nós, 7 relações):
+  gds.graph.project com orientação padrão (NATURAL) + gds.leiden.stats -> erro esperado:
+    "The Leiden algorithm requires relationship projections to be UNDIRECTED"
+  gds.graph.project com {R:{orientation:'UNDIRECTED'}} -> nodeCount 6, relationshipCount 14
+  gds.leiden.stats(randomSeed 42) -> communityCount 2, modularidade 0,36
+  apoc.text.join(['apoc','ok'], '-') -> "apoc-ok"
+  limpeza: nós restantes = 0
+
+Persistência: nó (:ZZPersistencia {marca:'sobrevive'}) gravado, Neo4j parado e reiniciado (8 s), consulta devolveu marca = "sobrevive", qtd = 1; nó removido.
+Dados em infra\neo4j\data (databases, dbms, transactions), fora da pasta do Neo4j.
