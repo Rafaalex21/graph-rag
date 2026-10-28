@@ -98,6 +98,19 @@ def fundir_rrf(
     return sorted(pontos.items(), key=lambda x: -x[1])
 
 
+def fundir(
+    modo: str, vetor: list[tuple[str, float]], texto: list[tuple[str, float]], alfa: float = ALFA_PADRAO
+) -> list[tuple[str, float]]:
+    """Lista final de (id, escore) do modo escolhido, a partir das listas de cada índice."""
+    if modo == "vetor":
+        return vetor
+    if modo == "texto":
+        return texto
+    if modo == "hibrido-max":
+        return fundir_max(vetor, texto, alfa)
+    return fundir_rrf(vetor, texto)
+
+
 def listas(
     driver: Any, pergunta: str, embute_consulta: Embutidor | None, n: int, banco: str, modo: str
 ) -> tuple[list[tuple[str, float]], list[tuple[str, float]]]:
@@ -130,15 +143,7 @@ def buscar(
         raise ValueError(f"modo desconhecido: {modo!r} (use {', '.join(MODOS)})")
     n = candidatos or k * FATOR_DE_CANDIDATOS
     vetor, texto = listas(driver, pergunta, embute_consulta, n, banco, modo)
-    if modo == "vetor":
-        final = vetor
-    elif modo == "texto":
-        final = texto
-    elif modo == "hibrido-max":
-        final = fundir_max(vetor, texto, alfa)
-    else:
-        final = fundir_rrf(vetor, texto)
-    final = final[:k]
+    final = fundir(modo, vetor, texto, alfa)[:k]
     if not final:
         return []
     registros, _, _ = driver.execute_query(DETALHES, {"ids": [i for i, _ in final]}, database_=banco)

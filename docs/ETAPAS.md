@@ -108,8 +108,9 @@
   - aceite: vetor, híbrido-máximo e híbrido-RRF selecionáveis por flag
   - nota: ADR-021; `child_ft` ONLINE (brazilian); `--modo vetor|texto|hibrido-max|hibrido-rrf` rodando no banco; sondas lexicais (informativas): texto e híbrido-máx. lideram, vetor falha em palavra rara (0,37 @1); conclusão fica para a F3
   - depende: F2.3
-- [~] **F2.5** Retriever parent-document: k×4 filhos → deduplicação por Pai → top-k
+- [x] **F2.5** Retriever parent-document: k×4 filhos → deduplicação por Pai → top-k
   - aceite: nenhum Pai duplicado; ≤ 300 ms sem rerank
+  - nota: ADR-022; 480 consultas (4 modos × k=6 e 24): 0 Pais duplicados, máximo 123 ms (p50 ~90 ms, 76 ms de embedding da consulta na CPU); medido com 166 Filhos e o modelo de embedding sozinho
   - depende: F2.3
 - [ ] **F2.6** Reranquear os Pais com Qwen3-Reranker-0.6B via `/v1/rerank`
   - aceite: 24 Pais reranqueados em ≤ 2 s

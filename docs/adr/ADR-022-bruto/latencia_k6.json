@@ -1,0 +1,62 @@
+﻿{
+  "k": 6,
+  "perguntas": 20,
+  "repeticoes": 3,
+  "limite_ms": 300,
+  "vetor": {
+    "consultas": 60,
+    "pais_duplicados": 0,
+    "pais_por_consulta_media": 6,
+    "ms_p50": 95.7,
+    "ms_p95": 108.7,
+    "ms_max": 123.0,
+    "ms_medio_por_etapa": {
+      "embedding_da_consulta": 78.8,
+      "busca_nos_indices": 9.2,
+      "pais": 9.2
+    },
+    "dentro_do_limite": true
+  },
+  "texto": {
+    "consultas": 60,
+    "pais_duplicados": 0,
+    "pais_por_consulta_media": 6,
+    "ms_p50": 9.6,
+    "ms_p95": 12.2,
+    "ms_max": 45.1,
+    "ms_medio_por_etapa": {
+      "embedding_da_consulta": 0.0,
+      "busca_nos_indices": 4.6,
+      "pais": 5.7
+    },
+    "dentro_do_limite": true
+  },
+  "hibrido-max": {
+    "consultas": 60,
+    "pais_duplicados": 0,
+    "pais_por_consulta_media": 6,
+    "ms_p50": 87.7,
+    "ms_p95": 100.9,
+    "ms_max": 104.5,
+    "ms_medio_por_etapa": {
+      "embedding_da_consulta": 74.1,
+      "busca_nos_indices": 9.8,
+      "pais": 5.1
+    },
+    "dentro_do_limite": true
+  },
+  "hibrido-rrf": {
+    "consultas": 60,
+    "pais_duplicados": 0,
+    "pais_por_consulta_media": 6,
+    "ms_p50": 90.8,
+    "ms_p95": 98.4,
+    "ms_max": 120.3,
+    "ms_medio_por_etapa": {
+      "embedding_da_consulta": 78.0,
+      "busca_nos_indices": 9.0,
+      "pais": 4.3
+    },
+    "dentro_do_limite": true
+  }
+}

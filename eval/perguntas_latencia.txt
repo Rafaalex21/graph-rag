@@ -1,0 +1,22 @@
+# Perguntas de fumaça para medir latência do retriever (F2.5). NÃO são o golden set (F3.1) e não têm gabarito.
+# Cobrem temas variados do recorte para exercitar os índices; algumas podem não ter resposta no texto.
+Quem são os membros do Conselho de Administração?
+Qual a remuneração total dos administradores?
+Quais são os principais riscos de mercado do banco?
+Como o banco monitora o risco de crédito?
+Quais são os segmentos operacionais do conglomerado?
+Quais participações em sociedades o banco possui?
+Quantos funcionários o banco tem por faixa etária?
+Como são feitas as projeções de carteira de crédito?
+Qual o programa de integridade e combate à corrupção?
+Quais os principais movimentos societários recentes?
+Como é o endividamento e as obrigações do banco?
+Quais são as captações de depósitos em 2025?
+Quem são os principais acionistas controladores?
+Qual a política de dividendos e destinação do lucro?
+Como funciona o comitê de auditoria?
+Quais são as regras de governança e controles internos?
+Existe processo judicial relevante contra o banco?
+Qual é a estrutura de capital e o índice de Basileia?
+Como o banco gerencia riscos de liquidez?
+Quais são os fatores de risco socioambientais e climáticos?

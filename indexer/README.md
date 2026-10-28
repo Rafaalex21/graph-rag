@@ -75,3 +75,10 @@ Busca por vetor, texto ou híbrida (F2.4, ADR-021); precisa do llama-swap e do N
 uv run python -m indexer.busca criar-indice
 uv run python -m indexer.busca buscar "sua pergunta" --modo hibrido-rrf --k 5
 ```
+
+Retriever parent-document (F2.5, ADR-022); precisa do llama-swap e do Neo4j no ar:
+
+```powershell
+uv run python -m indexer.recuperador buscar "sua pergunta" --modo hibrido-rrf --k 6
+uv run python -m indexer.recuperador medir --k 24
+```
