@@ -41,7 +41,7 @@ Requisitos para o passo 1: Git, GitHub CLI (`gh`) e Python 3.10+.
 
 ```
 docs/        especificação, plano e ADRs
-infra/       docker-compose, llama-swap, lock de modelos, scripts de subida
+infra/       llama-swap, Neo4j nativo, lock de modelos, scripts de subida
 contracts/   esquema do grafo e contrato da API (a fronteira entre indexador e API)
 indexer/     Python — parsing, extração, grafo, embeddings
 api/         TypeScript — agente, ferramentas, SSE

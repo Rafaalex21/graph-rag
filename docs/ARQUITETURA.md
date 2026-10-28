@@ -4,7 +4,7 @@
 >
 > **Base teórica:** *Essential GraphRAG* — Tomaž Bratanič & Oskar Hane (Manning, 2025).
 >
-> **Versão:** 0.4 · 27/10/2026 · **Status:** rascunho para validação — revisada com as medições da F0.4, F0.5 e F0.6 ([ADR-001](./adr/ADR-001-backend.md), [ADR-010](./adr/ADR-010-offload-moe.md), [ADR-011](./adr/ADR-011-perfis-swap.md))
+> **Versão:** 0.5 · 28/10/2026 · **Status:** rascunho para validação — revisada com as medições da F0.4 a F0.6 e com o ambiente real na F0.7 ([ADR-001](./adr/ADR-001-backend.md), [ADR-010](./adr/ADR-010-offload-moe.md), [ADR-011](./adr/ADR-011-perfis-swap.md), [ADR-012](./adr/ADR-012-neo4j-nativo.md))
 >
 > **Documento irmão:** [`ETAPAS.md`](./ETAPAS.md) — plano executável, tarefa a tarefa, que alimenta o painel de acompanhamento.
 
@@ -101,7 +101,7 @@ Para cada perfil de execução:
 
 ```
 VRAM:  Σ pesos na GPU + KV cache + buffers de computação + desktop (3,5 a 4,5 GB medidos aqui) ≤ 16 GB
-RAM:   Σ experts na CPU + Windows (~7 GB) + Neo4j/WSL2 (~4 GB) + apps e navegador (~3 GB) ≤ 30 GB
+RAM:   Σ experts na CPU + Windows (~7 GB) + Neo4j (~2 GB: heap de 1 GB, page cache de 512 MB e a JVM) + apps e navegador (~3 GB) ≤ 30 GB
 ```
 
 O desktop é a parcela mais subestimada: a F0.4 mediu 3,5 a 4,5 GB de VRAM em uso **antes** de qualquer modelo (Firefox, SignalRGB, app do Claude e o Windows), contra os ~0,8 GB supostos na v0.1. O orçamento deve ser feito com o valor medido, e o pico do RNF-8 (≤ 15,2 GB) é o total do adaptador (contador `GPU Adapter Memory`, desktop incluído). Fechar aplicativos pesados antes de indexar ou avaliar devolve parte desse espaço.
@@ -136,7 +136,7 @@ Tamanhos de arquivo não são consumo em execução: KV cache e buffers somam de
 | 6 | Extração estruturada (Pydantic), importação, *constraints*, resolução de entidades | Indexador, etapa F4 | JSON Schema imposto por gramática no `llama-server`; lastro numérico obrigatório; IDs determinísticos (o livro alerta para o `randomUUID()` não idempotente) |
 | 7 | MS GraphRAG: extração com *gleaning*, resumos, comunidades, busca local e global | Indexador F5 + ferramentas `entidade` e `panorama` | Leiden hierárquico no GDS; tratamento do supernó (o emissor); saída em JSON em vez de tuplas delimitadas |
 | 8 | Benchmark com Cypher como gabarito; recall de contexto, fidelidade, correção | Pasta `eval/` | Juiz local de outra família; métricas por rota e de latência; escada de ablações |
-| Ap. A | Neo4j + APOC + GDS | `infra/docker-compose.yml` | Versão 2026.10; memória limitada para caber ao lado dos modelos |
+| Ap. A | Neo4j + APOC + GDS | `infra/neo4j.ps1` | Versão 2026.10, nativo no Windows (ADR-012); memória limitada para caber ao lado dos modelos |
 
 ---
 
@@ -179,7 +179,7 @@ flowchart LR
 | `api/` | Agente, ferramentas de recuperação, SSE, telemetria | Node LTS, TypeScript, Fastify, `neo4j-driver`, SDK OpenAI, Zod |
 | `web/` | Chat, rastro, visualizador de fonte, explorador de grafo | Angular 22, pdf.js, NVL ou Cytoscape.js |
 | `eval/` | Golden set, métricas, ablações, bake-offs | Python, pandas, RAGAS (opcional) |
-| `infra/` | llama-swap, docker-compose do Neo4j, *lock* de modelos, scripts | YAML, PowerShell |
+| `infra/` | llama-swap, scripts do Neo4j nativo, *lock* de modelos, scripts | YAML, PowerShell |
 | `contracts/` | Esquema do grafo e da API — a fronteira entre Python e TypeScript | Cypher, JSON Schema, OpenAPI |
 
 ---
@@ -625,7 +625,7 @@ Notas: o motor `matrix` (ADR-011) permite que o embedding e o reranker participe
 | Camada | Tecnologia | Observação |
 |---|---|---|
 | Inferência | llama.cpp (`llama-server`, builds Vulkan e HIP), `llama-swap` | Versão fixada no *lock* |
-| Banco | Neo4j 2026.10 Community + APOC + GDS 2026.10 | Docker Desktop (WSL2); GDS Community limita a 4 núcleos — suficiente |
+| Banco | Neo4j 2026.10 Community + APOC + GDS 2026.10 | Nativo no Windows com JDK 21 portátil, sem Docker nem WSL2 (ADR-012); GDS Community limita a 4 núcleos — suficiente |
 | Indexador | Python 3.12, `uv`, Docling, Pydantic v2, `neo4j`, `openai`, `graphdatascience` | `neo4j-graphrag` como referência, não como dependência central |
 | API | Node LTS, TypeScript, Fastify, `neo4j-driver`, `openai`, Zod, Pino | Esquemas de ferramenta gerados a partir do Zod |
 | Web | Angular 22 (standalone, signals), `marked` + DOMPurify, `pdfjs-dist`, NVL ou Cytoscape.js | SSE via `fetch` + `ReadableStream` (o `EventSource` não aceita POST) |
@@ -639,7 +639,7 @@ graph-rag/
 │  └─ adr/
 ├─ infra/
 │  ├─ llama-swap.yaml
-│  ├─ docker-compose.yml
+│  ├─ neo4j.ps1               # instala, sobe e para o Neo4j nativo (ADR-012)
 │  ├─ models.lock.json        # repositório, arquivo, quantização, SHA-256
 │  └─ up.ps1
 ├─ contracts/
@@ -665,24 +665,19 @@ graph-rag/
 └─ data/                      # raw/ · parsed/ · cache/ (fora do git)
 ```
 
-```yaml
-# infra/docker-compose.yml — confirme a tag exata no Docker Hub
-services:
-  neo4j:
-    image: neo4j:2026.10.1
-    ports: ["7474:7474", "7687:7687"]
-    environment:
-      NEO4J_AUTH: neo4j/troque-esta-senha
-      NEO4J_PLUGINS: '["apoc", "graph-data-science"]'
-      NEO4J_server_memory_heap_max__size: 2G
-      NEO4J_server_memory_pagecache_size: 1G
-      NEO4J_dbms_security_procedures_unrestricted: apoc.*,gds.*
-    volumes:
-      - ./neo4j/data:/data
-      - ./neo4j/plugins:/plugins
+```properties
+# ajustes sobre o neo4j.conf padrão, aplicados por infra/neo4j.ps1 (ADR-012); nomes a validar na instalação (F0.7)
+server.default_listen_address=127.0.0.1         # RNF-1: nada exposto fora da máquina
+server.memory.heap.initial_size=1G
+server.memory.heap.max_size=1G
+server.memory.pagecache.size=512M
+server.directories.data=<repositório>/infra/neo4j/data    # fora da pasta do Neo4j: sobrevive a reinstalações
+dbms.security.procedures.unrestricted=apoc.*,gds.*
+dbms.security.procedures.allowlist=apoc.*,gds.*
+# plugins/: apoc-2026.10.1-core.jar (vem em labs/ no zip) e neo4j-graph-data-science-2026.10.1.jar
 ```
 
-Limite também a VM do WSL2 em `%UserProfile%\.wslconfig` (`memory=8GB`), senão ela come a RAM que os experts do MoE precisam.
+O Neo4j roda **nativo no Windows**, com um JDK 21 portátil em `infra/bin/`, porque nesta máquina não há Docker nem WSL2 e a virtualização está desligada na BIOS (ADR-012). A memória é pequena de propósito: com ~25,3 GB de RAM usados no `consultar` (F0.5) e teto de 28 GB, o Neo4j precisa caber em ~2 GB; o grafo de um documento de ~300 páginas é pequeno.
 
 ---
 
@@ -784,7 +779,7 @@ A tabela final A0–A6 é a peça central do README: mostra, camada a camada, o 
 | Text2Cypher gera consulta errada | Alta | Médio | Templates primeiro, *few-shot* crescente, `EXPLAIN` + autocorreção |
 | Tabelas mal extraídas | Média | Alto | TableFormer *accurate*, auditoria visual, fallback VLM |
 | Juiz local enviesado | Média | Médio | Família diferente, calibração manual |
-| RAM curta com Docker + Neo4j + experts | Média | Médio | `.wslconfig`, heap de 2 GB, mais camadas de experts na GPU no perfil `indexar` |
+| RAM curta com Neo4j + experts | Média | Médio | heap de 1 GB e page cache de 512 MB no Neo4j, `-lm none` e `ncmoe 28` nos LLMs, mais camadas de experts na GPU no `indexar` |
 | Documento em português com prompts em inglês | Média | Médio | Prompts no idioma do documento; embeddings multilíngues; terminologia bilíngue |
 
 ---
@@ -802,6 +797,7 @@ A tabela final A0–A6 é a peça central do README: mostra, camada a camada, o 
 | 007 | Avaliação antes do grafo | Sem linha de base, nenhuma camada prova o próprio valor |
 | 008 | Juiz de família diferente do gerador | Reduzir autopreferência |
 | 009 | *(a decidir na F1)* Documento escolhido | §16 |
+| [012](./adr/ADR-012-neo4j-nativo.md) | Neo4j nativo no Windows, sem Docker nem WSL2 | Docker e WSL2 ausentes, virtualização desligada na BIOS e RAM justa; o nativo dispensa a VM |
 | [010](./adr/ADR-010-offload-moe.md) | Qwen3.6 com `-lm none` e `--n-cpu-moe 28` | Sem mmap a RAM cai de ~32,5 para 25,3 GB e o prompt sobe 2,4× a 3,1×; `ncmoe 28` deixa folga de VRAM para o reranker |
 
 ---

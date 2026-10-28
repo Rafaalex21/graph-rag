@@ -43,8 +43,9 @@
   - aceite: `/v1/models` lista todos; `/v1/embeddings` e `/v1/rerank` respondem; troca de perfil ≤ 60 s
   - nota: llama-swap v267 com motor `matrix` (ADR-011); 6 modelos, embeddings e rerank ok, pior troca de perfil 16.0 s; `consultar-rapido` fecha em 14,8 GB com o gpt-oss em `--n-cpu-moe 4`; o juiz (`avaliar`) fica em 15,9 GB, acima do teto de 15,2 GB: pendência para a F3
   - depende: F0.5
-- [~] **F0.7** Subir o Neo4j 2026.10 com APOC e GDS no Docker, volume persistente e `.wslconfig` limitando o WSL2
-  - aceite: `RETURN gds.version(), apoc.version()` responde; WSL2 ≤ 8 GB
+- [~] **F0.7** Subir o Neo4j 2026.10 com APOC e GDS, nativo no Windows (JDK portátil, sem Docker nem WSL2), com dados persistentes fora do pacote
+  - aceite: `RETURN gds.version(), apoc.version()` responde; processo do Neo4j com ≤ 2 GB de RAM; escuta só em 127.0.0.1
+  - nota: Docker e WSL2 não estão instalados e a virtualização está desligada na BIOS; plano alterado de Docker para nativo (ADR-012)
 - [ ] **F0.8** Esqueleto dos três apps (indexador em Python com `uv`, API em TypeScript, web em Angular 22) com lint e testes vazios
   - aceite: `uv run pytest`, `npm test` e `ng test` verdes
   - depende: F0.1

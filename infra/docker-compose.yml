@@ -1,3 +1,5 @@
+# ALTERNATIVA NÃO USADA (ADR-012): o plano usa o Neo4j nativo no Windows (infra/neo4j.ps1).
+# Mantido só como referência, caso Docker e WSL2 venham a ser instalados.
 # Confirme a tag exata no Docker Hub antes do primeiro `up` (F0.7).
 # Copie .env.example para .env e defina NEO4J_PASSWORD.
 services:

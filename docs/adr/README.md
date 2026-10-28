@@ -7,6 +7,7 @@ Uma decisão por arquivo: `ADR-NNN-assunto.md`. As nove decisões iniciais estã
 | [001](ADR-001-backend.md) | Backend de inferência (Vulkan × HIP) | F0.4 — aceita, revisada na F0.5 |
 | [010](ADR-010-offload-moe.md) | Offload de experts do Qwen3.6 (`-lm none`, `--n-cpu-moe`) | F0.5 — aceita, com as medições |
 | [011](ADR-011-perfis-swap.md) | Perfis do `llama-swap` (motor `matrix`) e orçamento de VRAM | F0.6 — aceita |
+| [012](ADR-012-neo4j-nativo.md) | Neo4j nativo no Windows, sem Docker nem WSL2 | F0.7 — aceita |
 | 009 | Documento escolhido | F1.1 |
 
 Modelo em [`ADR-000-modelo.md`](ADR-000-modelo.md).
