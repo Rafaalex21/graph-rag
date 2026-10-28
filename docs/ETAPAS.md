@@ -145,9 +145,11 @@
   - resultado: ADR-028; `python -m indexer.avaliar executar` rodou as 60 perguntas numa única execução (71 min, 0 falhas do juiz, 0 erros do sistema); A3 no recorte: recall de contexto 0,53, fidelidade 1,00 (32 recusas sem afirmação), correção 0,53; juiz com orçamento de raciocínio de 512 tokens (53 s para 17,7 s por chamada); RAGAS não usado
   - depende: F3.1, F0.6
   - nota: 31 das 60 perguntas foram recusadas (agregação e numéricas dependem de tabelas e grafo ainda fora do `ask`); fidelidade 1,00 ainda não discrimina; concordância do juiz com humanos só na F3.4
-- [ ] **F3.3** Acrescentar page recall@k, acerto numérico (tolerância 0,5%) e latência p50/p95
+- [x] **F3.3** Acrescentar page recall@k, acerto numérico (tolerância 0,5%) e latência p50/p95
   - aceite: relatório único por execução em `eval/resultados/`
+  - resultado: ADR-029; `eval/resultados/<nome>.json` junta as métricas do juiz e as mecânicas (`indexer.metricas`, sem LLM; `avaliar relatorio` refaz sem rodar nada); A3 no recorte: page recall@1/3/6 = 0,49/0,58/0,62, acerto numérico 0,20 (21 perguntas de valor), latência p50 4,6 s e p95 10,2 s; a regra numérica concorda com o juiz em 20 de 21
   - depende: F3.2
+  - nota: nas numéricas a página certa chega ao LLM em 53% dos casos, mas a certa é citada em só 13%: o valor está em tabelas fora dos Pais; "tokens por resposta" da §13.2 ficou fora (o `ask` ainda não os devolve)
 - [ ] **F3.4** Calibrar o juiz contra 20 rótulos manuais
   - aceite: concordância ≥ 80%
   - depende: F3.2

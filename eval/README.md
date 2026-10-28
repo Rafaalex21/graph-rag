@@ -8,7 +8,7 @@ Avaliação do GraphRAG (ARQUITETURA §13, fase F3). Tudo aqui mede contra o **F
 | `validar_golden.py` | Valida o `golden.csv` e **confere cada gabarito contra o texto do PDF original** |
 | `fumaca_f2_9.json` | 5 perguntas de fumaça do `ask` (F2.9); não é o golden set |
 | `perguntas_latencia.txt` | 20 perguntas sem gabarito, só para medir latência (F2.5) |
-| `resultados/` | Notas agregadas de cada execução (`<nome>.json`, sem texto do documento); relatório único da F3.3 em diante |
+| `resultados/` | Um relatório por execução (`<nome>.json`, sem texto do documento): métricas do juiz (F3.2), page recall@k, acerto numérico e latência (F3.3), no geral, no recorte e por categoria, e a nota de cada pergunta |
 
 ## Colunas do `golden.csv`
 

@@ -119,3 +119,8 @@ uv run python -m indexer.avaliar executar --nome f3-2-a3-60
 uv run python -m indexer.avaliar executar --nome teste --limite 3
 ```
 
+Métricas mecânicas (F3.3, ADR-029): page recall@k, acerto numérico (0,5%) e latência p50/p95 saem das respostas já gravadas e entram no mesmo relatório. Para refazê-lo sem LLM, sem llama-swap e sem Neo4j:
+
+```powershell
+uv run python -m indexer.avaliar relatorio --nome f3-2-a3-60
+```

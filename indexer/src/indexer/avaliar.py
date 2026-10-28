@@ -15,8 +15,12 @@ respostas e as justificativas (que citam o documento) ficam em `data/avaliacao/<
 notas vão para `eval/resultados/<nome>.json`. Cada nota do juiz é gravada ao terminar, então uma execução
 interrompida continua de onde parou, e uma chamada que falha duas vezes é registrada e não derruba a rodada.
 
+As métricas mecânicas (page recall@k, acerto numérico, latência; F3.3) vêm de `indexer.metricas` e entram no
+mesmo relatório `eval/resultados/<nome>.json`; `relatorio` o refaz sem LLM a partir de `data/avaliacao/`.
+
 Uso (a partir de indexer/, com llama-swap e Neo4j no ar):
     uv run python -m indexer.avaliar executar --nome v0-a3-fumaca [--so-recorte] [--limite 5]
+    uv run python -m indexer.avaliar relatorio --nome v0-a3-fumaca
 """
 
 from __future__ import annotations
@@ -326,6 +330,27 @@ def agregar(casos: list[dict], notas: list[dict]) -> dict:
     }
 
 
+def montar_relatorio(nome: str, casos: list[dict], respostas: list[dict], notas: list[dict]) -> dict:
+    """O relatório único da execução: métricas do juiz (F3.2) e métricas mecânicas (F3.3) lado a lado."""
+    from indexer.metricas import calcular, concordancia_numerica_com_o_juiz
+
+    resumo = agregar(casos, notas)
+    resumo["nome"] = nome
+    resumo["erros_do_sistema"] = sum(1 for r in respostas if r["erro"])
+    mec = calcular(casos, respostas)
+    resumo.update(mecanicas=mec["mecanicas"])
+    resumo["numerico_regra_x_juiz"] = concordancia_numerica_com_o_juiz(
+        casos, mec["por_pergunta_mecanicas"], notas
+    )
+    notas_por_id = {
+        c["id"]: {j["metrica"]: j["nota"] for j in notas if j["id"] == c["id"]} for c in casos
+    }  # fmt: skip
+    resumo["por_pergunta"] = {
+        i: {**notas_por_id[i], **mec["por_pergunta_mecanicas"][i]} for i in notas_por_id
+    }
+    return resumo
+
+
 def ler_golden(caminho: Path) -> list[dict]:
     import csv
 
@@ -342,7 +367,7 @@ def sistema_ask(driver: Any, embute, notas, chat, **opcoes) -> Sistema:
 
 def main() -> None:
     ap = argparse.ArgumentParser(description=__doc__, formatter_class=argparse.RawDescriptionHelpFormatter)
-    ap.add_argument("acao", choices=["executar"])
+    ap.add_argument("acao", choices=["executar", "relatorio"], help="relatorio: refaz o relatório sem LLM")
     ap.add_argument("--nome", required=True)
     ap.add_argument("--golden", type=Path, default=Path("../eval/golden.csv"))
     ap.add_argument("--so-recorte", action="store_true", help="só as perguntas com no_recorte = sim")
@@ -353,11 +378,6 @@ def main() -> None:
     ap.add_argument("--banco", default="neo4j")
     a = ap.parse_args()
 
-    from indexer.ask import chat_llama
-    from indexer.embeddings import MODELO_CONSULTA, embutidor_llama
-    from indexer.grafo import conectar
-    from indexer.reranker import reranqueador_llama
-
     casos = ler_golden(a.golden)
     if a.so_recorte:
         casos = [c for c in casos if c["no_recorte"] == "sim"]
@@ -365,22 +385,29 @@ def main() -> None:
         casos = casos[: a.limite]
     pasta = a.raiz / "data" / "avaliacao" / a.nome
 
-    driver = conectar(a.raiz)
-    try:
-        sistema = sistema_ask(
-            driver, embutidor_llama(a.swap, MODELO_CONSULTA), reranqueador_llama(a.swap), chat_llama(a.swap),
-            modo=a.modo, banco=a.banco,
-        )  # fmt: skip
-        respostas = gerar(casos, sistema, pasta)
-    finally:
-        driver.close()
-    notas = julgar(casos, respostas, juiz_llama(a.swap), pasta)
-    resumo = agregar(casos, notas)
-    resumo["nome"] = a.nome
-    resumo["erros_do_sistema"] = sum(1 for r in respostas if r["erro"])
-    resumo["por_pergunta"] = {
-        c["id"]: {j["metrica"]: j["nota"] for j in notas if j["id"] == c["id"]} for c in casos
-    }
+    if a.acao == "relatorio":
+        respostas = [
+            json.loads(x) for x in (pasta / "respostas.jsonl").read_text(encoding="utf-8").splitlines()
+        ]
+        notas = [json.loads(x) for x in (pasta / "juizo.jsonl").read_text(encoding="utf-8").splitlines()]
+        casos = [c for c in casos if c["id"] in {r["id"] for r in respostas}]
+    else:
+        from indexer.ask import chat_llama
+        from indexer.embeddings import MODELO_CONSULTA, embutidor_llama
+        from indexer.grafo import conectar
+        from indexer.reranker import reranqueador_llama
+
+        driver = conectar(a.raiz)
+        try:
+            embute = embutidor_llama(a.swap, MODELO_CONSULTA)
+            sistema = sistema_ask(
+                driver, embute, reranqueador_llama(a.swap), chat_llama(a.swap), modo=a.modo, banco=a.banco
+            )
+            respostas = gerar(casos, sistema, pasta)
+        finally:
+            driver.close()
+        notas = julgar(casos, respostas, juiz_llama(a.swap), pasta)
+    resumo = montar_relatorio(a.nome, casos, respostas, notas)
     destino = a.raiz / "eval" / "resultados" / f"{a.nome}.json"
     destino.parent.mkdir(parents=True, exist_ok=True)
     destino.write_text(json.dumps(resumo, ensure_ascii=False, indent=1), encoding="utf-8")
