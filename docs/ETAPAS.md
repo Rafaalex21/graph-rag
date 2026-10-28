@@ -92,7 +92,7 @@
 > entrega: retriever de trechos com parent-document e rerank, respondendo com citações pela CLI
 > esforço: M
 
-- [ ] **F2.1** Gerar Pais (≈ 1.200 tokens, sem cruzar seção, com páginas) e Filhos (≈ 320 tokens, 12% de sobreposição, prefixo com o caminho da seção)
+- [~] **F2.1** Gerar Pais (≈ 1.200 tokens, sem cruzar seção, com páginas) e Filhos (≈ 320 tokens, 12% de sobreposição, prefixo com o caminho da seção)
   - aceite: tokens contados via `/tokenize`; nenhum Pai acima de 1.600 tokens
   - depende: F1.5
 - [ ] **F2.2** Aplicar as *constraints* da §6.3 e carregar Document, Section, Parent e Child
