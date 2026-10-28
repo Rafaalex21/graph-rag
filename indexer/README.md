@@ -111,3 +111,11 @@ CLI `ask` (F2.9, ADR-026); precisa do llama-swap (perfil `consultar`) e do Neo4j
 uv run python -m indexer.ask "Qual foi o caixa líquido proveniente das atividades operacionais em 2025?"
 uv run python -m indexer.ask avaliar
 ```
+
+Métricas com o juiz local (F3.2, ADR-028); precisa do llama-swap (perfis `consultar` e `avaliar`, um de cada vez) e do Neo4j no ar. Retomável: repetir o comando com o mesmo `--nome` continua de onde parou. Os dados ficam em `data/avaliacao/<nome>/` (ignorado pelo git) e as notas em `eval/resultados/<nome>.json`:
+
+```powershell
+uv run python -m indexer.avaliar executar --nome f3-2-a3-60
+uv run python -m indexer.avaliar executar --nome teste --limite 3
+```
+

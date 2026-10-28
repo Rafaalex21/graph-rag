@@ -140,9 +140,11 @@
   - resultado: ADR-027; 60 perguntas na distribuição da §13.1 (54 `sim` e 6 `nao` em `no_recorte`); 60/60 gabaritos conferidos no texto do PDF original (controle negativo: reprovou as 4 linhas adulteradas); gabarito em texto, `cypher_gabarito` reservada para a F4; perguntas redigidas por quem construiu o sistema (viés): pede revisão humana
   - depende: F1.1
   - nota: incluir a coluna `no_recorte` (sim/não: a evidência está nas páginas do recorte da F1.2); até a F5.8 só as perguntas com `sim` têm resposta possível
-- [~] **F3.2** Implementar recall de contexto, fidelidade e correção com o juiz local (prompts do cap. 8); RAGAS como opção
+- [x] **F3.2** Implementar recall de contexto, fidelidade e correção com o juiz local (prompts do cap. 8); RAGAS como opção
   - aceite: as três métricas rodam no golden set inteiro sem intervenção
+  - resultado: ADR-028; `python -m indexer.avaliar executar` rodou as 60 perguntas numa única execução (71 min, 0 falhas do juiz, 0 erros do sistema); A3 no recorte: recall de contexto 0,53, fidelidade 1,00 (32 recusas sem afirmação), correção 0,53; juiz com orçamento de raciocínio de 512 tokens (53 s para 17,7 s por chamada); RAGAS não usado
   - depende: F3.1, F0.6
+  - nota: 31 das 60 perguntas foram recusadas (agregação e numéricas dependem de tabelas e grafo ainda fora do `ask`); fidelidade 1,00 ainda não discrimina; concordância do juiz com humanos só na F3.4
 - [ ] **F3.3** Acrescentar page recall@k, acerto numérico (tolerância 0,5%) e latência p50/p95
   - aceite: relatório único por execução em `eval/resultados/`
   - depende: F3.2

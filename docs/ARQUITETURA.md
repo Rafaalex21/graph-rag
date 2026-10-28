@@ -522,7 +522,7 @@ sequenceDiagram
 | Extração | desligado | 0,2–0,3 | JSON Schema; `presence_penalty` 0–0,5 |
 | Atualizador, roteador, crítico | desligado | 0,1 | saída JSON ou *tool call* |
 | Redator | desligado | 0,7 | `top_p` 0,8 · `top_k` 20 · `presence_penalty` 1,5 (recomendação do Qwen para modo instruct) |
-| Juiz | ligado | 0 | saída JSON |
+| Juiz | ligado, orçamento de 512 tokens ([ADR-028](./adr/ADR-028-metricas-com-juiz-local.md)) | 0 | saída JSON |
 
 O raciocínio liga e desliga por requisição com `chat_template_kwargs: {"enable_thinking": false}` no corpo da chamada ao `llama-server`.
 
@@ -597,7 +597,7 @@ models:
     cmd: |
       "${hip}" --host 127.0.0.1 --port ${PORT}
       -m ${modelos}/gemma-4-26B_q4_0-it.gguf
-      -c 16384 -ngl 99 -fa on --jinja
+      -c 16384 -ngl 99 -fa on --jinja --reasoning-budget 512
 
 routing:
   router:
@@ -754,7 +754,7 @@ Se o documento escolhido for um 10-K coberto pelo FinanceBench, as perguntas pú
 
 - Do livro: **recall de contexto**, **fidelidade**, **correção da resposta**.
 - Acrescentadas: **acurácia de rota**, **page recall@k** (o gargalo apontado pelo estudo com FinanceBench), **acerto numérico** (tolerância de 0,5%), **latência** p50/p95 e **tokens por resposta**.
-- **Juiz:** Gemma 4 26B-A4B com raciocínio ligado e temperatura 0. Calibração: 20 vereditos comparados com rotulagem manual (meta: ≥ 80% de concordância). O livro já nota que juízes LLM produzem notas estranhas em casos triviais como "Olá".
+- **Juiz:** Gemma 4 26B-A4B com raciocínio ligado (orçamento de 512 tokens: sem ele, ~53 s por chamada; com ele, ~18 s) e temperatura 0. Calibração: 20 vereditos comparados com rotulagem manual (meta: ≥ 80% de concordância). O livro já nota que juízes LLM produzem notas estranhas em casos triviais como "Olá".
 
 ### 13.3 Escada de ablações
 

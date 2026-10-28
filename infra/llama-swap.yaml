@@ -62,7 +62,7 @@ models:
     cmd: |
       "${hip}" --host 127.0.0.1 --port ${PORT}
       -m ${modelos}/gemma-4-26B_q4_0-it.gguf
-      -c 16384 -ngl 99 -fa on --jinja
+      -c 16384 -ngl 99 -fa on --jinja --reasoning-budget 512
 
 routing:
   router:

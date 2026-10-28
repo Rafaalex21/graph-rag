@@ -149,6 +149,10 @@ def responder(
             }
             for p in pais
         ],
+        # o que o LLM de resposta viu (o juiz da F3 mede a fidelidade e o recall contra isto)
+        "contexto": [
+            {"paginas": rotulo_de_pagina(p), "caminho": p["caminho"], "texto": p["text"]} for p in pais
+        ],
         "latencia_ms": {**r["latencia_ms"], "geracao": round(geracao_ms, 1)},
     }
 

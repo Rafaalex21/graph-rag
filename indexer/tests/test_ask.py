@@ -102,6 +102,9 @@ def test_responder_entrega_so_o_contexto_ao_llm_e_confere_as_citacoes():
     assert vistas[0][0]["content"] == SISTEMA and "[p. 91] Seção: Fluxo de caixa" in vistas[0][1]["content"]
     assert vistas[0][1]["content"].rstrip().endswith("Pergunta: Qual o caixa?")
     assert r["fontes"][0]["paginas"] == "p. 91" and {"geracao", "rerank", "total"} <= set(r["latencia_ms"])
+    assert r["contexto"] == [
+        {"paginas": "p. 91", "caminho": "Fluxo de caixa", "texto": "O caixa foi de 159 milhões."}
+    ]
     inventada = responder(DriverFalso(), "q", embute_falso, notas_falsas, lambda m: "Algo [p. 12].")
     assert inventada["citacoes_invalidas"] == 1  # página que não estava nos trechos entregues
 
