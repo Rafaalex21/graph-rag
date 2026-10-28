@@ -140,7 +140,7 @@
   - resultado: ADR-027; 60 perguntas na distribuição da §13.1 (54 `sim` e 6 `nao` em `no_recorte`); 60/60 gabaritos conferidos no texto do PDF original (controle negativo: reprovou as 4 linhas adulteradas); gabarito em texto, `cypher_gabarito` reservada para a F4; perguntas redigidas por quem construiu o sistema (viés): pede revisão humana
   - depende: F1.1
   - nota: incluir a coluna `no_recorte` (sim/não: a evidência está nas páginas do recorte da F1.2); até a F5.8 só as perguntas com `sim` têm resposta possível
-- [ ] **F3.2** Implementar recall de contexto, fidelidade e correção com o juiz local (prompts do cap. 8); RAGAS como opção
+- [~] **F3.2** Implementar recall de contexto, fidelidade e correção com o juiz local (prompts do cap. 8); RAGAS como opção
   - aceite: as três métricas rodam no golden set inteiro sem intervenção
   - depende: F3.1, F0.6
 - [ ] **F3.3** Acrescentar page recall@k, acerto numérico (tolerância 0,5%) e latência p50/p95
