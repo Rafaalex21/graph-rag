@@ -64,3 +64,7 @@ Ao montar a árvore de seções (ADR-016), os intervalos de páginas saíram err
 Nova regra em `normalize.py` (`figuras_decorativas`): remover a figura cujo **tamanho e altura na página** (arredondados a 5 pt) se repetem em mais de 30% das páginas **do mesmo formato** (e em pelo menos 3). O eixo x é ignorado, porque o ícone muda de lado conforme a seção (x = 525, 551 ou 523), e o formato da página entra na chave, porque as páginas em paisagem têm o ícone em outra altura. Uma primeira versão, com o x na chave, deixou 8 ícones para trás e foi corrigida.
 
 Efeito no recorte: **78 figuras removidas**, 725 elementos (eram 803), linhas repetidas ainda 3 → 0, 24 notas associadas e 66 de 66 tabelas preservadas. Restam 7 figuras, todas de conteúdo (logotipo da capa, um gráfico e os organogramas das páginas 55 a 57). O critério de aceite da F1.4 não muda (a regra atua em figuras, não em linhas de texto).
+
+## Adendo 2 (F1.6, 28/10/2026): legenda "Obs:" como nota da tabela
+
+A auditoria de tabelas (`docs/auditoria-tabelas.md`) mostrou que a legenda *"Obs: Variações superiores a 200% são representadas por '-'"* (4 tabelas, páginas 84, 92, 93 e 96) mudava o sentido do "-" nas colunas de variação e ficava como parágrafo solto. O padrão de nota passou a aceitar também `Obs:` (sem diferenciar maiúsculas), além de `(n)`. Efeito no recorte: notas associadas 24 → **28**, elementos 725 → **721**; linhas repetidas continuam em 0 e a árvore de seções em 30 de 30 (ADR-016).

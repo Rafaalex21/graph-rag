@@ -33,3 +33,11 @@ uv run --group parse python -m indexer.sections ..\data\parsed\bb_fre_2026_recor
     --pdf-original ..\data\raw\banco_do_brasil_formulario_referencia_2026.pdf `
     --mapa ..\data\raw\bb_fre_2026_recorte_mapa.json --saida ..\data\parsed
 ```
+
+Auditoria de tabelas contra o PDF (F1.6, `docs/auditoria-tabelas.md`):
+
+```powershell
+uv run --group parse python -m indexer.auditoria ..\data\parsed\bb_fre_2026_recorte.docling.json `
+    --pdf ..\data\raw\bb_fre_2026_recorte.pdf --mapa ..\data\raw\bb_fre_2026_recorte_mapa.json `
+    --saida ..\data\parsed\auditoria --n 15 --semente 20261028
+```

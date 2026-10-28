@@ -8,7 +8,8 @@ elementos na ordem de leitura:
   que o Docling rotulou como `text`);
 * remove figuras decorativas (ícones e logotipos de mesmo tamanho e altura em mais de 30% das páginas do
   mesmo formato), que no topo da página seriam atribuídas à seção anterior;
-* associa as notas (`footnote` ou parágrafos que começam com `(n)`) à tabela ou à figura que as precede.
+* associa as notas (`footnote` ou parágrafos que começam com `(n)` ou `Obs:`) à tabela ou à figura
+  que as precede.
 
 Uso (a partir de indexer/):
     uv run python -m indexer.normalize ../data/parsed/ARQUIVO.docling.json \\
@@ -28,7 +29,8 @@ TAMANHO_MAXIMO_REPETIDA = 120  # só linhas curtas entram na regra das repetidas
 # a linha também precisa aparecer em ao menos 3 páginas (evita falso positivo em documentos minúsculos)
 MINIMO_PAGINAS = 3
 ROTULOS_ESTRUTURAIS = {"page_header", "page_footer"}
-PADRAO_NOTA = re.compile(r"^\(\d{1,2}\)\s")
+# "(1) ..." e também "Obs: ..." (a legenda de que "-" é variação acima de 200% muda o sentido da tabela)
+PADRAO_NOTA = re.compile(r"^(\(\d{1,2}\)|obs\.?:)\s", re.IGNORECASE)
 PADRAO_ROTULO_NOTAS = re.compile(r"^notas?\s*:?\s*$", re.IGNORECASE)
 COLECOES_ANCORA = {"tables", "pictures"}
 

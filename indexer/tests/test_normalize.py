@@ -115,3 +115,21 @@ def test_figura_repetida_no_topo_some_mas_figura_unica_fica():
     r = normalizar(doc)
     assert r["estatisticas"]["removidos"]["figura_decorativa_repetida"] == 10
     assert sum(1 for e in r["elementos"] if e["tipo"] == "picture") == 1
+
+
+def test_legenda_obs_depois_da_tabela_vira_nota_da_tabela():
+    corpo = [
+        ("tables", _item("tables", 0, "table", None, 1)),
+        (
+            "texts",
+            _item("texts", 0, "text", 'Obs: Variações superiores a 200% são representadas por "-".', 1),
+        ),
+        ("texts", _item("texts", 0, "text", "Observação solta que não é legenda.", 1)),
+    ]
+    r = normalizar(_doc(1, corpo))
+    tabela = next(x for x in r["elementos"] if x["tipo"] == "table")
+    assert [n["texto"] for n in tabela["notas"]] == [
+        'Obs: Variações superiores a 200% são representadas por "-".'
+    ]
+    assert r["estatisticas"]["notas_associadas"] == 1
+    assert [x["tipo"] for x in r["elementos"]] == ["table", "text"]
