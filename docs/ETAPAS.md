@@ -61,7 +61,7 @@
 - [x] **F1.1** Escolher o documento pelos critérios da §16 e registrar no ADR-009
   - aceite: ADR com fonte, número de páginas, idioma e condições de uso
   - nota: escolhido o Formulário de Referência 2026 do Banco do Brasil (v7, 21/09/2026, PDF de 423 páginas, PT, SHA-256 no ADR-009); o levantamento teve uma errata (o PDF atribuído à Petrobras era do BB). Citações usam a página física; a impressa é física − 1
-- [ ] **F1.2** Separar um recorte de até 80 páginas, com narrativa e tabelas, para os ciclos rápidos de F1 a F5
+- [~] **F1.2** Separar um recorte de até 80 páginas, com narrativa e tabelas, para os ciclos rápidos de F1 a F5
   - aceite: recorte salvo em `data/raw/` e descrito no ADR-009
   - depende: F1.1
 - [ ] **F1.3** Converter com Docling (OCR desligado, TableFormer *accurate*) e salvar o JSON
