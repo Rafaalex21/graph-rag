@@ -65,8 +65,9 @@
   - aceite: recorte salvo em `data/raw/` e descrito no ADR-009
   - nota: 79 páginas (19%), mapa em `data/raw/bb_fre_2026_recorte_mapa.json`; citar sempre a página física do original; a F5.8 indexa o documento inteiro (ADR-009)
   - depende: F1.1
-- [~] **F1.3** Converter com Docling (OCR desligado, TableFormer *accurate*) e salvar o JSON
+- [x] **F1.3** Converter com Docling (OCR desligado, TableFormer *accurate*) e salvar o JSON
   - aceite: 100% das páginas com texto; tempo de conversão registrado
+  - nota: Docling 2.144.0 (grupo `parse`, ADR-014); recorte de 79 páginas: 79/79 com texto, 66 tabelas, 201.0 s (2.54 s/página, CPU, offline); ~18 min estimados para as 423 páginas
   - depende: F1.2
 - [ ] **F1.4** Remover cabeçalhos e rodapés repetidos e associar notas de rodapé
   - aceite: nenhuma linha repetida em mais de 30% das páginas

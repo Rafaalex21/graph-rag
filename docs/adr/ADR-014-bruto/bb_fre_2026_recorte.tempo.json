@@ -1,0 +1,21 @@
+{
+  "pdf": "bb_fre_2026_recorte.pdf",
+  "pdf_sha256": "6fd77937e34fa09de9f42c36cd7f612f662b1392a34f64ddd9d768b3b7feade8",
+  "docling": "2.144.0",
+  "configuracao": {
+    "ocr": false,
+    "tabelas": "TableFormer accurate",
+    "dispositivo": "cpu",
+    "threads": 6
+  },
+  "segundos_carga_modelos": 7.7,
+  "segundos_conversao": 201.0,
+  "segundos_por_pagina": 2.54,
+  "cobertura": {
+    "paginas": 79,
+    "com_texto": 79,
+    "sem_texto": [],
+    "tabelas": 66,
+    "itens_de_texto": 925
+  }
+}

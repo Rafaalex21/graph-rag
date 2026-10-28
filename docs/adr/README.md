@@ -12,3 +12,5 @@ Uma decisão por arquivo: `ADR-NNN-assunto.md`. As nove decisões iniciais estã
 | [009](ADR-009-documento.md) | Documento escolhido | F1.1: aceita (Banco do Brasil, FRE 2026 v7) |
 
 Modelo em [`ADR-000-modelo.md`](ADR-000-modelo.md).
+
+| [014](ADR-014-parsing-docling.md) | Docling: versão, modelos e configuração do parsing | F1.3 — aceita |

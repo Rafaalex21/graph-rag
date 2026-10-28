@@ -10,3 +10,11 @@ uv sync
 uv run pytest
 uv run ruff check .
 ```
+
+Parsing de PDF (F1.3), com o grupo opcional `parse` (Docling, ADR-014):
+
+```powershell
+uv sync --group parse      # um `uv sync` puro remove o Docling
+uv run --group parse python -m indexer.parse ..\data\raw\bb_fre_2026_recorte.pdf `
+    --artefatos ..\infra\bin\modelos-docling --saida ..\data\parsed
+```
