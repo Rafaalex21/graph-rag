@@ -140,3 +140,10 @@ uv run python -m indexer.avaliar executar --nome v0-a3r --degrau a3r
 uv run python -m indexer.tabela
 ```
 
+Esquemas da extração (F4.1, ADR-032), sem LLM: gera `contracts/extraction.schema.json` a partir dos modelos Pydantic de `indexer.schemas`; `--conferir` falha se o arquivo estiver desatualizado:
+
+```powershell
+uv run python -m indexer.schemas
+uv run python -m indexer.schemas --conferir
+```
+

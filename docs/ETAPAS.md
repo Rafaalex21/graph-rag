@@ -159,7 +159,7 @@
   - aceite: `eval/resultados/v0.md` com as quatro linhas e as métricas da §13.2
   - resultado: ADR-031; correção no recorte (54 perguntas): A0 0,22; A1 0,50; A2 0,51; A3 0,55; a reescrita (A3r) empata com A3 e dobra a latência; fidelidade 1,00 e zero citações inválidas em todos; agregação 0,00 e numérica 0,20 em todos os degraus com contexto
   - depende: F2.9, F3.3
-  - nota: as métricas valem só para as perguntas com `no_recorte` = sim; a avaliação sobre o documento inteiro vem na F9.1; diferenças de 0,02 a 0,04 entre A1, A2 e A3 são 2 a 4 perguntas de 54, só A0 → A1 e o multi-hop do A3 estão claramente acima do ruído; o arredondamento do N01 segue em aberto
+  - nota: as métricas valem só para as perguntas com `no_recorte` = sim; a avaliação sobre o documento inteiro vem na F9.1; diferenças de 0,02 a 0,04 entre A1, A2 e A3 são 2 a 4 perguntas de 54, só A0 → A1 e o multi-hop do A3 estão claramente acima do ruído; arredondamento do N01 vale (decisão do Rafael), mas o juiz ainda o marca incorreta
 
 ## F4 · Grafo de domínio
 > objetivo: Transformar o texto em fatos consultáveis — filtrar, somar e comparar exige estrutura, não similaridade.
@@ -168,8 +168,10 @@
 > entrega: fatos financeiros, organizações, pessoas, segmentos, riscos e eventos no grafo, com lastro
 > esforço: G
 
-- [ ] **F4.1** Modelar em Pydantic os esquemas da §5 I-5, com descrição em cada campo e `Optional` onde puder faltar
+- [x] **F4.1** Modelar em Pydantic os esquemas da §5 I-5, com descrição em cada campo e `Optional` onde puder faltar
   - aceite: JSON Schema gerado e versionado em `contracts/`
+  - resultado: ADR-032; 7 modelos e o contêiner `ExtracaoDirigida` em `indexer/schemas/`, `contracts/extraction.schema.json` v1.0.0 (gerado por `python -m indexer.schemas`, conferido por teste); `scale` opcional, diferente do exemplo da §5 I-5
+  - nota: o schema ainda não passou pela gramática do `llama-server`; isso se prova na F4.2
 - [ ] **F4.2** Extrair por Pai e por Tabela com `response_format: json_schema`, cache por hash e retomada
   - aceite: 100% de JSON válido; interromper e retomar não repete chamadas
   - depende: F4.1, F2.1

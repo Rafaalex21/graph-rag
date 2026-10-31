@@ -28,5 +28,6 @@ Uma decisão por arquivo: `ADR-NNN-assunto.md`. As nove decisões iniciais estã
 | [029](ADR-029-metricas-mecanicas.md) | Métricas mecânicas: page recall@k, acerto numérico (0,5%) e latência p50/p95 | F3.3 — aceita |
 | [030](ADR-030-calibracao-do-juiz.md) | Calibração do juiz contra 20 rótulos (95% de concordância; rótulos dados pelo Claude) | F3.4 — aceita |
 | [031](ADR-031-linha-de-base-v0.md) | Linha de base v0: escada A0 a A3r (de memória 0,22; vetor 0,50; híbrida 0,51; Pai + reranker 0,55; reescrita sem ganho) | F3.5 — aceita |
+| [032](ADR-032-esquemas-de-extracao.md) | Esquemas Pydantic da extração dirigida e o JSON Schema versionado em `contracts/` | F4.1 — aceita |
 
 Modelo em [`ADR-000-modelo.md`](ADR-000-modelo.md).

@@ -1,0 +1,515 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://graphrag.local/contracts/extraction.schema.json",
+  "version": "1.0.0",
+  "$defs": {
+    "Event": {
+      "additionalProperties": false,
+      "description": "Um evento corporativo datado ou datável.",
+      "properties": {
+        "type": {
+          "description": "Tipo: aquisição, desinvestimento, emissão, litígio, reestruturação ou dividendos",
+          "enum": [
+            "acquisition",
+            "divestiture",
+            "issuance",
+            "litigation",
+            "restructuring",
+            "dividends"
+          ],
+          "title": "Type",
+          "type": "string"
+        },
+        "description": {
+          "description": "O que aconteceu, em uma ou duas frases, fiel ao trecho",
+          "title": "Description",
+          "type": "string"
+        },
+        "date": {
+          "anyOf": [
+            {
+              "pattern": "^\\d{4}(-\\d{2}(-\\d{2})?)?$",
+              "type": "string"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "description": "Data do evento: 2025, 2025-06 ou 2025-06-30; omitir se o trecho não disser",
+          "title": "Date"
+        },
+        "organizations": {
+          "description": "Nomes das organizações envolvidas, como aparecem no texto; lista vazia se nenhuma",
+          "items": {
+            "type": "string"
+          },
+          "title": "Organizations",
+          "type": "array"
+        }
+      },
+      "required": [
+        "type",
+        "description",
+        "organizations"
+      ],
+      "title": "Event",
+      "type": "object"
+    },
+    "FinancialFact": {
+      "additionalProperties": false,
+      "description": "Um valor numérico reportado no documento, com período e evidência.",
+      "properties": {
+        "metric": {
+          "description": "Nome da métrica como aparece no texto, ex.: 'Receita líquida', 'Lucro líquido ajustado'",
+          "title": "Metric",
+          "type": "string"
+        },
+        "value": {
+          "description": "O número como está escrito na evidência, já com sinal (negativos entre parênteses viram negativos) e SEM aplicar a escala; ex.: 'R$ 16.782 milhões' -> 16782",
+          "title": "Value",
+          "type": "number"
+        },
+        "unit": {
+          "description": "Natureza do valor: moeda, percentual, contagem, razão ou pontos-base",
+          "enum": [
+            "currency",
+            "percent",
+            "count",
+            "ratio",
+            "basis_points"
+          ],
+          "title": "Unit",
+          "type": "string"
+        },
+        "currency": {
+          "anyOf": [
+            {
+              "type": "string"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "description": "Código ISO 4217 quando unit = currency, ex.: BRL, USD; senão omitir",
+          "title": "Currency"
+        },
+        "scale": {
+          "anyOf": [
+            {
+              "enum": [
+                1,
+                1000,
+                1000000,
+                1000000000
+              ],
+              "type": "integer"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "description": "Escala declarada na tabela ou no texto (1, 1000, 1000000 ou 1000000000); omitir para percentuais, razões e contagens sem escala",
+          "title": "Scale"
+        },
+        "period": {
+          "description": "Período canônico: 2025-FY (exercício), 2025-Q4 (trimestre) ou 2025-12-31 (data)",
+          "pattern": "^\\d{4}-(FY|Q[1-4])$|^\\d{4}-\\d{2}-\\d{2}$",
+          "title": "Period",
+          "type": "string"
+        },
+        "period_type": {
+          "description": "Se o valor é de um exercício, de um trimestre ou de uma data",
+          "enum": [
+            "fiscal_year",
+            "quarter",
+            "point_in_time"
+          ],
+          "title": "Period Type",
+          "type": "string"
+        },
+        "entity": {
+          "description": "Empresa ou segmento a que o valor se refere, como aparece no texto",
+          "title": "Entity",
+          "type": "string"
+        },
+        "segment": {
+          "anyOf": [
+            {
+              "type": "string"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "description": "Segmento de negócio do valor, se a evidência o nomear; senão omitir",
+          "title": "Segment"
+        },
+        "evidence": {
+          "description": "Trecho literal curto (até 200 caracteres) copiado do texto, com o valor",
+          "maxLength": 200,
+          "title": "Evidence",
+          "type": "string"
+        }
+      },
+      "required": [
+        "metric",
+        "value",
+        "unit",
+        "period",
+        "period_type",
+        "entity",
+        "evidence"
+      ],
+      "title": "FinancialFact",
+      "type": "object"
+    },
+    "Instrument": {
+      "additionalProperties": false,
+      "description": "Um instrumento financeiro emitido ou contratado.",
+      "properties": {
+        "name": {
+          "description": "Nome ou identificação do instrumento como aparece no texto",
+          "title": "Name",
+          "type": "string"
+        },
+        "type": {
+          "description": "Tipo: debênture, bond, empréstimo ou derivativo",
+          "enum": [
+            "debenture",
+            "bond",
+            "loan",
+            "derivative"
+          ],
+          "title": "Type",
+          "type": "string"
+        },
+        "issuer": {
+          "anyOf": [
+            {
+              "type": "string"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "description": "Emissor ou tomador, se o trecho o nomear",
+          "title": "Issuer"
+        },
+        "maturity": {
+          "anyOf": [
+            {
+              "pattern": "^\\d{4}(-\\d{2}(-\\d{2})?)?$",
+              "type": "string"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "description": "Vencimento: 2030, 2030-06 ou 2030-06-30; omitir se não aparecer",
+          "title": "Maturity"
+        },
+        "description": {
+          "anyOf": [
+            {
+              "type": "string"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "description": "Uma frase com condições relevantes (taxa, valor), só se o trecho disser",
+          "title": "Description"
+        }
+      },
+      "required": [
+        "name",
+        "type"
+      ],
+      "title": "Instrument",
+      "type": "object"
+    },
+    "Organization": {
+      "additionalProperties": false,
+      "description": "Uma organização citada no trecho e o papel dela em relação ao emissor.",
+      "properties": {
+        "name": {
+          "description": "Nome da organização como aparece no texto",
+          "title": "Name",
+          "type": "string"
+        },
+        "role": {
+          "description": "Papel em relação ao emissor: emissor, subsidiária, controlada, coligada, auditor, regulador ou contraparte",
+          "enum": [
+            "issuer",
+            "subsidiary",
+            "controlled",
+            "affiliate",
+            "auditor",
+            "regulator",
+            "counterparty"
+          ],
+          "title": "Role",
+          "type": "string"
+        },
+        "description": {
+          "anyOf": [
+            {
+              "type": "string"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "description": "Uma frase sobre o que a organização é ou faz, só se o trecho disser",
+          "title": "Description"
+        },
+        "cnpj": {
+          "anyOf": [
+            {
+              "type": "string"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "description": "CNPJ exatamente como escrito, se aparecer",
+          "title": "Cnpj"
+        },
+        "ticker": {
+          "anyOf": [
+            {
+              "type": "string"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "description": "Código de negociação (ticker), se aparecer",
+          "title": "Ticker"
+        }
+      },
+      "required": [
+        "name",
+        "role"
+      ],
+      "title": "Organization",
+      "type": "object"
+    },
+    "Person": {
+      "additionalProperties": false,
+      "description": "Uma pessoa citada no trecho com o cargo.",
+      "properties": {
+        "name": {
+          "description": "Nome completo da pessoa como aparece no texto",
+          "title": "Name",
+          "type": "string"
+        },
+        "position": {
+          "anyOf": [
+            {
+              "type": "string"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "description": "Cargo ou função, ex.: 'Diretor Vice-Presidente'; omitir se não aparecer",
+          "title": "Position"
+        },
+        "organization": {
+          "anyOf": [
+            {
+              "type": "string"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "description": "Organização em que ocupa o cargo, se o trecho a nomear",
+          "title": "Organization"
+        }
+      },
+      "required": [
+        "name"
+      ],
+      "title": "Person",
+      "type": "object"
+    },
+    "RiskFactor": {
+      "additionalProperties": false,
+      "description": "Um fator de risco descrito no trecho.",
+      "properties": {
+        "name": {
+          "description": "Nome curto do risco, ex.: 'Risco de crédito'",
+          "title": "Name",
+          "type": "string"
+        },
+        "category": {
+          "description": "Categoria: mercado, crédito, liquidez, operacional, regulatório, câmbio, ESG ou outro",
+          "enum": [
+            "market",
+            "credit",
+            "liquidity",
+            "operational",
+            "regulatory",
+            "currency",
+            "esg",
+            "other"
+          ],
+          "title": "Category",
+          "type": "string"
+        },
+        "description": {
+          "description": "Resumo do risco em uma ou duas frases, fiel ao trecho",
+          "title": "Description",
+          "type": "string"
+        },
+        "affected_entity": {
+          "anyOf": [
+            {
+              "type": "string"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "description": "Organização ou segmento que o risco afeta, se o trecho disser",
+          "title": "Affected Entity"
+        }
+      },
+      "required": [
+        "name",
+        "category",
+        "description"
+      ],
+      "title": "RiskFactor",
+      "type": "object"
+    },
+    "Segment": {
+      "additionalProperties": false,
+      "description": "Um segmento de negócio ou área de atuação.",
+      "properties": {
+        "name": {
+          "description": "Nome do segmento como aparece no texto",
+          "title": "Name",
+          "type": "string"
+        },
+        "organization": {
+          "anyOf": [
+            {
+              "type": "string"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "description": "Organização a que o segmento pertence, se o trecho a nomear",
+          "title": "Organization"
+        },
+        "description": {
+          "anyOf": [
+            {
+              "type": "string"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "description": "Uma frase sobre o segmento, só se o trecho disser",
+          "title": "Description"
+        }
+      },
+      "required": [
+        "name"
+      ],
+      "title": "Segment",
+      "type": "object"
+    }
+  },
+  "additionalProperties": false,
+  "description": "Tudo o que se extrai de um Pai ou de uma Tabela numa única chamada; listas vazias são válidas.",
+  "properties": {
+    "financial_facts": {
+      "description": "Valores numéricos com período e evidência; lista vazia se o trecho não traz nenhum",
+      "items": {
+        "$ref": "#/$defs/FinancialFact"
+      },
+      "title": "Financial Facts",
+      "type": "array"
+    },
+    "organizations": {
+      "description": "Organizações citadas; lista vazia se nenhuma",
+      "items": {
+        "$ref": "#/$defs/Organization"
+      },
+      "title": "Organizations",
+      "type": "array"
+    },
+    "people": {
+      "description": "Pessoas citadas com cargo; lista vazia se nenhuma",
+      "items": {
+        "$ref": "#/$defs/Person"
+      },
+      "title": "People",
+      "type": "array"
+    },
+    "segments": {
+      "description": "Segmentos de negócio; lista vazia se nenhum",
+      "items": {
+        "$ref": "#/$defs/Segment"
+      },
+      "title": "Segments",
+      "type": "array"
+    },
+    "risk_factors": {
+      "description": "Fatores de risco; lista vazia se nenhum",
+      "items": {
+        "$ref": "#/$defs/RiskFactor"
+      },
+      "title": "Risk Factors",
+      "type": "array"
+    },
+    "events": {
+      "description": "Eventos corporativos; lista vazia se nenhum",
+      "items": {
+        "$ref": "#/$defs/Event"
+      },
+      "title": "Events",
+      "type": "array"
+    },
+    "instruments": {
+      "description": "Instrumentos financeiros; lista vazia se nenhum",
+      "items": {
+        "$ref": "#/$defs/Instrument"
+      },
+      "title": "Instruments",
+      "type": "array"
+    }
+  },
+  "required": [
+    "financial_facts",
+    "organizations",
+    "people",
+    "segments",
+    "risk_factors",
+    "events",
+    "instruments"
+  ],
+  "title": "ExtracaoDirigida",
+  "type": "object"
+}
