@@ -180,10 +180,11 @@
 - [x] **F4.3** Lastro numérico: rejeitar fatos cujo valor normalizado não aparece na evidência
   - aceite: taxa de rejeição registrada; 30 fatos aceitos auditados com ≥ 95% corretos
   - resultado: ADR-034; 418 de 1.225 fatos rejeitados (34,1%), 807 aceitos; auditoria em 4 rodadas de 30 aceitos (83%, 93%, 93%, **96,7%** = 29 de 30 na amostra final, nova)
-  - nota: o número certo no lugar errado era o erro dominante (só 2 fatos falharam em "valor ausente"), então o lastro confere também linha, coluna, faixa, sinal, escala e unidade (ARQUITETURA §5 I-5 corrigida); a auditoria foi feita por mim, não por uma pessoa; a unidade da tabela de risco de mercado (p. 157-158 do PDF, 48 fatos aceitos) não é declarada nem no PDF: decidir o tratamento na F4.4 (ADR-034)
+  - nota: o número certo no lugar errado era o erro dominante (só 2 fatos falharam em "valor ausente"), então o lastro confere também linha, coluna, faixa, sinal, escala e unidade (ARQUITETURA §5 I-5 corrigida); a auditoria foi feita por mim, não por uma pessoa; a unidade da tabela de risco de mercado (p. 157-158 do PDF, 48 fatos aceitos) não é declarada nem no PDF: entram na F4.4 marcados, sem conversão (ADR-034)
   - depende: F4.2, F1.7
 - [ ] **F4.4** Importar com MERGE e IDs determinísticos
   - aceite: importar duas vezes não altera nenhuma contagem
+  - nota: decidido em 31/10/2026 (ADR-034): os 48 fatos aceitos das p. 157-158 do PDF (unidade não declarada) entram com escala 1 e a marca "unidade não declarada", sem conversão
   - depende: F4.3
 - [ ] **F4.5** Resolução de entidades: normalização, bloqueio, similaridade, confirmação por LLM e `apoc.refactor.mergeNodes`
   - aceite: 20 fusões auditadas com ≥ 90% corretas; aliases preservados
