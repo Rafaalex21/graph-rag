@@ -172,8 +172,10 @@
   - aceite: JSON Schema gerado e versionado em `contracts/`
   - resultado: ADR-032; 7 modelos e o contêiner `ExtracaoDirigida` em `indexer/schemas/`, `contracts/extraction.schema.json` v1.0.0 (gerado por `python -m indexer.schemas`, conferido por teste); `scale` opcional, diferente do exemplo da §5 I-5
   - nota: o schema ainda não passou pela gramática do `llama-server`; isso se prova na F4.2
-- [ ] **F4.2** Extrair por Pai e por Tabela com `response_format: json_schema`, cache por hash e retomada
+- [x] **F4.2** Extrair por Pai e por Tabela com `response_format: json_schema`, cache por hash e retomada
   - aceite: 100% de JSON válido; interromper e retomar não repete chamadas
+  - resultado: ADR-033; 164 de 164 unidades (102 Pais + 62 Tabelas do recorte) com JSON válido, 142 na primeira chamada; nova execução com cache: 0 chamadas; 1.225 fatos, 139 organizações, 15 pessoas, 12 segmentos, 9 riscos, 5 instrumentos, 0 eventos; contrato `extraction.schema.json` 1.1.2 (`scale` obrigatório, teto de 60 fatos)
+  - nota: a gramática do llama-server não impõe `pattern` e o modelo erra `period_type` (80%) e `unit`: ajustes determinísticos contados (ARQUITETURA §5 I-5 corrigida); válido não é correto (F4.3); zero eventos é suspeito; ~8 h projetadas para o documento inteiro, contra 1,1 h da §5.2
   - depende: F4.1, F2.1
 - [ ] **F4.3** Lastro numérico: rejeitar fatos cujo valor normalizado não aparece na evidência
   - aceite: taxa de rejeição registrada; 30 fatos aceitos auditados com ≥ 95% corretos

@@ -239,7 +239,7 @@ Tokens contados com o tokenizador do próprio modelo (endpoint `/tokenize` do `l
 
 ### I-5 · Extração dirigida a esquema (cap. 6)
 
-Modelos Pydantic com descrição em cada campo e `Optional` em tudo que pode faltar — o livro observa que campos obrigatórios sem informação induzem o modelo a inventar valores. O JSON Schema gerado vai em `response_format: {type: "json_schema"}` e o `llama-server` o impõe por gramática: a saída é JSON válido por construção.
+Modelos Pydantic com descrição em cada campo e `Optional` em tudo que pode faltar — o livro observa que campos obrigatórios sem informação induzem o modelo a inventar valores. O JSON Schema gerado vai em `response_format: {type: "json_schema"}` e o `llama-server` o impõe por gramática: a saída é JSON sintaticamente válido e respeita tipos, *enums*, campos obrigatórios e `maxItems`. **Medido na F4.2 ([ADR-033](./adr/ADR-033-extracao-por-pai-e-por-tabela.md)):** `pattern` (o formato do período) **não** é imposto, e o modelo erra rótulos que a gramática aceita (`unit`, `period_type`); por isso a validação Pydantic com retentativa e os ajustes determinísticos da guarda 2 são necessários, não opcionais.
 
 ```python
 class FinancialFact(BaseModel):
@@ -261,7 +261,7 @@ Demais esquemas: `Organization` (com papel na relação: emissor, subsidiária, 
 **Guardas:**
 
 1. **Lastro numérico** — um fato só é aceito se o valor, normalizado, aparece no trecho `evidence`, e se `evidence` existe no texto do Pai ou da Tabela. Fato sem lastro é descartado e registrado.
-2. **Validação Pydantic** + uma retentativa com a mensagem de erro anexada.
+2. **Validação Pydantic** + uma retentativa com a mensagem de erro anexada, e ajustes determinísticos e contados no que o texto já determina (`period_type` pelo `period`; `unit` e `currency` pelo símbolo R$ ou US$ da evidência).
 3. **IDs determinísticos** (hash de documento + página + métrica + período + entidade): reimportar não duplica nada.
 
 ### I-6 · Extração aberta (MS GraphRAG, cap. 7)

@@ -1,0 +1,65 @@
+{
+ "comando": "uv run python -m indexer.extrair executar ../data/parsed/bb_fre_2026_recorte  (llama-swap, perfil indexar, Qwen3.6-35B-A3B)",
+ "prompt": "v3",
+ "schema": "1.1.2",
+ "unidades": 164,
+ "pais": 102,
+ "tabelas": 62,
+ "validas": 164,
+ "validas_na_primeira_tentativa": 142,
+ "com_retentativa": 22,
+ "execucao_1": {
+  "chamadas": 184,
+  "invalidas": 5,
+  "tokens_prompt": 231682,
+  "tokens_saida": 213896,
+  "segundos_de_llm": 11440.9,
+  "minutos_de_relogio": 95
+ },
+ "execucao_2": {
+  "chamadas": 10,
+  "invalidas": 2,
+  "minutos_de_relogio": 16
+ },
+ "execucao_3": {
+  "chamadas": 2,
+  "invalidas": 0,
+  "minutos_de_relogio": 5
+ },
+ "execucao_4_retomada": {
+  "chamadas": 0,
+  "do_cache": 164,
+  "segundos": 1
+ },
+ "itens": {
+  "financial_facts": 1225,
+  "organizations": 139,
+  "people": 15,
+  "segments": 12,
+  "risk_factors": 9,
+  "events": 0,
+  "instruments": 5
+ },
+ "unidades_sem_nenhum_item": 43,
+ "no_teto_de_60_fatos": 1,
+ "fatos_por_unit": {
+  "basis_points": 3,
+  "percent": 352,
+  "currency": 687,
+  "count": 183
+ },
+ "fatos_por_scale": {
+  "1000000": 505,
+  "1000": 36,
+  "1": 675,
+  "1000000000": 9
+ },
+ "period_type_antes_do_ajuste": "quarter 710 · point_in_time 506 · fiscal_year 9 (execução 1)",
+ "ajustes_deterministicos": {
+  "period_type": 988,
+  "currency": 160
+ },
+ "fatos_de_moeda_sem_codigo_apos_ajuste": 521,
+ "fatos_de_moeda": 687,
+ "reparos_de_unidade_basis_points": "6 fatos, nas 2 unidades reprocessadas na execução 3 (as demais ficaram no cache como o LLM as devolveu: 3 fatos basis_points aceitos, ainda não conferidos)"
+}

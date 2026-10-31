@@ -28,7 +28,11 @@ O exemplo do documento marca `scale` como obrigatório. Aqui ele é opcional: pe
 - `contracts/extraction.schema.json` gerado (515 linhas, 7 modelos em `$defs`, `version` 1.0.0), e `python -m indexer.schemas --conferir` confirma que está em dia.
 - `indexer/tests/test_schemas.py` (16 testes): arquivo versionado igual ao gerado; descrição em todo campo; `additionalProperties: false`; campos obrigatórios e opcionais como acima; contêiner exige as 7 listas e aceita todas vazias; período, escala, unidade, evidência longa, valor infinito e campo extra são rejeitados.
 
+## Revisão na F4.2 ([ADR-033](./ADR-033-extracao-por-pai-e-por-tabela.md))
+
+O contrato subiu para 1.1.2. `scale` voltou a **obrigatório** (1 = sem escala): com ele opcional o modelo o omitia sempre e o valor ficava errado, então a diferença em relação ao exemplo da §5 I-5 descrita acima foi desfeita. `financial_facts` ganhou `maxItems: 60`, e há um validador que recusa `basis_points` sem "pontos-base" na evidência. O `period_type` é redundante com `period` e é derivado em código.
+
 ## Ressalvas
 
-- **Ainda não passou pela gramática do `llama-server`.** O llama.cpp converte só um subconjunto do JSON Schema (`pattern`, `maxLength`, `anyOf` com `null` e `enum` de inteiros costumam funcionar, mas não foi medido). Isso se prova na F4.2, a primeira que envia o schema ao modelo; se alguma palavra-chave for recusada, o ajuste vai nos modelos e o `VERSAO` sobe.
+- **(Resolvido na F4.2: o schema passou pela gramática; o `pattern` não é imposto.)** Antes: não tinha passado pela gramática do `llama-server`. O llama.cpp converte só um subconjunto do JSON Schema (`pattern`, `maxLength`, `anyOf` com `null` e `enum` de inteiros costumam funcionar, mas não foi medido). Isso se prova na F4.2, a primeira que envia o schema ao modelo; se alguma palavra-chave for recusada, o ajuste vai nos modelos e o `VERSAO` sobe.
 - Os esquemas de extração aberta (I-6, F5) e do Text2Cypher não fazem parte desta tarefa.

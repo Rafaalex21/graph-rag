@@ -1,7 +1,7 @@
 {
   "$schema": "https://json-schema.org/draft/2020-12/schema",
   "$id": "https://graphrag.local/contracts/extraction.schema.json",
-  "version": "1.0.0",
+  "version": "1.1.2",
   "$defs": {
     "Event": {
       "additionalProperties": false,
@@ -71,7 +71,7 @@
           "type": "number"
         },
         "unit": {
-          "description": "Natureza do valor: moeda, percentual, contagem, razão ou pontos-base",
+          "description": "Natureza do valor: currency (valor em R$, US$ etc.), percent (%), count (quantidade de pessoas, ações, agências etc.), ratio (índice ou múltiplo) ou basis_points (só se o texto disser pontos-base)",
           "enum": [
             "currency",
             "percent",
@@ -92,31 +92,23 @@
             }
           ],
           "default": null,
-          "description": "Código ISO 4217 quando unit = currency, ex.: BRL, USD; senão omitir",
+          "description": "Código ISO 4217 quando unit = currency (R$ = BRL, US$ = USD); senão omitir",
           "title": "Currency"
         },
         "scale": {
-          "anyOf": [
-            {
-              "enum": [
-                1,
-                1000,
-                1000000,
-                1000000000
-              ],
-              "type": "integer"
-            },
-            {
-              "type": "null"
-            }
+          "description": "Multiplicador que acompanha o número: 1 se vem sem escala (inclusive %, razões e contagens), 1000 para 'mil', 1000000 para 'milhões', 1000000000 para 'bilhões'",
+          "enum": [
+            1,
+            1000,
+            1000000,
+            1000000000
           ],
-          "default": null,
-          "description": "Escala declarada na tabela ou no texto (1, 1000, 1000000 ou 1000000000); omitir para percentuais, razões e contagens sem escala",
-          "title": "Scale"
+          "title": "Scale",
+          "type": "integer"
         },
         "period": {
           "description": "Período canônico: 2025-FY (exercício), 2025-Q4 (trimestre) ou 2025-12-31 (data)",
-          "pattern": "^\\d{4}-(FY|Q[1-4])$|^\\d{4}-\\d{2}-\\d{2}$",
+          "pattern": "^\\d{4}-(FY|Q[1-4]|\\d{2}-\\d{2})$",
           "title": "Period",
           "type": "string"
         },
@@ -159,6 +151,7 @@
         "metric",
         "value",
         "unit",
+        "scale",
         "period",
         "period_type",
         "entity",
@@ -445,10 +438,11 @@
   "description": "Tudo o que se extrai de um Pai ou de uma Tabela numa única chamada; listas vazias são válidas.",
   "properties": {
     "financial_facts": {
-      "description": "Valores numéricos com período e evidência; lista vazia se o trecho não traz nenhum",
+      "description": "Valores numéricos com período e evidência (até 60, priorizando totais e o exercício mais recente); lista vazia se o trecho não traz nenhum",
       "items": {
         "$ref": "#/$defs/FinancialFact"
       },
+      "maxItems": 60,
       "title": "Financial Facts",
       "type": "array"
     },

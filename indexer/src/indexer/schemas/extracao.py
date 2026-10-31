@@ -12,17 +12,20 @@ origem são do contexto da chamada (F4.2) e do importador (F4.4), não do modelo
 from __future__ import annotations
 
 import math
+import re
 from typing import Literal
 
-from pydantic import BaseModel, ConfigDict, Field, field_validator
+from pydantic import BaseModel, ConfigDict, Field, field_validator, model_validator
 
-VERSAO = "1.0.0"
+VERSAO = "1.1.2"
 
-# 2025-FY, 2025-Q4 ou 2025-12-31 (§5 I-5)
-PADRAO_PERIODO = r"^\d{4}-(FY|Q[1-4])$|^\d{4}-\d{2}-\d{2}$"
+# 2025-FY, 2025-Q4 ou 2025-12-31 (§5 I-5); uma só âncora, porque o llama.cpp não impõe `^a$|^b$`
+PADRAO_PERIODO = r"^\d{4}-(FY|Q[1-4]|\d{2}-\d{2})$"
 # 2025, 2025-06 ou 2025-06-30
 PADRAO_DATA = r"^\d{4}(-\d{2}(-\d{2})?)?$"
 MAX_EVIDENCIA = 200
+MAX_FATOS = 60  # por chamada; imposto por gramática (maxItems), evita a saída cortada em tabelas grandes
+PONTOS_BASE = re.compile(r"pontos?[- ]base|\bbps\b|\bp\.?b\.?\b", re.IGNORECASE)
 
 Unidade = Literal["currency", "percent", "count", "ratio", "basis_points"]
 Escala = Literal[1, 1_000, 1_000_000, 1_000_000_000]
@@ -51,14 +54,17 @@ class FinancialFact(_Base):
         description="O número como está escrito na evidência, já com sinal (negativos entre parênteses "
         "viram negativos) e SEM aplicar a escala; ex.: 'R$ 16.782 milhões' -> 16782"
     )
-    unit: Unidade = Field(description="Natureza do valor: moeda, percentual, contagem, razão ou pontos-base")
-    currency: str | None = Field(
-        default=None, description="Código ISO 4217 quando unit = currency, ex.: BRL, USD; senão omitir"
+    unit: Unidade = Field(
+        description="Natureza do valor: currency (valor em R$, US$ etc.), percent (%), count (quantidade de "
+        "pessoas, ações, agências etc.), ratio (índice ou múltiplo) ou basis_points (só se o texto disser "
+        "pontos-base)"
     )
-    scale: Escala | None = Field(
-        default=None,
-        description="Escala declarada na tabela ou no texto (1, 1000, 1000000 ou 1000000000); omitir para "
-        "percentuais, razões e contagens sem escala",
+    currency: str | None = Field(
+        default=None, description="Código ISO 4217 quando unit = currency (R$ = BRL, US$ = USD); senão omitir"
+    )
+    scale: Escala = Field(
+        description="Multiplicador que acompanha o número: 1 se vem sem escala (inclusive %, razões e "
+        "contagens), 1000 para 'mil', 1000000 para 'milhões', 1000000000 para 'bilhões'"
     )
     period: str = Field(
         pattern=PADRAO_PERIODO,
@@ -82,6 +88,15 @@ class FinancialFact(_Base):
         if not math.isfinite(v):
             raise ValueError("valor não finito")
         return v
+
+    @model_validator(mode="after")
+    def _pontos_base_so_com_o_texto(self) -> FinancialFact:
+        if self.unit == "basis_points" and not PONTOS_BASE.search(self.evidence):
+            raise ValueError(
+                "unit basis_points só vale se a evidência disser 'pontos-base'; "
+                "valores em R$ ou US$ são currency"
+            )
+        return self
 
 
 class Organization(_Base):
@@ -173,7 +188,9 @@ class ExtracaoDirigida(_Base):
     """Tudo o que se extrai de um Pai ou de uma Tabela numa única chamada; listas vazias são válidas."""
 
     financial_facts: list[FinancialFact] = Field(
-        description="Valores numéricos com período e evidência; lista vazia se o trecho não traz nenhum"
+        max_length=MAX_FATOS,
+        description=f"Valores numéricos com período e evidência (até {MAX_FATOS}, priorizando totais e o "
+        "exercício mais recente); lista vazia se o trecho não traz nenhum",
     )
     organizations: list[Organization] = Field(description="Organizações citadas; lista vazia se nenhuma")
     people: list[Person] = Field(description="Pessoas citadas com cargo; lista vazia se nenhuma")

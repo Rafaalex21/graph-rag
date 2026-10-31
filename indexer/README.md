@@ -147,3 +147,11 @@ uv run python -m indexer.schemas
 uv run python -m indexer.schemas --conferir
 ```
 
+Extração dirigida a esquema (F4.2, ADR-033); precisa do llama-swap no perfil `indexar` (Qwen3.6) e é retomável (cache por hash em `data/parsed/extracao_cache/`; repetir o comando não refaz o que já está válido). Grava `data/parsed/<prefixo>.extracao.json` (fora do git):
+
+```powershell
+uv run python -m indexer.extrair executar ../data/parsed/bb_fre_2026_recorte
+uv run python -m indexer.extrair executar ../data/parsed/bb_fre_2026_recorte --limite 5
+uv run python -m indexer.extrair resumo ../data/parsed/bb_fre_2026_recorte
+```
+
