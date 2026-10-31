@@ -1,0 +1,572 @@
+[
+ {
+  "semente": 1,
+  "regras": "antes de faixa, coluna e unidade",
+  "fatos": 30,
+  "corretos": 25,
+  "erros": [
+   {
+    "unidade": "f5e37f2d5744e989",
+    "posicao": 2,
+    "classe": "dimensao_perdida (região da coluna fora do fato)"
+   },
+   {
+    "unidade": "c18990d242b37e6b",
+    "posicao": 6,
+    "classe": "metrica_trocada (total no lugar da média)"
+   },
+   {
+    "unidade": "2d40d724ef2c9384",
+    "posicao": 5,
+    "classe": "faixa (extremo da projeção tomado como ponto)"
+   },
+   {
+    "unidade": "f462caafd4db5fca",
+    "posicao": 27,
+    "classe": "faixa (extremo do guidance tomado como ponto)"
+   },
+   {
+    "unidade": "b703538c0f619a21",
+    "posicao": 4,
+    "classe": "unidade (valor em R$ marcado como percent)"
+   }
+  ],
+  "itens": [
+   [
+    "34044d31a4f5c4d2",
+    59
+   ],
+   [
+    "15dbdffcc4761763",
+    30
+   ],
+   [
+    "f5e37f2d5744e989",
+    2
+   ],
+   [
+    "c18990d242b37e6b",
+    6
+   ],
+   [
+    "ab88e12d45579d85",
+    12
+   ],
+   [
+    "4c4da2fdffbc5972",
+    4
+   ],
+   [
+    "78227f8ede9b18f2",
+    8
+   ],
+   [
+    "34044d31a4f5c4d2",
+    36
+   ],
+   [
+    "2d40d724ef2c9384",
+    5
+   ],
+   [
+    "ab88e12d45579d85",
+    9
+   ],
+   [
+    "48d1880567992a70",
+    6
+   ],
+   [
+    "f462caafd4db5fca",
+    11
+   ],
+   [
+    "0354bd125da822a7",
+    3
+   ],
+   [
+    "b63a48edebe57af2",
+    20
+   ],
+   [
+    "ab88e12d45579d85",
+    37
+   ],
+   [
+    "5e69a213a071f99f",
+    19
+   ],
+   [
+    "34044d31a4f5c4d2",
+    2
+   ],
+   [
+    "f462caafd4db5fca",
+    27
+   ],
+   [
+    "2774ddc877708ba2",
+    1
+   ],
+   [
+    "567be303a9c8aba4",
+    31
+   ],
+   [
+    "2d9b9a2b929fc2ed",
+    16
+   ],
+   [
+    "4cc0a052233de3b0",
+    6
+   ],
+   [
+    "f1685eaf92e2aa76",
+    25
+   ],
+   [
+    "d78ba17b383e51bd",
+    30
+   ],
+   [
+    "ab88e12d45579d85",
+    10
+   ],
+   [
+    "ab88e12d45579d85",
+    15
+   ],
+   [
+    "923805392cfd8e61",
+    2
+   ],
+   [
+    "e37a49d6bc0473b7",
+    3
+   ],
+   [
+    "48d1880567992a70",
+    2
+   ],
+   [
+    "b703538c0f619a21",
+    4
+   ]
+  ]
+ },
+ {
+  "semente": 2,
+  "regras": "com faixa, coluna e unidade (percentual > 1.000)",
+  "fatos": 30,
+  "corretos": 28,
+  "erros": [
+   {
+    "unidade": "15dbdffcc4761763",
+    "posicao": 26,
+    "classe": "unidade (R$ bilhões marcado como percent em tabela 'R$ bilhões ou %')"
+   },
+   {
+    "unidade": "d78ba17b383e51bd",
+    "posicao": 22,
+    "classe": "unidade (R$ bilhões marcado como percent em tabela 'R$ bilhões ou %')"
+   }
+  ],
+  "itens": [
+   [
+    "7174c432f519217c",
+    2
+   ],
+   [
+    "77e7667fdde20dbb",
+    8
+   ],
+   [
+    "77e7667fdde20dbb",
+    1
+   ],
+   [
+    "4cc0a052233de3b0",
+    3
+   ],
+   [
+    "6cb303e5cf49ff84",
+    3
+   ],
+   [
+    "53392af490a808bb",
+    0
+   ],
+   [
+    "75934ba78d14fb87",
+    13
+   ],
+   [
+    "f2268f23bd9ab059",
+    5
+   ],
+   [
+    "79534e2120e322b2",
+    23
+   ],
+   [
+    "9dcaa8fbbc4a022f",
+    23
+   ],
+   [
+    "78227f8ede9b18f2",
+    4
+   ],
+   [
+    "fc9d96849908c1f5",
+    3
+   ],
+   [
+    "5e69a213a071f99f",
+    22
+   ],
+   [
+    "fc9d96849908c1f5",
+    5
+   ],
+   [
+    "94705764a438d386",
+    2
+   ],
+   [
+    "73bdff6117824c5e",
+    0
+   ],
+   [
+    "ab88e12d45579d85",
+    11
+   ],
+   [
+    "ff161e36f4cf0ddd",
+    24
+   ],
+   [
+    "e67df802b223e3db",
+    3
+   ],
+   [
+    "096ef4bee3b4f4e0",
+    3
+   ],
+   [
+    "f1685eaf92e2aa76",
+    11
+   ],
+   [
+    "3263783c0d6ba05d",
+    5
+   ],
+   [
+    "75934ba78d14fb87",
+    0
+   ],
+   [
+    "15dbdffcc4761763",
+    26
+   ],
+   [
+    "4cc0a052233de3b0",
+    14
+   ],
+   [
+    "d78ba17b383e51bd",
+    22
+   ],
+   [
+    "2d40d724ef2c9384",
+    1
+   ],
+   [
+    "15dbdffcc4761763",
+    19
+   ],
+   [
+    "0a009cc652b6df90",
+    6
+   ],
+   [
+    "2774ddc877708ba2",
+    0
+   ]
+  ]
+ },
+ {
+  "semente": 3,
+  "regras": "com a regra de unidade da tabela mista",
+  "fatos": 30,
+  "corretos": 28,
+  "erros": [
+   {
+    "unidade": "e37a49d6bc0473b7",
+    "posicao": 4,
+    "classe": "dimensao_perdida (Conselho de Administração gravado como entidade Banco)"
+   },
+   {
+    "unidade": "79534e2120e322b2",
+    "posicao": 14,
+    "classe": "metrica_generica ('Outros' sem a seção)"
+   }
+  ],
+  "itens": [
+   [
+    "bbe8ee9e4c0cc7e7",
+    23
+   ],
+   [
+    "e37a49d6bc0473b7",
+    4
+   ],
+   [
+    "12fe4349a8c12582",
+    10
+   ],
+   [
+    "34044d31a4f5c4d2",
+    55
+   ],
+   [
+    "4cc0a052233de3b0",
+    12
+   ],
+   [
+    "096ef4bee3b4f4e0",
+    4
+   ],
+   [
+    "15dbdffcc4761763",
+    10
+   ],
+   [
+    "79534e2120e322b2",
+    14
+   ],
+   [
+    "a7bbaf4f08762788",
+    3
+   ],
+   [
+    "bfdffa7726bbf9ec",
+    0
+   ],
+   [
+    "096ef4bee3b4f4e0",
+    6
+   ],
+   [
+    "a53dcccea3590ccc",
+    0
+   ],
+   [
+    "15dbdffcc4761763",
+    5
+   ],
+   [
+    "78227f8ede9b18f2",
+    12
+   ],
+   [
+    "73bdff6117824c5e",
+    5
+   ],
+   [
+    "bbe8ee9e4c0cc7e7",
+    19
+   ],
+   [
+    "5e69a213a071f99f",
+    1
+   ],
+   [
+    "2d9b9a2b929fc2ed",
+    15
+   ],
+   [
+    "15dbdffcc4761763",
+    6
+   ],
+   [
+    "12fe4349a8c12582",
+    6
+   ],
+   [
+    "73bdff6117824c5e",
+    3
+   ],
+   [
+    "15dbdffcc4761763",
+    12
+   ],
+   [
+    "f1685eaf92e2aa76",
+    15
+   ],
+   [
+    "ab88e12d45579d85",
+    4
+   ],
+   [
+    "ff161e36f4cf0ddd",
+    16
+   ],
+   [
+    "bbe8ee9e4c0cc7e7",
+    17
+   ],
+   [
+    "ab88e12d45579d85",
+    0
+   ],
+   [
+    "ff161e36f4cf0ddd",
+    17
+   ],
+   [
+    "3a1549b5e97541da",
+    0
+   ],
+   [
+    "f1685eaf92e2aa76",
+    8
+   ]
+  ]
+ },
+ {
+  "semente": 4,
+  "regras": "regras finais, menos a do ano da coluna de variação",
+  "fatos": 30,
+  "corretos": 29,
+  "erros": [
+   {
+    "unidade": "34044d31a4f5c4d2",
+    "posicao": 18,
+    "classe": "periodo_da_variacao (Var.% 24/23 gravada como 2023)"
+   }
+  ],
+  "itens": [
+   [
+    "bbe8ee9e4c0cc7e7",
+    21
+   ],
+   [
+    "9dcaa8fbbc4a022f",
+    10
+   ],
+   [
+    "34044d31a4f5c4d2",
+    15
+   ],
+   [
+    "567be303a9c8aba4",
+    3
+   ],
+   [
+    "f1685eaf92e2aa76",
+    15
+   ],
+   [
+    "15dbdffcc4761763",
+    19
+   ],
+   [
+    "ff161e36f4cf0ddd",
+    20
+   ],
+   [
+    "77e7667fdde20dbb",
+    7
+   ],
+   [
+    "bfdffa7726bbf9ec",
+    1
+   ],
+   [
+    "ec62518933af416e",
+    1
+   ],
+   [
+    "f1685eaf92e2aa76",
+    21
+   ],
+   [
+    "73bdff6117824c5e",
+    7
+   ],
+   [
+    "f58c602ee1d84794",
+    13
+   ],
+   [
+    "f2268f23bd9ab059",
+    9
+   ],
+   [
+    "4c4da2fdffbc5972",
+    0
+   ],
+   [
+    "bbe8ee9e4c0cc7e7",
+    7
+   ],
+   [
+    "3a1549b5e97541da",
+    1
+   ],
+   [
+    "12fe4349a8c12582",
+    6
+   ],
+   [
+    "4cc0a052233de3b0",
+    3
+   ],
+   [
+    "f58c602ee1d84794",
+    0
+   ],
+   [
+    "66e828105854433a",
+    4
+   ],
+   [
+    "53392af490a808bb",
+    4
+   ],
+   [
+    "34044d31a4f5c4d2",
+    18
+   ],
+   [
+    "0a009cc652b6df90",
+    0
+   ],
+   [
+    "5e69a213a071f99f",
+    24
+   ],
+   [
+    "f1f81a0336c71a16",
+    3
+   ],
+   [
+    "ab88e12d45579d85",
+    19
+   ],
+   [
+    "78227f8ede9b18f2",
+    13
+   ],
+   [
+    "0a009cc652b6df90",
+    10
+   ],
+   [
+    "5e69a213a071f99f",
+    3
+   ]
+  ]
+ }
+]

@@ -1,0 +1,46 @@
+{
+ "fatos": 1225,
+ "aceitos": 807,
+ "rejeitados": 418,
+ "taxa_de_rejeicao": 0.3412,
+ "por_motivo": {
+  "evidencia_fora_do_texto": 24,
+  "metrica_generica": 7,
+  "valor_ausente": 2,
+  "sinal": 66,
+  "faixa": 30,
+  "linha": 47,
+  "coluna": 90,
+  "unidade": 100,
+  "escala": 6,
+  "escala_sem_lastro": 46
+ },
+ "por_tipo": {
+  "pai": {
+   "fatos": 98,
+   "rejeitados": 38
+  },
+  "tabela": {
+   "fatos": 1127,
+   "rejeitados": 380
+  }
+ },
+ "por_unidade_do_fato": {
+  "basis_points": {
+   "fatos": 3,
+   "rejeitados": 3
+  },
+  "count": {
+   "fatos": 183,
+   "rejeitados": 33
+  },
+  "currency": {
+   "fatos": 687,
+   "rejeitados": 216
+  },
+  "percent": {
+   "fatos": 352,
+   "rejeitados": 166
+  }
+ }
+}

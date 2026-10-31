@@ -30,5 +30,6 @@ Uma decisão por arquivo: `ADR-NNN-assunto.md`. As nove decisões iniciais estã
 | [031](ADR-031-linha-de-base-v0.md) | Linha de base v0: escada A0 a A3r (de memória 0,22; vetor 0,50; híbrida 0,51; Pai + reranker 0,55; reescrita sem ganho) | F3.5 — aceita |
 | [032](ADR-032-esquemas-de-extracao.md) | Esquemas Pydantic da extração dirigida e o JSON Schema versionado em `contracts/` | F4.1 — aceita |
 | [033](ADR-033-extracao-por-pai-e-por-tabela.md) | Extração dirigida a esquema por Pai e por Tabela (164 de 164 válidas; a gramática não impõe `pattern`) | F4.2 — aceita |
+| [034](ADR-034-lastro-numerico.md) | Lastro numérico dos fatos (34% rejeitados no recorte; 29 de 30 auditados corretos; só o número não basta) | F4.3 — aceita |
 
 Modelo em [`ADR-000-modelo.md`](ADR-000-modelo.md).

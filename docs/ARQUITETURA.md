@@ -260,7 +260,7 @@ Demais esquemas: `Organization` (com papel na relação: emissor, subsidiária, 
 
 **Guardas:**
 
-1. **Lastro numérico** — um fato só é aceito se o valor, normalizado, aparece no trecho `evidence`, e se `evidence` existe no texto do Pai ou da Tabela. Fato sem lastro é descartado e registrado.
+1. **Lastro numérico** — um fato só é aceito se o valor, normalizado, aparece no trecho `evidence`, e se `evidence` existe no texto do Pai ou da Tabela. Fato sem lastro é descartado e registrado. Medido na F4.3 ([ADR-034](./adr/ADR-034-lastro-numerico.md)), só isso não basta: os erros que sobravam eram o número certo no lugar errado. O lastro confere também a linha da tabela (rótulo), a coluna (ano do período e dimensão), faixas, sinal, escala e unidade, e rejeitou 34% dos fatos do recorte.
 2. **Validação Pydantic** + uma retentativa com a mensagem de erro anexada, e ajustes determinísticos e contados no que o texto já determina (`period_type` pelo `period`; `unit` e `currency` pelo símbolo R$ ou US$ da evidência).
 3. **IDs determinísticos** (hash de documento + página + métrica + período + entidade): reimportar não duplica nada.
 

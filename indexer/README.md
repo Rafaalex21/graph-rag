@@ -155,3 +155,9 @@ uv run python -m indexer.extrair executar ../data/parsed/bb_fre_2026_recorte --l
 uv run python -m indexer.extrair resumo ../data/parsed/bb_fre_2026_recorte
 ```
 
+Lastro numérico dos fatos (F4.3, ADR-034); não usa LLM nem serviço. Confere cada fato contra o texto enviado e grava `data/parsed/<prefixo>.fatos.json` (fora do git), com o motivo de cada rejeição; `--amostra K --semente N` sorteia K fatos aceitos para auditar em `data/parsed/auditoria/` (fora do git):
+
+```powershell
+uv run python -m indexer.lastro ../data/parsed/bb_fre_2026_recorte
+uv run python -m indexer.lastro ../data/parsed/bb_fre_2026_recorte --amostra 30 --semente 4
+```

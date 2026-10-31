@@ -177,8 +177,10 @@
   - resultado: ADR-033; 164 de 164 unidades (102 Pais + 62 Tabelas do recorte) com JSON válido, 142 na primeira chamada; nova execução com cache: 0 chamadas; 1.225 fatos, 139 organizações, 15 pessoas, 12 segmentos, 9 riscos, 5 instrumentos, 0 eventos; contrato `extraction.schema.json` 1.1.2 (`scale` obrigatório, teto de 60 fatos)
   - nota: a gramática do llama-server não impõe `pattern` e o modelo erra `period_type` (80%) e `unit`: ajustes determinísticos contados (ARQUITETURA §5 I-5 corrigida); válido não é correto (F4.3); zero eventos é suspeito; ~8 h projetadas para o documento inteiro, contra 1,1 h da §5.2
   - depende: F4.1, F2.1
-- [ ] **F4.3** Lastro numérico: rejeitar fatos cujo valor normalizado não aparece na evidência
+- [x] **F4.3** Lastro numérico: rejeitar fatos cujo valor normalizado não aparece na evidência
   - aceite: taxa de rejeição registrada; 30 fatos aceitos auditados com ≥ 95% corretos
+  - resultado: ADR-034; 418 de 1.225 fatos rejeitados (34,1%), 807 aceitos; auditoria em 4 rodadas de 30 aceitos (83%, 93%, 93%, **96,7%** = 29 de 30 na amostra final, nova)
+  - nota: o número certo no lugar errado era o erro dominante (só 2 fatos falharam em "valor ausente"), então o lastro confere também linha, coluna, faixa, sinal, escala e unidade (ARQUITETURA §5 I-5 corrigida); a auditoria foi feita por mim, não por uma pessoa; escala da tabela de risco de mercado (p. 157) não declarada no texto: confirmar no PDF antes da F4.4
   - depende: F4.2, F1.7
 - [ ] **F4.4** Importar com MERGE e IDs determinísticos
   - aceite: importar duas vezes não altera nenhuma contagem
