@@ -35,6 +35,8 @@ from collections.abc import Callable
 from pathlib import Path
 from typing import Any
 
+from indexer.degraus import DEGRAUS
+
 MODELO_JUIZ = "gemma4-26b-a4b-juiz"
 PONTUACAO = {"correta": 1.0, "parcial": 0.5, "incorreta": 0.0}
 METRICAS = ("recall_contexto", "fidelidade", "correcao")
@@ -266,8 +268,10 @@ def gerar(casos: list[dict], sistema: Sistema, saida: Path) -> list[dict]:
     return resultado
 
 
-def julgar(casos: list[dict], respostas: list[dict], juiz: Juiz, saida: Path) -> list[dict]:
-    """Aplica as três métricas e grava cada nota assim que sai (`juizo.jsonl`); retoma de onde parou."""
+def julgar(
+    casos: list[dict], respostas: list[dict], juiz: Juiz, saida: Path, metricas: tuple[str, ...] = METRICAS
+) -> list[dict]:
+    """Aplica as métricas pedidas (padrão: as três), gravando cada nota em `juizo.jsonl`; retomável."""
     saida.mkdir(parents=True, exist_ok=True)
     arq = saida / "juizo.jsonl"
     prontos: dict[tuple[str, str], dict] = {}
@@ -279,7 +283,7 @@ def julgar(casos: list[dict], respostas: list[dict], juiz: Juiz, saida: Path) ->
     with arq.open("a", encoding="utf-8") as f:
         for c in casos:
             r = por_id[c["id"]]
-            for metrica in METRICAS:
+            for metrica in metricas:
                 if (c["id"], metrica) in prontos:
                     continue
                 if r["erro"]:
@@ -330,12 +334,15 @@ def agregar(casos: list[dict], notas: list[dict]) -> dict:
     }
 
 
-def montar_relatorio(nome: str, casos: list[dict], respostas: list[dict], notas: list[dict]) -> dict:
+def montar_relatorio(
+    nome: str, casos: list[dict], respostas: list[dict], notas: list[dict], degrau: str | None = None
+) -> dict:
     """O relatório único da execução: métricas do juiz (F3.2) e métricas mecânicas (F3.3) lado a lado."""
     from indexer.metricas import calcular, concordancia_numerica_com_o_juiz
 
     resumo = agregar(casos, notas)
     resumo["nome"] = nome
+    resumo["degrau"] = degrau
     resumo["erros_do_sistema"] = sum(1 for r in respostas if r["erro"])
     mec = calcular(casos, respostas)
     resumo.update(mecanicas=mec["mecanicas"])
@@ -373,6 +380,8 @@ def main() -> None:
     ap.add_argument("--so-recorte", action="store_true", help="só as perguntas com no_recorte = sim")
     ap.add_argument("--limite", type=int, help="só as N primeiras (teste rápido)")
     ap.add_argument("--modo", default="hibrido-rrf")
+    ap.add_argument("--degrau", choices=DEGRAUS, default="a3", help="degrau da escada de ablações (F3.5)")
+    ap.add_argument("--metricas", nargs="+", choices=METRICAS, help="padrão: as três (no a0, só a correção)")
     ap.add_argument("--swap", default="http://127.0.0.1:8080")
     ap.add_argument("--raiz", type=Path, default=Path(".."))
     ap.add_argument("--banco", default="neo4j")
@@ -393,6 +402,7 @@ def main() -> None:
         casos = [c for c in casos if c["id"] in {r["id"] for r in respostas}]
     else:
         from indexer.ask import chat_llama
+        from indexer.degraus import sistema_a0, sistema_a3, sistema_filhos
         from indexer.embeddings import MODELO_CONSULTA, embutidor_llama
         from indexer.grafo import conectar
         from indexer.reranker import reranqueador_llama
@@ -400,14 +410,24 @@ def main() -> None:
         driver = conectar(a.raiz)
         try:
             embute = embutidor_llama(a.swap, MODELO_CONSULTA)
-            sistema = sistema_ask(
-                driver, embute, reranqueador_llama(a.swap), chat_llama(a.swap), modo=a.modo, banco=a.banco
-            )
+            chat = chat_llama(a.swap)
+            if a.degrau == "a0":
+                sistema = sistema_a0(chat)
+            elif a.degrau in ("a1", "a2"):
+                modo = "vetor" if a.degrau == "a1" else "hibrido-rrf"
+                sistema = sistema_filhos(driver, embute, chat, modo, banco=a.banco)
+            else:
+                sistema = sistema_a3(
+                    driver, embute, reranqueador_llama(a.swap), chat, a.swap, a.degrau == "a3r", a.banco
+                )
+            if not (pasta / "respostas.jsonl").exists():
+                sistema(casos[0])  # aquece os modelos do llama-swap: a latência não inclui a carga fria
             respostas = gerar(casos, sistema, pasta)
         finally:
             driver.close()
-        notas = julgar(casos, respostas, juiz_llama(a.swap), pasta)
-    resumo = montar_relatorio(a.nome, casos, respostas, notas)
+        metricas = tuple(a.metricas or (("correcao",) if a.degrau == "a0" else METRICAS))
+        notas = julgar(casos, respostas, juiz_llama(a.swap), pasta, metricas)
+    resumo = montar_relatorio(a.nome, casos, respostas, notas, a.degrau)
     destino = a.raiz / "eval" / "resultados" / f"{a.nome}.json"
     destino.parent.mkdir(parents=True, exist_ok=True)
     destino.write_text(json.dumps(resumo, ensure_ascii=False, indent=1), encoding="utf-8")

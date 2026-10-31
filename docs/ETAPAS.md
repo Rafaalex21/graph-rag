@@ -155,10 +155,11 @@
   - resultado: ADR-030; concordância de 95% (19 de 20; kappa 0,83) na correção, com planilha cega de 20 respostas estratificadas; única divergência: N01 ("R$ 16,8 bilhões" para R$ 16.782 milhões, arredondamento)
   - depende: F3.2
   - nota: os 20 rótulos foram dados pelo Claude a pedido, não por uma pessoa (ressalva no ADR): conferência humana recomendada; a classe `parcial` não foi exercitada; só a correção foi calibrada, não a fidelidade
-- [ ] **F3.5** Rodar A0, A1, A2 e A3 e publicar a tabela
+- [x] **F3.5** Rodar A0, A1, A2 e A3 e publicar a tabela
   - aceite: `eval/resultados/v0.md` com as quatro linhas e as métricas da §13.2
+  - resultado: ADR-031; correção no recorte (54 perguntas): A0 0,22; A1 0,50; A2 0,51; A3 0,55; a reescrita (A3r) empata com A3 e dobra a latência; fidelidade 1,00 e zero citações inválidas em todos; agregação 0,00 e numérica 0,20 em todos os degraus com contexto
   - depende: F2.9, F3.3
-  - nota: as métricas valem só para as perguntas com `no_recorte` = sim; a avaliação sobre o documento inteiro vem na F9.1
+  - nota: as métricas valem só para as perguntas com `no_recorte` = sim; a avaliação sobre o documento inteiro vem na F9.1; diferenças de 0,02 a 0,04 entre A1, A2 e A3 são 2 a 4 perguntas de 54, só A0 → A1 e o multi-hop do A3 estão claramente acima do ruído; o arredondamento do N01 segue em aberto
 
 ## F4 · Grafo de domínio
 > objetivo: Transformar o texto em fatos consultáveis — filtrar, somar e comparar exige estrutura, não similaridade.

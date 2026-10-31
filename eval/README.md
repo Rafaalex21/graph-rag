@@ -10,6 +10,7 @@ Avaliação do GraphRAG (ARQUITETURA §13, fase F3). Tudo aqui mede contra o **F
 | `perguntas_latencia.txt` | 20 perguntas sem gabarito, só para medir latência (F2.5) |
 | `calibracao_juiz.csv` | Os 20 rótulos de correção da F3.4 (`c`/`p`/`i`) e quem os deu; a planilha de leitura fica em `data/avaliacao/` |
 | `resultados/` | Um relatório por execução (`<nome>.json`, sem texto do documento): métricas do juiz (F3.2), page recall@k, acerto numérico e latência (F3.3), no geral, no recorte e por categoria, e a nota de cada pergunta |
+| `resultados/v0.md` | A tabela da escada de ablações A0 a A3r (F3.5, ADR-031), só nas perguntas com `no_recorte` = sim; gerada por `python -m indexer.tabela` |
 
 ## Colunas do `golden.csv`
 

@@ -131,3 +131,12 @@ Calibração do juiz (F3.4, ADR-030), sem LLM: gera a planilha de 20 respostas p
 uv run python -m indexer.calibrar planilha --nome f3-2-a3-60
 uv run python -m indexer.calibrar concordancia --nome f3-2-a3-60
 ```
+
+Escada de ablações (F3.5, ADR-031): `--degrau` troca o sistema avaliado (`a0` de memória, `a1` vetor, `a2` híbrida, `a3` pipeline do `ask`, `a3r` com step-back e HyDE) e `indexer.tabela` junta os relatórios em `eval/resultados/v0.md`, sem LLM. A rodada completa leva cerca de 3 h na GPU:
+
+```powershell
+uv run python -m indexer.avaliar executar --nome v0-a1 --degrau a1
+uv run python -m indexer.avaliar executar --nome v0-a3r --degrau a3r
+uv run python -m indexer.tabela
+```
+
