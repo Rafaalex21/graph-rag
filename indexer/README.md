@@ -161,3 +161,10 @@ Lastro numérico dos fatos (F4.3, ADR-034); não usa LLM nem serviço. Confere c
 uv run python -m indexer.lastro ../data/parsed/bb_fre_2026_recorte
 uv run python -m indexer.lastro ../data/parsed/bb_fre_2026_recorte --amostra 30 --semente 4
 ```
+
+Importação dos fatos aceitos e das entidades no Neo4j, com `MERGE` e IDs determinísticos (F4.4, ADR-035); não usa LLM, mas precisa do Neo4j no ar (`infra\neo4j.ps1 iniciar`). `executar` importa e conta; `verificar` importa duas vezes e compara contagens e impressão digital (só adiciona nós, nunca apaga):
+
+```powershell
+uv run python -m indexer.importar executar ../data/parsed/bb_fre_2026_recorte --doc-id bb-fre-2026-v7
+uv run python -m indexer.importar verificar ../data/parsed/bb_fre_2026_recorte --doc-id bb-fre-2026-v7
+```

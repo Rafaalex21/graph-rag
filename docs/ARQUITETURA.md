@@ -262,7 +262,7 @@ Demais esquemas: `Organization` (com papel na relação: emissor, subsidiária, 
 
 1. **Lastro numérico** — um fato só é aceito se o valor, normalizado, aparece no trecho `evidence`, e se `evidence` existe no texto do Pai ou da Tabela. Fato sem lastro é descartado e registrado. Medido na F4.3 ([ADR-034](./adr/ADR-034-lastro-numerico.md)), só isso não basta: os erros que sobravam eram o número certo no lugar errado. O lastro confere também a linha da tabela (rótulo), a coluna (ano do período e dimensão), faixas, sinal, escala e unidade, e rejeitou 34% dos fatos do recorte.
 2. **Validação Pydantic** + uma retentativa com a mensagem de erro anexada, e ajustes determinísticos e contados no que o texto já determina (`period_type` pelo `period`; `unit` e `currency` pelo símbolo R$ ou US$ da evidência).
-3. **IDs determinísticos** (hash de documento + página + métrica + período + entidade): reimportar não duplica nada.
+3. **IDs determinísticos**: reimportar não duplica nada. Medido na F4.4 ([ADR-035](./adr/ADR-035-importacao-idempotente.md)), a chave "documento + página + métrica + período + entidade" funde fatos diferentes (46 dos 807 aceitos do recorte). O id do fato é o hash de documento + unidade de origem (Pai ou Tabela) + métrica + período + entidade + segmento + valor + evidência; escala e unidade ficam fora, para que corrigi-las atualize o nó. O id de uma entidade é o hash do tipo e do nome normalizado.
 
 ### I-6 · Extração aberta (MS GraphRAG, cap. 7)
 
@@ -381,7 +381,7 @@ Todo nó de domínio (`Organization`, `Person`, `Segment`, `RiskFactor`, `Event`
 | `Child` | `id`, `text` (já com o prefixo do caminho da seção; é o que se embute e se indexa no full-text), `tokens`, `pageStart`, `pageEnd`, `ordinal`, `embedding`, `embeddingModel`, `embeddingDims` (F2.3) |
 | `Table` | `id`, `ref`, `markdown`, `page`, `pageStart`, `pageEnd`, `rows`, `cols`, `description`, `scale`, `currency`, `notes` |
 | `HypotheticalQuestion` | `id`, `text`, `ordinal`, `embedding` (relação `Table -[:HAS_QUESTION]-> HypotheticalQuestion`) |
-| `FinancialFact` | `id`, `metric`, `value`, `unit`, `currency`, `scale`, `period`, `periodType`, `evidence`, `page` |
+| `FinancialFact` | `id`, `metric`, `value`, `unit`, `currency`, `scale`, `period`, `periodType`, `entity`, `segment`, `evidence`, `page`, `pageEnd`, `documentId`, `unitDeclared` (`false` quando o texto não declara a unidade monetária; ADR-034 e ADR-035) |
 | `Metric` | `name` (canônico), `aliases`, `definition` |
 | `Period` | `id` (ex.: `2025-FY`, `2025-Q4`), `start`, `end` |
 | `__Entity__` | `id`, `name`, `type`, `aliases`, `description` (lista), `summary`, `embedding` |

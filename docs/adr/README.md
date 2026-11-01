@@ -31,5 +31,6 @@ Uma decisão por arquivo: `ADR-NNN-assunto.md`. As nove decisões iniciais estã
 | [032](ADR-032-esquemas-de-extracao.md) | Esquemas Pydantic da extração dirigida e o JSON Schema versionado em `contracts/` | F4.1 — aceita |
 | [033](ADR-033-extracao-por-pai-e-por-tabela.md) | Extração dirigida a esquema por Pai e por Tabela (164 de 164 válidas; a gramática não impõe `pattern`) | F4.2 — aceita |
 | [034](ADR-034-lastro-numerico.md) | Lastro numérico dos fatos (34% rejeitados no recorte; 29 de 30 auditados corretos; só o número não basta) | F4.3 — aceita |
+| [035](ADR-035-importacao-idempotente.md) | Importação idempotente da extração dirigida (a chave de ID da §5 fundia 46 fatos; 803 fatos e 106 entidades, duas importações iguais) | F4.4 — aceita |
 
 Modelo em [`ADR-000-modelo.md`](ADR-000-modelo.md).
