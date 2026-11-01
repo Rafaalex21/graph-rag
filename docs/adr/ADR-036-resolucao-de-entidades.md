@@ -1,6 +1,6 @@
 # ADR-036 · Resolução de entidades
 
-- **Estado:** proposta (01/11/2026): o código funciona e o grafo está resolvido, mas o aceite da F4.5 não foi atingido (ver abaixo); a tarefa segue `[~]`
+- **Estado:** aceita (01/11/2026), com o critério da F4.5 ajustado: as 12 fusões possíveis no recorte foram auditadas (12 de 12 na leitura aceita, 9 de 12 na estrita) e as 20 fusões ficam para a F5.8 (ver "Fechamento")
 - **Data:** 2026-11-01
 - **Tarefa(s):** F4.5
 
@@ -94,10 +94,14 @@ Audite as 12 absorções lendo o trecho do documento onde cada nome aparece. "Co
 
 **Corretas ou prováveis: 9 de 12 (75%).** Os 3 últimos só contam como corretos se "órgãos de um mesmo ministério, que o documento identifica pelo CNPJ do ministério" forem a mesma entidade; nessa leitura são 12 de 12. Duas leituras honestas, e o aceite (≥ 90%) passa numa e falha na outra.
 
+## Fechamento
+
+Em 01/11/2026 o Rafael decidiu: (1) órgãos do Ministério da Fazenda que o documento lista com o CNPJ do ministério contam como a mesma entidade, então as 12 fusões são corretas; (2) a F4.5 fecha com as 12 fusões possíveis no recorte. A conferência das 12 foi refeita contra o plano e o texto do documento: os 13 pares aceitos pelo LLM (7 grupos de 2 nós, 1 de 3 com 2 pares e 1 de 4 com 4 pares) formam exatamente os 9 grupos e as 12 absorções da tabela acima. Para o comitê, o trecho do documento tem o nome completo com a sigla CEPI e, mais adiante, a forma curta "Comitê de Prevenção à Ilícitos", sem outro comitê com esse escopo no recorte. Na justificativa de alguns "sim" o LLM deixou caracteres estranhos (CJK) no meio do texto; a decisão `true/false` não é afetada, mas o texto não deve ser citado como está. O critério de 20 fusões auditadas vira medição da F5.8.
+
 ## Consequências e ressalvas
 
-- **O aceite não foi atingido e a F4.5 continua `[~]`.** O critério pede 20 fusões; o recorte tem 12 absorções. Não dá para chegar a 20 aqui sem inventar duplicatas. Medir em 20 fusões exige a extração do documento inteiro (F5.8, ~8 h estimadas).
-- **A auditoria é minha, não de uma pessoa**, e a referência também foi escrita por mim. Vale uma conferência humana das 12 fusões, principalmente da família Ministério da Fazenda e do comitê.
+- **O recorte tem 12 absorções, não 20.** Não dá para chegar a 20 aqui sem inventar duplicatas; medir em 20 fusões exige a extração do documento inteiro (F5.8, ~8 h estimadas).
+- **A auditoria é minha, não de uma pessoa**, e a referência também foi escrita por mim. O Rafael aceitou o resultado, mas uma conferência humana independente da família Ministério da Fazenda e do comitê continua desejável.
 - **A correção da chave forte foi feita depois de ver a auditoria.** Os números acima são de depois dela; os de antes eram os mesmos (9 de 12), porque o LLM chegou à mesma fusão.
 - **O LLM é o árbitro, e erra para os dois lados.** Funde órgão com ministério quando o CNPJ é igual e recusa cargo × unidade. Os 21 "não" não foram auditados: a taxa de falsos negativos medida é só a da referência (3 fusões perdidas em 11).
 - **Lixo de extração continua no grafo.** Há pessoas chamadas "N/A", "null", "Desconhecido", "Membro Titular", um nome vazio e uma pessoa chamada "Ministério da Fazenda". A resolução as ignora (nome inválido) mas não as remove; isso é problema da extração (F4.2) ou de uma limpeza própria.
