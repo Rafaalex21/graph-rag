@@ -1,0 +1,19 @@
+# Atualizações semanais; as de segurança chegam à parte, pelos alertas do Dependabot.
+version: 2
+updates:
+  - package-ecosystem: github-actions
+    directory: /
+    schedule:
+      interval: weekly
+  - package-ecosystem: uv
+    directory: /indexer
+    schedule:
+      interval: weekly
+  - package-ecosystem: npm
+    directory: /api
+    schedule:
+      interval: weekly
+  - package-ecosystem: npm
+    directory: /web
+    schedule:
+      interval: weekly

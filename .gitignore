@@ -10,6 +10,33 @@ infra/neo4j/
 .env
 .env.*
 !.env.example
+*.pem
+*.key
+*.p12
+*.pfx
+*.jks
+id_rsa*
+id_ed25519*
+*credentials*.json
+*service-account*.json
+kubeconfig*
+.aws/
+.ssh/
+
+# configurações locais de ferramentas (podem guardar tokens)
+.claude/settings.local.json
+.mcp.json
+opencode.json
+
+# bases e despejos locais, pesos que executam código ao carregar, logs
+*.sqlite
+*.sqlite3
+*.db
+*.pkl
+*.pickle
+*.pt
+*.pth
+*.log
 
 # Python
 .venv/
