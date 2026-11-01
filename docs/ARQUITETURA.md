@@ -369,7 +369,7 @@ flowchart LR
   E -->|MENTIONED_IN| P
 ```
 
-Todo nó de domínio (`Organization`, `Person`, `Segment`, `RiskFactor`, `Event`, `Instrument`, `Metric`) recebe também o rótulo `__Entity__` com a propriedade `type`. Assim, a extração aberta (I-6) e a dirigida (I-5) convergem nos mesmos nós depois da resolução, e a busca local alcança os fatos estruturados.
+Todo nó de domínio (`Organization`, `Person`, `Segment`, `RiskFactor`, `Event`, `Instrument`) recebe também o rótulo `__Entity__` com a propriedade `type`. `Metric` fica de fora até a F5: o catálogo é fechado, tem a própria chave (`metric:<id>`) e entraria na resolução de entidades (F4.5) e nas contagens sem ser uma entidade extraída (ADR-037). Assim, a extração aberta (I-6) e a dirigida (I-5) convergem nos mesmos nós depois da resolução, e a busca local alcança os fatos estruturados.
 
 ### 6.2 Propriedades principais
 
@@ -382,7 +382,8 @@ Todo nó de domínio (`Organization`, `Person`, `Segment`, `RiskFactor`, `Event`
 | `Table` | `id`, `ref`, `markdown`, `page`, `pageStart`, `pageEnd`, `rows`, `cols`, `description`, `scale`, `currency`, `notes` |
 | `HypotheticalQuestion` | `id`, `text`, `ordinal`, `embedding` (relação `Table -[:HAS_QUESTION]-> HypotheticalQuestion`) |
 | `FinancialFact` | `id`, `metric`, `value`, `unit`, `currency`, `scale`, `period`, `periodType`, `entity`, `segment`, `evidence`, `page`, `pageEnd`, `documentId`, `unitDeclared` (`false` quando o texto não declara a unidade monetária; ADR-034 e ADR-035) |
-| `Metric` | `name` (canônico), `aliases`, `definition` |
+| `Metric` | `id` (`metric:<id>`), `name` (canônico, em inglês), `namePt`, `kind` (`monetary`, `percent`, `ratio`, `count`, `price`), `aliases` (PT e EN), `definition`; o catálogo vive em `contracts/metricas.json` (F4.6, ADR-037) |
+| `OF_METRIC` (relação `FinancialFact → Metric`) | `qualifier` (`nenhum`, `variacao_percentual`, `variacao_absoluta`, `percentual_do_total`) e `dimension` (o recorte do rótulo: região, prazo, componente; nulo no total) |
 | `Period` | `id` (ex.: `2025-FY`, `2025-Q4`), `start`, `end` |
 | `__Entity__` | `id`, `name`, `type`, `aliases`, `aliasesText`, `roles`, `absorbedIds` (ids fundidos na resolução), `description` (lista), `summary`, `embedding` |
 | `__Community__` | `id`, `level`, `title`, `summary`, `rating`, `rank`, `embedding` |
@@ -489,7 +490,7 @@ sequenceDiagram
 ### 7.3 Text2Cypher com guarda-corpos
 
 - **Prompt** com as quatro seções do cap. 4: esquema (inferido via APOC e amostrado), mapeamento terminológico, exemplos *few-shot* e instruções de formato ("SOMENTE CYPHER, SEM BLOCOS DE CÓDIGO").
-- **Mapeamento terminológico bilíngue** — "faturamento", "receita" e "revenue" → `Metric {name: 'Net revenue'}`; "4T25" → `Period {id: '2025-Q4'}`; "lucro" → `Net income`.
+- **Mapeamento terminológico bilíngue** — "faturamento", "receita" e "revenue" → `Metric {name: 'Net revenue'}`; "4T25" → `Period {id: '2025-Q4'}`; "lucro" → `Net income`. Os termos de métricas vêm de `contracts/metricas.json` (nome, nome em português e aliases; `python -m indexer.catalogo termo <texto>`); o prompt os recebe do mesmo arquivo, não de uma cópia. Os períodos ("4T25") ainda não têm tabela: ficam para a F6.
 - **Exemplos *few-shot*** em `api/prompts/cypher-examples.yaml`, crescendo a partir das falhas da avaliação — o ciclo que o livro descreve nos caps. 4 e 8.
 - **Execução segura:** sessão `READ`; recusa de `CREATE|MERGE|DELETE|SET|REMOVE|DROP|LOAD CSV` e de procedimentos de escrita; `EXPLAIN` antes de executar; `LIMIT 100` injetado quando ausente; tempo-limite de 5 s; uma tentativa de autocorreção com a mensagem de erro.
 - **Especialista opcional:** `neo4j/text-to-cypher-Gemma-3-4B-Instruct-2025.04.0`, comparado ao LLM principal na F6.

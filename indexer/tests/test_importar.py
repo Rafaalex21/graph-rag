@@ -3,6 +3,8 @@ import pytest
 from indexer.importar import (
     NOS,
     PASSOS,
+    VINCULOS_DE_METRICA_FORA_DO_PLANO,
+    carregar,
     id_da_entidade,
     id_do_fato,
     limites_do_periodo,
@@ -51,6 +53,41 @@ def unidade(id_="u1", tipo="tabela", valida=True, **listas):
 
 
 PEDIDOS = {"u1": TABELA_EM_MILHOES, "u2": TABELA_SEM_UNIDADE, "p1": "Trecho de texto."}
+
+
+class DriverFalso:
+    def __init__(self):
+        self.chamadas = []
+
+    def execute_query(self, cypher, parametros=None, database_=None):
+        self.chamadas.append((cypher, parametros))
+
+
+def _linhas_vazias():
+    return {chave: [] for chave, _ in PASSOS}
+
+
+def test_carregar_remove_vinculos_de_metrica_que_o_plano_nao_tem_mais():
+    linhas = _linhas_vazias()
+    linhas["metricas"] = [{"id": "metric:a", "props": {"id": "metric:a"}}]
+    linhas["of_metric"] = [{"de": "fact:1", "para": "metric:a", "qualifier": "nenhum", "dimension": None}]
+    driver = DriverFalso()
+    carregar(driver, linhas)
+    ultima = driver.chamadas[-1]
+    assert ultima[0] == VINCULOS_DE_METRICA_FORA_DO_PLANO
+    assert ultima[1] == {"chaves": ["fact:1|metric:a"]}
+
+
+def test_carregar_sem_metricas_no_plano_nao_apaga_vinculo_nenhum():
+    driver = DriverFalso()
+    carregar(driver, _linhas_vazias())
+    assert all(c[0] != VINCULOS_DE_METRICA_FORA_DO_PLANO for c in driver.chamadas)
+
+
+def test_a_remocao_so_toca_em_vinculos_of_metric():
+    assert VINCULOS_DE_METRICA_FORA_DO_PLANO.count("DELETE") == 1
+    assert "[x:OF_METRIC]" in VINCULOS_DE_METRICA_FORA_DO_PLANO
+    assert "DETACH" not in VINCULOS_DE_METRICA_FORA_DO_PLANO
 
 
 def test_normalizar_tira_caixa_acento_e_pontuacao():

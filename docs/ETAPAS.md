@@ -192,8 +192,10 @@
   - resultado: ADR-036; `indexer.resolver planejar|aplicar` aplicado ao recorte: 106 → 94 entidades (12 absorvidas em 9 grupos), aliases preservados (0 grafias perdidas), 803 fatos e todas as relações intactas, reimportar não muda nada
   - nota: **aceite atendido com o critério ajustado (decisão do Rafael em 01/11/2026).** O recorte só tem 12 absorções (< 20): as 12 foram auditadas, 12 de 12 corretas se órgãos do Ministério da Fazenda com o mesmo CNPJ contarem como a mesma entidade (9 de 12, 75%, na leitura estrita), e o Rafael aceitou a primeira leitura. As 20 fusões ficam como medição da F5.8 (documento inteiro). O embedding a 0,92 pega 1 de 14 duplicatas conhecidas, então a ARQUITETURA §5 I-7 foi corrigida (embedding só gera candidatos). Ressalva: a auditoria e a referência são do Claude, não de uma pessoa
   - depende: F4.4
-- [ ] **F4.6** Catálogo de métricas canônicas (`Metric`) e mapeamento terminológico PT↔EN
+- [x] **F4.6** Catálogo de métricas canônicas (`Metric`) e mapeamento terminológico PT↔EN
   - aceite: ≥ 95% dos fatos ligados a uma métrica canônica
+  - resultado: ADR-037; `contracts/metricas.json` (97 métricas, aliases PT/EN e componentes) e `indexer.catalogo validar|termo|mapear|medir`; no grafo, 800 dos 803 fatos têm `OF_METRIC` (99,6%), 97 nós `Metric`, duas importações com a mesma impressão digital e as 94 entidades intactas
+  - nota: a cobertura saiu de 86,1% (v1) para 93,8% (v2) e 99,6% (v3) depois de eu ajustar o contexto dado ao LLM olhando as falhas, no mesmo conjunto em que se mede, e o catálogo foi escrito lendo esses 400 rótulos: o número é otimista. Pela leitura completa dos rótulos, 17 fatos (≈ 2%) estão sob métrica errada; a auditoria é minha, não de uma pessoa. A cobertura de verdade se mede na extração do documento inteiro (F5.8). Guidance em % saiu com `qualifier = nenhum`
   - depende: F4.4
 
 ## F5 · Camada MS GraphRAG

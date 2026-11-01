@@ -169,6 +169,16 @@ uv run python -m indexer.importar executar ../data/parsed/bb_fre_2026_recorte --
 uv run python -m indexer.importar verificar ../data/parsed/bb_fre_2026_recorte --doc-id bb-fre-2026-v7
 ```
 
+Catálogo de métricas canônicas (F4.6, ADR-037); `validar` e `termo` não usam serviço. `mapear` liga os rótulos das métricas dos fatos ao catálogo `contracts/metricas.json` (termo exato sem LLM, o resto pelo Qwen3.6 no perfil `indexar`; retomável, cache em `data/parsed/metricas_cache/`) e grava `data/parsed/<prefixo>.metricas.json` (fora do git), que o importador lê sozinho para criar os nós `Metric` e o `OF_METRIC`. `medir` conta os fatos ligados no Neo4j:
+
+```powershell
+uv run python -m indexer.catalogo validar
+uv run python -m indexer.catalogo termo faturamento
+uv run python -m indexer.catalogo mapear ../data/parsed/bb_fre_2026_recorte
+uv run python -m indexer.importar executar ../data/parsed/bb_fre_2026_recorte --doc-id bb-fre-2026-v7
+uv run python -m indexer.catalogo medir ../data/parsed/bb_fre_2026_recorte --doc-id bb-fre-2026-v7
+```
+
 Resolução de entidades (F4.5, ADR-036); precisa do Neo4j e do llama-swap (perfis `vetorizar` e `indexar`). `planejar` reconstrói o grafo sem fusões, gera candidatos, pergunta ao LLM e grava `data/parsed/<prefixo>.resolucao.json` (fora do git; cache em `data/parsed/resolucao_cache/`). `aplicar` funde com `apoc.refactor.mergeNodes` (sem LLM) e confere que reimportar não muda nada. O importador lê o plano sozinho, então reimportar não recria os nós fundidos:
 
 ```powershell

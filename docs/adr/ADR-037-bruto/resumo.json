@@ -1,0 +1,88 @@
+{
+ "comandos": [
+  "uv run python -m indexer.catalogo validar",
+  "uv run python -m indexer.catalogo mapear ../data/parsed/bb_fre_2026_recorte",
+  "uv run python -m indexer.importar verificar ../data/parsed/bb_fre_2026_recorte --doc-id bb-fre-2026-v7",
+  "uv run python -m indexer.catalogo medir ../data/parsed/bb_fre_2026_recorte --doc-id bb-fre-2026-v7"
+ ],
+ "catalogo": {
+  "metricas": 97,
+  "com_componentes": 13,
+  "aliases": 221,
+  "componentes": 26
+ },
+ "iteracoes_do_mapeamento": [
+  {
+   "versao": "v1",
+   "entrada": "rótulo, unidades, páginas e 2 evidências",
+   "fatos_ligados": 695,
+   "fatos": 807,
+   "fracao": 0.8612
+  },
+  {
+   "versao": "v2",
+   "entrada": "v1 + seção do documento + regras de qualificador e de risco de mercado",
+   "fatos_ligados": 757,
+   "fatos": 807,
+   "fracao": 0.938
+  },
+  {
+   "versao": "v3",
+   "entrada": "v2 + rótulos vizinhos da mesma unidade + métrica 'capital autorizado'",
+   "fatos_ligados": 804,
+   "fatos": 807,
+   "fracao": 0.9963
+  }
+ ],
+ "mapeamento_final": {
+  "rotulos": 400,
+  "rotulos_ligados": 399,
+  "fatos": 807,
+  "fatos_ligados": 804,
+  "fracao_de_fatos_ligados": 0.9963,
+  "por_termo": 102,
+  "por_llm": 298,
+  "com_dimensao": 288,
+  "com_qualificador": 44,
+  "metricas_usadas": 96
+ },
+ "grafo": {
+  "fatos": 803,
+  "metricas": 97,
+  "of_metric": 800,
+  "entidades": 94,
+  "impressao_digital": [
+   "c93d991bc855dfc8",
+   "c93d991bc855dfc8"
+  ],
+  "iguais": true,
+  "problemas": {
+   "fatos_sem_origem": 0,
+   "fatos_sem_periodo": 0,
+   "fatos_com_mais_de_uma_origem": 0,
+   "entidades_sem_origem": 0,
+   "entidades_sem_tipo": 0,
+   "fatos_sem_documento": 0,
+   "fatos_com_mais_de_uma_metrica": 0
+  }
+ },
+ "fatos_ligados_no_grafo": {
+  "ligados": 800,
+  "total": 803,
+  "fracao": 0.9963
+ },
+ "auditoria": {
+  "amostra_de_40_fatos_semente_46": {
+   "metrica_correta": 39,
+   "metrica_errada": 1,
+   "qualificador_duvidoso": 3,
+   "dimensao_com_texto_nenhuma_corrigido": 8
+  },
+  "leitura_completa_dos_399_rotulos_mapeados": {
+   "rotulos_com_metrica_errada": 11,
+   "fatos_sob_erro_conhecido": 17,
+   "fracao_de_fatos_sob_erro": 0.0211
+  },
+  "auditor": "Claude, não uma pessoa"
+ }
+}

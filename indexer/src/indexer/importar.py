@@ -44,7 +44,7 @@ TIPO_DA_ENTIDADE = {
     "Event": "EVENT",
     "Instrument": "FINANCIAL_INSTRUMENT",
 }
-NOS = ("fatos", "periodos", *TIPO_DA_ENTIDADE)  # as demais chaves de `preparar` são relações
+NOS = ("fatos", "periodos", "metricas", *TIPO_DA_ENTIDADE)  # as demais chaves de `preparar` são relações
 
 
 def normalizar(texto: str | None) -> str:
@@ -175,6 +175,8 @@ def preparar(
     doc_id: str,
     redirecionar: dict[str, str] | None = None,
     nomes: dict[str, str] | None = None,
+    catalogo: list[dict] | None = None,
+    mapa_de_metricas: dict[str, dict] | None = None,
 ) -> dict:
     """Linhas prontas para os UNWIND: nós (`fatos`, `periodos`, uma lista por rótulo de entidade) e relações.
 
@@ -182,6 +184,8 @@ def preparar(
     extração (`<prefixo>.extracao.json`), de onde vêm as entidades; unidades inválidas não contribuem.
     `redirecionar` e `nomes` vêm da resolução de entidades (`<prefixo>.resolucao.json`, ADR-036): os ids
     absorvidos viram o id que ficou, para que reimportar depois da fusão não recrie os nós fundidos.
+    `catalogo` e `mapa_de_metricas` (`contracts/metricas.json` e `<prefixo>.metricas.json`, ADR-037)
+    acrescentam os nós `Metric` e o vínculo `OF_METRIC` de cada fato; sem eles não há nenhum dos dois.
     """
     ent = _Entidades(redirecionar, nomes)
     fatos: dict[str, dict] = {}
@@ -305,7 +309,13 @@ def preparar(
         "described_in_pai": described["pai"],
         "described_in_tabela": described["tabela"],
         **relacoes_entre_entidades,
+        "metricas": [],
+        "of_metric": [],
     }
+    if catalogo and mapa_de_metricas:
+        from indexer.catalogo import linhas_de_metricas  # import tardio: o catálogo usa `normalizar` daqui
+
+        linhas.update(linhas_de_metricas(catalogo, mapa_de_metricas, fatos))
     for (
         chave
     ) in linhas:  # a mesma relação pode vir de várias menções; o MERGE a une, mas não a mande duas vezes
@@ -330,10 +340,16 @@ PASSOS = [
     ("periodos", "UNWIND $rows AS r MERGE (n:Period {id: r.id}) SET n += r"),
     ("fatos", "UNWIND $rows AS r MERGE (n:FinancialFact {id: r.id}) SET n += r.props"),
     *[(rotulo, _nos_entidade(rotulo)) for rotulo in TIPO_DA_ENTIDADE],
+    ("metricas", "UNWIND $rows AS r MERGE (n:Metric {id: r.id}) SET n += r.props"),
     ("reported_in_pai", _relacao("FinancialFact", "REPORTED_IN", "Parent")),
     ("reported_in_tabela", _relacao("FinancialFact", "REPORTED_IN", "Table")),
     ("about", _relacao("FinancialFact", "ABOUT", "__Entity__")),
     ("for_period", _relacao("FinancialFact", "FOR_PERIOD", "Period")),
+    (
+        "of_metric",
+        "UNWIND $rows AS r MATCH (a:FinancialFact {id: r.de}), (b:Metric {id: r.para}) "
+        "MERGE (a)-[x:OF_METRIC]->(b) SET x.qualifier = r.qualifier, x.dimension = r.dimension",
+    ),
     ("mentioned_in_pai", _relacao("__Entity__", "MENTIONED_IN", "Parent")),
     ("mentioned_in_tabela", _relacao("__Entity__", "MENTIONED_IN", "Table")),
     ("described_in_pai", _relacao("__Entity__", "DESCRIBED_IN", "Parent")),
@@ -349,6 +365,7 @@ CONTAGENS = {
     "fatos": "MATCH (n:FinancialFact) RETURN count(n)",
     "periodos": "MATCH (n:Period) RETURN count(n)",
     "entidades": "MATCH (n:__Entity__) RETURN count(n)",
+    "metricas": "MATCH (n:Metric) RETURN count(n)",
     **{rotulo.lower(): f"MATCH (n:{rotulo}) RETURN count(n)" for rotulo in TIPO_DA_ENTIDADE},
     **{
         tipo.lower(): f"MATCH ()-[r:{tipo}]->() RETURN count(r)"
@@ -363,6 +380,7 @@ CONTAGENS = {
             "AFFECTS",
             "INVOLVES",
             "ISSUED_BY",
+            "OF_METRIC",
         )
     },  # fmt: skip
     "fatos_com_unidade_nao_declarada": "MATCH (n:FinancialFact {unitDeclared: false}) RETURN count(n)",
@@ -379,6 +397,9 @@ SANIDADE = {
     ),
     "entidades_sem_tipo": "MATCH (e:__Entity__) WHERE e.type IS NULL OR e.name IS NULL RETURN count(e)",
     "fatos_sem_documento": "MATCH (f:FinancialFact) WHERE f.documentId IS NULL RETURN count(f)",
+    "fatos_com_mais_de_uma_metrica": (
+        "MATCH (f:FinancialFact) WHERE count { (f)-[:OF_METRIC]->() } > 1 RETURN count(f)"
+    ),
 }
 
 
@@ -387,13 +408,26 @@ def _escalar(driver: Any, cypher: str, banco: str) -> int:
     return int(registros[0][0])
 
 
+VINCULOS_DE_METRICA_FORA_DO_PLANO = (
+    "MATCH (f:FinancialFact)-[x:OF_METRIC]->(m:Metric) WHERE NOT (f.id + '|' + m.id) IN $chaves DELETE x"
+)
+
+
 def carregar(driver: Any, linhas: dict, banco: str = "neo4j", lote: int = LOTE) -> dict[str, int]:
-    """Executa os passos em lotes e devolve quantas linhas cada passo enviou."""
+    """Executa os passos em lotes e devolve quantas linhas cada passo enviou.
+
+    O `MERGE` só acrescenta: se o mapeamento de métricas mudou, o vínculo antigo continuaria no grafo ao lado
+    do novo. Por isso, quando há métricas no plano, os `OF_METRIC` que o plano não tem mais são removidos
+    (são relações que este importador criou; nenhum fato, nó ou texto é tocado).
+    """
     enviadas: dict[str, int] = {}
     for chave, cypher in PASSOS:
         for i in range(0, len(linhas[chave]), lote):
             driver.execute_query(cypher, {"rows": linhas[chave][i : i + lote]}, database_=banco)
         enviadas[chave] = len(linhas[chave])
+    if linhas["metricas"]:
+        chaves = [f"{r['de']}|{r['para']}" for r in linhas["of_metric"]]
+        driver.execute_query(VINCULOS_DE_METRICA_FORA_DO_PLANO, {"chaves": chaves}, database_=banco)
     return enviadas
 
 
@@ -408,7 +442,7 @@ def sanidade(driver: Any, banco: str = "neo4j") -> dict[str, int]:
 def impressao_digital(driver: Any, banco: str = "neo4j") -> str:
     """Hash dos nós e relações que o importador escreve, com propriedades: mais forte que contar."""
     nos, _, _ = driver.execute_query(
-        "MATCH (n) WHERE n:FinancialFact OR n:__Entity__ OR n:Period "
+        "MATCH (n) WHERE n:FinancialFact OR n:__Entity__ OR n:Period OR n:Metric "
         "RETURN n.id AS id, properties(n) AS p ORDER BY id",
         database_=banco,
     )
@@ -454,7 +488,16 @@ def entradas(
     if redirecionar is None and arq.exists():
         plano = json.loads(arq.read_text(encoding="utf-8"))
         redirecionar, nomes = plano["redirecionar"], plano["nomes"]
-    return preparar(registros, resultados, _pedidos(prefixo), doc_id, redirecionar, nomes)
+    catalogo = mapa_de_metricas = None
+    arq_metricas = Path(f"{prefixo}.metricas.json")
+    if arq_metricas.exists():
+        from indexer.catalogo import ler_catalogo
+
+        catalogo = ler_catalogo()
+        mapa_de_metricas = json.loads(arq_metricas.read_text(encoding="utf-8"))["mapa"]
+    return preparar(
+        registros, resultados, _pedidos(prefixo), doc_id, redirecionar, nomes, catalogo, mapa_de_metricas
+    )
 
 
 def main() -> None:  # pragma: no cover - orquestração de CLI; as peças acima têm testes

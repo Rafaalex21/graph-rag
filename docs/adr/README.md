@@ -33,5 +33,6 @@ Uma decisão por arquivo: `ADR-NNN-assunto.md`. As nove decisões iniciais estã
 | [034](ADR-034-lastro-numerico.md) | Lastro numérico dos fatos (34% rejeitados no recorte; 29 de 30 auditados corretos; só o número não basta) | F4.3 — aceita |
 | [035](ADR-035-importacao-idempotente.md) | Importação idempotente da extração dirigida (a chave de ID da §5 fundia 46 fatos; 803 fatos e 106 entidades, duas importações iguais) | F4.4 — aceita |
 | [036](ADR-036-resolucao-de-entidades.md) | Resolução de entidades (o embedding a 0,92 pega 1 de 14 duplicatas; cinco fontes de candidatos + LLM; 106→94 entidades, 9/12 fusões corretas na leitura estrita) | F4.5 — aceita, com o critério ajustado (12 fusões no recorte; 20 na F5.8) |
+| [037](ADR-037-catalogo-de-metricas.md) | Catálogo de métricas canônicas e mapeamento PT↔EN (97 métricas; sinônimo × componente; recorte na `dimension` do `OF_METRIC`; 99,6% dos fatos ligados, ≈ 2% sob métrica errada) | F4.6 — aceita |
 
 Modelo em [`ADR-000-modelo.md`](ADR-000-modelo.md).
