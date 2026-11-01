@@ -168,3 +168,10 @@ Importação dos fatos aceitos e das entidades no Neo4j, com `MERGE` e IDs deter
 uv run python -m indexer.importar executar ../data/parsed/bb_fre_2026_recorte --doc-id bb-fre-2026-v7
 uv run python -m indexer.importar verificar ../data/parsed/bb_fre_2026_recorte --doc-id bb-fre-2026-v7
 ```
+
+Resolução de entidades (F4.5, ADR-036); precisa do Neo4j e do llama-swap (perfis `vetorizar` e `indexar`). `planejar` reconstrói o grafo sem fusões, gera candidatos, pergunta ao LLM e grava `data/parsed/<prefixo>.resolucao.json` (fora do git; cache em `data/parsed/resolucao_cache/`). `aplicar` funde com `apoc.refactor.mergeNodes` (sem LLM) e confere que reimportar não muda nada. O importador lê o plano sozinho, então reimportar não recria os nós fundidos:
+
+```powershell
+uv run python -m indexer.resolver planejar ../data/parsed/bb_fre_2026_recorte --doc-id bb-fre-2026-v7
+uv run python -m indexer.resolver aplicar ../data/parsed/bb_fre_2026_recorte --doc-id bb-fre-2026-v7
+```

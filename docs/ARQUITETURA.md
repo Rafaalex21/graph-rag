@@ -275,11 +275,11 @@ Demais esquemas: `Organization` (com papel na relação: emissor, subsidiária, 
 ### I-7 · Resolução de entidades (cap. 6.2.2)
 
 1. Normalização: caixa, acentos, sufixos societários (S.A., Ltda., Inc., Corp., Ltd., Limited).
-2. Bloqueio por tipo e primeiro token significativo.
-3. Candidatos por similaridade de embedding de `nome + descrição` (limiar inicial 0,92).
-4. Confirmação por LLM (sim/não com justificativa curta) para os pares candidatos.
-5. Fusão com `apoc.refactor.mergeNodes`, preservando `aliases`.
-6. Chaves fortes quando existirem (ticker, CNPJ) vencem qualquer heurística.
+2. Bloqueio por tipo e por primeiro token significativo ou iniciais das partes do nome.
+3. Candidatos, por qualquer uma de cinco razões: nome contido no outro, sigla (iniciais), mesmo CNPJ/ticker com nomes diferentes, embedding de `nome + descrição` ≥ 0,70 no mesmo bloco, ≥ 0,80 em qualquer bloco. **O embedding só gera candidatos:** a 0,92 ele pegava 1 de 14 pares duplicados e a 0,70 só 6, e há não duplicatas acima de 0,85 (ADR-036).
+4. Confirmação por LLM (sim/não com justificativa curta) para os pares candidatos; na dúvida, não.
+5. Fusão com `apoc.refactor.mergeNodes`, preservando `aliases`. O plano (`id absorvido → id que fica`) é gravado fora do grafo e o importador (I-5) o aplica, para a reimportação não recriar os nós absorvidos; `absorbedIds` registra quem foi fundido.
+6. Chaves fortes: CNPJ diferente **veta** o par; mesmo CNPJ ou ticker **e o mesmo nome sem sufixo** funde sem LLM; mesmo CNPJ com nomes diferentes vai ao LLM, porque o documento usa o CNPJ do ministério para órgãos distintos.
 
 ### I-8 · Resumos de entidades e relações (cap. 7.2.3)
 
@@ -309,7 +309,7 @@ Criação dos índices da §6.3; consultas de sanidade (§6.4); *dump* do banco 
 | Pais enviados ao reranker / ao LLM | 24 / 6 | F2 e F9 |
 | Temperatura de extração | 0,2–0,3, sem raciocínio | F4 |
 | *Gleaning* | 0 (decidido por medição) | F5 |
-| Limiar de similaridade na resolução | 0,92 | F4 |
+| Limiar de similaridade na resolução (só gera candidatos) | 0,70 no bloco / 0,80 global | F4 (ADR-036), F5.3 |
 | Limiar de *rating* na busca global | 5 (como no cap. 7) | F6 |
 | Slots paralelos no `llama-server` | 2 | F0 |
 
@@ -384,7 +384,7 @@ Todo nó de domínio (`Organization`, `Person`, `Segment`, `RiskFactor`, `Event`
 | `FinancialFact` | `id`, `metric`, `value`, `unit`, `currency`, `scale`, `period`, `periodType`, `entity`, `segment`, `evidence`, `page`, `pageEnd`, `documentId`, `unitDeclared` (`false` quando o texto não declara a unidade monetária; ADR-034 e ADR-035) |
 | `Metric` | `name` (canônico), `aliases`, `definition` |
 | `Period` | `id` (ex.: `2025-FY`, `2025-Q4`), `start`, `end` |
-| `__Entity__` | `id`, `name`, `type`, `aliases`, `description` (lista), `summary`, `embedding` |
+| `__Entity__` | `id`, `name`, `type`, `aliases`, `aliasesText`, `roles`, `absorbedIds` (ids fundidos na resolução), `description` (lista), `summary`, `embedding` |
 | `__Community__` | `id`, `level`, `title`, `summary`, `rating`, `rank`, `embedding` |
 
 ### 6.3 *Constraints* e índices

@@ -187,8 +187,10 @@
   - resultado: ADR-035; 803 fatos, 106 entidades (67 organizações, 13 pessoas, 12 segmentos, 9 riscos, 5 instrumentos) e 20 períodos no Neo4j; duas importações com todas as contagens iguais e a mesma impressão digital dos nós e relações; sanidade em 0
   - nota: a chave de ID da §5 fundia 46 dos 807 fatos aceitos, então o id inclui a unidade de origem, o segmento, o valor e a evidência (ARQUITETURA §5 I-5 corrigida); os 48 fatos das p. 157-158 entram com escala 1 e `unitDeclared = false`, sem conversão (mais 5 pela mesma regra, p. 352 e 405); entidades unidas só pelo nome normalizado (F4.5 resolve o resto) e não auditadas; zero eventos
   - depende: F4.3
-- [ ] **F4.5** Resolução de entidades: normalização, bloqueio, similaridade, confirmação por LLM e `apoc.refactor.mergeNodes`
+- [~] **F4.5** Resolução de entidades: normalização, bloqueio, similaridade, confirmação por LLM e `apoc.refactor.mergeNodes`
   - aceite: 20 fusões auditadas com ≥ 90% corretas; aliases preservados
+  - resultado: ADR-036; `indexer.resolver planejar|aplicar` aplicado ao recorte: 106 → 94 entidades (12 absorvidas em 9 grupos), aliases preservados (0 grafias perdidas), 803 fatos e todas as relações intactas, reimportar não muda nada
+  - nota: **aceite ainda não atingido.** O recorte só tem 12 absorções (< 20) e a minha auditoria deu 9 de 12 corretas (75%; 12 de 12 se órgãos do Ministério da Fazenda com o mesmo CNPJ contarem como a mesma entidade). O embedding a 0,92 pega 1 de 14 duplicatas conhecidas, então a ARQUITETURA §5 I-7 foi corrigida (embedding só gera candidatos). Falta: conferência humana das 12 fusões e as 20 fusões na extração do documento inteiro (F5.8)
   - depende: F4.4
 - [ ] **F4.6** Catálogo de métricas canônicas (`Metric`) e mapeamento terminológico PT↔EN
   - aceite: ≥ 95% dos fatos ligados a uma métrica canônica

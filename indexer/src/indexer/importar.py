@@ -112,7 +112,12 @@ def _sem_repeticao(linhas: list[dict]) -> list[dict]:
 class _Entidades:
     """Junta as menções do mesmo id: primeiro valor não nulo de cada campo, grafias e papéis em conjuntos."""
 
-    def __init__(self) -> None:
+    def __init__(
+        self, redirecionar: dict[str, str] | None = None, nomes: dict[str, str] | None = None
+    ) -> None:
+        # resolução de entidades (F4.5): id absorvido -> id que fica, e o nome canônico de quem fica
+        self.redirecionar = redirecionar or {}
+        self.nomes = nomes or {}
         self.por_id: dict[str, dict] = {}
         self.origens: dict[str, dict[str, set[str]]] = {
             "pai": {},
@@ -125,6 +130,7 @@ class _Entidades:
     ) -> str:
         """Registra uma menção de `nome` na unidade e devolve o id; `chave` acrescenta campos ao hash."""
         id_ = id_da_entidade(rotulo, nome, *chave)
+        id_ = self.redirecionar.get(id_, id_)
         e = self.por_id.setdefault(id_, {"id": id_, "name": nome, "aliases": set(), "papeis": set()})
         self.rotulo[id_] = rotulo
         e["aliases"].add(nome.strip())
@@ -139,6 +145,9 @@ class _Entidades:
 
     def linhas(self) -> dict[str, list[dict]]:
         por_rotulo: dict[str, list[dict]] = {r: [] for r in TIPO_DA_ENTIDADE}
+        absorvidos: dict[str, list[str]] = {}
+        for fora, fica in self.redirecionar.items():
+            absorvidos.setdefault(fica, []).append(fora)
         for id_, e in sorted(self.por_id.items()):
             aliases = sorted(e["aliases"])
             papeis = sorted(e["papeis"])
@@ -151,17 +160,30 @@ class _Entidades:
             }
             if papeis:
                 props["roles"] = papeis
+            if id_ in self.nomes:
+                props["name"] = self.nomes[id_]
+            if id_ in absorvidos:
+                props["absorbedIds"] = sorted(absorvidos[id_])
             por_rotulo[rotulo].append({"id": id_, "props": props})
         return por_rotulo
 
 
-def preparar(registros: list[dict], resultados: list[dict], pedidos: dict[str, str], doc_id: str) -> dict:
+def preparar(
+    registros: list[dict],
+    resultados: list[dict],
+    pedidos: dict[str, str],
+    doc_id: str,
+    redirecionar: dict[str, str] | None = None,
+    nomes: dict[str, str] | None = None,
+) -> dict:
     """Linhas prontas para os UNWIND: nós (`fatos`, `periodos`, uma lista por rótulo de entidade) e relações.
 
     `registros` vêm do lastro (`<prefixo>.fatos.json`); só `aceito` entra. `resultados` são as unidades da
     extração (`<prefixo>.extracao.json`), de onde vêm as entidades; unidades inválidas não contribuem.
+    `redirecionar` e `nomes` vêm da resolução de entidades (`<prefixo>.resolucao.json`, ADR-036): os ids
+    absorvidos viram o id que ficou, para que reimportar depois da fusão não recrie os nós fundidos.
     """
-    ent = _Entidades()
+    ent = _Entidades(redirecionar, nomes)
     fatos: dict[str, dict] = {}
     periodos: dict[str, dict] = {}
     reported_in: dict[str, list[dict]] = {"pai": [], "tabela": []}
@@ -419,10 +441,20 @@ def importar_duas_vezes(driver: Any, linhas: dict, banco: str = "neo4j") -> dict
     }
 
 
-def _entradas(prefixo: Path, doc_id: str) -> dict:
+def entradas(
+    prefixo: Path,
+    doc_id: str,
+    redirecionar: dict[str, str] | None = None,
+    nomes: dict[str, str] | None = None,
+) -> dict:
+    """As linhas do `<prefixo>`; sem `redirecionar`, usa o `<prefixo>.resolucao.json` se ele existir."""
     registros = json.loads(Path(f"{prefixo}.fatos.json").read_text(encoding="utf-8"))
     resultados = json.loads(Path(f"{prefixo}.extracao.json").read_text(encoding="utf-8"))
-    return preparar(registros, resultados, _pedidos(prefixo), doc_id)
+    arq = Path(f"{prefixo}.resolucao.json")
+    if redirecionar is None and arq.exists():
+        plano = json.loads(arq.read_text(encoding="utf-8"))
+        redirecionar, nomes = plano["redirecionar"], plano["nomes"]
+    return preparar(registros, resultados, _pedidos(prefixo), doc_id, redirecionar, nomes)
 
 
 def main() -> None:  # pragma: no cover - orquestração de CLI; as peças acima têm testes
@@ -434,7 +466,7 @@ def main() -> None:  # pragma: no cover - orquestração de CLI; as peças acima
     ap.add_argument("--banco", default="neo4j")
     a = ap.parse_args()
 
-    linhas = _entradas(a.prefixo, a.doc_id)
+    linhas = entradas(a.prefixo, a.doc_id)
     enviadas = {k: len(v) for k, v in linhas.items()}
     driver = conectar(a.raiz)
     try:
