@@ -55,4 +55,4 @@ tools/       automação do plano e do GitHub (tools/github vira .github no boot
 
 ## Licença
 
-A definir. Enquanto não houver arquivo `LICENSE`, todos os direitos permanecem com o autor.
+[MIT](LICENSE) para o código deste repositório. A licença não cobre o documento-fonte (o Formulário de Referência do Banco do Brasil) nem trechos dele: eles pertencem ao emissor e ficam fora do git (ADR-009).
