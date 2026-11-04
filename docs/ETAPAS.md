@@ -229,9 +229,11 @@
   - depende: F5.4
   - resultado: ADR-042 (aceita); 3 níveis com 67, 47 e 45 comunidades e modularidade 0,825, 0,887 e 0,889 (a do GDS e a recalculada em Python coincidem); 294 nós e 291 arestas na projeção, sem o emissor; mesmas 159 comunidades com os mesmos ids em duas execuções; sanidade com 0 violações (471 testes)
   - nota: 138 entidades ficam sem aresta fora do emissor e não entram em comunidade; a modularidade alta vem em parte da fragmentação (36 componentes conexos) do recorte de 19% das páginas, e a F5.8 mede de novo
-- [ ] **F5.6** Relatórios de comunidade em JSON e embeddings em `community_vec`
+- [x] **F5.6** Relatórios de comunidade em JSON e embeddings em `community_vec`
   - aceite: 100% com relatório válido; 10 revisados à mão
   - depende: F5.5
+  - resultado: ADR-043 (aceita); 159 de 159 relatórios válidos, todos na primeira tentativa (83 conteúdos distintos, 83 chamadas, ≈ 23 min); 10 revisados à mão contra os resumos de origem: o prompt `v1` vazava etiqueta em 61% e especulava em 16%, o `v2` em 0%, e os 10 ficaram fiéis; `community_vec` ONLINE (1024, cosseno), recall@1 = 1,0; segunda rodada com 0 chamadas (502 testes)
+  - nota: achados de `min(5, entidades)` a `min(10, 2 × entidades)` em vez de 5 a 10 fixos (ARQUITETURA corrigida); a revisão é por amostra, e a F5.8 revisa outra no documento inteiro; um relatório reproduz um erro da extração aberta (cargo atribuído a um ministério), anotado para o prompt v4
 - [ ] **F5.7** Embutir os resumos de entidade em `entity_vec`
   - aceite: índice ONLINE; busca "entidade → si mesma" com recall@1 ≥ 0,95
   - depende: F5.4

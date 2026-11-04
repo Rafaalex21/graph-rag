@@ -1,0 +1,94 @@
+{
+ "comando": "cd indexer; uv run python -m indexer.relatorios gerar | embutir | autoteste | verificar",
+ "comunidades": 159,
+ "conteudos_distintos": 83,
+ "prompt_v1": {
+  "validos": 159,
+  "chamadas": 83,
+  "segundos": 1461,
+  "com_etiqueta_no_texto": 51,
+  "com_especulacao": 13,
+  "achados_min_med_max": [
+   2,
+   5,
+   10
+  ],
+  "nota_media": 6.96,
+  "max_tokens_prompt": 2587
+ },
+ "prompt_v2": {
+  "validos": 159,
+  "invalidos": 0,
+  "chamadas": 83,
+  "segundos": 1370,
+  "recusas_e_novas_tentativas": 0,
+  "com_etiqueta_no_texto": 0,
+  "com_especulacao": 0,
+  "achados_min_med_max": [
+   2,
+   4,
+   10
+  ],
+  "nota_media": 7.03,
+  "max_tokens_prompt": 2725,
+  "contexto_omitido": 0
+ },
+ "revisao_a_mao": {
+  "relatorios": 10,
+  "niveis": [
+   0,
+   1,
+   2
+  ],
+  "tamanhos_de_comunidade": [
+   25,
+   13,
+   7,
+   6,
+   5,
+   3,
+   3,
+   2,
+   2,
+   2
+  ],
+  "v1": {
+   "com_etiqueta": 7,
+   "com_especulacao": 3,
+   "com_sigla_inventada": 1
+  },
+  "v2": {
+   "fieis_ao_material": 10,
+   "com_etiqueta": 0,
+   "com_especulacao": 0,
+   "com_sigla_inventada": 0,
+   "com_achados_redundantes": 4,
+   "com_arredondamento_leve": 3,
+   "reproduzindo_erro_da_extracao": 1
+  }
+ },
+ "community_vec": {
+  "estado": "ONLINE",
+  "populado_pct": 100.0,
+  "dimensoes": 1024,
+  "similaridade": "COSINE",
+  "embutidas": 159
+ },
+ "autoteste": {
+  "recall_at_1": 1.0,
+  "sonda_titulo_top3": 0.9874
+ },
+ "segunda_rodada": {
+  "chamadas": 0,
+  "segundos": 3
+ },
+ "sanidade": {
+  "comunidades_sem_relatorio": 0,
+  "comunidades_sem_embedding": 0,
+  "nota_fora_de_0_a_10": 0,
+  "comunidades_com_omissao_de_contexto": 0
+ },
+ "testes": {
+  "indexer_total": 502
+ }
+}

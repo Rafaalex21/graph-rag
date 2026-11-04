@@ -295,9 +295,9 @@ Demais esquemas: `Organization` (com papel na relação: emissor, subsidiária, 
 - Projeção: `__Entity__` + `SUMMARIZED_RELATIONSHIP` com peso = força, **excluindo o emissor**, para que as comunidades se formem em torno de temas e não colapsem num único astro.
 - Entram na projeção só as entidades que, sem o emissor, têm ao menos uma aresta (no recorte, 138 de 432 ficam de fora); pares presentes nos dois sentidos valem o maior peso. Leiden com semente 42 e `concurrency 1` (reprodutível); modularidade do GDS e recalculada em Python registradas por nível. Medido no recorte: 3 níveis, 67/47/45 comunidades, modularidade 0,825/0,887/0,889 ([ADR-042](./adr/ADR-042-leiden-hierarquico.md)).
 - Nós `(:__Community__ {id, level, size, title, summary, rating, rank})` ligados por `(:__Entity__)-[:IN_COMMUNITY]->` (nível 0) e `(:__Community__)-[:PARENT_COMMUNITY]->` (a do nível seguinte). O `id` é `com:<nível>:<hash dos membros>`, estável entre execuções.
-- Relatório por comunidade em JSON: título, resumo, impacto (0–10), explicação do impacto, 5–10 achados com referências.
+- Relatório por comunidade em JSON: título, resumo, impacto (0–10), explicação do impacto e achados com referências (entidades e relações do contexto). Achados: de `min(5, nº de entidades)` a `min(10, 2 × nº de entidades)`, porque 5 a 10 numa comunidade de 2 ou 3 entidades obriga a inventar. A validação recusa nota fora de 0–10, referência que não existe, achado sem referência e etiqueta do contexto (`E3`, `R5`) no texto; uma recusa é pedida de novo uma vez. Medido no recorte: 159 de 159 válidos, o prompt `v1` vazava etiqueta em 61% e especulava em 16%, o `v2` em 0% ([ADR-043](./adr/ADR-043-relatorios-de-comunidade.md)).
 - Comunidades grandes demais para o contexto: ranqueamento de entidades e relações antes do prompt (o livro antecipa o problema).
-- Relatórios embutidos em `community_vec`.
+- Relatórios embutidos em `community_vec` (título, resumo e achados; recall@1 = 1,0 no autoteste). `__Community__.rank` = número de Pais que mencionam as entidades da comunidade; `report` guarda o JSON inteiro.
 
 ### I-10 · Índices e verificação
 

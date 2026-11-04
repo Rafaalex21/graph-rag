@@ -225,3 +225,14 @@ Leiden hierárquico no GDS sobre `SUMMARIZED_RELATIONSHIP`, sem o emissor e sem 
 uv run python -m indexer.comunidades executar
 uv run python -m indexer.comunidades verificar
 ```
+
+## Relatórios de comunidade (F5.6, ADR-043)
+
+O Qwen3.6 escreve um relatório JSON por comunidade (título, resumo, nota de 0 a 10, achados com referências às entidades e relações); a validação recusa referência inexistente, etiqueta no texto e nota fora da faixa. `gerar` usa o perfil `indexar` e é idempotente (cache por hash em `data/parsed/relatorios_cache/`); `embutir` usa o `vetorizar` e cria o índice `community_vec`; depois de mudar um relatório, rode `embutir` de novo:
+
+```powershell
+uv run python -m indexer.relatorios gerar
+uv run python -m indexer.relatorios embutir
+uv run python -m indexer.relatorios autoteste
+uv run python -m indexer.relatorios verificar
+```
