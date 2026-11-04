@@ -40,6 +40,6 @@ Uma decisão por arquivo: `ADR-NNN-assunto.md`. As nove decisões iniciais estã
 | [041](ADR-041-resumos-de-entidades-e-relacoes.md) | Resumos de entidades e relações: só chama o LLM com mais de um texto; ranking por diversidade de seção, lotes de 30 e teto de 300; emissor em 2 níveis; maior prompt 817 tokens para um slot de 16 mil | F5.4 — aceita |
 | [042](ADR-042-leiden-hierarquico.md) | Leiden hierárquico sem o emissor: 294 nós (138 entidades sem aresta ficam de fora), 3 níveis com 67/47/45 comunidades e modularidade 0,825/0,887/0,889 (GDS e recalculada coincidem); reprodutível | F5.5 — aceita |
 | [043](ADR-043-relatorios-de-comunidade.md) | Relatórios de comunidade em JSON e `community_vec`: 159 de 159 válidos; o prompt `v1` vazava etiqueta em 61% e especulava em 16%, o `v2` em 0%; 10 revisados à mão; recall@1 = 1,0 | F5.6 — aceita |
-| [044](ADR-044-embeddings-de-entidade.md) | Embeddings dos resumos de entidade e `entity_vec`: 433 em 4,3 s, incrementais por hash; recall@1 = 1,0; sonda pelo nome 96,8% no top-3; 4 entidades-lixo (nome vazio, `N/A`, `null`) achadas | F5.7 — aceita |
+| [044](ADR-044-embeddings-de-entidade.md) | Embeddings dos resumos de entidade e `entity_vec`: 433 em 4,3 s, incrementais por hash; recall@1 = 1,0; sonda pelo nome 96,8% no top-3; 4 entidades-lixo (nome vazio, `N/A`, `null`) achadas, filtradas no importador e apagadas | F5.7 — aceita |
 
 Modelo em [`ADR-000-modelo.md`](ADR-000-modelo.md).

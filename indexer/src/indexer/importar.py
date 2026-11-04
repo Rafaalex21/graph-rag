@@ -61,6 +61,22 @@ def normalizar(texto: str | None) -> str:
     return " ".join(re.findall(r"[a-z0-9]+", sem_acento.lower()))
 
 
+# Nomes que o modelo escreve quando o campo é obrigatório e não há o que preencher (achado da F5.7, ADR-044).
+# O filtro compara o nome inteiro, normalizado: "Nulla Participações" e "Desconhecido Ltda." passam.
+NOMES_VAZIOS = {
+    "", "n a", "null", "none", "nan", "unknown", "desconhecido", "sem nome",
+    "nao informado", "nao disponivel", "nao se aplica",
+}  # fmt: skip
+
+
+def nome_valido(nome: str | None) -> bool:
+    return normalizar(nome) not in NOMES_VAZIOS
+
+
+def _validas(itens: list[dict], campo: str = "name") -> list[dict]:
+    return [i for i in itens if nome_valido(i.get(campo))]
+
+
 def _hash(*partes: str) -> str:
     return hashlib.sha256("\x1f".join(partes).encode("utf-8")).hexdigest()[:16]
 
@@ -214,7 +230,7 @@ def _somar_abertas(ent: _Entidades, abertas: list[dict], doc_id: str) -> list[di
             continue
         unidade = r["id"]
         por_nome: dict[str, str] = {}
-        for e in resp["entities"]:
+        for e in _validas(resp["entities"]):
             rotulo = ROTULO_DO_TIPO.get(e["type"])
             if rotulo is None:
                 raise ValueError(f"tipo de entidade desconhecido: {e['type']!r} ({e['name']!r})")
@@ -274,7 +290,7 @@ def preparar(
     }
 
     def org(nome: str | None, unidade: str, tipo_unidade: str) -> str | None:
-        if not nome or normalizar(nome) in GENERICAS or not normalizar(nome):
+        if not nome_valido(nome) or normalizar(nome) in GENERICAS:
             return None
         return ent.somar("Organization", nome, unidade, tipo_unidade)
 
@@ -315,19 +331,19 @@ def preparar(
         if not r["valida"]:
             continue
         unidade, tipo, resp = r["id"], r["tipo"], r["resposta"]
-        for o in resp["organizations"]:
+        for o in _validas(resp["organizations"]):
             ent.somar(
                 "Organization", o["name"], unidade, tipo,
                 papel=o["role"], description=o.get("description"), cnpj=o.get("cnpj"), ticker=o.get("ticker"),
             )  # fmt: skip
-        for p in resp["people"]:
+        for p in _validas(resp["people"]):
             pid = ent.somar("Person", p["name"], unidade, tipo, position=p.get("position"))
             alvo = org(p.get("organization"), unidade, tipo)
             if alvo and p.get("position"):
                 relacoes_entre_entidades["holds_position"].append(
                     {"de": pid, "para": alvo, "title": p["position"]}
                 )
-        for s in resp["segments"]:
+        for s in _validas(resp["segments"]):
             sid = ent.somar(
                 "Segment",
                 s["name"],
@@ -339,7 +355,7 @@ def preparar(
             alvo = org(s.get("organization"), unidade, tipo)
             if alvo:
                 relacoes_entre_entidades["has_segment"].append({"de": alvo, "para": sid})
-        for k in resp["risk_factors"]:
+        for k in _validas(resp["risk_factors"]):
             kid = ent.somar(
                 "RiskFactor", k["name"], unidade, tipo, (k["category"],),
                 category=k["category"], description=k["description"],
@@ -347,7 +363,7 @@ def preparar(
             alvo = org(k.get("affected_entity"), unidade, tipo)
             if alvo:
                 relacoes_entre_entidades["affects"].append({"de": kid, "para": alvo})
-        for e in resp["events"]:
+        for e in _validas(resp["events"], "description"):
             eid = ent.somar(
                 "Event", e["description"], unidade, tipo, (doc_id, unidade, e["type"]),
                 eventType=e["type"], date=e.get("date"),
@@ -356,7 +372,7 @@ def preparar(
                 alvo = org(nome, unidade, tipo)
                 if alvo:
                     relacoes_entre_entidades["involves"].append({"de": eid, "para": alvo})
-        for i in resp["instruments"]:
+        for i in _validas(resp["instruments"]):
             iid = ent.somar(
                 "Instrument", i["name"], unidade, tipo, (i["type"],),
                 instrumentType=i["type"], maturity=i.get("maturity"), description=i.get("description"),

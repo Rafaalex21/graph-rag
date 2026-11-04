@@ -23,7 +23,7 @@ Comandos: `cd indexer; uv run python -m indexer.entidades_vec embutir | autotest
 
 | | |
 |---|---|
-| Entidades embutidas | 433 em 4,3 s; a segunda rodada embutiu 0 em 0,02 s |
+| Entidades embutidas | 433 em 4,3 s; a segunda rodada embutiu 0 em 0,02 s (depois do filtro de nomes vazios: 429) |
 | Índice | `entity_vec` ONLINE, 100% populado, 1024 dimensões, cosseno |
 | **recall@1 (entidade → si mesma)** | **1,0000** (433 de 433; aceite ≥ 0,95) |
 | Sonda pelo nome, top-3 | 96,8% (419 de 433) |
@@ -32,7 +32,9 @@ Comandos: `cd indexer; uv run python -m indexer.entidades_vec embutir | autotest
 
 **As 14 que falham na sonda pelo nome** são nomes genéricos ou curtos: 10 têm até duas palavras ("seguros", "varejo", "governo", "agricultura"...) e a consulta pelo nome puro cai em entidades de resumo mais específico; 1 tem o nome repetido em outro tipo. Isso diz que `entidade(nome)` não deve confiar só no vetor: o índice de texto `entity_ft` (nome e apelidos, §6.3) cobre o caso do nome exato, e a F6 combina os dois.
 
-**Achado fora do critério:** 4 entidades `PERSON` da camada dirigida têm como nome um marcador de vazio (nome vazio, `N/A`, `Desconhecido`, `null`): o modelo preenche o campo obrigatório com um placeholder. Não têm relações, não estão em comunidades e têm de uma a duas menções cada; entram no índice e podem aparecer em buscas. Reimportar não as remove (a importação só acrescenta). A correção é recusar nomes assim no importador e apagar os 4 nós; **o apagamento aguarda autorização**.
+**Achado fora do critério:** 4 entidades `PERSON` da camada dirigida têm como nome um marcador de vazio (nome vazio, `N/A`, `Desconhecido`, `null`): o modelo preenche o campo obrigatório com um placeholder. Não tinham `RELATED_TO` nem comunidade, mas entravam no índice e podiam aparecer em buscas; três delas ocupavam cargos (`HOLDS_POSITION`, 6 arestas em 15) cujo ocupante o modelo não soube nomear. Reimportar não as removia (a importação só acrescenta). Primeira avaliação, errada: eu as descrevi como "sem relações" por ter olhado só `RELATED_TO` e comunidades; a trava do script de apagamento pegou as arestas de cargo antes de qualquer remoção e o usuário foi avisado.
+
+**Correção, autorizada pelo usuário:** `nome_valido` no importador (`NOMES_VAZIOS`: vazio, `N/A`, `null`, `None`, `NaN`, `unknown`, `Desconhecido`, `Sem nome`, `Não informado`, `Não disponível`, `Não se aplica`, e nomes só de pontuação) recusa a entidade, na extração dirigida (os 6 tipos), na aberta e nas referências a organizações; a comparação é com o nome inteiro, então "Nulla Participações" e "Desconhecido Ltda." passam. Os 4 nós foram apagados com `DETACH DELETE` por um script que só age se achar exatamente 4 alvos, ligados apenas por `HOLDS_POSITION` e `MENTIONED_IN`. Depois: 429 entidades, `person` 21 → 17, `HOLDS_POSITION` 15 → 9, reimportar não recria os nós (`reimportar_nao_muda`), recall@1 = 1,0, sonda pelo nome 97,4% (418 de 429) e por apelido 97,8%; resumos, comunidades e relatórios continuam com 0 violações. Os cargos continuam no texto dos Pais; o grafo só deixou de ter um "Person" chamado `null` ocupando um deles.
 
 ## Consequências
 

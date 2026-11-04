@@ -33,8 +33,13 @@
   "total": 4,
   "tipo": "PERSON",
   "camada": "dirigida",
-  "com_relacoes": 0,
-  "em_comunidade": 0
+  "com_related_to": 0,
+  "em_comunidade": 0,
+  "arestas_holds_position_removidas": 6,
+  "holds_position_antes_depois": [
+   15,
+   9
+  ]
  },
  "sanidade": {
   "entidades_sem_embedding": 0,
@@ -42,6 +47,24 @@
   "entidades_sem_resumo": 0
  },
  "testes": {
-  "indexer_total": 512
+  "indexer_total": 543
+ },
+ "depois_do_filtro": {
+  "entidades": 429,
+  "person_antes_depois": [
+   21,
+   17
+  ],
+  "reimportar_nao_muda": true,
+  "recall_at_1": 1.0,
+  "sonda_nome_top3": {
+   "consultas": 429,
+   "taxa": 0.9744
+  },
+  "sonda_apelido_top3": {
+   "consultas": 494,
+   "taxa": 0.9777
+  },
+  "embutidas_agora": 0
  }
 }

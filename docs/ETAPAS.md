@@ -238,7 +238,7 @@
   - aceite: índice ONLINE; busca "entidade → si mesma" com recall@1 ≥ 0,95
   - depende: F5.4
   - resultado: ADR-044 (aceita); 433 entidades embutidas em 4,3 s, segunda rodada com 0 (hash do texto); `entity_vec` ONLINE (1024, cosseno); recall@1 = 1,0 (433 de 433); sonda pelo nome 96,8% no top-3 e por apelido 97,4% (512 testes)
-  - nota: as 14 que falham pelo nome são genéricas (`seguros`, `varejo`...), então a F6 combina `entity_vec` com `entity_ft`; achadas 4 entidades `PERSON` com nome vazio, `N/A`, `Desconhecido` e `null` (camada dirigida, sem relações): filtrar no importador e apagar os 4 nós aguarda autorização
+  - nota: as 14 que falham pelo nome são genéricas (`seguros`, `varejo`...), então a F6 combina `entity_vec` com `entity_ft`; as 4 entidades `PERSON` com nome vazio, `N/A`, `Desconhecido` e `null` (camada dirigida) foram recusadas no importador (`nome_valido`) e apagadas com a autorização do usuário: 429 entidades, 6 arestas `HOLDS_POSITION` saíram junto (15 → 9), recall@1 continua 1,0 e a sonda pelo nome sobe para 97,4% (543 testes)
 - [ ] **F5.8** Indexar o documento inteiro (423 páginas) com o pipeline das fases F1 a F5, numa execução noturna
   - aceite: 423 páginas processadas; contagens do grafo registradas (Parent, Child, Table, FinancialFact, __Entity__, __Community__); consultas de sanidade da §6.4 sem órfãos; reexecutar não repete chamadas ao LLM
   - depende: F5.6, F5.7, F4.6
