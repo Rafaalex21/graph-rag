@@ -1,0 +1,47 @@
+{
+ "comando": "cd indexer; uv run python -m indexer.entidades_vec embutir | autoteste | verificar",
+ "entidades": 433,
+ "embutidas_primeira_rodada": 433,
+ "segundos_primeira_rodada": 4.28,
+ "embutidas_segunda_rodada": 0,
+ "segundos_segunda_rodada": 0.02,
+ "indice": {
+  "nome": "entity_vec",
+  "estado": "ONLINE",
+  "populado_pct": 100.0,
+  "dimensoes": 1024,
+  "similaridade": "COSINE"
+ },
+ "recall_at_1": 1.0,
+ "erradas": 0,
+ "sonda_nome_top3": {
+  "consultas": 433,
+  "acertos": 419,
+  "taxa": 0.9677
+ },
+ "sonda_apelido_top3": {
+  "consultas": 497,
+  "acertos": 484,
+  "taxa": 0.9738
+ },
+ "sonda_nome_perdidas": {
+  "total": 14,
+  "com_ate_duas_palavras": 10,
+  "nome_repetido_em_outro_tipo": 1
+ },
+ "entidades_com_nome_placeholder": {
+  "total": 4,
+  "tipo": "PERSON",
+  "camada": "dirigida",
+  "com_relacoes": 0,
+  "em_comunidade": 0
+ },
+ "sanidade": {
+  "entidades_sem_embedding": 0,
+  "entidades_sem_hash": 0,
+  "entidades_sem_resumo": 0
+ },
+ "testes": {
+  "indexer_total": 512
+ }
+}

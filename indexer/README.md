@@ -236,3 +236,13 @@ uv run python -m indexer.relatorios embutir
 uv run python -m indexer.relatorios autoteste
 uv run python -m indexer.relatorios verificar
 ```
+
+## Embeddings de entidade (F5.7, ADR-044)
+
+`indexer.entidades_vec` embute `nome (tipo). resumo` + apelidos de cada `__Entity__` no perfil `vetorizar` e cria o índice `entity_vec`; o hash do texto em `embeddingHash` faz a reexecução embutir só o que mudou. O autoteste re-embute pela CPU e exige a entidade em 1º lugar:
+
+```powershell
+uv run python -m indexer.entidades_vec embutir
+uv run python -m indexer.entidades_vec autoteste
+uv run python -m indexer.entidades_vec verificar
+```

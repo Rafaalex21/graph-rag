@@ -234,7 +234,7 @@ Tokens contados com o tokenizador do próprio modelo (endpoint `/tokenize` do `l
 
 - **Modelo:** Qwen3-Embedding-0.6B, 1024 dimensões, vetores normalizados, similaridade de cosseno.
 - **Assimetria consulta/documento:** documentos sem instrução; consultas com o prefixo `Instruct: <tarefa>\nQuery: <pergunta>`, em inglês, como recomenda o modelo — mesmo para perguntas em português.
-- **O que se embute:** Filhos, perguntas hipotéticas das tabelas, resumos de entidade (após I-8) e relatórios de comunidade (após I-9).
+- **O que se embute:** Filhos, perguntas hipotéticas das tabelas, resumos de entidade (após I-8) e relatórios de comunidade (após I-9). O resumo de entidade vai como `nome (tipo). resumo` mais uma linha de apelidos, com o hash do texto em `embeddingHash` para só refazer o que mudou; medido: 433 entidades em 4,3 s, recall@1 = 1,0 ([ADR-044](./adr/ADR-044-embeddings-de-entidade.md)).
 - Trocar de modelo de embedding obriga a recriar os índices vetoriais (cap. 2); por isso a dimensão fica registrada no *lock*.
 
 ### I-5 · Extração dirigida a esquema (cap. 6)
@@ -391,7 +391,7 @@ Todo nó de domínio (`Organization`, `Person`, `Segment`, `RiskFactor`, `Event`
 | `Metric` | `id` (`metric:<id>`), `name` (canônico, em inglês), `namePt`, `kind` (`monetary`, `percent`, `ratio`, `count`, `price`), `aliases` (PT e EN), `definition`; o catálogo vive em `contracts/metricas.json` (F4.6, ADR-037) |
 | `OF_METRIC` (relação `FinancialFact → Metric`) | `qualifier` (`nenhum`, `variacao_percentual`, `variacao_absoluta`, `percentual_do_total`) e `dimension` (o recorte do rótulo: região, prazo, componente; nulo no total) |
 | `Period` | `id` (ex.: `2025-FY`, `2025-Q4`), `start`, `end` |
-| `__Entity__` | `id`, `name`, `type`, `layers` (`dirigida`, `aberta` ou as duas), `aliases`, `aliasesText`, `roles`, `absorbedIds` (ids fundidos na resolução), `description` (texto, da extração dirigida), `descriptions` (lista, uma por Pai, da aberta) e `descriptionParents` (o Pai de cada uma), `summary`, `summarySource`, `summaryDescriptions`, `embedding` |
+| `__Entity__` | `id`, `name`, `type`, `layers` (`dirigida`, `aberta` ou as duas), `aliases`, `aliasesText`, `roles`, `absorbedIds` (ids fundidos na resolução), `description` (texto, da extração dirigida), `descriptions` (lista, uma por Pai, da aberta) e `descriptionParents` (o Pai de cada uma), `summary`, `summarySource`, `summaryDescriptions`, `embedding`, `embeddingHash` |
 | `RELATED_TO` (relação `__Entity__ → __Entity__`) | `descriptions` (lista), `strength` (1–10, a máxima entre os Pais), `parents` (ids dos Pais); a F5.4 as resume em `SUMMARIZED_RELATIONSHIP {summary, weight, rank}` |
 | `__Community__` | `id`, `level`, `size`, `title`, `summary`, `rating`, `rank`, `embedding` |
 
