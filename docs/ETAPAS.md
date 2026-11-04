@@ -209,8 +209,10 @@
   - aceite: prompt versionado; 5 Pais extraídos e revisados à mão
   - resultado: ADR-038; `contracts/open_extraction.schema.json` 1.0.0 (11 tipos, força 1–10, relação só entre entidades da resposta, nome que é data ou valor recusado), `indexer.extracao_aberta` com prompt `v3` em português e exemplo fictício; 5 Pais (semente 1, entre os 13 de ≥ 300 tokens) válidos de primeira: 94 entidades e 89 relações
   - nota: a §5 I-6 tinha 10 tipos; a leitura achou 8 de 9 `PRODUCT_OR_SERVICE` que eram políticas e programas, e entrou `POLICY_OR_PROGRAM` (ARQUITETURA corrigida). A revisão foi minha, não de uma pessoa, e o prompt foi ajustado (v1→v3) nos mesmos 5 Pais, então o resultado é otimista; ficam para a F5.2 os apelidos que viram entidade, a força de relação sem poder de discriminar (nenhuma abaixo de 5) e `LOCATION`/`PERSON` sem exercício
-- [~] **F5.2** Extração aberta por Pai, com *gleaning* configurável
+- [x] **F5.2** Extração aberta por Pai, com *gleaning* configurável
   - aceite: ganho do *gleaning* medido em 20 Pais e decidido em ADR
+  - resultado: ADR-039; `indexer.extracao_aberta --gleaning 0|1` (rodada extra no mesmo diálogo, fusão sem repetir nome nem relação, mesma validação); em 20 Pais novos (semente 2, sem os 5 da F5.1) o *gleaning* acrescenta 60% de entidades e 69% de relações, com 51% dos acréscimos corretos (37 de 72) e +62% de tempo de LLM; fica **desligado por padrão**. A primeira passada nesses Pais: 20 de 20 válidos de primeira, 120 entidades e 96 relações
+  - nota: a leitura dos 72 acréscimos foi minha, não de uma pessoa, e a regra de decisão foi minha, definida antes da corrida; a taxa de acerto da primeira passada (~94%) é estimada só por nome e tipo. Moedas, índices e mercadorias sem tipo que as acomode, `PERSON` para cargo e valor dentro do nome são os defeitos que sobram para o prompt `v4`. A extração do recorte inteiro (116 Pais) não foi rodada: é o primeiro passo da F5.3
   - depende: F5.1
 - [ ] **F5.3** Convergir entidades abertas e de domínio pela mesma resolução da F4.5
   - aceite: nenhum par duplicado entre camadas na amostra de 30 entidades mais citadas

@@ -186,6 +186,12 @@ uv run python -m indexer.extracao_aberta executar ../data/parsed/bb_fre_2026_rec
 uv run python -m indexer.extracao_aberta resumo ../data/parsed/bb_fre_2026_recorte --amostra 5 --semente 1
 ```
 
+*Gleaning* (F5.2, ADR-039): `--gleaning 1` faz uma rodada extra por Pai e a saída traz `ganho_do_gleaning`; o padrão é 0, porque a rodada extra acrescentou 60% de entidades mas só metade estava certa. `--minimo`, `--excluir` e `--saida` refazem a amostra de 20 Pais sem tocar na da F5.1:
+
+```powershell
+uv run python -m indexer.extracao_aberta executar ../data/parsed/bb_fre_2026_recorte --amostra 20 --minimo 100 --semente 2 --gleaning 1 --saida aberta_f52 --excluir a7babf0139ab7d1e 923805392cfd8e61 997b78e7a9370bfc 259a2ade6cd81a7a 454107c2f98f2838
+```
+
 Resolução de entidades (F4.5, ADR-036); precisa do Neo4j e do llama-swap (perfis `vetorizar` e `indexar`). `planejar` reconstrói o grafo sem fusões, gera candidatos, pergunta ao LLM e grava `data/parsed/<prefixo>.resolucao.json` (fora do git; cache em `data/parsed/resolucao_cache/`). `aplicar` funde com `apoc.refactor.mergeNodes` (sem LLM) e confere que reimportar não muda nada. O importador lê o plano sozinho, então reimportar não recria os nós fundidos:
 
 ```powershell

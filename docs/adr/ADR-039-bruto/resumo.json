@@ -1,0 +1,127 @@
+{
+ "primeira_passada": {
+  "unidades": 20,
+  "validas": 20,
+  "validas_na_primeira": 20,
+  "invalidas": [],
+  "do_cache": 0,
+  "chamadas": 20,
+  "entidades": 120,
+  "relacoes": 96,
+  "entidades_por_tipo": {
+   "ORGANIZATION": 45,
+   "PERSON": 3,
+   "SEGMENT": 2,
+   "PRODUCT_OR_SERVICE": 14,
+   "FINANCIAL_METRIC": 14,
+   "RISK": 8,
+   "EVENT": 11,
+   "FINANCIAL_INSTRUMENT": 5,
+   "REGULATION": 3,
+   "POLICY_OR_PROGRAM": 10,
+   "LOCATION": 5
+  },
+  "relacoes_por_forca": {
+   "1": 0,
+   "2": 0,
+   "3": 0,
+   "4": 3,
+   "5": 6,
+   "6": 18,
+   "7": 24,
+   "8": 21,
+   "9": 19,
+   "10": 5
+  },
+  "nomes_repetidos": 0,
+  "no_teto_de_entidades": 0,
+  "tokens_prompt": 43435,
+  "tokens_saida": 12925,
+  "segundos_de_llm": 531.9
+ },
+ "ganho_do_gleaning": {
+  "pais_com_as_duas": 20,
+  "pais_so_primeira_passada": 0,
+  "gleaning_invalido": [],
+  "pais_que_ganharam_entidade": 13,
+  "pais_que_ganharam_relacao": 13,
+  "entidades_primeira": 120,
+  "entidades_acrescentadas": 72,
+  "ganho_entidades_pct": 60.0,
+  "relacoes_primeira": 96,
+  "relacoes_acrescentadas": 66,
+  "ganho_relacoes_pct": 68.8,
+  "acrescimos_por_tipo": {
+   "ORGANIZATION": 4,
+   "PERSON": 12,
+   "SEGMENT": 0,
+   "PRODUCT_OR_SERVICE": 9,
+   "FINANCIAL_METRIC": 4,
+   "RISK": 10,
+   "EVENT": 12,
+   "FINANCIAL_INSTRUMENT": 9,
+   "REGULATION": 1,
+   "POLICY_OR_PROGRAM": 10,
+   "LOCATION": 1
+  },
+  "entidades_repetidas_descartadas": 0,
+  "relacoes_repetidas_descartadas": 0,
+  "relacoes_soltas_descartadas": 2,
+  "sem_lastro_de_nome_primeira_pct": 5.0,
+  "sem_lastro_de_nome_acrescentadas": 12,
+  "sem_lastro_de_nome_acrescentadas_pct": 16.7,
+  "custo_primeira": {
+   "pais": 20,
+   "tokens_saida": 12925,
+   "segundos": 531.9
+  },
+  "custo_gleaning": {
+   "pais": 20,
+   "tokens_prompt": 66396,
+   "tokens_saida": 7539,
+   "segundos": 328.5,
+   "chamadas": 23
+  }
+ },
+ "amostra": {
+  "regra": "20 Pais sorteados com semente 2 entre os de >= 100 tokens (62 no recorte), sem os 5 da F5.1",
+  "tokens_total": 4181,
+  "tokens_por_pai": [
+   100,
+   105,
+   113,
+   118,
+   118,
+   120,
+   122,
+   124,
+   125,
+   126,
+   128,
+   151,
+   169,
+   225,
+   226,
+   229,
+   255,
+   422,
+   581,
+   624
+  ]
+ },
+ "leitura_dos_acrescimos": {
+  "feita_por": "Claude, nao uma pessoa; todos os 72 acrescimos lidos contra o texto do Pai",
+  "corretas": 37,
+  "com_defeito": 35,
+  "defeitos": {
+   "entidade_real_sem_tipo_que_a_acomode": 11,
+   "person_para_cargo_ou_grupo": 12,
+   "generica_ou_nao_entidade": 12
+  },
+  "pais_sem_acrescimo": 7
+ },
+ "decisao": {
+  "regra_registrada_antes": "ligar se ganho >= 15% em entidades e em relacoes, lastro de nome >= 90% e >= 80% dos acrescimos corretos",
+  "gleaning_padrao": 0
+ }
+}

@@ -9,11 +9,17 @@ validada pelo Pydantic, uma retentativa com a mensagem de erro anexada, cache po
   converge variantes de grafia é a F5.3, e quem cruza com o catálogo de métricas da F4.6 também.
 * **Exemplo fictício** no prompt (empresa inventada): nenhum trecho do documento do BB vai para o repositório
   (ADR-009).
-* **Gleaning** (reextrair para pegar o que escapou) não está aqui: a F5.2 mede se vale 0 ou 1 rodada.
+* **Gleaning** (F5.2): `--gleaning 1` faz uma segunda chamada no mesmo diálogo pedindo só o que faltou
+  (`CONTINUAR`); o acréscimo é fundido à primeira resposta, sem repetir nome nem relação, e a fusão passa
+  pelas mesmas validações. A primeira resposta fica guardada à parte (`resposta`), o resultado com a rodada
+  extra em `gleaning.resposta`, para medir o ganho sobre os mesmos Pais sem rodar a primeira passada duas
+  vezes. O contrato (ARQUITETURA §5 I-6) é 0 ou 1 rodada; a decisão está no ADR-039.
 
 Uso (a partir de indexer/, com llama-swap no perfil `indexar` no ar):
     uv run python -m indexer.extracao_aberta executar ../data/parsed/bb_fre_2026_recorte --amostra 5
-    uv run python -m indexer.extracao_aberta resumo ../data/parsed/bb_fre_2026_recorte --amostra 5   # sem LLM
+    uv run python -m indexer.extracao_aberta executar ../data/parsed/bb_fre_2026_recorte --amostra 20 \\
+        --minimo 100 --semente 2 --gleaning 1 --saida aberta_f52 --excluir ID1 ID2
+    uv run python -m indexer.extracao_aberta resumo ../data/parsed/bb_fre_2026_recorte --saida aberta_f52
 """
 
 from __future__ import annotations
@@ -22,8 +28,10 @@ import argparse
 import hashlib
 import json
 import random
+import re
 import sys
 import time
+import unicodedata
 import urllib.request
 from collections.abc import Callable
 from concurrent.futures import ThreadPoolExecutor
@@ -34,7 +42,7 @@ from pydantic import ValidationError
 
 from indexer.extrair import DOCUMENTO, MODELO_LLM, PEDIDO_PAI, _gravar, _paginas
 from indexer.schemas import TIPOS_DE_ENTIDADE, VERSAO_ABERTA, ExtracaoAberta
-from indexer.schemas.aberta import MAX_ENTIDADES, normalizar_nome
+from indexer.schemas.aberta import MAX_ENTIDADES, MAX_RELACOES, normalizar_nome
 
 VERSAO_DO_PROMPT = "v3"  # v1 e v2 foram lidas nos mesmos 5 Pais e corrigidas: ver ADR-038
 MIN_TOKENS_AMOSTRA = 300  # a amostra da F5.1 sorteia entre Pais com texto suficiente para ter o que revisar
@@ -241,12 +249,14 @@ def unidades(chunks: dict, documento: str = DOCUMENTO) -> list[dict]:
     return saida
 
 
-def amostrar(lista: list[dict], n: int, semente: int, minimo: int = MIN_TOKENS_AMOSTRA) -> list[dict]:
+def amostrar(
+    lista: list[dict], n: int, semente: int, minimo: int = MIN_TOKENS_AMOSTRA, excluir: tuple[str, ...] = ()
+) -> list[dict]:
     """`n` Pais sorteados (com semente) entre os de pelo menos `minimo` tokens, na ordem do documento.
 
     A regra é registrada no ADR para a amostra ser refeita; o corte de tokens só evita sortear trechos que
-    não têm o que revisar."""
-    elegiveis = [u for u in lista if u["tokens"] >= minimo]
+    não têm o que revisar, e `excluir` tira os Pais que já serviram para ajustar o prompt."""
+    elegiveis = [u for u in lista if u["tokens"] >= minimo and u["id"] not in excluir]
     sorteados = random.Random(semente).sample(elegiveis, min(n, len(elegiveis)))
     ordem = {u["id"]: i for i, u in enumerate(lista)}
     return sorted(sorteados, key=lambda u: ordem[u["id"]])
@@ -338,6 +348,119 @@ def extrair(unidade: dict, gera: Gerador, tentativas_max: int = 3) -> dict:
     }
 
 
+CONTINUAR = (
+    "Faltaram entidades ou relações do trecho na sua resposta. Responda de novo com o mesmo esquema, mas só "
+    "com o que ainda não está nela: entidades dos onze tipos que o trecho cita e a sua lista não tem, e "
+    "relações novas, entre entidades da lista anterior ou das novas, com os nomes idênticos aos da lista. "
+    "Valem as mesmas regras. Se nada faltou, devolva as duas listas vazias."
+)
+
+
+def fundir(base: dict, adicional: dict) -> tuple[dict, dict]:
+    """Funde o acréscimo do *gleaning* à primeira resposta e devolve (fundida, o que foi mesmo acrescentado).
+
+    Entidade com nome já existente (sem caixa nem espaços sobrando) e relação com o mesmo par origem-destino
+    não entram de novo. Dentro dos tetos de entidades e de relações, as relações que citam nome fora da lista
+    fundida são descartadas e contadas, em vez de invalidar o acréscimo todo."""
+    nomes = {normalizar_nome(e["name"]) for e in base["entities"]}
+    entidades, repetidas = [], 0
+    for e in adicional.get("entities", []):
+        if not (isinstance(e, dict) and "name" in e):
+            continue
+        chave = normalizar_nome(e["name"])
+        if chave in nomes:
+            repetidas += 1
+        elif len(base["entities"]) + len(entidades) < MAX_ENTIDADES:
+            nomes.add(chave)
+            entidades.append(e)
+    pares = {(normalizar_nome(r["source"]), normalizar_nome(r["target"])) for r in base["relationships"]}
+    relacoes, repetidas_rel, soltas = [], 0, 0
+    for r in adicional.get("relationships", []):
+        if not (isinstance(r, dict) and "source" in r and "target" in r):
+            continue
+        par = (normalizar_nome(r["source"]), normalizar_nome(r["target"]))
+        if par in pares:
+            repetidas_rel += 1
+        elif par[0] not in nomes or par[1] not in nomes:
+            soltas += 1
+        elif len(base["relationships"]) + len(relacoes) < MAX_RELACOES:
+            pares.add(par)
+            relacoes.append(r)
+    fundida = {
+        "entities": base["entities"] + entidades,
+        "relationships": base["relationships"] + relacoes,
+    }
+    return fundida, {
+        "entities": entidades,
+        "relationships": relacoes,
+        "entidades_repetidas": repetidas,
+        "relacoes_repetidas": repetidas_rel,
+        "relacoes_soltas": soltas,
+    }
+
+
+def completar(unidade: dict, base: dict, gera: Gerador, tentativas_max: int = 2) -> dict:
+    """Uma rodada de *gleaning* sobre a resposta `base` (já válida): o acréscimo é fundido e a fusão validada.
+
+    Se a rodada não der uma fusão válida, vale a primeira resposta (`valida` falso e o erro)."""
+    t0 = time.perf_counter()
+    mensagens = [
+        {"role": "system", "content": SISTEMA},
+        {"role": "user", "content": unidade["pedido"]},
+        {"role": "assistant", "content": json.dumps(base, ensure_ascii=False)},
+        {"role": "user", "content": CONTINUAR},
+    ]
+    tokens_prompt = tokens_saida = tentativas = 0
+    fundida, acrescimo, erro = None, None, None
+    while tentativas < tentativas_max:
+        r = gera(mensagens)
+        tentativas += 1
+        tokens_prompt += r.get("tokens_prompt", 0)
+        tokens_saida += r.get("tokens_saida", 0)
+        fundida, acrescimo, erro = None, None, None
+        if r.get("finish") == "length":
+            erro = (
+                "saída cortada por tamanho: devolva só as entidades e relações que faltam, em poucas linhas"
+            )
+        else:
+            try:
+                adicional = json.loads(r["conteudo"])
+                if not isinstance(adicional, dict):
+                    raise ValueError("a resposta não é um objeto JSON")
+                fundida, acrescimo = fundir(base, adicional)
+                fundida = ExtracaoAberta.model_validate(fundida).model_dump(mode="json")
+            except ValueError as e:  # JSON inválido e ValidationError (que herda de ValueError)
+                fundida, acrescimo = None, None
+                erro = _problema(e)
+        if fundida is not None:
+            break
+        mensagens += [
+            {"role": "assistant", "content": r.get("conteudo") or ""},
+            {"role": "user", "content": f"A resposta é inválida ({erro}). Corrija e responda de novo."},
+        ]
+    return {
+        "valida": fundida is not None,
+        "resposta": fundida if fundida is not None else base,
+        "acrescimo": acrescimo,
+        "erro": erro,
+        "tentativas": tentativas,
+        "tokens_prompt": tokens_prompt,
+        "tokens_saida": tokens_saida,
+        "segundos": round(time.perf_counter() - t0, 1),
+    }
+
+
+def _problema(e: ValueError) -> str:
+    if isinstance(e, ValidationError):
+        return "; ".join(f"{'.'.join(map(str, x['loc']))}: {x['msg']}" for x in e.errors()[:5])
+    return f"JSON inválido: {e}"
+
+
+def chave_de_gleaning(unidade: dict, modelo: str = MODELO_LLM) -> str:
+    """Chave da rodada extra: a da primeira passada mais o texto de `CONTINUAR`."""
+    return hashlib.sha1(f"g1|{chave_de_cache(unidade, modelo)}|{CONTINUAR}".encode()).hexdigest()[:20]
+
+
 def chave_de_cache(unidade: dict, modelo: str = MODELO_LLM) -> str:
     # o patch do schema não muda o que o modelo deve devolver; só maior.menor entra na chave
     versao_schema = VERSAO_ABERTA.rsplit(".", 1)[0]
@@ -345,31 +468,83 @@ def chave_de_cache(unidade: dict, modelo: str = MODELO_LLM) -> str:
     return hashlib.sha1(base.encode("utf-8")).hexdigest()[:20]
 
 
+def _com_cache(arq: Path, fazer: Callable[[], dict]) -> tuple[dict, bool]:
+    """(resultado, veio do cache). Só entrada válida do cache vale; toda execução nova é gravada."""
+    if arq.exists():
+        guardada = json.loads(arq.read_text(encoding="utf-8"))
+        if guardada.get("valida"):
+            return guardada, True
+    r = fazer()
+    _gravar(arq, r)
+    return r, False
+
+
 def extrair_todas(
-    lista: list[dict], gera: Gerador, cache: Path, paralelismo: int = 2, modelo: str = MODELO_LLM, log=None
+    lista: list[dict],
+    gera: Gerador,
+    cache: Path,
+    paralelismo: int = 2,
+    modelo: str = MODELO_LLM,
+    log=None,
+    gleaning: int = 0,
 ) -> list[dict]:
-    """Extrai todas as unidades com cache por hash; só entrada válida do cache é reaproveitada."""
+    """Extrai todas as unidades com cache por hash. Com `gleaning=1`, cada Pai de primeira passada válida
+    ganha uma rodada extra (`completar`) em `gleaning`; `resposta` segue sendo a primeira passada."""
+    if gleaning not in (0, 1):
+        raise ValueError("gleaning é 0 ou 1 (ARQUITETURA §5 I-6)")
     cache.mkdir(parents=True, exist_ok=True)
 
     def uma(u: dict) -> dict:
-        arq = cache / f"{chave_de_cache(u, modelo)}.json"
-        r = None
-        if arq.exists():
-            guardada = json.loads(arq.read_text(encoding="utf-8"))
-            if guardada.get("valida"):
-                r = {**guardada, "do_cache": True, "chamadas": 0}
-                tag = "cache"
-        if r is None:
-            r = extrair(u, gera)
-            _gravar(arq, r)
-            r = {**r, "do_cache": False, "chamadas": r["tentativas"]}
-            tag = "ok" if r["valida"] else "INVÁLIDA"
+        r, do_cache = _com_cache(cache / f"{chave_de_cache(u, modelo)}.json", lambda: extrair(u, gera))
+        r = {**r, "do_cache": do_cache, "chamadas": 0 if do_cache else r["tentativas"], "gleaning": None}
+        tag = "cache" if do_cache else ("ok" if r["valida"] else "INVÁLIDA")
+        if gleaning and r["valida"]:
+            g, g_cache = _com_cache(
+                cache / f"g1_{chave_de_gleaning(u, modelo)}.json", lambda: completar(u, r["resposta"], gera)
+            )
+            r["gleaning"] = {**g, "do_cache": g_cache, "chamadas": 0 if g_cache else g["tentativas"]}
+            tag += "+g" if g["valida"] else "+g INVÁLIDO"
         if log:
             log(f"{u['id']} p. {u['paginas'][0]}: {tag}")
         return {"id": u["id"], "tokens": u["tokens"], "paginas": u["paginas"], **r}
 
     with ThreadPoolExecutor(max_workers=paralelismo) as pool:
         return list(pool.map(uma, lista))
+
+
+def final(resultado: dict) -> dict | None:
+    """A resposta que vale: a da rodada extra, se houve e foi válida; senão a primeira passada."""
+    g = resultado.get("gleaning")
+    if g and g["valida"]:
+        return g["resposta"]
+    return resultado["resposta"] if resultado["valida"] else None
+
+
+_SUFIXOS = {"s.a.", "s/a", "s.a", "ltda.", "ltda", "sa"}
+
+
+def _sem_acento(texto: str) -> str:
+    d = unicodedata.normalize("NFKD", texto)
+    return " ".join("".join(c for c in d if not unicodedata.combining(c)).casefold().split())
+
+
+def lastro_de_nome(nome: str, texto: str) -> bool:
+    """O nome da entidade aparece no texto do Pai (sem acento, caixa nem espaços sobrando)? Também vale o
+    nome sem sufixo societário, sem o que vem entre parênteses ou só o que está entre eles (sigla).
+
+    É um teste mecânico e conservador: acusa falta de lastro em nomes que o LLM reescreveu, e deixa passar
+    entidade de nome certo e descrição inventada; por isso a leitura dos acréscimos continua sendo manual."""
+    t = _sem_acento(texto)
+    variantes = {_sem_acento(nome)}
+    fora = re.sub(r"\([^)]*\)", " ", nome)
+    variantes.add(_sem_acento(fora))
+    variantes.update(_sem_acento(m) for m in re.findall(r"\(([^)]+)\)", nome))
+    for v in list(variantes):
+        palavras = v.split()
+        while palavras and palavras[-1] in _SUFIXOS:
+            palavras.pop()
+            variantes.add(" ".join(palavras))
+    return any(v and v in t for v in variantes)
 
 
 def nomes_repetidos(resposta: dict) -> list[str]:
@@ -414,6 +589,70 @@ def resumir(resultados: list[dict]) -> dict:
     }
 
 
+def _pct(parte: float, todo: float) -> float | None:
+    return round(100 * parte / todo, 1) if todo else None
+
+
+def resumir_ganho(resultados: list[dict], textos: dict[str, str]) -> dict:
+    """O que a rodada de *gleaning* acrescentou sobre a primeira passada, nos Pais em que as duas valeram.
+
+    `textos` mapeia o id do Pai ao que o LLM leu (o pedido), para o lastro mecânico dos nomes
+    (`lastro_de_nome`). Os custos são só os das chamadas feitas nesta execução (o cache não conta)."""
+    pares = [r for r in resultados if r["valida"] and r.get("gleaning") and r["gleaning"]["valida"]]
+    base_e = sum(len(r["resposta"]["entities"]) for r in pares)
+    base_r = sum(len(r["resposta"]["relationships"]) for r in pares)
+    novas = [(r["id"], e) for r in pares for e in r["gleaning"]["acrescimo"]["entities"]]
+    novas_r = sum(len(r["gleaning"]["acrescimo"]["relationships"]) for r in pares)
+    sem_lastro_base = sum(
+        not lastro_de_nome(e["name"], textos[r["id"]]) for r in pares for e in r["resposta"]["entities"]
+    )
+    sem_lastro_novas = [(i, e["name"]) for i, e in novas if not lastro_de_nome(e["name"], textos[i])]
+    por_tipo = {t: 0 for t in TIPOS_DE_ENTIDADE}
+    for _, e in novas:
+        por_tipo[e["type"]] += 1
+    g_feitas = [r["gleaning"] for r in pares if not r["gleaning"]["do_cache"]]
+    b_feitas = [r for r in pares if not r["do_cache"]]
+    return {
+        "pais_com_as_duas": len(pares),
+        "pais_so_primeira_passada": sum(1 for r in resultados if r["valida"] and r not in pares),
+        "gleaning_invalido": [
+            r["id"] for r in resultados if r.get("gleaning") and not r["gleaning"]["valida"]
+        ],
+        "pais_que_ganharam_entidade": sum(1 for r in pares if r["gleaning"]["acrescimo"]["entities"]),
+        "pais_que_ganharam_relacao": sum(1 for r in pares if r["gleaning"]["acrescimo"]["relationships"]),
+        "entidades_primeira": base_e,
+        "entidades_acrescentadas": len(novas),
+        "ganho_entidades_pct": _pct(len(novas), base_e),
+        "relacoes_primeira": base_r,
+        "relacoes_acrescentadas": novas_r,
+        "ganho_relacoes_pct": _pct(novas_r, base_r),
+        "acrescimos_por_tipo": por_tipo,
+        "entidades_repetidas_descartadas": sum(
+            r["gleaning"]["acrescimo"]["entidades_repetidas"] for r in pares
+        ),
+        "relacoes_repetidas_descartadas": sum(
+            r["gleaning"]["acrescimo"]["relacoes_repetidas"] for r in pares
+        ),
+        "relacoes_soltas_descartadas": sum(r["gleaning"]["acrescimo"]["relacoes_soltas"] for r in pares),
+        "sem_lastro_de_nome_primeira_pct": _pct(sem_lastro_base, base_e),
+        "sem_lastro_de_nome_acrescentadas": len(sem_lastro_novas),
+        "sem_lastro_de_nome_acrescentadas_pct": _pct(len(sem_lastro_novas), len(novas)),
+        "sem_lastro_de_nome_lista": sem_lastro_novas,
+        "custo_primeira": {
+            "pais": len(b_feitas),
+            "tokens_saida": sum(r["tokens_saida"] for r in b_feitas),
+            "segundos": round(sum(r["segundos"] for r in b_feitas), 1),
+        },
+        "custo_gleaning": {
+            "pais": len(g_feitas),
+            "tokens_prompt": sum(g["tokens_prompt"] for g in g_feitas),
+            "tokens_saida": sum(g["tokens_saida"] for g in g_feitas),
+            "segundos": round(sum(g["segundos"] for g in g_feitas), 1),
+            "chamadas": sum(g["chamadas"] for g in g_feitas),
+        },
+    }
+
+
 def _carregar(prefixo: Path) -> dict:
     return json.loads(Path(f"{prefixo}.chunks.json").read_text(encoding="utf-8"))
 
@@ -426,15 +665,22 @@ def main() -> None:  # pragma: no cover - orquestração de CLI; as peças acima
         p.add_argument("prefixo", type=Path, help="ex.: ../data/parsed/bb_fre_2026_recorte")
         p.add_argument("--amostra", type=int, default=0, help="só N Pais sorteados (0 = todos)")
         p.add_argument("--semente", type=int, default=1)
+        p.add_argument(
+            "--minimo", type=int, default=MIN_TOKENS_AMOSTRA, help="tokens mínimos dos Pais sorteados"
+        )
+        p.add_argument("--excluir", nargs="*", default=[], help="ids de Pais que não podem ser sorteados")
+        p.add_argument("--saida", default="aberta", help="sufixo do arquivo: <prefixo>.<saida>.json")
         if nome == "executar":
             p.add_argument("--swap", default="http://127.0.0.1:8080")
             p.add_argument("--paralelismo", type=int, default=2)
+            p.add_argument("--gleaning", type=int, choices=(0, 1), default=0, help="rodadas extras (0 ou 1)")
     a = ap.parse_args()
 
-    lista = unidades(_carregar(a.prefixo))
+    chunks = _carregar(a.prefixo)
+    lista = unidades(chunks)
     if a.amostra:
-        lista = amostrar(lista, a.amostra, a.semente)
-    destino = Path(f"{a.prefixo}.aberta.json")
+        lista = amostrar(lista, a.amostra, a.semente, a.minimo, tuple(a.excluir))
+    destino = Path(f"{a.prefixo}.{a.saida}.json")
     cache = a.prefixo.parent / "aberta_cache"
     if a.acao == "resumo":
         resultados = json.loads(destino.read_text(encoding="utf-8"))
@@ -445,9 +691,17 @@ def main() -> None:  # pragma: no cover - orquestração de CLI; as peças acima
             cache,
             a.paralelismo,
             log=lambda m: print(m, file=sys.stderr, flush=True),
+            gleaning=a.gleaning,
         )
         _gravar(destino, resultados)
-    print(json.dumps(resumir(resultados), ensure_ascii=False, indent=1))
+    resumo = {"primeira_passada": resumir(resultados)}
+    if any(r.get("gleaning") for r in resultados):
+        # o lastro vale contra o pedido inteiro (documento, seção e trecho): o emissor e os nomes de seção
+        # que o LLM vê também são "o que o trecho diz"
+        resumo["ganho_do_gleaning"] = resumir_ganho(
+            resultados, {u["id"]: u["pedido"] for u in unidades(chunks)}
+        )
+    print(json.dumps(resumo, ensure_ascii=False, indent=1))
 
 
 if __name__ == "__main__":

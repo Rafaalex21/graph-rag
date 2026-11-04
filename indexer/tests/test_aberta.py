@@ -212,3 +212,159 @@ def test_resumir_conta_entidades_por_tipo_forca_e_nomes_repetidos(tmp_path):
     assert res["entidades_por_tipo"]["ORGANIZATION"] == 2 and res["entidades_por_tipo"]["RISK"] == 1
     assert res["relacoes_por_forca"][8] == 1
     assert res["nomes_repetidos"] == 1
+
+
+# --- F5.2: gleaning ---------------------------------------------------------------------------------------
+
+
+def base_valida():
+    return {
+        "entities": [entidade("Banco Alfa S.A."), entidade("Comitê de Auditoria")],
+        "relationships": [relacao("Banco Alfa S.A.", "Comitê de Auditoria")],
+    }
+
+
+def test_fundir_nao_repete_nome_nem_par_e_descarta_relacao_solta():
+    adicional = {
+        "entities": [entidade("  banco ALFA s.a. "), entidade("Cade"), entidade("Lei 1")],
+        "relationships": [
+            relacao("Banco Alfa S.A.", "Comitê de Auditoria", 8),  # mesmo par da primeira passada
+            relacao("Cade", "Banco Alfa S.A."),  # entre nova e antiga: entra
+            relacao("Cade", "Fantasma"),  # nome fora da lista: descartada e contada
+        ],
+    }
+    fundida, acrescimo = ea.fundir(base_valida(), adicional)
+    assert [e["name"] for e in acrescimo["entities"]] == ["Cade", "Lei 1"]
+    assert len(acrescimo["relationships"]) == 1 and len(fundida["relationships"]) == 2
+    contagens = (
+        acrescimo["entidades_repetidas"],
+        acrescimo["relacoes_repetidas"],
+        acrescimo["relacoes_soltas"],
+    )
+    assert contagens == (1, 1, 1)
+    assert ExtracaoAberta.model_validate(fundida)  # a fusão passa pelo validador do esquema
+
+
+def test_fundir_respeita_os_tetos_de_entidades_e_de_relacoes():
+    base = {"entities": [entidade(f"E{i}") for i in range(29)], "relationships": []}
+    adicional = {"entities": [entidade("N1"), entidade("N2")], "relationships": [relacao("N1", "E0")]}
+    fundida, acrescimo = ea.fundir(base, adicional)
+    assert len(fundida["entities"]) == 30 and [e["name"] for e in acrescimo["entities"]] == ["N1"]
+    assert acrescimo["relacoes_soltas"] == 0 and len(acrescimo["relationships"]) == 1
+
+
+def test_fundir_ignora_item_sem_nome_em_vez_de_quebrar():
+    fundida, acrescimo = ea.fundir(
+        base_valida(), {"entities": [{"type": "RISK"}, "texto"], "relationships": [{}]}
+    )
+    assert acrescimo["entities"] == [] and fundida == base_valida()
+
+
+def test_completar_valida_a_fusao_e_repete_com_o_erro_se_o_acrescimo_tem_nome_de_data():
+    chamadas = []
+    boa = {
+        "entities": [entidade("Leilão da oferta", "EVENT")],
+        "relationships": [relacao("Leilão da oferta", "Banco Alfa S.A.")],
+    }
+    respostas = [{"entities": [entidade("14 de agosto de 2024", "EVENT")], "relationships": []}, boa]
+
+    def gera(mensagens):
+        chamadas.append(list(mensagens))
+        return resposta_do_llm(respostas[len(chamadas) - 1])
+
+    r = ea.completar({"pedido": "trecho"}, base_valida(), gera)
+    assert r["valida"] and r["tentativas"] == 2
+    assert [e["name"] for e in r["acrescimo"]["entities"]] == ["Leilão da oferta"]
+    assert len(r["resposta"]["entities"]) == 3
+    assert "data ou um valor" in chamadas[1][-1]["content"]
+    assert chamadas[0][-1]["content"] == ea.CONTINUAR  # a rodada extra continua o diálogo da primeira
+    assert json.loads(chamadas[0][-2]["content"]) == base_valida()
+
+
+def test_completar_que_nao_da_fusao_valida_mantem_a_primeira_passada():
+    r = ea.completar({"pedido": "t"}, base_valida(), lambda m: {"conteudo": "{", "finish": "stop"})
+    assert (
+        not r["valida"] and r["tentativas"] == 2 and r["resposta"] == base_valida() and r["acrescimo"] is None
+    )
+    r = ea.completar({"pedido": "t"}, base_valida(), lambda m: resposta_do_llm({}, "length"))
+    assert not r["valida"] and "cortada" in r["erro"]
+
+
+def test_completar_aceita_listas_vazias_quando_nada_faltou():
+    r = ea.completar(
+        {"pedido": "t"}, base_valida(), lambda m: resposta_do_llm({"entities": [], "relationships": []})
+    )
+    assert r["valida"] and r["resposta"] == base_valida() and r["acrescimo"]["entities"] == []
+
+
+@pytest.mark.parametrize(
+    ("nome", "texto", "esperado"),
+    [
+        ("Banco Digio S.A.", "alienação da participação no Banco Digio S.A., pela BB Elo", True),
+        ("Banco Digio S.A.", "participação no Banco Digio", True),  # sem o sufixo societário
+        ("Comitê Executivo (CEPI)", "O Comitê Executivo de Prevenção (CEPI) reúne-se", True),  # só a sigla
+        ("Conselho de Defesa Econômica", "pelo conselho de defesa economica", True),
+        ("Sest", "Bacen, Sest e Cade", True),
+        ("Superintendência Fantasma", "Bacen, Sest e Cade", False),
+        ("", "qualquer texto", False),
+    ],
+)  # fmt: skip
+def test_lastro_de_nome_ignora_acento_caixa_sufixo_e_parenteses(nome, texto, esperado):
+    assert ea.lastro_de_nome(nome, texto) is esperado
+
+
+def pai_longo(i="p1", texto="Banco Alfa S.A. e o Comitê de Auditoria. O Cade aprovou."):
+    return {
+        "pais": [
+            {"id": i, "caminho": ["S"], "texto": texto, "tokens": 400, "pagina_inicio": 1, "pagina_fim": 1}
+        ]
+    }
+
+
+def test_extrair_todas_com_gleaning_guarda_as_duas_passadas_e_nao_repete_chamada_do_cache(tmp_path):
+    lista = ea.unidades(pai_longo())
+    n = []
+
+    def gera(mensagens):
+        n.append(1)
+        if mensagens[-1]["content"] == ea.CONTINUAR:
+            return resposta_do_llm(
+                {"entities": [entidade("Cade")], "relationships": [relacao("Cade", "Banco Alfa S.A.")]}
+            )
+        return resposta_do_llm(base_valida())
+
+    r = ea.extrair_todas(lista, gera, tmp_path, gleaning=1)[0]
+    assert len(n) == 2 and len(r["resposta"]["entities"]) == 2  # `resposta` segue sendo a primeira passada
+    assert len(ea.final(r)["entities"]) == 3 and r["gleaning"]["chamadas"] == 1
+    r2 = ea.extrair_todas(lista, gera, tmp_path, gleaning=1)[0]
+    assert len(n) == 2 and r2["gleaning"]["do_cache"] and r2["do_cache"]
+    ea.extrair_todas(lista, gera, tmp_path, gleaning=0)  # sem gleaning reaproveita a primeira passada
+    assert len(n) == 2
+    assert ea.extrair_todas(lista, gera, tmp_path)[0]["gleaning"] is None
+
+
+def test_gleaning_so_aceita_zero_ou_um(tmp_path):
+    with pytest.raises(ValueError, match="0 ou 1"):
+        ea.extrair_todas([], lambda m: {}, tmp_path, gleaning=2)
+
+
+def test_resumir_ganho_conta_acrescimos_lastro_e_custo(tmp_path):
+    chunks = pai_longo()
+
+    def gera(mensagens):
+        if mensagens[-1]["content"] == ea.CONTINUAR:
+            return resposta_do_llm(
+                {"entities": [entidade("Cade"), entidade("Entidade Inventada")], "relationships": []}
+            )
+        return resposta_do_llm(base_valida())
+
+    r = ea.extrair_todas(ea.unidades(chunks), gera, tmp_path, gleaning=1)
+    g = ea.resumir_ganho(r, {"p1": chunks["pais"][0]["texto"]})
+    assert (g["entidades_primeira"], g["entidades_acrescentadas"], g["ganho_entidades_pct"]) == (2, 2, 100.0)
+    assert g["sem_lastro_de_nome_acrescentadas"] == 1 and g["sem_lastro_de_nome_lista"] == [
+        ("p1", "Entidade Inventada")
+    ]
+    assert g["custo_gleaning"]["chamadas"] == 1 and g["pais_com_as_duas"] == 1
+    assert (
+        ea.resumir_ganho(ea.extrair_todas(ea.unidades(chunks), gera, tmp_path), {})["pais_com_as_duas"] == 0
+    )
