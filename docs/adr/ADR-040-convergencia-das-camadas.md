@@ -1,6 +1,6 @@
 # ADR-040 · Convergência das entidades abertas e de domínio
 
-- **Estado:** proposta (04/11/2026). A extração e a convergência estão feitas e medidas, mas o aceite da F5.3 ("nenhum par duplicado entre camadas na amostra de 30 entidades mais citadas") **não foi atendido à risca**: sobram 2 pares na amostra (ver "Amostra das 30"). A tarefa fica em `[~]` até o critério ser aceito como está, ajustado ou refeito.
+- **Estado:** aceita (04/11/2026), com o critério da F5.3 ajustado: o aceite original ("nenhum par duplicado entre camadas na amostra de 30 entidades mais citadas") **não foi atendido à risca**, sobram 2 pares (ver "Amostra das 30"), e o usuário aceitou "até 2 pares documentados". Mais uma rodada na resolução ficou descartada; a F5.8 mede de novo no documento inteiro.
 - **Data:** 2026-11-04
 - **Tarefa(s):** F5.3
 
@@ -65,9 +65,9 @@ Ordenadas por fatos + menções depois da resolução. Para cada uma listei todo
 
 A leitura é minha. Para dar a medida do que a resolução já resolveu: os 26 nós que ela fundiu nos sobreviventes da amostra eram duplicatas dela (o emissor em duas grafias, o Banco Central em quatro, a Cielo em três, o Comitê de Auditoria e o Bacen…). O critério não diz de onde partir, então este é o único "antes" que tenho.
 
-## Por que não fechei a tarefa
+## Fechamento com o critério ajustado
 
-O critério é "nenhum par". Dois pares sobram, e os dois vêm de erro do juiz dentro de um grupo, que a regra de conflito evita propagar ao custo de perder o par certo. Cada correção que fiz depois da primeira rodada (conflito, fechamento, parênteses, contração, tipos) nasceu de um caso que a amostra mostrou; consertar mais dois casos com regra nova seria ajustar a regra à amostra, e o próximo caso apareceria na F5.8. Duas saídas honestas: (a) aceitar o critério como "≤ 2 pares na amostra, todos documentados aqui"; (b) mais uma rodada: correlação ponderada sobre o grupo (resolve o primeiro par, não o segundo) e/ou uma segunda opinião do juiz nos pares do grupo que decidem o corte.
+O critério é "nenhum par". Dois pares sobram, e os dois vêm de erro do juiz dentro de um grupo, que a regra de conflito evita propagar ao custo de perder o par certo. Cada correção que fiz depois da primeira rodada (conflito, fechamento, parênteses, contração, tipos) nasceu de um caso que a amostra mostrou; consertar mais dois casos com regra nova seria ajustar a regra à amostra, e o próximo caso apareceria na F5.8. Duas saídas eram (a) aceitar o critério como "até 2 pares na amostra, todos documentados aqui" ou (b) mais uma rodada: correlação ponderada sobre o grupo (resolve o primeiro par, não o segundo) e/ou uma segunda opinião do juiz nos pares do grupo que decidem o corte. O usuário escolheu (a) em 04/11/2026; (b) fica como opção se a F5.8 mostrar mais casos assim.
 
 ## Questão em aberto da F5.3: `FINANCIAL_METRIC` e o catálogo
 
