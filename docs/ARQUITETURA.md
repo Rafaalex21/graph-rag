@@ -266,7 +266,7 @@ Demais esquemas: `Organization` (com papel na relação: emissor, subsidiária, 
 
 ### I-6 · Extração aberta (MS GraphRAG, cap. 7)
 
-- **Tipos de entidade** (definidos antes, como o livro exige): `ORGANIZATION`, `PERSON`, `SEGMENT`, `PRODUCT_OR_SERVICE`, `FINANCIAL_METRIC`, `RISK`, `EVENT`, `FINANCIAL_INSTRUMENT`, `REGULATION`, `LOCATION`.
+- **Tipos de entidade** (definidos antes, como o livro exige): `ORGANIZATION`, `PERSON`, `SEGMENT`, `PRODUCT_OR_SERVICE`, `FINANCIAL_METRIC`, `RISK`, `EVENT`, `FINANCIAL_INSTRUMENT`, `REGULATION`, `POLICY_OR_PROGRAM`, `LOCATION`. O décimo primeiro, `POLICY_OR_PROGRAM` (política, programa, metodologia ou instrumento de governança, controle e compliance), entrou na F5.1: com dez tipos, 8 das 9 entidades `PRODUCT_OR_SERVICE` extraídas de 5 Pais eram políticas e programas dos Pais de integridade, sem tipo que os coubesse ([ADR-038](./adr/ADR-038-extracao-aberta.md)). `FINANCIAL_METRIC` nomeia o indicador (lucro líquido), não o valor ("R$ 625 milhões"), que fica na descrição ou nos fatos da extração dirigida.
 - **Saída em JSON** — `{entities: [{name, type, description}], relationships: [{source, target, description, strength 1–10}]}` — em vez das tuplas com delimitadores do artigo original: com gramática, modelos locais erram muito menos de formato.
 - ***Gleaning*** (passadas extras de "faltaram entidades?"): configurável, 0 ou 1. O livro mostra que cada passada acha mais entidades; aqui ela dobra o custo, então a F5 mede o ganho em 20 Pais antes de ligar no corpus inteiro.
 - Cada entidade liga-se ao Pai de onde saiu: `(:__Entity__)-[:MENTIONED_IN]->(:Parent)`.

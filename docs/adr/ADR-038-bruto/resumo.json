@@ -1,0 +1,137 @@
+{
+ "v1": {
+  "unidades": 5,
+  "validas": 5,
+  "validas_na_primeira": 5,
+  "invalidas": [],
+  "do_cache": 2,
+  "chamadas": 3,
+  "entidades": 92,
+  "relacoes": 85,
+  "entidades_por_tipo": {
+   "ORGANIZATION": 45,
+   "PERSON": 2,
+   "SEGMENT": 9,
+   "PRODUCT_OR_SERVICE": 9,
+   "FINANCIAL_METRIC": 3,
+   "RISK": 7,
+   "EVENT": 6,
+   "FINANCIAL_INSTRUMENT": 1,
+   "REGULATION": 9,
+   "POLICY_OR_PROGRAM": 0,
+   "LOCATION": 1
+  },
+  "relacoes_por_forca": {
+   "1": 0,
+   "2": 0,
+   "3": 0,
+   "4": 0,
+   "5": 0,
+   "6": 11,
+   "7": 27,
+   "8": 25,
+   "9": 20,
+   "10": 2
+  },
+  "nomes_repetidos": 0,
+  "no_teto_de_entidades": 0,
+  "tokens_prompt": 6884,
+  "tokens_saida": 6434
+ },
+ "v2": {
+  "unidades": 5,
+  "validas": 5,
+  "validas_na_primeira": 5,
+  "invalidas": [],
+  "do_cache": 0,
+  "chamadas": 5,
+  "entidades": 112,
+  "relacoes": 110,
+  "entidades_por_tipo": {
+   "ORGANIZATION": 50,
+   "PERSON": 0,
+   "SEGMENT": 9,
+   "PRODUCT_OR_SERVICE": 2,
+   "FINANCIAL_METRIC": 3,
+   "RISK": 9,
+   "EVENT": 20,
+   "FINANCIAL_INSTRUMENT": 1,
+   "REGULATION": 10,
+   "POLICY_OR_PROGRAM": 8,
+   "LOCATION": 0
+  },
+  "relacoes_por_forca": {
+   "1": 0,
+   "2": 0,
+   "3": 0,
+   "4": 0,
+   "5": 4,
+   "6": 15,
+   "7": 36,
+   "8": 25,
+   "9": 25,
+   "10": 5
+  },
+  "nomes_repetidos": 1,
+  "no_teto_de_entidades": 1,
+  "tokens_prompt": 14200,
+  "tokens_saida": 13040
+ },
+ "v3": {
+  "unidades": 5,
+  "validas": 5,
+  "validas_na_primeira": 5,
+  "invalidas": [],
+  "do_cache": 0,
+  "chamadas": 5,
+  "entidades": 94,
+  "relacoes": 89,
+  "entidades_por_tipo": {
+   "ORGANIZATION": 47,
+   "PERSON": 0,
+   "SEGMENT": 9,
+   "PRODUCT_OR_SERVICE": 4,
+   "FINANCIAL_METRIC": 0,
+   "RISK": 6,
+   "EVENT": 13,
+   "FINANCIAL_INSTRUMENT": 1,
+   "REGULATION": 8,
+   "POLICY_OR_PROGRAM": 6,
+   "LOCATION": 0
+  },
+  "relacoes_por_forca": {
+   "1": 0,
+   "2": 0,
+   "3": 0,
+   "4": 0,
+   "5": 4,
+   "6": 16,
+   "7": 25,
+   "8": 28,
+   "9": 12,
+   "10": 4
+  },
+  "nomes_repetidos": 1,
+  "no_teto_de_entidades": 0,
+  "tokens_prompt": 14560,
+  "tokens_saida": 11057
+ },
+ "amostra": {
+  "regra": "5 Pais sorteados com semente 1 entre os de >= 300 tokens, na ordem do documento",
+  "elegiveis": 13,
+  "ids": [
+   "a7babf0139ab7d1e",
+   "923805392cfd8e61",
+   "997b78e7a9370bfc",
+   "259a2ade6cd81a7a",
+   "454107c2f98f2838"
+  ],
+  "tokens": [
+   911,
+   763,
+   682,
+   1187,
+   1189
+  ]
+ }
+}

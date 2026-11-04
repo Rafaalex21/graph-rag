@@ -205,8 +205,10 @@
 > entrega: entidades e relações resumidas, comunidades Leiden hierárquicas com relatórios embutidos
 > esforço: G
 
-- [ ] **F5.1** Fixar os tipos de entidade financeiros (§5 I-6) e o prompt de extração em JSON
+- [x] **F5.1** Fixar os tipos de entidade financeiros (§5 I-6) e o prompt de extração em JSON
   - aceite: prompt versionado; 5 Pais extraídos e revisados à mão
+  - resultado: ADR-038; `contracts/open_extraction.schema.json` 1.0.0 (11 tipos, força 1–10, relação só entre entidades da resposta, nome que é data ou valor recusado), `indexer.extracao_aberta` com prompt `v3` em português e exemplo fictício; 5 Pais (semente 1, entre os 13 de ≥ 300 tokens) válidos de primeira: 94 entidades e 89 relações
+  - nota: a §5 I-6 tinha 10 tipos; a leitura achou 8 de 9 `PRODUCT_OR_SERVICE` que eram políticas e programas, e entrou `POLICY_OR_PROGRAM` (ARQUITETURA corrigida). A revisão foi minha, não de uma pessoa, e o prompt foi ajustado (v1→v3) nos mesmos 5 Pais, então o resultado é otimista; ficam para a F5.2 os apelidos que viram entidade, a força de relação sem poder de discriminar (nenhuma abaixo de 5) e `LOCATION`/`PERSON` sem exercício
 - [ ] **F5.2** Extração aberta por Pai, com *gleaning* configurável
   - aceite: ganho do *gleaning* medido em 20 Pais e decidido em ADR
   - depende: F5.1

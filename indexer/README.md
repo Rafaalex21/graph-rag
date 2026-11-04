@@ -179,6 +179,13 @@ uv run python -m indexer.importar executar ../data/parsed/bb_fre_2026_recorte --
 uv run python -m indexer.catalogo medir ../data/parsed/bb_fre_2026_recorte --doc-id bb-fre-2026-v7
 ```
 
+Extração aberta (F5.1, ADR-038), a camada MS GraphRAG: entidades de 11 tipos fixos e relações com força de 1 a 10 por Pai, com o esquema em `contracts/open_extraction.schema.json` (gerado por `python -m indexer.schemas`). Precisa só do llama-swap no perfil `indexar`; `--amostra N` sorteia N Pais de pelo menos 300 tokens (`--semente`), a saída vai para `data/parsed/<prefixo>.aberta.json` (fora do git) e o cache para `data/parsed/aberta_cache/`. `resumo` conta a saída sem LLM:
+
+```powershell
+uv run python -m indexer.extracao_aberta executar ../data/parsed/bb_fre_2026_recorte --amostra 5 --semente 1
+uv run python -m indexer.extracao_aberta resumo ../data/parsed/bb_fre_2026_recorte --amostra 5 --semente 1
+```
+
 Resolução de entidades (F4.5, ADR-036); precisa do Neo4j e do llama-swap (perfis `vetorizar` e `indexar`). `planejar` reconstrói o grafo sem fusões, gera candidatos, pergunta ao LLM e grava `data/parsed/<prefixo>.resolucao.json` (fora do git; cache em `data/parsed/resolucao_cache/`). `aplicar` funde com `apoc.refactor.mergeNodes` (sem LLM) e confere que reimportar não muda nada. O importador lê o plano sozinho, então reimportar não recria os nós fundidos:
 
 ```powershell

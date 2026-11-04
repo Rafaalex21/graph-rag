@@ -1,0 +1,129 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://graphrag.local/contracts/open_extraction.schema.json",
+  "version": "1.0.0",
+  "$defs": {
+    "EntidadeAberta": {
+      "additionalProperties": false,
+      "description": "Uma entidade citada no trecho, com o tipo e o que o trecho diz sobre ela.",
+      "properties": {
+        "name": {
+          "description": "Nome da entidade como aparece no texto, na grafia mais completa que o trecho usar",
+          "minLength": 1,
+          "title": "Name",
+          "type": "string"
+        },
+        "type": {
+          "description": "Um dos tipos fixos: ORGANIZATION, PERSON, SEGMENT, PRODUCT_OR_SERVICE, FINANCIAL_METRIC, RISK, EVENT, FINANCIAL_INSTRUMENT, REGULATION, POLICY_OR_PROGRAM ou LOCATION",
+          "enum": [
+            "ORGANIZATION",
+            "PERSON",
+            "SEGMENT",
+            "PRODUCT_OR_SERVICE",
+            "FINANCIAL_METRIC",
+            "RISK",
+            "EVENT",
+            "FINANCIAL_INSTRUMENT",
+            "REGULATION",
+            "POLICY_OR_PROGRAM",
+            "LOCATION"
+          ],
+          "title": "Type",
+          "type": "string"
+        },
+        "description": {
+          "description": "O que o trecho diz sobre a entidade, em uma ou duas frases (até 300 caracteres), sem acrescentar o que o trecho não diz",
+          "maxLength": 300,
+          "minLength": 1,
+          "title": "Description",
+          "type": "string"
+        }
+      },
+      "required": [
+        "name",
+        "type",
+        "description"
+      ],
+      "title": "EntidadeAberta",
+      "type": "object"
+    },
+    "RelacaoAberta": {
+      "additionalProperties": false,
+      "description": "Uma relação entre duas entidades da mesma resposta.",
+      "properties": {
+        "source": {
+          "description": "Nome da entidade de origem, idêntico ao de `entities`",
+          "minLength": 1,
+          "title": "Source",
+          "type": "string"
+        },
+        "target": {
+          "description": "Nome da entidade de destino, idêntico ao de `entities`",
+          "minLength": 1,
+          "title": "Target",
+          "type": "string"
+        },
+        "description": {
+          "description": "Por que as duas se relacionam, segundo o trecho (até 300 caracteres)",
+          "maxLength": 300,
+          "minLength": 1,
+          "title": "Description",
+          "type": "string"
+        },
+        "strength": {
+          "description": "Força da relação de 1 a 10: 1-3 citação de passagem, 4-6 relação clara, 7-10 relação central ao trecho (controle, emissão, regulação direta, risco principal)",
+          "enum": [
+            1,
+            2,
+            3,
+            4,
+            5,
+            6,
+            7,
+            8,
+            9,
+            10
+          ],
+          "title": "Strength",
+          "type": "integer"
+        }
+      },
+      "required": [
+        "source",
+        "target",
+        "description",
+        "strength"
+      ],
+      "title": "RelacaoAberta",
+      "type": "object"
+    }
+  },
+  "additionalProperties": false,
+  "description": "Entidades e relações de um Pai numa única chamada; listas vazias são válidas.",
+  "properties": {
+    "entities": {
+      "description": "Entidades dos tipos fixos citadas no trecho (até 30); lista vazia se nenhuma",
+      "items": {
+        "$ref": "#/$defs/EntidadeAberta"
+      },
+      "maxItems": 30,
+      "title": "Entities",
+      "type": "array"
+    },
+    "relationships": {
+      "description": "Relações entre as entidades acima (até 40); lista vazia se nenhuma",
+      "items": {
+        "$ref": "#/$defs/RelacaoAberta"
+      },
+      "maxItems": 40,
+      "title": "Relationships",
+      "type": "array"
+    }
+  },
+  "required": [
+    "entities",
+    "relationships"
+  ],
+  "title": "ExtracaoAberta",
+  "type": "object"
+}
