@@ -198,3 +198,12 @@ Resolução de entidades (F4.5, ADR-036); precisa do Neo4j e do llama-swap (perf
 uv run python -m indexer.resolver planejar ../data/parsed/bb_fre_2026_recorte --doc-id bb-fre-2026-v7
 uv run python -m indexer.resolver aplicar ../data/parsed/bb_fre_2026_recorte --doc-id bb-fre-2026-v7
 ```
+
+Extração aberta do recorte inteiro e convergência com a dirigida (F5.3, ADR-040). O importador carrega `<prefixo>.aberta.json` quando ele existe (entidades `Product`, `FinancialMetric`, `Regulation`, `Policy`, `Location` e as demais com o id da dirigida, mais `RELATED_TO`), então a ordem é: extrair, copiar a saída para `.aberta.json`, `planejar`, `aplicar`. A resolução ganhou o fechamento dos grupos, a fusão parcial de conflitos e as razões de candidato novas (contração, nome igual entre tipos, nota entre parênteses):
+
+```powershell
+uv run python -m indexer.extracao_aberta executar ../data/parsed/bb_fre_2026_recorte --saida aberta_f53
+Copy-Item ../data/parsed/bb_fre_2026_recorte.aberta_f53.json ../data/parsed/bb_fre_2026_recorte.aberta.json
+uv run python -m indexer.resolver planejar ../data/parsed/bb_fre_2026_recorte --doc-id bb-fre-2026-v7
+uv run python -m indexer.resolver aplicar ../data/parsed/bb_fre_2026_recorte --doc-id bb-fre-2026-v7
+```

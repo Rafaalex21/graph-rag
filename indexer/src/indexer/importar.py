@@ -43,7 +43,15 @@ TIPO_DA_ENTIDADE = {
     "RiskFactor": "RISK",
     "Event": "EVENT",
     "Instrument": "FINANCIAL_INSTRUMENT",
+    # só a extração aberta (F5.3) produz estes cinco; a dirigida não os pede
+    "Product": "PRODUCT_OR_SERVICE",
+    "FinancialMetric": "FINANCIAL_METRIC",
+    "Regulation": "REGULATION",
+    "Policy": "POLICY_OR_PROGRAM",
+    "Location": "LOCATION",
 }
+ROTULO_DO_TIPO = {tipo: rotulo for rotulo, tipo in TIPO_DA_ENTIDADE.items()}
+ROTULO_DO_ID = {rotulo.lower(): rotulo for rotulo in TIPO_DA_ENTIDADE}  # o id é `ent:<rotulo>:<hash>`
 NOS = ("fatos", "periodos", "metricas", *TIPO_DA_ENTIDADE)  # as demais chaves de `preparar` são relações
 
 
@@ -124,6 +132,7 @@ class _Entidades:
             "tabela": {},
         }  # tipo da unidade -> id -> unidades
         self.rotulo: dict[str, str] = {}
+        self.camada = "dirigida"  # quem extraiu a menção; vira `layers` no nó (a F5.3 mede a convergência)
 
     def somar(
         self, rotulo: str, nome: str, unidade: str, tipo_unidade: str, chave: tuple = (), **campos: Any
@@ -131,13 +140,28 @@ class _Entidades:
         """Registra uma menção de `nome` na unidade e devolve o id; `chave` acrescenta campos ao hash."""
         id_ = id_da_entidade(rotulo, nome, *chave)
         id_ = self.redirecionar.get(id_, id_)
-        e = self.por_id.setdefault(id_, {"id": id_, "name": nome, "aliases": set(), "papeis": set()})
-        self.rotulo[id_] = rotulo
+        e = self.por_id.setdefault(
+            id_,
+            {
+                "id": id_,
+                "name": nome,
+                "aliases": set(),
+                "papeis": set(),
+                "descricoes": set(),
+                "camadas": set(),
+            },
+        )
+        # o rótulo é o do id, que pode ser o de quem sobreviveu a uma fusão entre tipos (F5.3)
+        self.rotulo[id_] = ROTULO_DO_ID[id_.split(":")[1]]
         e["aliases"].add(nome.strip())
+        e["camadas"].add(self.camada)
         for k, v in campos.items():
             if k == "papel":
                 if v:
                     e["papeis"].add(v)
+            elif k == "descricao":  # a extração aberta junta as descrições de cada Pai (F5.3)
+                if v:
+                    e["descricoes"].add(v)
             elif v is not None and k not in e:
                 e[k] = v
         self.origens[tipo_unidade].setdefault(id_, set()).add(unidade)
@@ -153,19 +177,69 @@ class _Entidades:
             papeis = sorted(e["papeis"])
             rotulo = self.rotulo[id_]
             props = {
-                **{k: v for k, v in e.items() if k not in ("aliases", "papeis")},
+                **{k: v for k, v in e.items() if k not in ("aliases", "papeis", "descricoes", "camadas")},
                 "type": TIPO_DA_ENTIDADE[rotulo],
                 "aliases": aliases,
                 "aliasesText": " | ".join(aliases),
+                "layers": sorted(e["camadas"]),
             }
             if papeis:
                 props["roles"] = papeis
+            if e["descricoes"]:
+                props["descriptions"] = sorted(e["descricoes"])
             if id_ in self.nomes:
                 props["name"] = self.nomes[id_]
             if id_ in absorvidos:
                 props["absorbedIds"] = sorted(absorvidos[id_])
             por_rotulo[rotulo].append({"id": id_, "props": props})
         return por_rotulo
+
+
+def _somar_abertas(ent: _Entidades, abertas: list[dict], doc_id: str) -> list[dict]:
+    """Entidades e relações da extração aberta (I-6) nos mesmos nós da dirigida; devolve as relações.
+
+    O id vem do rótulo e do nome normalizado, como na dirigida: mesmo tipo e mesmo nome caem no mesmo nó sem
+    a resolução. Eventos levam o Pai na chave (como na dirigida): dois Pais com o mesmo nome de evento são
+    dois eventos. Uma relação que repete o par em outro Pai acumula descrição, força máxima e origem; a que
+    vira laço depois de uma fusão some.
+    """
+    from indexer.extracao_aberta import final  # import tardio: a extração aberta usa `normalizar` daqui
+
+    ent.camada = "aberta"
+    pares: dict[tuple[str, str], dict] = {}
+    for r in sorted(abertas, key=lambda r: r["id"]):
+        resp = final(r)
+        if resp is None:
+            continue
+        unidade = r["id"]
+        por_nome: dict[str, str] = {}
+        for e in resp["entities"]:
+            rotulo = ROTULO_DO_TIPO.get(e["type"])
+            if rotulo is None:
+                raise ValueError(f"tipo de entidade desconhecido: {e['type']!r} ({e['name']!r})")
+            chave = (doc_id, unidade, "aberta") if rotulo == "Event" else ()
+            id_ = ent.somar(rotulo, e["name"], unidade, "pai", chave, descricao=e.get("description"))
+            por_nome.setdefault(normalizar(e["name"]), id_)
+        for x in resp["relationships"]:
+            de, para = por_nome.get(normalizar(x["source"])), por_nome.get(normalizar(x["target"]))
+            if de is None or para is None or de == para:
+                continue
+            p = pares.setdefault((de, para), {"descriptions": set(), "strength": 0, "parents": set()})
+            p["descriptions"].add(x["description"])
+            p["strength"] = max(p["strength"], x["strength"])
+            p["parents"].add(unidade)
+    return [
+        {
+            "de": de,
+            "para": para,
+            "props": {
+                "descriptions": sorted(p["descriptions"]),
+                "strength": p["strength"],
+                "parents": sorted(p["parents"]),
+            },
+        }
+        for (de, para), p in sorted(pares.items())
+    ]
 
 
 def preparar(
@@ -177,6 +251,7 @@ def preparar(
     nomes: dict[str, str] | None = None,
     catalogo: list[dict] | None = None,
     mapa_de_metricas: dict[str, dict] | None = None,
+    abertas: list[dict] | None = None,
 ) -> dict:
     """Linhas prontas para os UNWIND: nós (`fatos`, `periodos`, uma lista por rótulo de entidade) e relações.
 
@@ -289,6 +364,7 @@ def preparar(
             if alvo:
                 relacoes_entre_entidades["issued_by"].append({"de": iid, "para": alvo})
 
+    related_to = _somar_abertas(ent, abertas or [], doc_id)
     riscos = {i for i, rot in ent.rotulo.items() if rot == "RiskFactor"}
     mentioned: dict[str, list[dict]] = {"pai": [], "tabela": []}
     described: dict[str, list[dict]] = {"pai": [], "tabela": []}
@@ -309,6 +385,7 @@ def preparar(
         "described_in_pai": described["pai"],
         "described_in_tabela": described["tabela"],
         **relacoes_entre_entidades,
+        "related_to": related_to,
         "metricas": [],
         "of_metric": [],
     }
@@ -319,7 +396,7 @@ def preparar(
     for (
         chave
     ) in linhas:  # a mesma relação pode vir de várias menções; o MERGE a une, mas não a mande duas vezes
-        if chave not in NOS:
+        if chave not in NOS and chave != "related_to":  # `related_to` já sai sem repetição, com listas
             linhas[chave] = _sem_repeticao(linhas[chave])
     return linhas
 
@@ -359,6 +436,11 @@ PASSOS = [
     ("affects", _relacao("__Entity__", "AFFECTS", "__Entity__")),
     ("involves", _relacao("__Entity__", "INVOLVES", "__Entity__")),
     ("issued_by", _relacao("__Entity__", "ISSUED_BY", "__Entity__")),
+    (
+        "related_to",
+        "UNWIND $rows AS r MATCH (a:__Entity__ {id: r.de}), (b:__Entity__ {id: r.para}) "
+        "MERGE (a)-[x:RELATED_TO]->(b) SET x += r.props",
+    ),
 ]
 
 CONTAGENS = {
@@ -380,6 +462,7 @@ CONTAGENS = {
             "AFFECTS",
             "INVOLVES",
             "ISSUED_BY",
+            "RELATED_TO",
             "OF_METRIC",
         )
     },  # fmt: skip
@@ -495,8 +578,18 @@ def entradas(
 
         catalogo = ler_catalogo()
         mapa_de_metricas = json.loads(arq_metricas.read_text(encoding="utf-8"))["mapa"]
+    arq_aberta = Path(f"{prefixo}.aberta.json")  # extração aberta (F5.3): ausente, só a dirigida entra
+    abertas = json.loads(arq_aberta.read_text(encoding="utf-8")) if arq_aberta.exists() else None
     return preparar(
-        registros, resultados, _pedidos(prefixo), doc_id, redirecionar, nomes, catalogo, mapa_de_metricas
+        registros,
+        resultados,
+        _pedidos(prefixo),
+        doc_id,
+        redirecionar,
+        nomes,
+        catalogo,
+        mapa_de_metricas,
+        abertas,
     )
 
 

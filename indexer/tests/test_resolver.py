@@ -9,6 +9,7 @@ from indexer.resolver import (
     chaves_de_bloco,
     componentes,
     cosseno,
+    fechamento,
     iniciais,
     julgar,
     montar_pedido,
@@ -112,9 +113,50 @@ def test_embedding_alto_no_bloco_ou_muito_alto_fora_dele():
     assert razoes(c, d, UM, PROXIMO) == ["embedding_global"]
 
 
-def test_tipos_diferentes_nunca_formam_par():
-    a, b = ent("a", "Alfa"), ent("b", "Alfa", label="Segment")
+def test_tipos_diferentes_so_formam_par_pelo_nome():
+    muito_parecidos = {k: UM for k in "abcdef"}
+    # nada além do embedding: nunca
+    assert candidatos([ent("a", "Alfa"), ent("b", "Beta", label="Segment")], muito_parecidos) == []
+    # nome igual (a extração aberta tipa o mesmo ente de dois jeitos)
+    a, b = ent("a", "Ministério da Fazenda"), ent("b", "ministério da fazenda", label="Person")
+    assert [p["razoes"] for p in candidatos([a, b], muito_parecidos)] == [["nome_igual_outro_tipo"]]
+    # nome contido entre tipos não é candidato: o juiz errou 4 de 7 no recorte (ADR-040)
+    c, d = ent("c", "Carteira de negociação", label="Policy"), ent("d", "Carteira de negociação de varejo")
+    assert candidatos([c, d], muito_parecidos) == []
+
+
+def test_cnpj_diferente_veta_tambem_entre_tipos():
+    a = ent("a", "Alfa", cnpj="00.000.000/0001-91")
+    b = ent("b", "Alfa", label="Person", cnpj="11.111.111/0001-11")
     assert candidatos([a, b], {"a": UM, "b": UM}) == []
+
+
+@pytest.mark.parametrize(
+    ("a", "b", "esperado"),
+    [
+        ("Bacen", "Banco Central do Brasil", True),
+        ("BACEN", "Banco Central", True),
+        ("BCB", "Banco Central do Brasil", False),  # menos de 4 letras: é caso da sigla por iniciais
+        ("Cielo", "Cielo S.A.", False),  # o outro nome tem um token só
+        ("Banco", "Banco Central", False),  # um prefixo de um token só não é contração
+        ("Bacen", "Banco Alfa", False),
+        ("Bradesco", "Banco Bradesco", False),  # "br"+"ad"? não: o 2º token começa por "br", o 1º por "ba"
+        ("Petrobras", "Petróleo Brasileiro S.A.", True),  # "petro"+"bras"
+    ],
+)
+def test_contracao_de_nome_de_uma_palavra(a, b, esperado):
+    assert ("contracao" in razoes(ent("a", a), ent("b", b), UM, DOIS)) is esperado
+
+
+def test_nome_com_sigla_entre_parenteses_funde_sem_juiz(tmp_path):
+    a, b = ent("a", "Comitê de Auditoria"), ent("b", "Comitê de Auditoria (Coaud)")
+    assert "nota_entre_parenteses" in razoes(a, b, UM, DOIS)
+    # dois nomes com parênteses diferentes não são o mesmo ente
+    c, d = ent("c", "Banco Alfa (Brasil)"), ent("d", "Banco Alfa (Argentina)")
+    assert "nota_entre_parenteses" not in razoes(c, d, UM, DOIS)
+    juiz = JuizFalso({})
+    (r,) = julgar(candidatos([a, b], {"a": UM, "b": DOIS}), {"a": a, "b": b}, juiz, tmp_path / "c")
+    assert juiz.chamadas == 0 and (r["decisao"], r["por"]) == (True, "regra")
 
 
 def test_cnpj_igual_com_o_mesmo_nome_funde_sem_juiz_e_com_nome_diferente_vai_ao_juiz():
@@ -181,6 +223,15 @@ def test_o_pedido_leva_os_dois_registros_com_papeis_e_trecho():
     assert "Autoridade monetária" in p and "não disponível" in p and "ORGANIZATION" in p
 
 
+def test_o_pedido_entre_tipos_diferentes_mostra_os_dois_tipos():
+    p = montar_pedido(
+        ent("a", "Canal de Ética", label="Product"), ent("b", "Canal de Ética BB", label="Policy")
+    )
+    assert "Tipo do registro A: PRODUCT_OR_SERVICE" in p and "Tipo do registro B: POLICY_OR_PROGRAM" in p
+    mesmo = montar_pedido(ent("a", "X"), ent("b", "Y"))
+    assert "Tipo da entidade: ORGANIZATION" in mesmo and "Tipo do registro" not in mesmo
+
+
 def decisao(a, b, sim):
     return {
         "a": a,
@@ -193,17 +244,56 @@ def decisao(a, b, sim):
     }
 
 
-def test_componentes_unem_por_transitividade_e_isolam_conflitos():
+def com_sim(a, b, sim, valor):
+    return decisao(a, b, sim) | {"similaridade": valor}
+
+
+def test_componentes_unem_por_transitividade_quando_ninguem_foi_julgado_diferente():
     limpos, conflitos = componentes(
         [decisao("a", "b", True), decisao("b", "c", True), decisao("x", "y", True)]
     )
     assert limpos == [["a", "b", "c"], ["x", "y"]] and conflitos == []
-    # a=b, b=c, mas a≠c: o grupo é contraditório e não funde
-    limpos, conflitos = componentes(
-        [decisao("a", "b", True), decisao("b", "c", True), decisao("a", "c", False), decisao("x", "y", True)]
-    )
-    assert limpos == [["x", "y"]] and conflitos == [["a", "b", "c"]]
     assert componentes([decisao("a", "b", False)]) == ([], [])
+
+
+def test_conflito_funde_so_o_par_mais_parecido_e_deixa_de_fora_quem_o_juiz_separou():
+    # BB = BB S.A. e Conglomerado = BB S.A., mas BB ≠ Conglomerado
+    decisoes = [
+        com_sim("bb", "sa", True, 0.59),
+        com_sim("cong", "sa", True, 0.52),
+        com_sim("bb", "cong", False, 0.63),
+    ]
+    limpos, conflitos = componentes(decisoes)
+    assert limpos == [["bb", "sa"]] and conflitos == [["bb", "cong", "sa"]]
+
+
+def test_a_ordem_dos_pares_nao_muda_o_resultado():
+    decisoes = [
+        com_sim("bb", "sa", True, 0.59),
+        com_sim("cong", "sa", True, 0.52),
+        com_sim("bb", "cong", False, 0.63),
+    ]
+    assert componentes(decisoes) == componentes(list(reversed(decisoes)))
+
+
+def test_ponte_entre_duas_entidades_que_o_juiz_separou_nao_funde_depois_do_fechamento():
+    # o juiz aceitou pgfn~mf_pgfn e mf_pgfn~stn (mesmo CNPJ), mas pgfn≠stn quando julgado
+    vetores = {"pgfn": [1.0, 0.0], "mf_pgfn": [0.7, 0.7], "stn": [0.0, 1.0]}
+    decisoes = [com_sim("mf_pgfn", "pgfn", True, 0.71), com_sim("mf_pgfn", "stn", True, 0.77)]
+    (novo,) = fechamento(decisoes, vetores)
+    assert (novo["a"], novo["b"], novo["via"], novo["razoes"]) == ("pgfn", "stn", "mf_pgfn", ["fechamento"])
+    limpos, conflitos = componentes([*decisoes, com_sim("pgfn", "stn", False, novo["similaridade"])])
+    assert limpos == [["mf_pgfn", "stn"]] and conflitos == [["mf_pgfn", "pgfn", "stn"]]
+
+
+def test_fechamento_nao_repete_par_ja_julgado_nem_pede_nada_sem_ponte():
+    vetores = {k: [1.0, 0.0] for k in "abc"}
+    julgadas = [com_sim("a", "b", True, 0.9), com_sim("b", "c", True, 0.9), com_sim("a", "c", False, 0.9)]
+    assert fechamento(julgadas, vetores) == []
+    assert (
+        fechamento([com_sim("a", "b", True, 0.9), com_sim("c", "d", True, 0.9)], vetores | {"d": [1, 0]})
+        == []
+    )
 
 
 def test_sobrevivente_e_o_mais_citado_depois_o_nome_mais_completo():

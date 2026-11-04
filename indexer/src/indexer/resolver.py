@@ -79,6 +79,12 @@ Registro B
 - Trecho onde aparece: {b_trecho}
 
 A e B são a mesma entidade?"""
+PEDIDO_OUTRO_TIPO = PEDIDO.replace(
+    "Tipo da entidade: {tipo}",
+    "Tipo do registro A: {tipo}\nTipo do registro B: {tipo_b}\n"
+    "(Os dois foram extraídos com tipos diferentes; o tipo pode estar errado em um deles. "
+    "Compare o que o nome e o trecho dizem.)",
+)
 
 
 def nome_base(nome: str | None) -> tuple[str, ...]:
@@ -162,37 +168,90 @@ def valido(e: dict) -> bool:
     return normalizar(e["name"]) not in NOMES_INVALIDOS
 
 
+def sem_parenteses(nome: str | None) -> str:
+    return re.sub(r"\s*\([^)]*\)", "", nome or "").strip()
+
+
+def _com_nota_entre_parenteses(a: dict, b: dict) -> bool:
+    """Um nome é o outro mais uma sigla ou nota entre parênteses ("Comitê de Auditoria (Coaud)")."""
+    base_a, base_b = nome_base(sem_parenteses(a["name"])), nome_base(sem_parenteses(b["name"]))
+    return bool(base_a) and base_a == base_b and ("(" in a["name"]) != ("(" in b["name"])
+
+
+def _compoe(alvo: str, tokens: tuple[str, ...], usados: int = 0) -> bool:
+    """`alvo` é a soma de prefixos (2 letras ou mais) dos primeiros tokens, de pelo menos dois ("bacen")."""
+    if not tokens:
+        return False
+    for n in range(2, min(len(tokens[0]), len(alvo)) + 1):
+        if alvo[:n] != tokens[0][:n]:
+            break  # um prefixo maior também não casa
+        resto = alvo[n:]
+        if (not resto and usados >= 1) or (resto and _compoe(resto, tokens[1:], usados + 1)):
+            return True
+    return False
+
+
+def _contracao(a: dict, b: dict) -> bool:
+    """Um nome de uma palavra só é a contração do outro ("Bacen" e "Banco Central do Brasil")."""
+    for x, y in ((a, b), (b, a)):
+        sx, sy = significativos(x["name"]), significativos(y["name"])
+        if len(sx) == 1 and len(sx[0]) >= 4 and len(sy) >= 2 and _compoe(sx[0], sy):
+            return True
+    return False
+
+
 def candidatos(entidades: list[dict], vetores: dict[str, list[float]]) -> list[dict]:
-    """Pares do mesmo tipo com as razões da candidatura; nomes inválidos ("N/A", "null") ficam fora."""
-    por_tipo: dict[str, list[dict]] = {}
-    for e in entidades:
-        if valido(e) and e["label"] not in PARES_SEM_JUIZ_NO_TIPO:
-            por_tipo.setdefault(e["label"], []).append(e)
+    """Pares com as razões da candidatura; nomes inválidos ("N/A", "null") e eventos ficam fora.
+
+    Dentro do mesmo tipo valem todas as razões. Entre tipos diferentes só o nome igual: a extração aberta
+    dá tipos diferentes ao mesmo ente (o Ministério da Fazenda como organização e como pessoa) e o juiz decide
+    se o tipo errado era o de um dos dois. Nome contido entre tipos ficou de fora: dos 50 pares do recorte o
+    juiz aceitou 7, e 4 eram erros ou dúvidas (a "taxa básica de juro", indicador, com as "Mudanças na taxa
+    básica de juro", risco; o "valor justo" com os ativos a valor justo; dois órgãos com o ministério pelo
+    CNPJ), contra 3 plausíveis (ADR-040)."""
+    validas = sorted(
+        (e for e in entidades if valido(e) and e["label"] not in PARES_SEM_JUIZ_NO_TIPO),
+        key=lambda e: e["id"],
+    )
     saida = []
-    for lista in por_tipo.values():
-        lista = sorted(lista, key=lambda e: e["id"])
-        for a, b in itertools.combinations(lista, 2):
-            forca = relacao_forte(a, b)
-            if forca == "veto":
-                continue
-            sim = cosseno(vetores[a["id"]], vetores[b["id"]])
-            mesmo_bloco = bool(chaves_de_bloco(a["name"]) & chaves_de_bloco(b["name"]))
-            razoes = []
-            if forca == "forte":
-                # só o mesmo nome (sem sufixo) com a mesma chave funde sem juiz; um órgão que usa o CNPJ do
-                # ministério (procuradoria, secretaria) é outra entidade e vai ao LLM (ADR-036)
-                mesmo_nome = nome_base(a["name"]) == nome_base(b["name"])
-                razoes.append("chave_forte" if mesmo_nome else "mesmo_cnpj")
-            if _contido(significativos(a["name"]), significativos(b["name"])):
-                razoes.append("nome_contido")
-            if mesmo_bloco and _sigla(a, b):
-                razoes.append("sigla")
-            if mesmo_bloco and sim >= LIMIAR_NO_BLOCO:
-                razoes.append("embedding_no_bloco")
-            if sim >= LIMIAR_GLOBAL:
-                razoes.append("embedding_global")
-            if razoes:
-                saida.append({"a": a["id"], "b": b["id"], "similaridade": round(sim, 4), "razoes": razoes})
+    for a, b in itertools.combinations(validas, 2):
+        forca = relacao_forte(a, b)
+        if forca == "veto":
+            continue
+        sim = cosseno(vetores[a["id"]], vetores[b["id"]])
+        sa, sb = significativos(a["name"]), significativos(b["name"])
+        if a["label"] != b["label"]:
+            if nome_base(a["name"]) == nome_base(b["name"]):
+                saida.append(
+                    {
+                        "a": a["id"],
+                        "b": b["id"],
+                        "similaridade": round(sim, 4),
+                        "razoes": ["nome_igual_outro_tipo"],
+                    }
+                )
+            continue
+        mesmo_bloco = bool(chaves_de_bloco(a["name"]) & chaves_de_bloco(b["name"]))
+        razoes = []
+        if forca == "forte":
+            # só o mesmo nome (sem sufixo) com a mesma chave funde sem juiz; um órgão que usa o CNPJ do
+            # ministério (procuradoria, secretaria) é outra entidade e vai ao LLM (ADR-036)
+            mesmo_nome = nome_base(a["name"]) == nome_base(b["name"])
+            razoes.append("chave_forte" if mesmo_nome else "mesmo_cnpj")
+        if _com_nota_entre_parenteses(a, b):
+            razoes.append("nota_entre_parenteses")  # funde sem juiz, como a chave forte
+        if _contido(sa, sb):
+            razoes.append("nome_contido")
+        if mesmo_bloco and _sigla(a, b):
+            razoes.append("sigla")
+        if _contracao(a, b):
+            razoes.append("contracao")
+        if mesmo_bloco and sim >= LIMIAR_NO_BLOCO:
+            razoes.append("embedding_no_bloco")
+        if sim >= LIMIAR_GLOBAL:
+            razoes.append("embedding_global")
+        if razoes:
+            saida.append({"a": a["id"], "b": b["id"], "similaridade": round(sim, 4), "razoes": razoes})
     return saida
 
 
@@ -229,17 +288,28 @@ def juiz_llama(base: str, modelo: str = MODELO_LLM, timeout: int = 300) -> Juiz:
     return julga
 
 
+def descricao_de(e: dict, maximo: int = 2) -> str:
+    """A descrição da dirigida (texto) ou as primeiras da aberta (lista, uma por Pai), no máximo `maximo`."""
+    return e.get("description") or " ".join((e.get("descriptions") or [])[:maximo])
+
+
 def montar_pedido(a: dict, b: dict) -> str:
     def campos(prefixo: str, e: dict) -> dict:
         return {
             f"{prefixo}_nome": e["name"],
             f"{prefixo}_papeis": ", ".join(e.get("roles") or []) or "não informado",
-            f"{prefixo}_desc": e.get("description") or "não informada",
+            f"{prefixo}_desc": descricao_de(e) or "não informada",
             f"{prefixo}_cnpj": e.get("cnpj") or "não informado",
             f"{prefixo}_trecho": e.get("trecho") or "não disponível",
         }
 
-    return PEDIDO.format(tipo=TIPO_DA_ENTIDADE[a["label"]], **campos("a", a), **campos("b", b))
+    modelo = PEDIDO if a["label"] == b["label"] else PEDIDO_OUTRO_TIPO
+    return modelo.format(
+        tipo=TIPO_DA_ENTIDADE[a["label"]],
+        tipo_b=TIPO_DA_ENTIDADE[b["label"]],
+        **campos("a", a),
+        **campos("b", b),
+    )
 
 
 def julgar(
@@ -255,6 +325,16 @@ def julgar(
                 {**p, "decisao": True, "por": "chave_forte", "justificativa": "mesmo CNPJ ou ticker"}
             )
             continue
+        if "nota_entre_parenteses" in p["razoes"]:
+            saida.append(
+                {
+                    **p,
+                    "decisao": True,
+                    "por": "regra",
+                    "justificativa": "mesmo nome, um com sigla entre parênteses",
+                }
+            )
+            continue
         pedido = montar_pedido(a, b)
         arq = cache / f"{_chave_de_cache(pedido, modelo)}.json"
         if arq.exists():
@@ -268,8 +348,54 @@ def julgar(
     return saida
 
 
+def fechamento(decisoes: list[dict], vetores: dict[str, list[float]]) -> list[dict]:
+    """Pares que faltam para fechar os grupos: se a~b e b~c foram aceitos e a,c nunca foram julgados.
+
+    Sem o julgamento de a,c, uma ponte entre duas entidades distintas as fundiria (o juiz aceitou
+    "Procuradoria Geral da Fazenda Nacional/Ministério da Fazenda" com a Secretaria do Tesouro e com a
+    Procuradoria, porque os três usam o mesmo CNPJ). Os pares novos vão ao juiz como os demais, com a
+    razão `fechamento`."""
+    aceitos: dict[str, set[str]] = {}
+    julgados: set[frozenset[str]] = set()
+    for d in decisoes:
+        julgados.add(frozenset((d["a"], d["b"])))
+        if d["decisao"]:
+            aceitos.setdefault(d["a"], set()).add(d["b"])
+            aceitos.setdefault(d["b"], set()).add(d["a"])
+    novos: dict[frozenset[str], dict] = {}
+    for meio, vizinhos in aceitos.items():
+        for a, c in itertools.combinations(sorted(vizinhos), 2):
+            par = frozenset((a, c))
+            if par not in julgados and par not in novos:
+                novos[par] = {
+                    "a": a, "b": c, "razoes": ["fechamento"], "via": meio,
+                    "similaridade": round(cosseno(vetores[a], vetores[c]), 4),
+                }  # fmt: skip
+    return sorted(novos.values(), key=lambda p: (p["a"], p["b"]))
+
+
 def componentes(decisoes: list[dict]) -> tuple[list[list[str]], list[list[str]]]:
-    """Grupos de ids ligados por pares aceitos; o grupo com algum par julgado "não" é conflito e não funde."""
+    """Grupos de ids a fundir e os conjuntos contraditórios, que o juiz não aceitou por inteiro.
+
+    Os pares aceitos entram do mais parecido para o menos (empate pelo id), e dois grupos só se unem se nenhum
+    par entre eles foi julgado "não": com os pares de `fechamento` já julgados, isso é ligação completa, e uma
+    ponte não funde o que o juiz separou. Num conjunto de aceitos ligados entre si que acabou em mais de um
+    grupo, o que ficou de fora é um conflito (o juiz se contradisse): sai no plano para revisão."""
+    aceitos = sorted(
+        (d for d in decisoes if d["decisao"]), key=lambda d: (-d["similaridade"], d["a"], d["b"])
+    )
+    nao = {frozenset((d["a"], d["b"])) for d in decisoes if not d["decisao"]}
+    grupo: dict[str, set[str]] = {}
+    for d in aceitos:
+        ga = grupo.setdefault(d["a"], {d["a"]})
+        gb = grupo.setdefault(d["b"], {d["b"]})
+        if ga is gb or any(frozenset((x, y)) in nao for x in ga for y in gb):
+            continue
+        uniao = ga | gb
+        for x in uniao:
+            grupo[x] = uniao
+    limpos = {tuple(sorted(g)) for g in grupo.values() if len(g) > 1}
+
     pai: dict[str, str] = {}
 
     def raiz(x: str) -> str:
@@ -279,20 +405,13 @@ def componentes(decisoes: list[dict]) -> tuple[list[list[str]], list[list[str]]]
             x = pai[x]
         return x
 
-    for d in decisoes:
-        if d["decisao"]:
-            pai[raiz(d["a"])] = raiz(d["b"])
-    grupos: dict[str, set[str]] = {}
+    for d in aceitos:
+        pai[raiz(d["a"])] = raiz(d["b"])
+    ligados: dict[str, set[str]] = {}
     for x in list(pai):
-        grupos.setdefault(raiz(x), set()).add(x)
-    nao = [(d["a"], d["b"]) for d in decisoes if not d["decisao"]]
-    limpos, conflitos = [], []
-    for g in grupos.values():
-        if any(a in g and b in g for a, b in nao):
-            conflitos.append(sorted(g))
-        else:
-            limpos.append(sorted(g))
-    return sorted(limpos), sorted(conflitos)
+        ligados.setdefault(raiz(x), set()).add(x)
+    conflitos = [sorted(c) for c in ligados.values() if any(grupo[x] != c for x in c)]
+    return sorted([list(g) for g in limpos]), sorted(conflitos)
 
 
 def sobrevivente(grupo: list[str], por_id: dict[str, dict]) -> str:
@@ -351,7 +470,10 @@ def reconciliar(driver: Any, redirecionar: dict[str, str], banco: str = "neo4j")
 
 
 def fundir(driver: Any, fusoes: list[dict], banco: str = "neo4j") -> int:
-    """`apoc.refactor.mergeNodes` por grupo: o primeiro nó da lista fica, as relações iguais se unem."""
+    """`apoc.refactor.mergeNodes` por grupo: o primeiro nó da lista fica, as relações iguais se unem.
+
+    Os rótulos dos absorvidos vão junto na fusão; quando o grupo junta tipos diferentes, o nó fica só com o
+    rótulo do sobrevivente (o id guarda o rótulo: `ent:<rotulo>:<hash>`)."""
     feitas = 0
     for f in fusoes:
         driver.execute_query(
@@ -359,9 +481,16 @@ def fundir(driver: Any, fusoes: list[dict], banco: str = "neo4j") -> int:
             "MATCH (o:__Entity__) WHERE o.id IN $fora "
             "WITH k, collect(o) AS fora "
             "CALL apoc.refactor.mergeNodes([k] + fora, {properties: 'discard', mergeRels: true}) YIELD node "
-            "RETURN node.id",
-            {"fica": f["fica"], "fora": f["absorvidos"]},
+            "WITH node, [l IN labels(node) WHERE l <> '__Entity__' AND toLower(l) <> $rotulo] AS extras "
+            "CALL apoc.create.removeLabels(node, extras) YIELD node AS limpo "
+            "RETURN limpo.id",
+            {"fica": f["fica"], "fora": f["absorvidos"], "rotulo": f["fica"].split(":")[1]},
             database_=banco,
+        )
+        # uma relação entre dois absorvidos (ou entre eles e o sobrevivente) vira laço; o importador já as
+        # descarta, e aqui saem as que a fusão acabou de criar
+        driver.execute_query(
+            "MATCH (n:__Entity__ {id: $fica})-[x]->(n) DELETE x", {"fica": f["fica"]}, database_=banco
         )
         feitas += len(f["absorvidos"])
     return feitas
@@ -376,7 +505,7 @@ def ler_entidades(driver: Any, banco: str = "neo4j") -> list[dict]:
         "WITH e, label, u ORDER BY u.id "
         "WITH e, label, collect(u)[0] AS u "
         "RETURN e.id AS id, label, e.name AS name, e.roles AS roles, e.description AS description, "
-        "e.cnpj AS cnpj, e.ticker AS ticker, e.aliases AS aliases, "
+        "e.descriptions AS descriptions, e.cnpj AS cnpj, e.ticker AS ticker, e.aliases AS aliases, "
         "count { (:FinancialFact)-[:ABOUT]->(e) } AS fatos, "
         "count { (e)-[:MENTIONED_IN|DESCRIBED_IN]->() } AS mencoes, "
         "coalesce(u.text, u.markdown, '') AS texto",
@@ -403,7 +532,7 @@ def trecho(texto: str, nome: str, folga: int = 160) -> str:
 def embutir(
     entidades: list[dict], embute: Callable[[list[str]], list[list[float]]]
 ) -> dict[str, list[float]]:
-    textos = [f"{e['name']}. {e.get('description') or ''}".strip() for e in entidades]
+    textos = [f"{e['name']}. {descricao_de(e)}".strip() for e in entidades]
     vetores: list[list[float]] = []
     for i in range(0, len(textos), 16):
         vetores += embute(textos[i : i + 16])
@@ -439,7 +568,16 @@ def main() -> None:  # pragma: no cover - orquestração de CLI; as peças acima
             vetores = embutir([e for e in entidades if valido(e)], embutidor_llama(a.swap, MODELO_LOTE))
             pares = candidatos(entidades, vetores)
             cache = a.prefixo.parent / "resolucao_cache"
-            decisoes = julgar(pares, por_id, juiz_llama(a.swap), cache)
+            juiz = juiz_llama(a.swap)
+            decisoes = julgar(pares, por_id, juiz, cache)
+            fechados = 0
+            for _ in range(3):  # cada rodada pode abrir pares novos; três bastam para grupos de poucos nomes
+                faltam = fechamento(decisoes, vetores)
+                if not faltam:
+                    break
+                fechados += len(faltam)
+                pares += faltam
+                decisoes += julgar(faltam, por_id, juiz, cache)
             p = plano(decisoes, por_id)
             saida = {
                 "doc_id": a.doc_id, "limiares": {"bloco": LIMIAR_NO_BLOCO, "global": LIMIAR_GLOBAL},
@@ -448,8 +586,8 @@ def main() -> None:  # pragma: no cover - orquestração de CLI; as peças acima
             }  # fmt: skip
             _arquivo_do_plano(a.prefixo).write_text(json.dumps(saida, ensure_ascii=False, indent=1), "utf-8")
             sim = sum(d["decisao"] for d in decisoes)
-            print(json.dumps({"fusoes_desfeitas": desfeitas, "candidatos": len(pares), "sim": sim,
-                              "nao": len(pares) - sim,
+            print(json.dumps({"fusoes_desfeitas": desfeitas, "candidatos": len(pares),
+                              "do_fechamento": fechados, "sim": sim, "nao": len(pares) - sim,
                               "fusoes": len(p["fusoes"]), "absorvidos": len(p["redirecionar"]),
                               "conflitos": len(p["conflitos"])}, ensure_ascii=False))  # fmt: skip
         else:

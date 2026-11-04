@@ -1,0 +1,116 @@
+{
+ "extracao_aberta_recorte": {
+  "pais": 116,
+  "validos": 116,
+  "validos_na_primeira": 114,
+  "do_cache": 25,
+  "chamadas": 93,
+  "entidades": 658,
+  "relacoes": 536,
+  "entidades_por_tipo": {
+   "ORGANIZATION": 240,
+   "PERSON": 15,
+   "SEGMENT": 33,
+   "PRODUCT_OR_SERVICE": 82,
+   "FINANCIAL_METRIC": 74,
+   "RISK": 59,
+   "EVENT": 45,
+   "FINANCIAL_INSTRUMENT": 23,
+   "REGULATION": 22,
+   "POLICY_OR_PROGRAM": 52,
+   "LOCATION": 13
+  },
+  "relacoes_por_forca": {
+   "4": 6,
+   "5": 47,
+   "6": 126,
+   "7": 131,
+   "8": 134,
+   "9": 71,
+   "10": 21
+  },
+  "tokens_prompt": 195291,
+  "tokens_saida": 47107,
+  "segundos_de_llm": 2041,
+  "minutos_de_relogio": 17,
+  "paralelismo": 2,
+  "gleaning": 0,
+  "prompt": "v3"
+ },
+ "grafo_antes_da_resolucao": {
+  "entidades": 513,
+  "so_dirigida": 43,
+  "so_aberta": 407,
+  "nas_duas_camadas": 63,
+  "por_tipo": {
+   "ORGANIZATION": 110,
+   "PERSON": 23,
+   "SEGMENT": 42,
+   "RISK": 52,
+   "FINANCIAL_INSTRUMENT": 24,
+   "EVENT": 45,
+   "PRODUCT_OR_SERVICE": 75,
+   "FINANCIAL_METRIC": 68,
+   "REGULATION": 21,
+   "POLICY_OR_PROGRAM": 46,
+   "LOCATION": 7
+  },
+  "related_to": 512
+ },
+ "resolucao": {
+  "candidatos": 303,
+  "do_fechamento": 25,
+  "sim_pelo_llm": 114,
+  "sim_por_regra": 3,
+  "nao": 186,
+  "razoes_dos_candidatos": {
+   "nome_contido": 137,
+   "embedding_global": 111,
+   "embedding_no_bloco": 90,
+   "fechamento": 25,
+   "sigla": 8,
+   "nome_igual_outro_tipo": 8,
+   "nota_entre_parenteses": 3,
+   "mesmo_cnpj": 3,
+   "contracao": 2
+  },
+  "fusoes": 61,
+  "absorvidos": 80,
+  "grupos_por_tamanho": {
+   "2": 45,
+   "3": 13,
+   "4": 3
+  },
+  "conflitos": 10,
+  "entidades_depois": 433,
+  "related_to_depois": 481,
+  "reimportar_nao_muda": true,
+  "impressao_digital": "2a8d665dd20cebd9",
+  "pares_entre_tipos_com_nome_contido": {
+   "julgados": 50,
+   "aceitos": 7,
+   "plausiveis": 3,
+   "errados_ou_duvidosos": 4
+  },
+  "fusoes_com_nos_das_duas_camadas": 34,
+  "leitura_das_fusoes": {
+   "leitura": "minha, nao de uma pessoa",
+   "corretas_aprox": 53,
+   "duvidosas_ou_erradas": 8
+  }
+ },
+ "amostra_das_30_mais_citadas": {
+  "leitura": "minha, nao de uma pessoa",
+  "pares_duplicados_que_sobram": 2,
+  "regiao_incerta": "Ministerio da Fazenda, Secretaria do Tesouro Nacional e Procuradoria-Geral (mesmo CNPJ no documento)",
+  "absorvidos_por_sobreviventes_da_amostra": 26
+ },
+ "financial_metric_aberta_x_catalogo": {
+  "entidades_abertas": 62,
+  "nome_ou_alias_igual_a_metrica_do_catalogo": 4
+ },
+ "testes": {
+  "antes": 409,
+  "depois": 443
+ }
+}

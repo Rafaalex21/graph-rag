@@ -36,5 +36,6 @@ Uma decisão por arquivo: `ADR-NNN-assunto.md`. As nove decisões iniciais estã
 | [037](ADR-037-catalogo-de-metricas.md) | Catálogo de métricas canônicas e mapeamento PT↔EN (97 métricas; sinônimo × componente; recorte na `dimension` do `OF_METRIC`; 99,6% dos fatos ligados, ≈ 2% sob métrica errada) | F4.6 — aceita |
 | [038](ADR-038-extracao-aberta.md) | Tipos de entidade e prompt da extração aberta (11 tipos: 8 de 9 `PRODUCT_OR_SERVICE` eram políticas e programas; nomes que são data ou valor recusados por validação; prompt v3 em 5 Pais) | F5.1 — aceita |
 | [039](ADR-039-gleaning.md) | *Gleaning* da extração aberta: +60% de entidades e +69% de relações em 20 Pais novos, mas só 51% dos acréscimos corretos e +62% de LLM; configurável, padrão 0 | F5.2 — aceita |
+| [040](ADR-040-convergencia-das-camadas.md) | Convergência das entidades abertas e de domínio: 658 entidades abertas em 116 Pais (17 min); 513 → 433 nós com 61 fusões; conflitos deixam de bloquear o grupo (o emissor ficava em duas grafias); sobram 2 pares duplicados nas 30 mais citadas | F5.3 — proposta, aguarda decisão sobre o critério |
 
 Modelo em [`ADR-000-modelo.md`](ADR-000-modelo.md).

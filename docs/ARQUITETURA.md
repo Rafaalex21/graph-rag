@@ -270,6 +270,7 @@ Demais esquemas: `Organization` (com papel na relação: emissor, subsidiária, 
 - **Saída em JSON** — `{entities: [{name, type, description}], relationships: [{source, target, description, strength 1–10}]}` — em vez das tuplas com delimitadores do artigo original: com gramática, modelos locais erram muito menos de formato.
 - ***Gleaning*** (passadas extras de "faltaram entidades?"): configurável, 0 ou 1, **padrão 0**. O livro mostra que cada passada acha mais entidades; medido na F5.2 em 20 Pais novos, a rodada extra acrescenta 60% de entidades e 69% de relações, mas só 51% do que acrescenta está certo (a primeira passada, ~94%) e custa 62% mais tempo de LLM, então fica desligada ([ADR-039](./adr/ADR-039-gleaning.md)).
 - Cada entidade liga-se ao Pai de onde saiu: `(:__Entity__)-[:MENTIONED_IN]->(:Parent)`.
+- Cada relação vira `(:__Entity__)-[:RELATED_TO {descriptions, strength, parents}]->(:__Entity__)`; o mesmo par em outros Pais acumula descrições, força máxima e origens, e a F5.4 as resume em `SUMMARIZED_RELATIONSHIP`. O id da entidade é o mesmo da extração dirigida (rótulo + nome normalizado), então o que tem o mesmo tipo e o mesmo nome já é o mesmo nó; o resto converge pela resolução (I-7). Medido no recorte inteiro (116 Pais, 17 min de relógio): 658 entidades e 536 relações ([ADR-040](./adr/ADR-040-convergencia-das-camadas.md)).
 - Prompts no idioma do documento; nomes canônicos de entidade preservados como aparecem.
 
 ### I-7 · Resolução de entidades (cap. 6.2.2)
@@ -277,8 +278,9 @@ Demais esquemas: `Organization` (com papel na relação: emissor, subsidiária, 
 1. Normalização: caixa, acentos, sufixos societários (S.A., Ltda., Inc., Corp., Ltd., Limited).
 2. Bloqueio por tipo e por primeiro token significativo ou iniciais das partes do nome.
 3. Candidatos, por qualquer uma de cinco razões: nome contido no outro, sigla (iniciais), mesmo CNPJ/ticker com nomes diferentes, embedding de `nome + descrição` ≥ 0,70 no mesmo bloco, ≥ 0,80 em qualquer bloco. **O embedding só gera candidatos:** a 0,92 ele pegava 1 de 14 pares duplicados e a 0,70 só 6, e há não duplicatas acima de 0,85 (ADR-036).
-4. Confirmação por LLM (sim/não com justificativa curta) para os pares candidatos; na dúvida, não.
-5. Fusão com `apoc.refactor.mergeNodes`, preservando `aliases`. O plano (`id absorvido → id que fica`) é gravado fora do grafo e o importador (I-5) o aplica, para a reimportação não recriar os nós absorvidos; `absorbedIds` registra quem foi fundido.
+   Acrescentadas na F5.3 ([ADR-040](./adr/ADR-040-convergencia-das-camadas.md)): contração de nome de uma palavra ("Bacen" e "Banco Central do Brasil"); nome igual entre tipos diferentes (a extração aberta tipa o mesmo ente de dois jeitos; nome contido entre tipos ficou de fora, o juiz errou 4 de 7); e, sem juiz, um nome igual ao outro mais uma nota entre parênteses ("Comitê de Auditoria (Coaud)").
+4. Confirmação por LLM (sim/não com justificativa curta) para os pares candidatos; na dúvida, não. **Fechamento:** se a~b e b~c foram aceitos e a,c nunca foram julgados, o par a,c também vai ao juiz, para que uma ponte não una o que ele separou.
+5. Fusão com `apoc.refactor.mergeNodes`, preservando `aliases`. Os pares aceitos entram do mais parecido para o menos e dois grupos só se unem se nenhum par entre eles foi julgado "não"; o que sobra contraditório vai para `conflitos` no plano (na F4.5 um conflito desfazia o grupo inteiro, o que deixou o emissor em duas grafias). Numa fusão entre tipos o nó fica com o rótulo e o `type` do sobrevivente. O plano (`id absorvido → id que fica`) é gravado fora do grafo e o importador (I-5) o aplica, para a reimportação não recriar os nós absorvidos; `absorbedIds` registra quem foi fundido.
 6. Chaves fortes: CNPJ diferente **veta** o par; mesmo CNPJ ou ticker **e o mesmo nome sem sufixo** funde sem LLM; mesmo CNPJ com nomes diferentes vai ao LLM, porque o documento usa o CNPJ do ministério para órgãos distintos.
 
 ### I-8 · Resumos de entidades e relações (cap. 7.2.3)
@@ -326,6 +328,8 @@ Hipóteses: documento de ~300 páginas (~200 mil tokens) → ~170 Pais e ~40 tab
 | Relatórios de comunidade | ~80 | ~6K / 1K | ~46 min |
 | **Total** | | | **~4,6 h — uma noite** |
 
+Medido na F5.3 ([ADR-040](./adr/ADR-040-convergencia-das-camadas.md)): a extração aberta do recorte (116 Pais) levou 17 min de relógio com 2 em paralelo (2.041 s de LLM, ~1,7K tokens de prompt e ~0,4K de saída por Pai); extrapolada por Pais para as 423 páginas (~620), dá cerca de 1,5 h, igual à linha da tabela.
+
 Com gpt-oss-20b no Vulkan (4.402 tok/s de prompt e 170 tok/s de geração medidos) o mesmo cálculo dá cerca de 1 h inteiro na GPU (cerca de 2 h com o `--n-cpu-moe 4` do perfil rápido); o bake-off da F9 dirá se a qualidade acompanha. Antes do documento inteiro, todo o ciclo F1–F5 roda num recorte de até 80 páginas (F1.2); a F5.8 indexa o documento inteiro numa execução noturna.
 
 ---
@@ -359,7 +363,8 @@ flowchart LR
     IN[Instrument] -->|ISSUED_BY| O
   end
   subgraph K["Camada de comunidades (cap. 7)"]
-    E["__Entity__"] -->|SUMMARIZED_RELATIONSHIP| E
+    E["__Entity__"] -->|RELATED_TO| E
+    E -->|SUMMARIZED_RELATIONSHIP| E
     E -->|IN_COMMUNITY| CO["__Community__"]
     CO -->|PARENT_COMMUNITY| CO
   end
@@ -369,7 +374,7 @@ flowchart LR
   E -->|MENTIONED_IN| P
 ```
 
-Todo nó de domínio (`Organization`, `Person`, `Segment`, `RiskFactor`, `Event`, `Instrument`) recebe também o rótulo `__Entity__` com a propriedade `type`. `Metric` fica de fora até a F5: o catálogo é fechado, tem a própria chave (`metric:<id>`) e entraria na resolução de entidades (F4.5) e nas contagens sem ser uma entidade extraída (ADR-037). Assim, a extração aberta (I-6) e a dirigida (I-5) convergem nos mesmos nós depois da resolução, e a busca local alcança os fatos estruturados.
+Todo nó de domínio (`Organization`, `Person`, `Segment`, `RiskFactor`, `Event`, `Instrument` e, só da extração aberta, `Product`, `FinancialMetric`, `Regulation`, `Policy`, `Location`) recebe também o rótulo `__Entity__` com a propriedade `type`. `Metric` fica de fora até a F5: o catálogo é fechado, tem a própria chave (`metric:<id>`) e entraria na resolução de entidades (F4.5) e nas contagens sem ser uma entidade extraída (ADR-037). Assim, a extração aberta (I-6) e a dirigida (I-5) convergem nos mesmos nós depois da resolução, e a busca local alcança os fatos estruturados.
 
 ### 6.2 Propriedades principais
 
@@ -385,7 +390,8 @@ Todo nó de domínio (`Organization`, `Person`, `Segment`, `RiskFactor`, `Event`
 | `Metric` | `id` (`metric:<id>`), `name` (canônico, em inglês), `namePt`, `kind` (`monetary`, `percent`, `ratio`, `count`, `price`), `aliases` (PT e EN), `definition`; o catálogo vive em `contracts/metricas.json` (F4.6, ADR-037) |
 | `OF_METRIC` (relação `FinancialFact → Metric`) | `qualifier` (`nenhum`, `variacao_percentual`, `variacao_absoluta`, `percentual_do_total`) e `dimension` (o recorte do rótulo: região, prazo, componente; nulo no total) |
 | `Period` | `id` (ex.: `2025-FY`, `2025-Q4`), `start`, `end` |
-| `__Entity__` | `id`, `name`, `type`, `aliases`, `aliasesText`, `roles`, `absorbedIds` (ids fundidos na resolução), `description` (lista), `summary`, `embedding` |
+| `__Entity__` | `id`, `name`, `type`, `layers` (`dirigida`, `aberta` ou as duas), `aliases`, `aliasesText`, `roles`, `absorbedIds` (ids fundidos na resolução), `description` (texto, da extração dirigida), `descriptions` (lista, uma por Pai, da aberta), `summary`, `embedding` |
+| `RELATED_TO` (relação `__Entity__ → __Entity__`) | `descriptions` (lista), `strength` (1–10, a máxima entre os Pais), `parents` (ids dos Pais); a F5.4 as resume em `SUMMARIZED_RELATIONSHIP` |
 | `__Community__` | `id`, `level`, `title`, `summary`, `rating`, `rank`, `embedding` |
 
 ### 6.3 *Constraints* e índices
