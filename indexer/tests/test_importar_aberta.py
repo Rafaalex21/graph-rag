@@ -84,6 +84,17 @@ def test_descricoes_de_varios_pais_viram_lista_sem_repeticao_e_em_ordem():
     assert org["props"]["descriptions"] == ["a", "b"]
 
 
+def test_cada_descricao_guarda_o_primeiro_pai_de_onde_veio_na_mesma_ordem():
+    abertas = [
+        aberta("p3", [ent("Alfa", desc="b")]),
+        aberta("p2", [ent("Alfa", desc="b")]),  # repetida: vale o menor id
+        aberta("p1", [ent("Alfa", desc="c")]),
+    ]
+    (org,) = montar(abertas)["Organization"]
+    assert org["props"]["descriptions"] == ["b", "c"]
+    assert org["props"]["descriptionParents"] == ["p2", "p1"]
+
+
 def test_o_mesmo_nome_com_dois_tipos_sao_dois_nos():
     linhas = montar([aberta("p1", [ent("Pix", "PRODUCT_OR_SERVICE"), ent("Pix", "POLICY_OR_PROGRAM")])])
     assert len(linhas["Product"]) == 1 and len(linhas["Policy"]) == 1

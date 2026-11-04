@@ -219,9 +219,11 @@
   - resultado: ADR-040 (aceita); extração aberta dos 116 Pais (658 entidades, 536 relações, 17 min de relógio); importador com os 11 tipos, `layers`, `descriptions` e `RELATED_TO`; 513 → 433 nós com 61 fusões (34 com nós das duas camadas), reimportar não muda nada; a resolução ganhou fechamento de grupos, fusão parcial de conflitos, contração, nome igual entre tipos e nota entre parênteses (443 testes)
   - nota: **critério não atendido à risca: sobram 2 pares duplicados nas 30 mais citadas** ("Programa de Compliance e Integridade" × "…do Banco do Brasil"; "letras financeiras subordinadas" × "LFS"), os dois por erro do juiz dentro de um grupo. A leitura da amostra e das 61 fusões (~53 corretas) é minha, não de uma pessoa. O usuário aceitou o critério como "até 2 pares documentados" e a tarefa foi fechada assim, sem mais uma rodada. `FINANCIAL_METRIC` aberta × `Metric` do catálogo: só 4 de 62 coincidem, ficam separados
   - depende: F5.2, F4.5
-- [ ] **F5.4** Resumir descrições de entidades e relações, com ranking e teto para supernós
+- [x] **F5.4** Resumir descrições de entidades e relações, com ranking e teto para supernós
   - aceite: nenhum prompt estoura o contexto; emissor resumido em dois níveis
   - depende: F5.3
+  - resultado: ADR-041 (aceita); maior prompt de 817 tokens contra o slot de ≈ 16 mil; emissor (70 descrições) em 2 níveis e 4 chamadas, com `:Issuer`; 89 entidades e 31 relações resumidas pelo LLM, as demais com o próprio texto ou o nome; 481 `SUMMARIZED_RELATIONSHIP`; `summary IS NULL` = 0; segunda rodada com 0 chamadas (459 testes)
+  - nota: o teto de 300 descrições por entidade não foi acionado no recorte (0 descartadas); na F5.8 o emissor tem muito mais descrições, e `descartadas_pelo_teto` deve ser lido na hora
 - [ ] **F5.5** Leiden hierárquico no GDS (peso = força), excluindo o emissor da projeção
   - aceite: modularidade e número de comunidades por nível registrados
   - depende: F5.4

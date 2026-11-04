@@ -207,3 +207,12 @@ Copy-Item ../data/parsed/bb_fre_2026_recorte.aberta_f53.json ../data/parsed/bb_f
 uv run python -m indexer.resolver planejar ../data/parsed/bb_fre_2026_recorte --doc-id bb-fre-2026-v7
 uv run python -m indexer.resolver aplicar ../data/parsed/bb_fre_2026_recorte --doc-id bb-fre-2026-v7
 ```
+
+## Resumos de entidades e relações (F5.4, ADR-041)
+
+Depois de `aplicar`, `indexer.resumos` resume as descrições de cada entidade e de cada `RELATED_TO` (só chama o LLM com mais de um texto; o emissor sai em dois níveis), grava `summary` e `summarySource` nas entidades, o rótulo `:Issuer` e a `SUMMARIZED_RELATIONSHIP` com `weight` e `rank`. Precisa do Neo4j e do `llama-swap`; é idempotente (cache por hash em `data/parsed/resumos_cache/`, 0 chamadas na segunda rodada):
+
+```powershell
+uv run python -m indexer.resumos executar ../data/parsed/bb_fre_2026_recorte
+uv run python -m indexer.resumos verificar ../data/parsed/bb_fre_2026_recorte
+```

@@ -147,7 +147,7 @@ class _Entidades:
                 "name": nome,
                 "aliases": set(),
                 "papeis": set(),
-                "descricoes": set(),
+                "descricoes": {},  # texto -> menor id de Pai onde apareceu
                 "camadas": set(),
             },
         )
@@ -161,7 +161,7 @@ class _Entidades:
                     e["papeis"].add(v)
             elif k == "descricao":  # a extração aberta junta as descrições de cada Pai (F5.3)
                 if v:
-                    e["descricoes"].add(v)
+                    e["descricoes"][v] = min(unidade, e["descricoes"].get(v, unidade))
             elif v is not None and k not in e:
                 e[k] = v
         self.origens[tipo_unidade].setdefault(id_, set()).add(unidade)
@@ -187,6 +187,7 @@ class _Entidades:
                 props["roles"] = papeis
             if e["descricoes"]:
                 props["descriptions"] = sorted(e["descricoes"])
+                props["descriptionParents"] = [e["descricoes"][d] for d in props["descriptions"]]
             if id_ in self.nomes:
                 props["name"] = self.nomes[id_]
             if id_ in absorvidos:

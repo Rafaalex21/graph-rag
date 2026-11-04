@@ -1,0 +1,22 @@
+{
+ "comando": "cd indexer; uv run python -m indexer.resumos executar ../data/parsed/bb_fre_2026_recorte",
+ "grafo": {"entidades": 433, "relacoes_related_to": 481, "emissor_descricoes": 70, "emissor_grau": 190},
+ "descricoes_por_entidade": {"zero": 12, "uma": 337, "duas_ou_mais": 80, "observacao": "89 entidades acabaram com 2+ textos porque a descricao da camada dirigida soma com a lista da aberta"},
+ "descricoes_por_relacao": {"uma": 450, "duas_ou_mais": 31},
+ "resumos": {"entidades": {"llm": 89, "descricao": 332, "nome": 12}, "relacoes": {"llm": 31, "descricao": 450}},
+ "chamadas_ao_llm_primeira_rodada": 123,
+ "tempo_primeira_rodada_s": 225,
+ "tempo_segunda_rodada_com_cache_s": 3,
+ "chamadas_na_segunda_rodada": 0,
+ "max_tokens_prompt": 817,
+ "slot_do_servidor_tokens": 16384,
+ "emissor": {"descricoes": 70, "lotes_do_primeiro_nivel": 3, "chamadas": 4, "niveis": 2},
+ "niveis_maximos": 2,
+ "descartadas_pelo_teto": 0,
+ "teto_de_descricoes": 300,
+ "rotulo_issuer": 1,
+ "sanidade": {"entidades_sem_resumo": 0, "relacoes_sem_resumo": 0, "resumos_de_relacao_sem_relacao": 0},
+ "summarized_relationship": {"total": 481, "peso_max": 10, "rank_min": 2, "rank_max": 206},
+ "tamanho_dos_resumos_llm": {"entidades_com_mais_de_690_caracteres_no_prompt_v1": 1, "depois_de_aparar": 0},
+ "testes": {"indexer_total": 459}
+}

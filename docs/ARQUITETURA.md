@@ -287,7 +287,7 @@ Demais esquemas: `Organization` (com papel na relação: emissor, subsidiária, 
 
 - Entidades e pares de entidades com mais de uma descrição recebem resumo único (prompt do artigo, adaptado ao idioma).
 - **Supernó:** num documento de uma só empresa, o emissor aparece em quase todo trecho — exatamente o caso de "Atenas" que o livro descreve. Tratamento: o emissor recebe o rótulo `:Issuer`; suas descrições são ranqueadas por diversidade de seção e resumidas em dois níveis (lotes de 30 → resumo dos resumos).
-- Saída: `__Entity__.summary` e `(:__Entity__)-[:SUMMARIZED_RELATIONSHIP {summary, weight, rank}]->(:__Entity__)`.
+- Saída: `__Entity__.summary` (com `summarySource`: `llm`, `descricao` ou `nome`) e `(:__Entity__)-[:SUMMARIZED_RELATIONSHIP {summary, weight, rank}]->(:__Entity__)` para todo `RELATED_TO` (`rank` = soma dos graus dos extremos). Só chama o LLM com mais de uma descrição; pedidos de até 24 mil caracteres, teto de 300 descrições por entidade. Medido no recorte: 89 entidades e 31 relações resumidas pelo modelo, maior prompt de 817 tokens, emissor em 2 níveis ([ADR-041](./adr/ADR-041-resumos-de-entidades-e-relacoes.md)).
 
 ### I-9 · Comunidades e relatórios (cap. 7.2.4)
 
@@ -390,8 +390,8 @@ Todo nó de domínio (`Organization`, `Person`, `Segment`, `RiskFactor`, `Event`
 | `Metric` | `id` (`metric:<id>`), `name` (canônico, em inglês), `namePt`, `kind` (`monetary`, `percent`, `ratio`, `count`, `price`), `aliases` (PT e EN), `definition`; o catálogo vive em `contracts/metricas.json` (F4.6, ADR-037) |
 | `OF_METRIC` (relação `FinancialFact → Metric`) | `qualifier` (`nenhum`, `variacao_percentual`, `variacao_absoluta`, `percentual_do_total`) e `dimension` (o recorte do rótulo: região, prazo, componente; nulo no total) |
 | `Period` | `id` (ex.: `2025-FY`, `2025-Q4`), `start`, `end` |
-| `__Entity__` | `id`, `name`, `type`, `layers` (`dirigida`, `aberta` ou as duas), `aliases`, `aliasesText`, `roles`, `absorbedIds` (ids fundidos na resolução), `description` (texto, da extração dirigida), `descriptions` (lista, uma por Pai, da aberta), `summary`, `embedding` |
-| `RELATED_TO` (relação `__Entity__ → __Entity__`) | `descriptions` (lista), `strength` (1–10, a máxima entre os Pais), `parents` (ids dos Pais); a F5.4 as resume em `SUMMARIZED_RELATIONSHIP` |
+| `__Entity__` | `id`, `name`, `type`, `layers` (`dirigida`, `aberta` ou as duas), `aliases`, `aliasesText`, `roles`, `absorbedIds` (ids fundidos na resolução), `description` (texto, da extração dirigida), `descriptions` (lista, uma por Pai, da aberta) e `descriptionParents` (o Pai de cada uma), `summary`, `summarySource`, `summaryDescriptions`, `embedding` |
+| `RELATED_TO` (relação `__Entity__ → __Entity__`) | `descriptions` (lista), `strength` (1–10, a máxima entre os Pais), `parents` (ids dos Pais); a F5.4 as resume em `SUMMARIZED_RELATIONSHIP {summary, weight, rank}` |
 | `__Community__` | `id`, `level`, `title`, `summary`, `rating`, `rank`, `embedding` |
 
 ### 6.3 *Constraints* e índices
