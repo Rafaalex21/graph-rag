@@ -209,7 +209,7 @@
   - aceite: prompt versionado; 5 Pais extraídos e revisados à mão
   - resultado: ADR-038; `contracts/open_extraction.schema.json` 1.0.0 (11 tipos, força 1–10, relação só entre entidades da resposta, nome que é data ou valor recusado), `indexer.extracao_aberta` com prompt `v3` em português e exemplo fictício; 5 Pais (semente 1, entre os 13 de ≥ 300 tokens) válidos de primeira: 94 entidades e 89 relações
   - nota: a §5 I-6 tinha 10 tipos; a leitura achou 8 de 9 `PRODUCT_OR_SERVICE` que eram políticas e programas, e entrou `POLICY_OR_PROGRAM` (ARQUITETURA corrigida). A revisão foi minha, não de uma pessoa, e o prompt foi ajustado (v1→v3) nos mesmos 5 Pais, então o resultado é otimista; ficam para a F5.2 os apelidos que viram entidade, a força de relação sem poder de discriminar (nenhuma abaixo de 5) e `LOCATION`/`PERSON` sem exercício
-- [ ] **F5.2** Extração aberta por Pai, com *gleaning* configurável
+- [~] **F5.2** Extração aberta por Pai, com *gleaning* configurável
   - aceite: ganho do *gleaning* medido em 20 Pais e decidido em ADR
   - depende: F5.1
 - [ ] **F5.3** Convergir entidades abertas e de domínio pela mesma resolução da F4.5
@@ -315,6 +315,10 @@
 - [ ] **F8.7** Selo de saúde e feedback por resposta
   - aceite: 5 perguntas do golden set feitas pela interface sem tocar no terminal
   - depende: F8.6
+- [ ] **F8.8** Testes E2E com Playwright (skill de testes E2E-first) dos fluxos da interface, com relatório reproduzível
+  - aceite: `npx playwright test` verde e gera `playwright-report/`, `test-results/results.json` e traces; cobre chat com citação que abre a página certa, troca de modo que muda a rota no Rastro, resposta "não consta" e erro da API; um teste `@smoke` roda contra a pilha local real
+  - depende: F8.7
+  - nota: seguir a skill de testes: E2E como mecanismo principal, seletores por papel e rótulo, Page Objects, sem `waitForTimeout`; a API do chat fica simulada com `page.route` nos fluxos determinísticos, e só o `@smoke` usa o llama-swap e o Neo4j de verdade; nenhum teste unitário novo escrito depois do código. A suíte unitária do indexador (F0 a F5) segue como está; podá-la pelo critério da skill é decisão à parte, só com confirmação do Rafael
 
 ## F9 · Avaliação final e bake-offs
 > objetivo: Fechar a escada A0–A6 e escolher os modelos com números, não com impressões.
@@ -337,7 +341,7 @@
   - depende: F9.2
 - [ ] **F9.5** Congelar a v1: metas da §1.3 atingidas ou desvios justificados em ADR
   - aceite: `eval/resultados/v1.md` e tag `v1.0.0` no git
-  - depende: F9.4
+  - depende: F9.4, F8.8
 
 ## F10 · Portfólio e acabamento
 > objetivo: Deixar o projeto apresentável e reproduzível por quem nunca o viu.
