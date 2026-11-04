@@ -38,5 +38,6 @@ Uma decisão por arquivo: `ADR-NNN-assunto.md`. As nove decisões iniciais estã
 | [039](ADR-039-gleaning.md) | *Gleaning* da extração aberta: +60% de entidades e +69% de relações em 20 Pais novos, mas só 51% dos acréscimos corretos e +62% de LLM; configurável, padrão 0 | F5.2 — aceita |
 | [040](ADR-040-convergencia-das-camadas.md) | Convergência das entidades abertas e de domínio: 658 entidades abertas em 116 Pais (17 min); 513 → 433 nós com 61 fusões; conflitos deixam de bloquear o grupo (o emissor ficava em duas grafias); sobram 2 pares duplicados nas 30 mais citadas | F5.3 — aceita, com o critério ajustado (até 2 pares na amostra; a F5.8 mede de novo) |
 | [041](ADR-041-resumos-de-entidades-e-relacoes.md) | Resumos de entidades e relações: só chama o LLM com mais de um texto; ranking por diversidade de seção, lotes de 30 e teto de 300; emissor em 2 níveis; maior prompt 817 tokens para um slot de 16 mil | F5.4 — aceita |
+| [042](ADR-042-leiden-hierarquico.md) | Leiden hierárquico sem o emissor: 294 nós (138 entidades sem aresta ficam de fora), 3 níveis com 67/47/45 comunidades e modularidade 0,825/0,887/0,889 (GDS e recalculada coincidem); reprodutível | F5.5 — aceita |
 
 Modelo em [`ADR-000-modelo.md`](ADR-000-modelo.md).

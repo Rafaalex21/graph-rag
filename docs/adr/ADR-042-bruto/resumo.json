@@ -1,0 +1,88 @@
+{
+ "parametros": {
+  "relationshipWeightProperty": "weight",
+  "includeIntermediateCommunities": true,
+  "maxLevels": 10,
+  "gamma": 1.0,
+  "theta": 0.01,
+  "tolerance": 0.0001,
+  "randomSeed": 42,
+  "concurrency": 1
+ },
+ "entidades_no_grafo": 433,
+ "emissores_excluidos": 1,
+ "entidades_sem_aresta_fora_do_emissor": 138,
+ "projecao": {
+  "nos": 294,
+  "arestas_nao_direcionadas": 291
+ },
+ "niveis_executados": 3,
+ "comunidades_no_ultimo_nivel": 45,
+ "modularidade_final_gds": 0.8893895953285127,
+ "por_nivel": [
+  {
+   "nivel": 0,
+   "comunidades": 67,
+   "modularidade_gds": 0.8250227637565329,
+   "modularidade_recalculada": 0.825023,
+   "tamanhos": {
+    "minimo": 2,
+    "mediana": 3,
+    "maximo": 17,
+    "unitarias": 0
+   }
+  },
+  {
+   "nivel": 1,
+   "comunidades": 47,
+   "modularidade_gds": 0.8868886190004934,
+   "modularidade_recalculada": 0.886889,
+   "tamanhos": {
+    "minimo": 2,
+    "mediana": 3,
+    "maximo": 25,
+    "unitarias": 0
+   }
+  },
+  {
+   "nivel": 2,
+   "comunidades": 45,
+   "modularidade_gds": 0.8893895953285127,
+   "modularidade_recalculada": 0.88939,
+   "tamanhos": {
+    "minimo": 2,
+    "mediana": 3,
+    "maximo": 25,
+    "unitarias": 0
+   }
+  }
+ ],
+ "comando": "cd indexer; uv run python -m indexer.comunidades executar",
+ "componentes_conexos_da_projecao": {
+  "total": 36,
+  "maiores": [
+   124,
+   51,
+   10,
+   7,
+   7,
+   6
+  ],
+  "pares_isolados": 11
+ },
+ "reprodutibilidade": {
+  "comunidades": 159,
+  "ids_iguais_em_duas_execucoes": true
+ },
+ "sanidade": {
+  "entidades_do_emissor_em_comunidade": 0,
+  "entidades_em_mais_de_uma_comunidade_no_nivel_0": 0,
+  "comunidades_nao_topo_sem_pai": 0,
+  "comunidades_com_mais_de_um_pai": 0,
+  "comunidades_vazias": 0,
+  "tamanho_gravado_diferente_dos_membros": 0
+ },
+ "testes": {
+  "indexer_total": 471
+ }
+}

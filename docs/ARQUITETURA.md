@@ -293,7 +293,8 @@ Demais esquemas: `Organization` (com papel na relação: emissor, subsidiária, 
 
 - **Leiden hierárquico** no GDS (o artigo original usa Leiden; o livro usa Louvain por simplicidade), com `includeIntermediateCommunities: true` para obter níveis.
 - Projeção: `__Entity__` + `SUMMARIZED_RELATIONSHIP` com peso = força, **excluindo o emissor**, para que as comunidades se formem em torno de temas e não colapsem num único astro.
-- Nós `(:__Community__ {id, level, title, summary, rating, rank})` ligados por `IN_COMMUNITY` e `PARENT_COMMUNITY`.
+- Entram na projeção só as entidades que, sem o emissor, têm ao menos uma aresta (no recorte, 138 de 432 ficam de fora); pares presentes nos dois sentidos valem o maior peso. Leiden com semente 42 e `concurrency 1` (reprodutível); modularidade do GDS e recalculada em Python registradas por nível. Medido no recorte: 3 níveis, 67/47/45 comunidades, modularidade 0,825/0,887/0,889 ([ADR-042](./adr/ADR-042-leiden-hierarquico.md)).
+- Nós `(:__Community__ {id, level, size, title, summary, rating, rank})` ligados por `(:__Entity__)-[:IN_COMMUNITY]->` (nível 0) e `(:__Community__)-[:PARENT_COMMUNITY]->` (a do nível seguinte). O `id` é `com:<nível>:<hash dos membros>`, estável entre execuções.
 - Relatório por comunidade em JSON: título, resumo, impacto (0–10), explicação do impacto, 5–10 achados com referências.
 - Comunidades grandes demais para o contexto: ranqueamento de entidades e relações antes do prompt (o livro antecipa o problema).
 - Relatórios embutidos em `community_vec`.
@@ -392,7 +393,7 @@ Todo nó de domínio (`Organization`, `Person`, `Segment`, `RiskFactor`, `Event`
 | `Period` | `id` (ex.: `2025-FY`, `2025-Q4`), `start`, `end` |
 | `__Entity__` | `id`, `name`, `type`, `layers` (`dirigida`, `aberta` ou as duas), `aliases`, `aliasesText`, `roles`, `absorbedIds` (ids fundidos na resolução), `description` (texto, da extração dirigida), `descriptions` (lista, uma por Pai, da aberta) e `descriptionParents` (o Pai de cada uma), `summary`, `summarySource`, `summaryDescriptions`, `embedding` |
 | `RELATED_TO` (relação `__Entity__ → __Entity__`) | `descriptions` (lista), `strength` (1–10, a máxima entre os Pais), `parents` (ids dos Pais); a F5.4 as resume em `SUMMARIZED_RELATIONSHIP {summary, weight, rank}` |
-| `__Community__` | `id`, `level`, `title`, `summary`, `rating`, `rank`, `embedding` |
+| `__Community__` | `id`, `level`, `size`, `title`, `summary`, `rating`, `rank`, `embedding` |
 
 ### 6.3 *Constraints* e índices
 

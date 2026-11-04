@@ -216,3 +216,12 @@ Depois de `aplicar`, `indexer.resumos` resume as descrições de cada entidade e
 uv run python -m indexer.resumos executar ../data/parsed/bb_fre_2026_recorte
 uv run python -m indexer.resumos verificar ../data/parsed/bb_fre_2026_recorte
 ```
+
+## Comunidades (F5.5, ADR-042)
+
+Leiden hierárquico no GDS sobre `SUMMARIZED_RELATIONSHIP`, sem o emissor e sem as entidades sem aresta; grava `(:__Community__ {id, level, size})`, `IN_COMMUNITY` (nível 0) e `PARENT_COMMUNITY`, e imprime a modularidade (GDS e recalculada) e a contagem por nível. Precisa do Neo4j com o GDS; reexecutar apaga e refaz as comunidades com os mesmos ids:
+
+```powershell
+uv run python -m indexer.comunidades executar
+uv run python -m indexer.comunidades verificar
+```

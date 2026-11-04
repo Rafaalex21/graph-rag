@@ -224,9 +224,11 @@
   - depende: F5.3
   - resultado: ADR-041 (aceita); maior prompt de 817 tokens contra o slot de ≈ 16 mil; emissor (70 descrições) em 2 níveis e 4 chamadas, com `:Issuer`; 89 entidades e 31 relações resumidas pelo LLM, as demais com o próprio texto ou o nome; 481 `SUMMARIZED_RELATIONSHIP`; `summary IS NULL` = 0; segunda rodada com 0 chamadas (459 testes)
   - nota: o teto de 300 descrições por entidade não foi acionado no recorte (0 descartadas); na F5.8 o emissor tem muito mais descrições, e `descartadas_pelo_teto` deve ser lido na hora
-- [ ] **F5.5** Leiden hierárquico no GDS (peso = força), excluindo o emissor da projeção
+- [x] **F5.5** Leiden hierárquico no GDS (peso = força), excluindo o emissor da projeção
   - aceite: modularidade e número de comunidades por nível registrados
   - depende: F5.4
+  - resultado: ADR-042 (aceita); 3 níveis com 67, 47 e 45 comunidades e modularidade 0,825, 0,887 e 0,889 (a do GDS e a recalculada em Python coincidem); 294 nós e 291 arestas na projeção, sem o emissor; mesmas 159 comunidades com os mesmos ids em duas execuções; sanidade com 0 violações (471 testes)
+  - nota: 138 entidades ficam sem aresta fora do emissor e não entram em comunidade; a modularidade alta vem em parte da fragmentação (36 componentes conexos) do recorte de 19% das páginas, e a F5.8 mede de novo
 - [ ] **F5.6** Relatórios de comunidade em JSON e embeddings em `community_vec`
   - aceite: 100% com relatório válido; 10 revisados à mão
   - depende: F5.5
