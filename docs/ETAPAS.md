@@ -305,10 +305,10 @@
   - aceite: acurácia de rota ≥ 85% no golden set
   - depende: F7.2, F6.1, F6.2, F6.3, F6.5
   - resultado: ADR-054; `api/src/agente/roteador.ts` (`rotear`, `rotearSubperguntas`, `CATALOGO`): as **12** ferramentas da tabela §7.2 com esquema Zod e descrição de quando usar, `tool_choice: auto`, argumentos normalizados e validados (chamada ruim é descartada e anotada, máximo de 3), caminho seguro `buscar_trechos` se o LLM falha ou nada serve, subperguntas por ondas (independentes até 2 juntas, dependentes com `<respostas_anteriores>`). `eval/golden_rotas.json` (100 casos: 60 do golden + 40 novas, com a rota literal e o conjunto de rotas aceitas fixado antes de medir) e `npm run avaliar:rotas`. **Aceite: 17/20 = 85,0% no `teste3`** (limpo, escrito depois da última correção; estrito 75%), ajuste 20/20; a primeira medição num grupo novo (`teste`, prompt v2) deu **82,5%, abaixo do aceite**. 170 testes na API (61 unitários novos de roteador e avaliador, escritos antes do código, e 5 de integração), mediana de ~4 s no caminho atualizador + roteador, 0 caminhos seguros acionados
-  - nota: o ETAPAS diz "oito" e a §7.2 lista 12 ferramentas; implementei as 12. O roteador **não executa** ferramentas (as de recuperação estão em Python e nenhuma tarefa porta a execução para o `api/`: decidir antes da F7.6). Nomear a companhia no prompt fez o Qwen responder de memória (sede, bolsa, código de negociação) sem ferramenta; o v4 manda chamar ferramenta para todo fato da companhia. Contas sobre quadros (diferença, média, menor remuneração) ainda vão para `buscar_tabelas` em 6 das 12 falhas; o texto da rota `nenhuma` não deve virar resposta. n = 20 no grupo limpo, 85% é o limiar exato
+  - nota: o ETAPAS diz "oito" e a §7.2 lista 12 ferramentas; implementei as 12. O roteador **não executa** ferramentas (as de recuperação estão em Python); decidido em seguida (ADR-055): portar para TypeScript, nas tarefas F7.8 a F7.11, e a F7.4 passa a depender da F7.11. Nomear a companhia no prompt fez o Qwen responder de memória (sede, bolsa, código de negociação) sem ferramenta; o v4 manda chamar ferramenta para todo fato da companhia. Contas sobre quadros (diferença, média, menor remuneração) ainda vão para `buscar_tabelas` em 6 das 12 falhas; o texto da rota `nenhuma` não deve virar resposta. n = 20 no grupo limpo, 85% é o limiar exato
 - [ ] **F7.4** Crítico com uma rodada extra e critério de saída
   - aceite: nenhuma conversa ultrapassa duas rodadas; casos "ausente" respondidos como ausentes
-  - depende: F7.3
+  - depende: F7.11
 - [ ] **F7.5** Redator: citações por id → página, números em pt-BR, "não consta" quando faltar
   - aceite: 100% das afirmações numéricas citadas no golden set
   - depende: F7.4
@@ -318,6 +318,22 @@
 - [ ] **F7.7** Telemetria em JSONL por requisição (rota, ferramentas, tokens, latência)
   - aceite: relatório diário gerado a partir dos logs
   - depende: F7.6
+- [ ] **F7.8** Executor de ferramentas em TypeScript: contrato `evidence[]`, `neo4j-driver` (sessão `READ`) e os templates Cypher da F6.3
+  - aceite: `fato_financeiro`, `serie_metrica`, `comparar_segmentos`, `riscos`, `eventos` e `pessoas_cargos` devolvem, no grafo real, os mesmos valores, escalas, divergências e páginas que o Python nas perguntas do teste de contrato da F6.3; `pessoas_cargos` sem filtro recusa
+  - depende: F7.3, F6.3
+  - nota: decisão da ADR-055 (portar para TypeScript, §3). O roteador (F7.3) só escolhe; o executor recebe `{nome, argumentos}` e devolve `evidence[]` com `id`, tipo, página, texto e score. Paridade conferida contra a saída do Python, que fica como referência até a F7.11
+- [ ] **F7.9** Buscas em TypeScript: `buscar_trechos`, `buscar_tabelas`, `entidade` e `resposta_ja_dada`
+  - aceite: embedding de consulta e rerank pelo cliente da F7.1; page recall@k por regex nas perguntas do golden com gabarito não inferior ao do Python (F3.3), e T15 (cargo → pessoa) resolvida pela `entidade`
+  - depende: F7.8, F6.1
+  - nota: reescrita opcional (step-back/HyDE), `child_vec` ± full-text, deduplicação por Pai e 6 Pais, como a §7.2; a F7.5 cita as páginas dos itens `pai`
+- [ ] **F7.10** `consultar_grafo` (Text2Cypher com guarda-corpos) e `panorama` (busca global) em TypeScript
+  - aceite: guarda com 26 de 26 entradas maliciosas bloqueadas e sem escrita no grafo real; Text2Cypher com acurácia de execução ≥ 90% nas 10 perguntas de teste da F6.4; `panorama` em ≤ 60 s nas 10 perguntas da F6.2
+  - depende: F7.8, F6.2, F6.4, F6.5
+  - nota: a guarda é o item de segurança; o teste de contrato da F6.5 (26 entradas) é portado antes do resto e roda também na integração contínua. O resultado de `consultar_grafo` continua sendo hipótese (F6.4, F7.4)
+- [ ] **F7.11** Agente: atualizador, roteador e executor em ondas, com `evidence[]` por subpergunta
+  - aceite: as 60 perguntas do golden executam ponta a ponta sem erro de ferramenta, com a rota e o tempo de cada etapa registrados, e o page recall não é inferior ao do Python
+  - depende: F7.9, F7.10
+  - nota: as independentes andam juntas (até 2, `-np 2`), as dependentes recebem o resumo da anterior; falhas de ferramenta viram evidência vazia anotada, não erro do agente
 
 ## F8 · Interface Angular
 > objetivo: Um assistente que mostra o caminho: rota, Cypher, evidências e páginas a um clique.
