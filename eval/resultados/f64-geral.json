@@ -1,0 +1,205 @@
+{
+  "teste": {
+    "n": 10,
+    "acertos": 9,
+    "acuracia": 0.9
+  },
+  "ajuste": {
+    "n": 5,
+    "acertos": 4,
+    "acuracia": 0.8
+  },
+  "geral": {
+    "n": 15,
+    "acertos": 13,
+    "acuracia": 0.867
+  },
+  "latencia_ms": {
+    "mediana": 3187,
+    "maximo": 3928
+  },
+  "avisos_esquema": [],
+  "prompt_chars": 38472,
+  "casos": [
+    {
+      "id": "AG01",
+      "grupo": "teste",
+      "ok": true,
+      "erro": null,
+      "linhas": 1,
+      "latencia_ms": {
+        "llm": 3180,
+        "banco": 3,
+        "total": 3187
+      }
+    },
+    {
+      "id": "AG02",
+      "grupo": "teste",
+      "ok": false,
+      "erro": null,
+      "linhas": 1,
+      "latencia_ms": {
+        "llm": 2731,
+        "banco": 3,
+        "total": 2739
+      }
+    },
+    {
+      "id": "AG03",
+      "grupo": "teste",
+      "ok": true,
+      "erro": null,
+      "linhas": 1,
+      "latencia_ms": {
+        "llm": 2164,
+        "banco": 3,
+        "total": 2172
+      }
+    },
+    {
+      "id": "AG04",
+      "grupo": "ajuste",
+      "ok": false,
+      "erro": null,
+      "linhas": 1,
+      "latencia_ms": {
+        "llm": 3238,
+        "banco": 3,
+        "total": 3246
+      }
+    },
+    {
+      "id": "AG05",
+      "grupo": "teste",
+      "ok": true,
+      "erro": null,
+      "linhas": 1,
+      "latencia_ms": {
+        "llm": 2269,
+        "banco": 3,
+        "total": 2276
+      }
+    },
+    {
+      "id": "AG06",
+      "grupo": "ajuste",
+      "ok": true,
+      "erro": null,
+      "linhas": 1,
+      "latencia_ms": {
+        "llm": 2814,
+        "banco": 3,
+        "total": 2820
+      }
+    },
+    {
+      "id": "AG07",
+      "grupo": "teste",
+      "ok": true,
+      "erro": null,
+      "linhas": 1,
+      "latencia_ms": {
+        "llm": 2389,
+        "banco": 3,
+        "total": 2396
+      }
+    },
+    {
+      "id": "AG08",
+      "grupo": "teste",
+      "ok": true,
+      "erro": null,
+      "linhas": 1,
+      "latencia_ms": {
+        "llm": 3920,
+        "banco": 3,
+        "total": 3928
+      }
+    },
+    {
+      "id": "AG09",
+      "grupo": "teste",
+      "ok": true,
+      "erro": null,
+      "linhas": 1,
+      "latencia_ms": {
+        "llm": 3318,
+        "banco": 3,
+        "total": 3324
+      }
+    },
+    {
+      "id": "AG10",
+      "grupo": "ajuste",
+      "ok": true,
+      "erro": null,
+      "linhas": 1,
+      "latencia_ms": {
+        "llm": 2381,
+        "banco": 3,
+        "total": 2387
+      }
+    },
+    {
+      "id": "AG11",
+      "grupo": "teste",
+      "ok": true,
+      "erro": null,
+      "linhas": 1,
+      "latencia_ms": {
+        "llm": 3871,
+        "banco": 3,
+        "total": 3877
+      }
+    },
+    {
+      "id": "AG12",
+      "grupo": "teste",
+      "ok": true,
+      "erro": null,
+      "linhas": 1,
+      "latencia_ms": {
+        "llm": 3321,
+        "banco": 3,
+        "total": 3330
+      }
+    },
+    {
+      "id": "AG13",
+      "grupo": "ajuste",
+      "ok": true,
+      "erro": null,
+      "linhas": 1,
+      "latencia_ms": {
+        "llm": 3186,
+        "banco": 3,
+        "total": 3194
+      }
+    },
+    {
+      "id": "AG14",
+      "grupo": "teste",
+      "ok": true,
+      "erro": null,
+      "linhas": 1,
+      "latencia_ms": {
+        "llm": 2471,
+        "banco": 3,
+        "total": 2478
+      }
+    },
+    {
+      "id": "AG15",
+      "grupo": "ajuste",
+      "ok": true,
+      "erro": null,
+      "linhas": 1,
+      "latencia_ms": {
+        "llm": 3752,
+        "banco": 3,
+        "total": 3760
+      }
+    }
+  ]
+}

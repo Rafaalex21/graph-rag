@@ -7,6 +7,7 @@ Avaliação do GraphRAG (ARQUITETURA §13, fase F3). Tudo aqui mede contra o **F
 | `golden.csv` | Golden set da F3.1: 60 perguntas com gabarito, páginas e rota esperada (colunas abaixo) |
 | `validar_golden.py` | Valida o `golden.csv` e **confere cada gabarito contra o texto do PDF original** |
 | `golden_entidades.csv` | 10 perguntas "quem é / o que é" da F6.1, escritas **depois** de a busca local estar ajustada e conferidas contra o PDF (mesmas colunas do `golden.csv`, ids `E01`–`E10`, rota `entidade`); servem de conjunto separado, porque as três perguntas "quem é…" do golden foram as que orientaram o ajuste. Não fazem parte dos 60 do golden set |
+| `golden_agregacao.csv` | 15 perguntas de agregação **respondíveis pelo grafo** (AG01–AG15; AG01 = G03 e AG02 = G07) da F6.4, com valor, páginas e o `cypher_gabarito` que o teste de contrato executa no grafo real; `grupo` é `ajuste` (5, usadas para iterar o prompt do Text2Cypher) ou `teste` (10, o número do aceite). Traz também as 8 perguntas oficiais de agregação que o grafo não responde, com `grupo = fora` e o motivo (dívidas de extração) |
 | `fumaca_f2_9.json` | 5 perguntas de fumaça do `ask` (F2.9); não é o golden set |
 | `perguntas_latencia.txt` | 20 perguntas sem gabarito, só para medir latência (F2.5) |
 | `calibracao_juiz.csv` | Os 20 rótulos de correção da F3.4 (`c`/`p`/`i`) e quem os deu; a planilha de leitura fica em `data/avaliacao/` |

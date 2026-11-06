@@ -1,0 +1,85 @@
+{
+  "teste": {
+    "n": 0,
+    "acertos": 0,
+    "acuracia": 0.0
+  },
+  "ajuste": {
+    "n": 5,
+    "acertos": 3,
+    "acuracia": 0.6
+  },
+  "geral": {
+    "n": 5,
+    "acertos": 3,
+    "acuracia": 0.6
+  },
+  "latencia_ms": {
+    "mediana": 4048,
+    "maximo": 13561
+  },
+  "avisos_esquema": [],
+  "prompt_chars": 32415,
+  "casos": [
+    {
+      "id": "AG04",
+      "grupo": "ajuste",
+      "ok": true,
+      "erro": null,
+      "linhas": 1,
+      "latencia_ms": {
+        "llm": 13557,
+        "banco": 4,
+        "total": 13561
+      }
+    },
+    {
+      "id": "AG06",
+      "grupo": "ajuste",
+      "ok": false,
+      "erro": null,
+      "linhas": 1,
+      "latencia_ms": {
+        "llm": 2257,
+        "banco": 27,
+        "total": 2284
+      }
+    },
+    {
+      "id": "AG10",
+      "grupo": "ajuste",
+      "ok": true,
+      "erro": null,
+      "linhas": 1,
+      "latencia_ms": {
+        "llm": 1994,
+        "banco": 22,
+        "total": 2016
+      }
+    },
+    {
+      "id": "AG13",
+      "grupo": "ajuste",
+      "ok": true,
+      "erro": null,
+      "linhas": 1,
+      "latencia_ms": {
+        "llm": 4077,
+        "banco": 55,
+        "total": 4132
+      }
+    },
+    {
+      "id": "AG15",
+      "grupo": "ajuste",
+      "ok": false,
+      "erro": "falha_na_execucao: {neo4j_code: Neo.ClientError.Statement.SyntaxError} {message: Variable `f` not defined (line 4, column 54 (offset: 392))\r\n\"RETURN total_pardos - lider_pardos AS diferenca, min(f.page) AS pagina\"\r\n    ",
+      "linhas": 0,
+      "latencia_ms": {
+        "llm": 4033,
+        "banco": 15,
+        "total": 4048
+      }
+    }
+  ]
+}

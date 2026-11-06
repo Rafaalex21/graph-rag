@@ -1,0 +1,145 @@
+{
+  "teste": {
+    "n": 10,
+    "acertos": 9,
+    "acuracia": 0.9
+  },
+  "ajuste": {
+    "n": 0,
+    "acertos": 0,
+    "acuracia": 0.0
+  },
+  "geral": {
+    "n": 10,
+    "acertos": 9,
+    "acuracia": 0.9
+  },
+  "latencia_ms": {
+    "mediana": 2966,
+    "maximo": 3949
+  },
+  "avisos_esquema": [],
+  "prompt_chars": 38472,
+  "casos": [
+    {
+      "id": "AG01",
+      "grupo": "teste",
+      "ok": true,
+      "erro": null,
+      "linhas": 1,
+      "latencia_ms": {
+        "llm": 3132,
+        "banco": 29,
+        "total": 3165
+      }
+    },
+    {
+      "id": "AG02",
+      "grupo": "teste",
+      "ok": false,
+      "erro": null,
+      "linhas": 1,
+      "latencia_ms": {
+        "llm": 2750,
+        "banco": 11,
+        "total": 2766
+      }
+    },
+    {
+      "id": "AG03",
+      "grupo": "teste",
+      "ok": true,
+      "erro": null,
+      "linhas": 1,
+      "latencia_ms": {
+        "llm": 2178,
+        "banco": 28,
+        "total": 2210
+      }
+    },
+    {
+      "id": "AG05",
+      "grupo": "teste",
+      "ok": true,
+      "erro": null,
+      "linhas": 1,
+      "latencia_ms": {
+        "llm": 2315,
+        "banco": 10,
+        "total": 2330
+      }
+    },
+    {
+      "id": "AG07",
+      "grupo": "teste",
+      "ok": true,
+      "erro": null,
+      "linhas": 1,
+      "latencia_ms": {
+        "llm": 2408,
+        "banco": 10,
+        "total": 2423
+      }
+    },
+    {
+      "id": "AG08",
+      "grupo": "teste",
+      "ok": true,
+      "erro": null,
+      "linhas": 1,
+      "latencia_ms": {
+        "llm": 3932,
+        "banco": 12,
+        "total": 3949
+      }
+    },
+    {
+      "id": "AG09",
+      "grupo": "teste",
+      "ok": true,
+      "erro": null,
+      "linhas": 1,
+      "latencia_ms": {
+        "llm": 3303,
+        "banco": 11,
+        "total": 3320
+      }
+    },
+    {
+      "id": "AG11",
+      "grupo": "teste",
+      "ok": true,
+      "erro": null,
+      "linhas": 1,
+      "latencia_ms": {
+        "llm": 3855,
+        "banco": 22,
+        "total": 3881
+      }
+    },
+    {
+      "id": "AG12",
+      "grupo": "teste",
+      "ok": true,
+      "erro": null,
+      "linhas": 1,
+      "latencia_ms": {
+        "llm": 3266,
+        "banco": 12,
+        "total": 3282
+      }
+    },
+    {
+      "id": "AG14",
+      "grupo": "teste",
+      "ok": true,
+      "erro": null,
+      "linhas": 1,
+      "latencia_ms": {
+        "llm": 2471,
+        "banco": 29,
+        "total": 2503
+      }
+    }
+  ]
+}

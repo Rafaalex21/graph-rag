@@ -1,0 +1,85 @@
+{
+  "teste": {
+    "n": 0,
+    "acertos": 0,
+    "acuracia": 0.0
+  },
+  "ajuste": {
+    "n": 5,
+    "acertos": 1,
+    "acuracia": 0.2
+  },
+  "geral": {
+    "n": 5,
+    "acertos": 1,
+    "acuracia": 0.2
+  },
+  "latencia_ms": {
+    "mediana": 4210,
+    "maximo": 13718
+  },
+  "avisos_esquema": [],
+  "prompt_chars": 32415,
+  "casos": [
+    {
+      "id": "AG04",
+      "grupo": "ajuste",
+      "ok": true,
+      "erro": null,
+      "linhas": 1,
+      "latencia_ms": {
+        "llm": 13687,
+        "banco": 31,
+        "total": 13718
+      }
+    },
+    {
+      "id": "AG06",
+      "grupo": "ajuste",
+      "ok": false,
+      "erro": null,
+      "linhas": 1,
+      "latencia_ms": {
+        "llm": 2019,
+        "banco": 26,
+        "total": 2045
+      }
+    },
+    {
+      "id": "AG10",
+      "grupo": "ajuste",
+      "ok": false,
+      "erro": null,
+      "linhas": 1,
+      "latencia_ms": {
+        "llm": 3442,
+        "banco": 44,
+        "total": 3486
+      }
+    },
+    {
+      "id": "AG13",
+      "grupo": "ajuste",
+      "ok": false,
+      "erro": null,
+      "linhas": 1,
+      "latencia_ms": {
+        "llm": 5686,
+        "banco": 71,
+        "total": 5757
+      }
+    },
+    {
+      "id": "AG15",
+      "grupo": "ajuste",
+      "ok": false,
+      "erro": "falha_na_execucao: {neo4j_code: Neo.ClientError.Statement.SyntaxError} {message: Type mismatch: expected List<T> but was Any (line 5, column 3 (offset: 192))\r\n\"  [x IN total WHERE x.metrica = 'Empregados Pardo'][0].tota",
+      "linhas": 0,
+      "latencia_ms": {
+        "llm": 4190,
+        "banco": 19,
+        "total": 4210
+      }
+    }
+  ]
+}

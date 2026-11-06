@@ -1,0 +1,85 @@
+{
+  "teste": {
+    "n": 0,
+    "acertos": 0,
+    "acuracia": 0.0
+  },
+  "ajuste": {
+    "n": 5,
+    "acertos": 4,
+    "acuracia": 0.8
+  },
+  "geral": {
+    "n": 5,
+    "acertos": 4,
+    "acuracia": 0.8
+  },
+  "latencia_ms": {
+    "mediana": 3188,
+    "maximo": 17251
+  },
+  "avisos_esquema": [],
+  "prompt_chars": 38472,
+  "casos": [
+    {
+      "id": "AG04",
+      "grupo": "ajuste",
+      "ok": false,
+      "erro": null,
+      "linhas": 1,
+      "latencia_ms": {
+        "llm": 17245,
+        "banco": 3,
+        "total": 17251
+      }
+    },
+    {
+      "id": "AG06",
+      "grupo": "ajuste",
+      "ok": true,
+      "erro": null,
+      "linhas": 1,
+      "latencia_ms": {
+        "llm": 2815,
+        "banco": 27,
+        "total": 2846
+      }
+    },
+    {
+      "id": "AG10",
+      "grupo": "ajuste",
+      "ok": true,
+      "erro": null,
+      "linhas": 1,
+      "latencia_ms": {
+        "llm": 2375,
+        "banco": 3,
+        "total": 2381
+      }
+    },
+    {
+      "id": "AG13",
+      "grupo": "ajuste",
+      "ok": true,
+      "erro": null,
+      "linhas": 1,
+      "latencia_ms": {
+        "llm": 3182,
+        "banco": 3,
+        "total": 3188
+      }
+    },
+    {
+      "id": "AG15",
+      "grupo": "ajuste",
+      "ok": true,
+      "erro": null,
+      "linhas": 1,
+      "latencia_ms": {
+        "llm": 3757,
+        "banco": 29,
+        "total": 3789
+      }
+    }
+  ]
+}

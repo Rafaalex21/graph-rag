@@ -498,14 +498,14 @@ sequenceDiagram
 | `riscos(tema?, categoria?)`, `eventos(tema?, ano?)`, `pessoas_cargos(cargo?, nome?, orgao?)` | Fatores de risco, eventos datados, quem ocupa um cargo | Templates Cypher com páginas; sem filtro de cargo/nome/órgão, `pessoas_cargos` recusa | 5 |
 | `entidade(nome)` | "Quem é…", "O que é a subsidiária…" | Busca local: `entity_vec` (e `entity_ft` pelo nome citado) → reranker → resumo, Pais, relações resumidas e comunidades, com tetos ([ADR-046](./adr/ADR-046-busca-local.md)) | 7 |
 | `panorama(pergunta, nivel?)` | Perguntas temáticas e globais | Busca global *map-reduce* sobre relatórios com *rating* ≥ limiar: nível 1, 16 comunidades em lotes, pontos notados, reduce opcional, ≤ 60 s medidos; pontos sem página ([ADR-047](./adr/ADR-047-busca-global.md)) | 7 |
-| `consultar_grafo(pergunta)` | Agregações e filtros sem template — rede de segurança | Text2Cypher | 4 |
+| `consultar_grafo(pergunta)` | Agregações e filtros sem template — rede de segurança | Text2Cypher: 90% de acurácia de execução nas 10 perguntas de teste, ~3 s; sessão `READ` ([ADR-049](./adr/ADR-049-text2cypher.md)) | 4 |
 | `resposta_ja_dada(resposta)` | A resposta já está na conversa | Extração direta (ferramenta genérica do cap. 5) | 5 |
 
 ### 7.3 Text2Cypher com guarda-corpos
 
-- **Prompt** com as quatro seções do cap. 4: esquema (inferido via APOC e amostrado), mapeamento terminológico, exemplos *few-shot* e instruções de formato ("SOMENTE CYPHER, SEM BLOCOS DE CÓDIGO").
+- **Prompt** com as quatro seções do cap. 4: esquema (inferido via APOC e amostrado), mapeamento terminológico, exemplos *few-shot* e instruções de formato ("SOMENTE CYPHER, SEM BLOCOS DE CÓDIGO"). Implementado em `indexer.text2cypher` ([ADR-049](./adr/ADR-049-text2cypher.md)): o sistema é igual em toda pergunta (cache de prefixo) e a mensagem do usuário leva os 12 rótulos de `f.metric` mais parecidos com a pergunta; **9/10 (90%) de acurácia de execução** nas 10 perguntas de teste de `eval/golden_agregacao.csv` (13/15 no geral), mediana de 3,2 s. As perguntas sem dado no grafo voltam números plausíveis e errados: o resultado é hipótese, não resposta.
 - **Mapeamento terminológico bilíngue** — "faturamento", "receita" e "revenue" → `Metric {name: 'Net revenue'}`; "4T25" → `Period {id: '2025-Q4'}`; "lucro" → `Net income`. Os termos de métricas vêm de `contracts/metricas.json` (nome, nome em português e aliases; `python -m indexer.catalogo termo <texto>`); o prompt os recebe do mesmo arquivo, não de uma cópia. Os períodos ("4T25") ainda não têm tabela: ficam para a F6.
-- **Exemplos *few-shot*** em `api/prompts/cypher-examples.yaml`, crescendo a partir das falhas da avaliação — o ciclo que o livro descreve nos caps. 4 e 8.
+- **Exemplos *few-shot*** em `api/prompts/cypher-examples.json` (JSON e não YAML: o projeto não depende de PyYAML), crescendo a partir das falhas da avaliação — o ciclo que o livro descreve nos caps. 4 e 8. Cada exemplo é executado no grafo real por um teste de contrato e nenhuma pergunta repete as dos golden sets.
 - **Execução segura:** sessão `READ`; recusa de `CREATE|MERGE|DELETE|SET|REMOVE|DROP|LOAD CSV` e de procedimentos de escrita; `EXPLAIN` antes de executar; `LIMIT 100` injetado quando ausente; tempo-limite de 5 s; uma tentativa de autocorreção com a mensagem de erro.
 - **Especialista opcional:** `neo4j/text-to-cypher-Gemma-3-4B-Instruct-2025.04.0`, comparado ao LLM principal na F6.
 

@@ -300,3 +300,16 @@ uv run python -m indexer.templates_cypher eventos --ano 2025
 uv run python -m indexer.templates_cypher pessoas --cargo "diretora presidente"
 uv run pytest tests/test_templates_grafo.py -v     # contrato contra o grafo real (pulado sem o Neo4j)
 ```
+
+## Text2Cypher (F6.4, ADR-049)
+
+`indexer.text2cypher` é a rede de segurança de `consultar_grafo`: traduz a pergunta em Cypher e a executa numa **sessão de leitura**, com tempo limite de 10 s e teto de 50 linhas. O prompt junta o esquema do grafo (APOC, valores de exemplo e os rótulos de `f.metric`), a terminologia PT↔EN de `contracts/metricas.json`, os exemplos de `api/prompts/cypher-examples.json` e as instruções de formato; a pergunta leva junto os 12 rótulos mais parecidos com ela. Devolve `cypher`, `linhas`, `evidencias[]` (a página só vem da coluna `pagina`), `aviso` e `erro` (`falha_no_llm`, `sem_cypher`, `falha_na_execucao`, `pergunta_vazia`); nunca levanta. Resultado sem página tem `aviso`: trate-o como hipótese. Precisa do Neo4j e do llama-swap (perfil `consultar`) no ar:
+
+```powershell
+uv run python -m indexer.text2cypher perguntar "Quantos empregados atuam em Auditoria Interna?"
+uv run python -m indexer.text2cypher perguntar "..." --mostrar-prompt   # imprime o prompt do sistema
+uv run python -m indexer.text2cypher medir --grupo teste --nome f64-teste   # acurácia de execução
+uv run pytest tests/test_text2cypher_grafo.py -v   # exemplos e gabaritos contra o grafo real
+```
+
+`medir` lê `eval/golden_agregacao.csv` (grupos `ajuste` e `teste`), grava `eval/resultados/<nome>.json` (só números) e o Cypher gerado em `data/avaliacao/<nome>-detalhes.json` (fora do repositório). Edite os exemplos só com perguntas que **não** estejam nos golden sets: um teste confere.

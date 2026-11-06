@@ -1,0 +1,46 @@
+[
+  {
+    "pergunta": "Qual o patrimônio líquido do Banco do Brasil em 2025?",
+    "cypher": "MATCH (f:FinancialFact)-[r:OF_METRIC]->(m:Metric {name: \"Shareholders' equity\"})\nMATCH (f)-[:FOR_PERIOD]->(p:Period)\nWHERE p.id STARTS WITH '2025' AND r.qualifier = 'nenhum' AND r.dimension IS NULL AND f.unit = 'currency'\nRETURN f.value AS valor, f.scale AS escala, f.page AS pagina, f.id AS id\nORDER BY f.scale ASC\nLIMIT 5"
+  },
+  {
+    "pergunta": "Qual faixa de atraso das parcelas vencidas tem o maior valor em 2025?",
+    "cypher": "MATCH (f:FinancialFact)-[:FOR_PERIOD]->(p:Period)\nWHERE p.id STARTS WITH '2025' AND f.metric STARTS WITH 'Parcelas Vencidas ' AND f.metric <> 'Parcelas Vencidas'\nRETURN f.metric AS faixa, f.value AS valor, f.page AS pagina, f.id AS id\nORDER BY valor DESC\nLIMIT 1"
+  },
+  {
+    "pergunta": "Qual categoria de acionista tem a maior participação no total de ações?",
+    "cypher": "MATCH (f:FinancialFact)-[:FOR_PERIOD]->(p:Period)\nWHERE p.id STARTS WITH '2025' AND f.metric STARTS WITH 'Participação acionária - ' AND f.metric ENDS WITH '% Total de Ações' AND f.metric <> 'Participação acionária - Total - % Total de Ações'\nRETURN f.metric AS acionista, f.value AS valor, f.page AS pagina, f.id AS id\nORDER BY valor DESC\nLIMIT 1"
+  },
+  {
+    "pergunta": "Quanto caiu a despesa realizada de publicidade e propaganda de 2023 para 2025?",
+    "cypher": "MATCH (f:FinancialFact)-[:FOR_PERIOD]->(p:Period)\nWHERE p.id IN ['2023-FY', '2025-FY'] AND f.metric = 'Despesas de publicidade e propaganda - Realizado'\nRETURN sum(CASE WHEN p.id = '2023-FY' THEN f.value ELSE -f.value END) AS queda, min(f.page) AS pagina\nLIMIT 50"
+  },
+  {
+    "pergunta": "Somando as despesas realizadas de publicidade e de promoção e patrocínio em 2025, quanto dá?",
+    "cypher": "MATCH (f:FinancialFact)-[:FOR_PERIOD]->(p:Period)\nWHERE p.id STARTS WITH '2025' AND f.metric IN ['Despesas de publicidade e propaganda - Realizado', 'Despesas de promoção e patrocínio - Realizado']\nRETURN sum(f.value) AS total, min(f.page) AS pagina\nLIMIT 50"
+  },
+  {
+    "pergunta": "Quanto o capital de Nível I superou o de Nível II em 2025?",
+    "cypher": "MATCH (f:FinancialFact)-[:FOR_PERIOD]->(p:Period)\nWHERE p.id STARTS WITH '2025' AND f.metric IN ['Nível I', 'Nível II']\nRETURN sum(CASE WHEN f.metric = 'Nível I' THEN f.value ELSE -f.value END) AS diferenca, min(f.page) AS pagina\nLIMIT 50"
+  },
+  {
+    "pergunta": "Somando a receita de tarifas e comissões de Conta Corrente e de Consórcios em 2025, quanto dá?",
+    "cypher": "MATCH (f:FinancialFact)-[r:OF_METRIC]->(m:Metric {name: 'Fee and commission income'})\nMATCH (f)-[:FOR_PERIOD]->(p:Period)\nWHERE p.id STARTS WITH '2025' AND r.qualifier = 'nenhum' AND r.dimension IN ['Conta Corrente', 'Consórcios'] AND f.unit = 'currency'\nRETURN sum(f.value) AS total, collect(DISTINCT f.page)[0] AS pagina"
+  },
+  {
+    "pergunta": "Quantos fatores de risco de crédito o documento descreve?",
+    "cypher": "MATCH (r:RiskFactor {category: 'credit'})\nRETURN count(r) AS total"
+  },
+  {
+    "pergunta": "Quais as três métricas com mais valores reportados?",
+    "cypher": "MATCH (f:FinancialFact)-[:OF_METRIC]->(m:Metric)\nRETURN m.name AS metrica, m.namePt AS metrica_pt, count(f) AS valores\nORDER BY valores DESC\nLIMIT 3"
+  },
+  {
+    "pergunta": "Quantos eventos do documento têm data registrada?",
+    "cypher": "MATCH (e:Event)\nWHERE e.date IS NOT NULL\nRETURN count(e) AS total"
+  },
+  {
+    "pergunta": "Em quantos períodos diferentes o documento traz o lucro líquido?",
+    "cypher": "MATCH (f:FinancialFact)-[:OF_METRIC]->(m:Metric {name: 'Net income'})\nMATCH (f)-[:FOR_PERIOD]->(p:Period)\nRETURN count(DISTINCT p.id) AS periodos"
+  }
+]
