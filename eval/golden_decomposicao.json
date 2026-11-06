@@ -1,0 +1,820 @@
+[
+  {
+    "id": "D01",
+    "grupo": "ajuste",
+    "tipo": "composta",
+    "historico": [],
+    "pergunta": "Qual foi o lucro líquido ajustado em 2025 e quantos empregados o Banco tinha ao fim do ano?",
+    "esperado": {
+      "subperguntas": [
+        [
+          "lucro",
+          "liquido",
+          "2025"
+        ],
+        [
+          "empregados|funcionarios",
+          "2025"
+        ]
+      ],
+      "dependencias": {}
+    }
+  },
+  {
+    "id": "D02",
+    "grupo": "ajuste",
+    "tipo": "composta",
+    "historico": [],
+    "pergunta": "Qual empresa faz a auditoria independente do Banco e há quanto tempo ela presta esse serviço?",
+    "esperado": {
+      "subperguntas": [
+        [
+          "empresa|auditor",
+          "auditoria"
+        ],
+        [
+          "tempo|desde|anos",
+          "servico|auditoria"
+        ]
+      ],
+      "dependencias": {
+        "1": [
+          0
+        ]
+      }
+    }
+  },
+  {
+    "id": "D03",
+    "grupo": "ajuste",
+    "tipo": "composta",
+    "historico": [],
+    "pergunta": "Quais são os fatores de risco de crédito e de risco de mercado citados no relatório?",
+    "esperado": {
+      "subperguntas": [
+        [
+          "risco",
+          "credito"
+        ],
+        [
+          "risco",
+          "mercado"
+        ]
+      ],
+      "dependencias": {}
+    }
+  },
+  {
+    "id": "D04",
+    "grupo": "ajuste",
+    "tipo": "composta",
+    "historico": [],
+    "pergunta": "Quanto o Banco pagou de dividendos em 2025, qual foi o payout e qual lucro serviu de base?",
+    "esperado": {
+      "subperguntas": [
+        [
+          "dividendos",
+          "2025"
+        ],
+        [
+          "payout"
+        ],
+        [
+          "lucro",
+          "base"
+        ]
+      ],
+      "dependencias": {}
+    }
+  },
+  {
+    "id": "D05",
+    "grupo": "ajuste",
+    "tipo": "composta",
+    "historico": [],
+    "pergunta": "Qual segmento teve a maior participação na receita e como ele evoluiu em relação a 2024?",
+    "esperado": {
+      "subperguntas": [
+        [
+          "segmento",
+          "maior",
+          "receita"
+        ],
+        [
+          "segmento",
+          "2024"
+        ]
+      ],
+      "dependencias": {
+        "1": [
+          0
+        ]
+      }
+    }
+  },
+  {
+    "id": "D06",
+    "grupo": "ajuste",
+    "tipo": "simples",
+    "historico": [],
+    "pergunta": "Qual é o valor do capital social do Banco?",
+    "esperado": {
+      "subperguntas": [
+        [
+          "capital",
+          "social"
+        ]
+      ],
+      "dependencias": {}
+    }
+  },
+  {
+    "id": "D07",
+    "grupo": "ajuste",
+    "tipo": "simples",
+    "historico": [],
+    "pergunta": "Somando os empregados pretos e os pardos, quantos são ao todo?",
+    "esperado": {
+      "subperguntas": [
+        [
+          "pretos|preto",
+          "pardos|pardo"
+        ]
+      ],
+      "dependencias": {}
+    }
+  },
+  {
+    "id": "D08",
+    "grupo": "ajuste",
+    "tipo": "seguimento",
+    "historico": [
+      {
+        "papel": "usuario",
+        "texto": "Quem preside o Conselho de Administração?"
+      },
+      {
+        "papel": "assistente",
+        "texto": "O presidente do Conselho de Administração é o Sr. Fulano de Tal (p. 214)."
+      }
+    ],
+    "pergunta": "E quantos membros ele tem?",
+    "esperado": {
+      "subperguntas": [
+        [
+          "conselho",
+          "administracao",
+          "membros"
+        ]
+      ],
+      "dependencias": {},
+      "proibido": [
+        "ele",
+        "ela"
+      ]
+    }
+  },
+  {
+    "id": "D09",
+    "grupo": "ajuste",
+    "tipo": "seguimento",
+    "historico": [
+      {
+        "papel": "usuario",
+        "texto": "Qual foi o lucro líquido do Banco em 2025?"
+      },
+      {
+        "papel": "assistente",
+        "texto": "O lucro líquido de 2025 foi de R$ 20,0 bilhões (p. 41)."
+      }
+    ],
+    "pergunta": "E em 2024?",
+    "esperado": {
+      "subperguntas": [
+        [
+          "lucro",
+          "liquido",
+          "2024"
+        ]
+      ],
+      "dependencias": {},
+      "proibido": [
+        "e em"
+      ]
+    }
+  },
+  {
+    "id": "D10",
+    "grupo": "teste",
+    "tipo": "composta",
+    "origem": "golden:M01",
+    "historico": [],
+    "pergunta": "Qual a participação do Banco do Brasil na BB Seguridade e que percentual da receita total de 2025 veio do segmento de seguridade?",
+    "esperado": {
+      "subperguntas": [
+        [
+          "participacao",
+          "seguridade"
+        ],
+        [
+          "percentual|receita",
+          "2025",
+          "seguridade"
+        ]
+      ],
+      "dependencias": {}
+    }
+  },
+  {
+    "id": "D11",
+    "grupo": "teste",
+    "tipo": "composta",
+    "origem": "golden:M02",
+    "historico": [],
+    "pergunta": "Quantas ações ordinárias a União Federal detém e que percentual do capital está em circulação?",
+    "esperado": {
+      "subperguntas": [
+        [
+          "acoes",
+          "uniao"
+        ],
+        [
+          "percentual",
+          "circulacao"
+        ]
+      ],
+      "dependencias": {}
+    }
+  },
+  {
+    "id": "D12",
+    "grupo": "teste",
+    "tipo": "composta",
+    "origem": "golden:M03",
+    "historico": [],
+    "pergunta": "Quantos funcionários o Banco tinha ao fim de 2025 e qual foi o índice de rotatividade no exercício?",
+    "esperado": {
+      "subperguntas": [
+        [
+          "funcionarios|empregados",
+          "2025"
+        ],
+        [
+          "rotatividade"
+        ]
+      ],
+      "dependencias": {}
+    }
+  },
+  {
+    "id": "D13",
+    "grupo": "teste",
+    "tipo": "composta",
+    "origem": "golden:M04",
+    "historico": [],
+    "pergunta": "Qual empresa audita o Banco do Brasil e que regra exige aprovação prévia para que ela preste outros serviços?",
+    "esperado": {
+      "subperguntas": [
+        [
+          "empresa|auditor",
+          "audita|auditoria|auditor"
+        ],
+        [
+          "regra|aprovacao",
+          "outros servicos|servicos"
+        ]
+      ],
+      "dependencias": {
+        "1": [
+          0
+        ]
+      }
+    }
+  },
+  {
+    "id": "D14",
+    "grupo": "teste",
+    "tipo": "composta",
+    "origem": "golden:M05",
+    "historico": [],
+    "pergunta": "Qual o capital autorizado do Banco, aprovado em abril de 2026, e que percentual do capital total a União detém?",
+    "esperado": {
+      "subperguntas": [
+        [
+          "capital",
+          "autorizado"
+        ],
+        [
+          "percentual",
+          "uniao"
+        ]
+      ],
+      "dependencias": {}
+    }
+  },
+  {
+    "id": "D15",
+    "grupo": "teste",
+    "tipo": "composta",
+    "historico": [],
+    "pergunta": "Quem é a pessoa que ocupa a presidência do Banco e qual é a sua remuneração anual em 2025?",
+    "esperado": {
+      "subperguntas": [
+        [
+          "presidente|presidencia",
+          "quem|pessoa|ocupa"
+        ],
+        [
+          "remuneracao",
+          "2025"
+        ]
+      ],
+      "dependencias": {
+        "1": [
+          0
+        ]
+      }
+    }
+  },
+  {
+    "id": "D16",
+    "grupo": "teste",
+    "tipo": "composta",
+    "historico": [],
+    "pergunta": "Qual foi a receita de intermediação financeira em 2025, qual o resultado com provisões e qual o lucro líquido?",
+    "esperado": {
+      "subperguntas": [
+        [
+          "receita",
+          "intermediacao"
+        ],
+        [
+          "provisoes|provisao"
+        ],
+        [
+          "lucro",
+          "liquido"
+        ]
+      ],
+      "dependencias": {}
+    }
+  },
+  {
+    "id": "D17",
+    "grupo": "teste",
+    "tipo": "composta",
+    "historico": [],
+    "pergunta": "Quais são os principais riscos ambientais citados e que ações o Banco adota para mitigá-los?",
+    "esperado": {
+      "subperguntas": [
+        [
+          "riscos",
+          "ambientais"
+        ],
+        [
+          "acoes|medidas",
+          "mitig"
+        ]
+      ],
+      "dependencias": {
+        "1": [
+          0
+        ]
+      }
+    }
+  },
+  {
+    "id": "D18",
+    "grupo": "teste",
+    "tipo": "composta",
+    "historico": [],
+    "pergunta": "Quantos membros tem o Conselho Fiscal e quantos tem o Conselho de Administração?",
+    "esperado": {
+      "subperguntas": [
+        [
+          "conselho fiscal",
+          "membros"
+        ],
+        [
+          "conselho de administracao",
+          "membros"
+        ]
+      ],
+      "dependencias": {}
+    }
+  },
+  {
+    "id": "D19",
+    "grupo": "teste",
+    "tipo": "composta",
+    "historico": [],
+    "pergunta": "Qual é o rating do Banco atribuído pela Moody's e qual o atribuído pela Fitch?",
+    "esperado": {
+      "subperguntas": [
+        [
+          "rating",
+          "moody"
+        ],
+        [
+          "rating",
+          "fitch"
+        ]
+      ],
+      "dependencias": {}
+    }
+  },
+  {
+    "id": "D20",
+    "grupo": "teste",
+    "tipo": "simples",
+    "historico": [],
+    "pergunta": "Somando a remuneração anual do Conselho de Administração e a do Conselho Fiscal em 2025, quanto dá?",
+    "esperado": {
+      "subperguntas": [
+        [
+          "remuneracao",
+          "conselho",
+          "2025"
+        ]
+      ],
+      "dependencias": {}
+    }
+  },
+  {
+    "id": "D21",
+    "grupo": "teste",
+    "tipo": "simples",
+    "historico": [],
+    "pergunta": "Qual a diferença entre a maior e a menor remuneração individual da Diretoria Executiva em 2025?",
+    "esperado": {
+      "subperguntas": [
+        [
+          "diferenca|maior",
+          "remuneracao",
+          "diretoria"
+        ]
+      ],
+      "dependencias": {}
+    }
+  },
+  {
+    "id": "D22",
+    "grupo": "teste",
+    "tipo": "simples",
+    "historico": [],
+    "pergunta": "Em quais anos, entre 2023 e 2025, o lucro líquido do exercício caiu em relação ao ano anterior?",
+    "esperado": {
+      "subperguntas": [
+        [
+          "lucro",
+          "liquido",
+          "2023",
+          "2025"
+        ]
+      ],
+      "dependencias": {}
+    }
+  },
+  {
+    "id": "D23",
+    "grupo": "teste",
+    "tipo": "simples",
+    "historico": [],
+    "pergunta": "Quais são os valores que guiam o Banco do Brasil?",
+    "esperado": {
+      "subperguntas": [
+        [
+          "valores"
+        ]
+      ],
+      "dependencias": {}
+    }
+  },
+  {
+    "id": "D24",
+    "grupo": "teste",
+    "tipo": "simples",
+    "historico": [],
+    "pergunta": "Quais são os principais mecanismos do programa de integridade do Banco para prevenir e combater a corrupção?",
+    "esperado": {
+      "subperguntas": [
+        [
+          "integridade",
+          "mecanismos"
+        ]
+      ],
+      "dependencias": {}
+    }
+  },
+  {
+    "id": "D25",
+    "grupo": "teste",
+    "tipo": "simples",
+    "historico": [],
+    "pergunta": "Qual é o endereço da sede e o telefone de contato do Banco?",
+    "esperado": {
+      "subperguntas": [
+        [
+          "sede|endereco",
+          "telefone"
+        ]
+      ],
+      "dependencias": {}
+    },
+    "observacao": "dois atributos da mesma entidade, na mesma seção: uma busca só"
+  },
+  {
+    "id": "D26",
+    "grupo": "teste",
+    "tipo": "seguimento",
+    "historico": [
+      {
+        "papel": "usuario",
+        "texto": "Qual empresa audita o Banco do Brasil?"
+      },
+      {
+        "papel": "assistente",
+        "texto": "A auditoria independente é feita pela Fictícia Auditores S.A. (p. 280)."
+      }
+    ],
+    "pergunta": "E desde quando ela presta esse serviço?",
+    "esperado": {
+      "subperguntas": [
+        [
+          "desde|quando",
+          "auditoria|auditores|ficticia"
+        ]
+      ],
+      "dependencias": {},
+      "proibido": [
+        "ela"
+      ]
+    }
+  },
+  {
+    "id": "D27",
+    "grupo": "teste",
+    "tipo": "seguimento",
+    "historico": [
+      {
+        "papel": "usuario",
+        "texto": "Quantos empregados o Banco tinha ao fim de 2025?"
+      },
+      {
+        "papel": "assistente",
+        "texto": "O Banco tinha 85.000 empregados ao fim de 2025 (p. 367)."
+      }
+    ],
+    "pergunta": "E quantos eram mulheres?",
+    "esperado": {
+      "subperguntas": [
+        [
+          "empregados|funcionarios|quantos",
+          "mulheres",
+          "2025"
+        ]
+      ],
+      "dependencias": {}
+    }
+  },
+  {
+    "id": "D28",
+    "grupo": "teste",
+    "tipo": "seguimento",
+    "historico": [
+      {
+        "papel": "usuario",
+        "texto": "Qual foi o lucro líquido do Banco em 2025?"
+      },
+      {
+        "papel": "assistente",
+        "texto": "O lucro líquido de 2025 foi de R$ 20,0 bilhões (p. 41)."
+      }
+    ],
+    "pergunta": "Quantos membros tem o Conselho Fiscal?",
+    "esperado": {
+      "subperguntas": [
+        [
+          "conselho fiscal",
+          "membros"
+        ]
+      ],
+      "dependencias": {},
+      "proibido": [
+        "lucro",
+        "2025"
+      ]
+    },
+    "observacao": "pergunta nova: o histórico não pode vazar para dentro dela"
+  },
+  {
+    "id": "D29",
+    "grupo": "teste",
+    "tipo": "seguimento",
+    "historico": [
+      {
+        "papel": "usuario",
+        "texto": "Quem preside o Conselho de Administração?"
+      },
+      {
+        "papel": "assistente",
+        "texto": "O presidente do Conselho de Administração é o Sr. Fulano de Tal (p. 214)."
+      }
+    ],
+    "pergunta": "Quando ele foi eleito e qual é o prazo do mandato?",
+    "esperado": {
+      "subperguntas": [
+        [
+          "eleito|eleicao",
+          "presidente|conselho"
+        ],
+        [
+          "prazo",
+          "mandato"
+        ]
+      ],
+      "dependencias": {},
+      "proibido": [
+        "ele",
+        "ela"
+      ]
+    }
+  },
+  {
+    "id": "D30",
+    "grupo": "teste2",
+    "tipo": "simples",
+    "historico": [],
+    "pergunta": "Qual foi a tendência do índice de eficiência nos últimos três anos?",
+    "esperado": {
+      "subperguntas": [
+        [
+          "indice",
+          "eficiencia"
+        ]
+      ],
+      "dependencias": {}
+    }
+  },
+  {
+    "id": "D31",
+    "grupo": "teste2",
+    "tipo": "simples",
+    "historico": [],
+    "pergunta": "Em que anos o número de empregados aumentou em relação ao ano anterior?",
+    "esperado": {
+      "subperguntas": [
+        [
+          "empregados",
+          "aumentou|aumento"
+        ]
+      ],
+      "dependencias": {}
+    }
+  },
+  {
+    "id": "D32",
+    "grupo": "teste2",
+    "tipo": "simples",
+    "historico": [],
+    "pergunta": "Qual a data de constituição e o prazo de duração da companhia?",
+    "esperado": {
+      "subperguntas": [
+        [
+          "constituicao",
+          "prazo"
+        ]
+      ],
+      "dependencias": {}
+    },
+    "observacao": "dois atributos da mesma entidade, na mesma seção"
+  },
+  {
+    "id": "D33",
+    "grupo": "teste2",
+    "tipo": "simples",
+    "historico": [],
+    "pergunta": "Somando as provisões para contingências cíveis e as trabalhistas, qual o total?",
+    "esperado": {
+      "subperguntas": [
+        [
+          "civeis|civel",
+          "trabalhistas|trabalhista"
+        ]
+      ],
+      "dependencias": {}
+    }
+  },
+  {
+    "id": "D34",
+    "grupo": "teste2",
+    "tipo": "composta",
+    "historico": [],
+    "pergunta": "Qual o valor das provisões para contingências cíveis e quantos processos trabalhistas estão em andamento?",
+    "esperado": {
+      "subperguntas": [
+        [
+          "provisoes|provisao",
+          "civeis|civel"
+        ],
+        [
+          "processos",
+          "trabalhistas|trabalhista"
+        ]
+      ],
+      "dependencias": {}
+    }
+  },
+  {
+    "id": "D35",
+    "grupo": "teste2",
+    "tipo": "composta",
+    "historico": [],
+    "pergunta": "Quem é o presidente do Conselho Fiscal e qual a formação acadêmica dessa pessoa?",
+    "esperado": {
+      "subperguntas": [
+        [
+          "presidente",
+          "conselho fiscal"
+        ],
+        [
+          "formacao"
+        ]
+      ],
+      "dependencias": {
+        "1": [
+          0
+        ]
+      }
+    }
+  },
+  {
+    "id": "D36",
+    "grupo": "teste2",
+    "tipo": "composta",
+    "historico": [],
+    "pergunta": "Qual a política de dividendos da companhia e qual foi o total de juros sobre capital próprio pagos em 2025?",
+    "esperado": {
+      "subperguntas": [
+        [
+          "politica",
+          "dividendos"
+        ],
+        [
+          "juros sobre capital proprio",
+          "2025"
+        ]
+      ],
+      "dependencias": {}
+    }
+  },
+  {
+    "id": "D37",
+    "grupo": "teste2",
+    "tipo": "composta",
+    "historico": [],
+    "pergunta": "Qual foi o ativo total, o patrimônio líquido e o índice de Basileia em 2025?",
+    "esperado": {
+      "subperguntas": [
+        [
+          "ativo total"
+        ],
+        [
+          "patrimonio liquido"
+        ],
+        [
+          "basileia"
+        ]
+      ],
+      "dependencias": {}
+    }
+  },
+  {
+    "id": "D38",
+    "grupo": "teste2",
+    "tipo": "seguimento",
+    "historico": [
+      {
+        "papel": "usuario",
+        "texto": "Qual foi o ativo total do Banco em 2025?"
+      },
+      {
+        "papel": "assistente",
+        "texto": "O ativo total em 2025 foi de R$ 2,1 trilhões (p. 40)."
+      }
+    ],
+    "pergunta": "E o patrimônio líquido?",
+    "esperado": {
+      "subperguntas": [
+        [
+          "patrimonio liquido",
+          "2025"
+        ]
+      ],
+      "dependencias": {},
+      "proibido": [
+        "e o"
+      ]
+    }
+  }
+]

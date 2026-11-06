@@ -33,6 +33,16 @@ await llm.embeddingDeConsulta("Qual foi o lucro?");                       // 102
 await llm.rerank("pergunta", textos);                                     // uma nota por texto
 ```
 
+## Atualizador de pergunta (`src/agente`, F7.2, ADR-053)
+
+`atualizarPergunta(llm, pergunta, historico)` devolve a pergunta autônoma e as subperguntas com `dependeDe`
+(índices das que precisam responder antes). Soma, lista, série e atributos da mesma entidade ficam numa
+pergunta só. Se o LLM falha, a pergunta segue inteira (`fallback`). Medir com o llama-swap no ar:
+
+```powershell
+npm run avaliar:decomposicao -- --nome f72-teste --grupo teste   # ajuste | teste | teste2
+```
+
 Erros (`LlmIndisponivelError`, `LlmTimeoutError`, `LlmAbortadoError`, `LlmHttpError`,
 `LlmRespostaInvalidaError`) têm uma classe por causa. Só rede e 5xx ganham uma nova tentativa. A primeira
 chamada de cada modelo inclui a carga dele (14 s o Qwen). Para rodar a integração:

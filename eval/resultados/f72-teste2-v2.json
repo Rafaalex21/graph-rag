@@ -1,0 +1,144 @@
+{
+  "modelo": "principal",
+  "geral": {
+    "n": 9,
+    "acertos": 9,
+    "taxa": 1
+  },
+  "ajuste": {
+    "n": 0,
+    "acertos": 0,
+    "taxa": 0
+  },
+  "teste": {
+    "n": 0,
+    "acertos": 0,
+    "taxa": 0
+  },
+  "teste2": {
+    "n": 9,
+    "acertos": 9,
+    "taxa": 1
+  },
+  "teste2_composta": {
+    "n": 4,
+    "acertos": 4,
+    "taxa": 1
+  },
+  "teste2_simples": {
+    "n": 4,
+    "acertos": 4,
+    "taxa": 1
+  },
+  "teste2_seguimento": {
+    "n": 1,
+    "acertos": 1,
+    "taxa": 1
+  },
+  "latencia_ms": {
+    "mediana": 2209,
+    "maximo": 4356
+  },
+  "fallbacks": 0,
+  "casos": [
+    {
+      "id": "D30",
+      "grupo": "teste2",
+      "tipo": "simples",
+      "ok": true,
+      "motivos": [],
+      "obtidas": 1,
+      "esperadas": 1,
+      "fallback": null,
+      "ms": 2209
+    },
+    {
+      "id": "D31",
+      "grupo": "teste2",
+      "tipo": "simples",
+      "ok": true,
+      "motivos": [],
+      "obtidas": 1,
+      "esperadas": 1,
+      "fallback": null,
+      "ms": 1983
+    },
+    {
+      "id": "D32",
+      "grupo": "teste2",
+      "tipo": "simples",
+      "ok": true,
+      "motivos": [],
+      "obtidas": 1,
+      "esperadas": 1,
+      "fallback": null,
+      "ms": 1712
+    },
+    {
+      "id": "D33",
+      "grupo": "teste2",
+      "tipo": "simples",
+      "ok": true,
+      "motivos": [],
+      "obtidas": 1,
+      "esperadas": 1,
+      "fallback": null,
+      "ms": 2103
+    },
+    {
+      "id": "D34",
+      "grupo": "teste2",
+      "tipo": "composta",
+      "ok": true,
+      "motivos": [],
+      "obtidas": 2,
+      "esperadas": 2,
+      "fallback": null,
+      "ms": 3278
+    },
+    {
+      "id": "D35",
+      "grupo": "teste2",
+      "tipo": "composta",
+      "ok": true,
+      "motivos": [],
+      "obtidas": 2,
+      "esperadas": 2,
+      "fallback": null,
+      "ms": 3375
+    },
+    {
+      "id": "D36",
+      "grupo": "teste2",
+      "tipo": "composta",
+      "ok": true,
+      "motivos": [],
+      "obtidas": 2,
+      "esperadas": 2,
+      "fallback": null,
+      "ms": 3489
+    },
+    {
+      "id": "D37",
+      "grupo": "teste2",
+      "tipo": "composta",
+      "ok": true,
+      "motivos": [],
+      "obtidas": 3,
+      "esperadas": 3,
+      "fallback": null,
+      "ms": 4356
+    },
+    {
+      "id": "D38",
+      "grupo": "teste2",
+      "tipo": "seguimento",
+      "ok": true,
+      "motivos": [],
+      "obtidas": 1,
+      "esperadas": 1,
+      "fallback": null,
+      "ms": 1804
+    }
+  ]
+}

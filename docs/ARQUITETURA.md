@@ -480,7 +480,7 @@ sequenceDiagram
   A-->>U: eventos "token" … "fim" (citações e métricas)
 ```
 
-1. **Atualizador de pergunta** — reescreve a pergunta como autônoma, usando o histórico curto, e a decompõe em subperguntas atômicas quando necessário ("Quem tem mais X e essa pessoa ainda é Y?").
+1. **Atualizador de pergunta** — reescreve a pergunta como autônoma, usando o histórico curto, e a decompõe em subperguntas atômicas quando necessário ("Quem tem mais X e essa pessoa ainda é Y?"). Implementado em `api/src/agente/atualizador.ts` ([ADR-053](./adr/ADR-053-atualizador-de-pergunta.md)): JSON `{autonoma, subperguntas: [{pergunta, dependeDe}]}`; soma, comparação, lista, série e dois atributos da mesma entidade **não** se decompõem; as independentes o roteador pode executar em paralelo e as dependentes só depois da resposta de que precisam; se o LLM falha ou quebra em mais de 4, a pergunta segue inteira. 10/10 compostas decompostas (9/10 com dependências exatas), ~3 s.
 2. **Roteador** — *tool calling* nativo do `llama-server` (`--jinja`), uma subpergunta por vez, como no livro; as respostas anteriores alimentam a próxima reescrita.
 3. **Ferramentas** — executadas em paralelo quando independentes; toda ferramenta devolve `evidence[]` com `id`, tipo, página, texto e score.
 4. **Crítico** — devolve `{"questions": [...]}`; lista vazia encerra; no máximo uma rodada extra, depois responde com o que tem e diz o que faltou.

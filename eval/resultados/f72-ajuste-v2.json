@@ -1,0 +1,144 @@
+{
+  "modelo": "principal",
+  "geral": {
+    "n": 9,
+    "acertos": 9,
+    "taxa": 1
+  },
+  "ajuste": {
+    "n": 9,
+    "acertos": 9,
+    "taxa": 1
+  },
+  "ajuste_composta": {
+    "n": 5,
+    "acertos": 5,
+    "taxa": 1
+  },
+  "ajuste_simples": {
+    "n": 2,
+    "acertos": 2,
+    "taxa": 1
+  },
+  "ajuste_seguimento": {
+    "n": 2,
+    "acertos": 2,
+    "taxa": 1
+  },
+  "teste": {
+    "n": 0,
+    "acertos": 0,
+    "taxa": 0
+  },
+  "teste2": {
+    "n": 0,
+    "acertos": 0,
+    "taxa": 0
+  },
+  "latencia_ms": {
+    "mediana": 3251,
+    "maximo": 5233
+  },
+  "fallbacks": 0,
+  "casos": [
+    {
+      "id": "D01",
+      "grupo": "ajuste",
+      "tipo": "composta",
+      "ok": true,
+      "motivos": [],
+      "obtidas": 2,
+      "esperadas": 2,
+      "fallback": null,
+      "ms": 5233
+    },
+    {
+      "id": "D02",
+      "grupo": "ajuste",
+      "tipo": "composta",
+      "ok": true,
+      "motivos": [],
+      "obtidas": 2,
+      "esperadas": 2,
+      "fallback": null,
+      "ms": 3359
+    },
+    {
+      "id": "D03",
+      "grupo": "ajuste",
+      "tipo": "composta",
+      "ok": true,
+      "motivos": [],
+      "obtidas": 2,
+      "esperadas": 2,
+      "fallback": null,
+      "ms": 3251
+    },
+    {
+      "id": "D04",
+      "grupo": "ajuste",
+      "tipo": "composta",
+      "ok": true,
+      "motivos": [],
+      "obtidas": 3,
+      "esperadas": 3,
+      "fallback": null,
+      "ms": 4652
+    },
+    {
+      "id": "D05",
+      "grupo": "ajuste",
+      "tipo": "composta",
+      "ok": true,
+      "motivos": [],
+      "obtidas": 2,
+      "esperadas": 2,
+      "fallback": null,
+      "ms": 3620
+    },
+    {
+      "id": "D06",
+      "grupo": "ajuste",
+      "tipo": "simples",
+      "ok": true,
+      "motivos": [],
+      "obtidas": 1,
+      "esperadas": 1,
+      "fallback": null,
+      "ms": 1944
+    },
+    {
+      "id": "D07",
+      "grupo": "ajuste",
+      "tipo": "simples",
+      "ok": true,
+      "motivos": [],
+      "obtidas": 1,
+      "esperadas": 1,
+      "fallback": null,
+      "ms": 2049
+    },
+    {
+      "id": "D08",
+      "grupo": "ajuste",
+      "tipo": "seguimento",
+      "ok": true,
+      "motivos": [],
+      "obtidas": 1,
+      "esperadas": 1,
+      "fallback": null,
+      "ms": 2057
+    },
+    {
+      "id": "D09",
+      "grupo": "ajuste",
+      "tipo": "seguimento",
+      "ok": true,
+      "motivos": [],
+      "obtidas": 1,
+      "esperadas": 1,
+      "fallback": null,
+      "ms": 2330
+    }
+  ]
+}

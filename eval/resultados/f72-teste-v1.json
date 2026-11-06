@@ -1,0 +1,266 @@
+{
+  "modelo": "principal",
+  "geral": {
+    "n": 20,
+    "acertos": 17,
+    "taxa": 0.85
+  },
+  "ajuste": {
+    "n": 0,
+    "acertos": 0,
+    "taxa": 0
+  },
+  "teste": {
+    "n": 20,
+    "acertos": 17,
+    "taxa": 0.85
+  },
+  "teste_composta": {
+    "n": 10,
+    "acertos": 9,
+    "taxa": 0.9
+  },
+  "teste_simples": {
+    "n": 6,
+    "acertos": 4,
+    "taxa": 0.667
+  },
+  "teste_seguimento": {
+    "n": 4,
+    "acertos": 4,
+    "taxa": 1
+  },
+  "latencia_ms": {
+    "mediana": 3276,
+    "maximo": 5401
+  },
+  "fallbacks": 0,
+  "casos": [
+    {
+      "id": "D10",
+      "grupo": "teste",
+      "tipo": "composta",
+      "ok": true,
+      "motivos": [],
+      "obtidas": 2,
+      "esperadas": 2,
+      "fallback": null,
+      "ms": 4054
+    },
+    {
+      "id": "D11",
+      "grupo": "teste",
+      "tipo": "composta",
+      "ok": true,
+      "motivos": [],
+      "obtidas": 2,
+      "esperadas": 2,
+      "fallback": null,
+      "ms": 3128
+    },
+    {
+      "id": "D12",
+      "grupo": "teste",
+      "tipo": "composta",
+      "ok": true,
+      "motivos": [],
+      "obtidas": 2,
+      "esperadas": 2,
+      "fallback": null,
+      "ms": 3630
+    },
+    {
+      "id": "D13",
+      "grupo": "teste",
+      "tipo": "composta",
+      "ok": true,
+      "motivos": [],
+      "obtidas": 2,
+      "esperadas": 2,
+      "fallback": null,
+      "ms": 3627
+    },
+    {
+      "id": "D14",
+      "grupo": "teste",
+      "tipo": "composta",
+      "ok": true,
+      "motivos": [],
+      "obtidas": 2,
+      "esperadas": 2,
+      "fallback": null,
+      "ms": 3680
+    },
+    {
+      "id": "D15",
+      "grupo": "teste",
+      "tipo": "composta",
+      "ok": true,
+      "motivos": [],
+      "obtidas": 2,
+      "esperadas": 2,
+      "fallback": null,
+      "ms": 3818
+    },
+    {
+      "id": "D16",
+      "grupo": "teste",
+      "tipo": "composta",
+      "ok": true,
+      "motivos": [],
+      "obtidas": 3,
+      "esperadas": 3,
+      "fallback": null,
+      "ms": 4629
+    },
+    {
+      "id": "D17",
+      "grupo": "teste",
+      "tipo": "composta",
+      "ok": false,
+      "motivos": [
+        "dependencias: não batem com as esperadas"
+      ],
+      "obtidas": 2,
+      "esperadas": 2,
+      "fallback": null,
+      "ms": 3431
+    },
+    {
+      "id": "D18",
+      "grupo": "teste",
+      "tipo": "composta",
+      "ok": true,
+      "motivos": [],
+      "obtidas": 2,
+      "esperadas": 2,
+      "fallback": null,
+      "ms": 2973
+    },
+    {
+      "id": "D19",
+      "grupo": "teste",
+      "tipo": "composta",
+      "ok": true,
+      "motivos": [],
+      "obtidas": 2,
+      "esperadas": 2,
+      "fallback": null,
+      "ms": 3276
+    },
+    {
+      "id": "D20",
+      "grupo": "teste",
+      "tipo": "simples",
+      "ok": true,
+      "motivos": [],
+      "obtidas": 1,
+      "esperadas": 1,
+      "fallback": null,
+      "ms": 2390
+    },
+    {
+      "id": "D21",
+      "grupo": "teste",
+      "tipo": "simples",
+      "ok": true,
+      "motivos": [],
+      "obtidas": 1,
+      "esperadas": 1,
+      "fallback": null,
+      "ms": 2393
+    },
+    {
+      "id": "D22",
+      "grupo": "teste",
+      "tipo": "simples",
+      "ok": false,
+      "motivos": [
+        "quantidade: esperadas 1, obtidas 4"
+      ],
+      "obtidas": 4,
+      "esperadas": 1,
+      "fallback": null,
+      "ms": 5401
+    },
+    {
+      "id": "D23",
+      "grupo": "teste",
+      "tipo": "simples",
+      "ok": true,
+      "motivos": [],
+      "obtidas": 1,
+      "esperadas": 1,
+      "fallback": null,
+      "ms": 2155
+    },
+    {
+      "id": "D24",
+      "grupo": "teste",
+      "tipo": "simples",
+      "ok": true,
+      "motivos": [],
+      "obtidas": 1,
+      "esperadas": 1,
+      "fallback": null,
+      "ms": 2669
+    },
+    {
+      "id": "D25",
+      "grupo": "teste",
+      "tipo": "simples",
+      "ok": false,
+      "motivos": [
+        "quantidade: esperadas 1, obtidas 2"
+      ],
+      "obtidas": 2,
+      "esperadas": 1,
+      "fallback": null,
+      "ms": 2808
+    },
+    {
+      "id": "D26",
+      "grupo": "teste",
+      "tipo": "seguimento",
+      "ok": true,
+      "motivos": [],
+      "obtidas": 1,
+      "esperadas": 1,
+      "fallback": null,
+      "ms": 2811
+    },
+    {
+      "id": "D27",
+      "grupo": "teste",
+      "tipo": "seguimento",
+      "ok": true,
+      "motivos": [],
+      "obtidas": 1,
+      "esperadas": 1,
+      "fallback": null,
+      "ms": 2470
+    },
+    {
+      "id": "D28",
+      "grupo": "teste",
+      "tipo": "seguimento",
+      "ok": true,
+      "motivos": [],
+      "obtidas": 1,
+      "esperadas": 1,
+      "fallback": null,
+      "ms": 1600
+    },
+    {
+      "id": "D29",
+      "grupo": "teste",
+      "tipo": "seguimento",
+      "ok": true,
+      "motivos": [],
+      "obtidas": 2,
+      "esperadas": 2,
+      "fallback": null,
+      "ms": 3456
+    }
+  ]
+}
