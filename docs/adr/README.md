@@ -42,5 +42,6 @@ Uma decisão por arquivo: `ADR-NNN-assunto.md`. As nove decisões iniciais estã
 | [043](ADR-043-relatorios-de-comunidade.md) | Relatórios de comunidade em JSON e `community_vec`: 159 de 159 válidos; o prompt `v1` vazava etiqueta em 61% e especulava em 16%, o `v2` em 0%; 10 revisados à mão; recall@1 = 1,0 | F5.6 — aceita |
 | [044](ADR-044-embeddings-de-entidade.md) | Embeddings dos resumos de entidade e `entity_vec`: 433 em 4,3 s, incrementais por hash; recall@1 = 1,0; sonda pelo nome 96,8% no top-3; 4 entidades-lixo (nome vazio, `N/A`, `null`) achadas, filtradas no importador e apagadas | F5.7 — aceita |
 | [045](ADR-045-indexacao-do-documento-inteiro.md) | Indexação do documento inteiro: 423 de 423 páginas, 2.474 entidades, 745 comunidades, 0 órfãos; 4 correções (erro 5xx, Leiden que não aninha, dois falsos positivos de validação); cobertura de métricas 88,4% e duplicatas entre camadas ficam abertas; ~9,5 h de execução | F5.8 — aceita com ressalva |
+| [046](ADR-046-busca-local.md) | Busca local (`entidade`): `entity_vec` + `entity_ft` só pelo nome citado, reranker sobre `nome: resumo`, Pais por RRF (contagem × similaridade), tetos e orçamento de tokens; recall de contexto 1,00 nas 3 "quem é…" do golden e nas 10 do conjunto separado (n pequeno, ajustado nas 3) | F6.1 — aceita com ressalva |
 
 Modelo em [`ADR-000-modelo.md`](ADR-000-modelo.md).

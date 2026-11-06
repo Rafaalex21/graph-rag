@@ -1,0 +1,122 @@
+{
+ "perguntas": 10,
+ "limites": {
+  "candidatas": 25,
+  "ft": 2,
+  "entidades": 6,
+  "relacoes": 10,
+  "pais": 6,
+  "comunidades": 2,
+  "tokens": 6000
+ },
+ "recall_regex": {
+  "n": 10,
+  "media": 0.9
+ },
+ "page_recall_tudo": {
+  "n": 10,
+  "media": 0.9
+ },
+ "page_recall_pais": {
+  "n": 10,
+  "media": 0.9
+ },
+ "recall_juiz": {
+  "n": 10,
+  "media": 1.0
+ },
+ "segundos_p50": 0.3,
+ "segundos_max": 0.3,
+ "por_pergunta": {
+  "E01": {
+   "recall_regex": 1.0,
+   "page_recall_tudo": 1.0,
+   "page_recall_pais": 1.0,
+   "recall_juiz": 1.0,
+   "evidencias": 23,
+   "segundos": 0.3,
+   "erro": null
+  },
+  "E02": {
+   "recall_regex": 1.0,
+   "page_recall_tudo": 1.0,
+   "page_recall_pais": 1.0,
+   "recall_juiz": 1.0,
+   "evidencias": 14,
+   "segundos": 0.3,
+   "erro": null
+  },
+  "E03": {
+   "recall_regex": 0.0,
+   "page_recall_tudo": 0.0,
+   "page_recall_pais": 0.0,
+   "recall_juiz": 1.0,
+   "evidencias": 24,
+   "segundos": 0.3,
+   "erro": null
+  },
+  "E04": {
+   "recall_regex": 1.0,
+   "page_recall_tudo": 1.0,
+   "page_recall_pais": 1.0,
+   "recall_juiz": 1.0,
+   "evidencias": 20,
+   "segundos": 0.3,
+   "erro": null
+  },
+  "E05": {
+   "recall_regex": 1.0,
+   "page_recall_tudo": 1.0,
+   "page_recall_pais": 1.0,
+   "recall_juiz": 1.0,
+   "evidencias": 24,
+   "segundos": 0.3,
+   "erro": null
+  },
+  "E06": {
+   "recall_regex": 1.0,
+   "page_recall_tudo": 1.0,
+   "page_recall_pais": 1.0,
+   "recall_juiz": 1.0,
+   "evidencias": 24,
+   "segundos": 0.3,
+   "erro": null
+  },
+  "E07": {
+   "recall_regex": 1.0,
+   "page_recall_tudo": 1.0,
+   "page_recall_pais": 1.0,
+   "recall_juiz": 1.0,
+   "evidencias": 24,
+   "segundos": 0.2,
+   "erro": null
+  },
+  "E08": {
+   "recall_regex": 1.0,
+   "page_recall_tudo": 1.0,
+   "page_recall_pais": 1.0,
+   "recall_juiz": 1.0,
+   "evidencias": 24,
+   "segundos": 0.3,
+   "erro": null
+  },
+  "E09": {
+   "recall_regex": 1.0,
+   "page_recall_tudo": 1.0,
+   "page_recall_pais": 1.0,
+   "recall_juiz": 1.0,
+   "evidencias": 24,
+   "segundos": 0.3,
+   "erro": null
+  },
+  "E10": {
+   "recall_regex": 1.0,
+   "page_recall_tudo": 1.0,
+   "page_recall_pais": 1.0,
+   "recall_juiz": 1.0,
+   "evidencias": 24,
+   "segundos": 0.3,
+   "erro": null
+  }
+ }
+}

@@ -131,6 +131,7 @@ foreach ($e in $etapas) {
       Rodar "entidades-embutir" "uv run python -m indexer.entidades_vec embutir"
       Rodar "entidades-autoteste" "uv run python -m indexer.entidades_vec autoteste"
       Rodar "entidades-verificar" "uv run python -m indexer.entidades_vec verificar"
+      Rodar "entidades-texto" "uv run python -m indexer.busca_local criar-indice"  # entity_ft, da busca local (F6.1)
     }
     "fim" { }
   }

@@ -1,0 +1,527 @@
+{
+ "perguntas": 55,
+ "limites": {
+  "candidatas": 25,
+  "ft": 2,
+  "entidades": 6,
+  "relacoes": 10,
+  "pais": 6,
+  "comunidades": 2,
+  "tokens": 6000
+ },
+ "recall_regex": {
+  "n": 55,
+  "media": 0.4061
+ },
+ "page_recall_tudo": {
+  "n": 55,
+  "media": 0.4909
+ },
+ "page_recall_pais": {
+  "n": 55,
+  "media": 0.4727
+ },
+ "recall_juiz": {
+  "n": 0,
+  "media": null
+ },
+ "segundos_p50": 0.3,
+ "segundos_max": 0.4,
+ "por_pergunta": {
+  "T01": {
+   "recall_regex": 1.0,
+   "page_recall_tudo": 1.0,
+   "page_recall_pais": 1.0,
+   "recall_juiz": null,
+   "evidencias": 24,
+   "segundos": 0.3,
+   "erro": null
+  },
+  "T02": {
+   "recall_regex": 1.0,
+   "page_recall_tudo": 1.0,
+   "page_recall_pais": 1.0,
+   "recall_juiz": null,
+   "evidencias": 13,
+   "segundos": 0.3,
+   "erro": null
+  },
+  "T03": {
+   "recall_regex": 1.0,
+   "page_recall_tudo": 1.0,
+   "page_recall_pais": 1.0,
+   "recall_juiz": null,
+   "evidencias": 24,
+   "segundos": 0.3,
+   "erro": null
+  },
+  "T04": {
+   "recall_regex": 1.0,
+   "page_recall_tudo": 1.0,
+   "page_recall_pais": 1.0,
+   "recall_juiz": null,
+   "evidencias": 24,
+   "segundos": 0.3,
+   "erro": null
+  },
+  "T05": {
+   "recall_regex": 1.0,
+   "page_recall_tudo": 1.0,
+   "page_recall_pais": 1.0,
+   "recall_juiz": null,
+   "evidencias": 24,
+   "segundos": 0.3,
+   "erro": null
+  },
+  "T06": {
+   "recall_regex": 1.0,
+   "page_recall_tudo": 1.0,
+   "page_recall_pais": 1.0,
+   "recall_juiz": null,
+   "evidencias": 13,
+   "segundos": 0.3,
+   "erro": null
+  },
+  "T07": {
+   "recall_regex": 1.0,
+   "page_recall_tudo": 1.0,
+   "page_recall_pais": 1.0,
+   "recall_juiz": null,
+   "evidencias": 23,
+   "segundos": 0.3,
+   "erro": null
+  },
+  "T08": {
+   "recall_regex": 1.0,
+   "page_recall_tudo": 1.0,
+   "page_recall_pais": 1.0,
+   "recall_juiz": null,
+   "evidencias": 13,
+   "segundos": 0.3,
+   "erro": null
+  },
+  "T09": {
+   "recall_regex": 1.0,
+   "page_recall_tudo": 1.0,
+   "page_recall_pais": 1.0,
+   "recall_juiz": null,
+   "evidencias": 24,
+   "segundos": 0.3,
+   "erro": null
+  },
+  "T10": {
+   "recall_regex": 1.0,
+   "page_recall_tudo": 1.0,
+   "page_recall_pais": 1.0,
+   "recall_juiz": null,
+   "evidencias": 24,
+   "segundos": 0.3,
+   "erro": null
+  },
+  "T11": {
+   "recall_regex": 0.0,
+   "page_recall_tudo": 0.0,
+   "page_recall_pais": 0.0,
+   "recall_juiz": null,
+   "evidencias": 24,
+   "segundos": 0.3,
+   "erro": null
+  },
+  "T12": {
+   "recall_regex": 0.0,
+   "page_recall_tudo": 0.0,
+   "page_recall_pais": 0.0,
+   "recall_juiz": null,
+   "evidencias": 23,
+   "segundos": 0.3,
+   "erro": null
+  },
+  "T13": {
+   "recall_regex": 1.0,
+   "page_recall_tudo": 1.0,
+   "page_recall_pais": 1.0,
+   "recall_juiz": null,
+   "evidencias": 21,
+   "segundos": 0.3,
+   "erro": null
+  },
+  "T14": {
+   "recall_regex": 1.0,
+   "page_recall_tudo": 1.0,
+   "page_recall_pais": 1.0,
+   "recall_juiz": null,
+   "evidencias": 24,
+   "segundos": 0.3,
+   "erro": null
+  },
+  "T15": {
+   "recall_regex": 1.0,
+   "page_recall_tudo": 1.0,
+   "page_recall_pais": 1.0,
+   "recall_juiz": null,
+   "evidencias": 23,
+   "segundos": 0.3,
+   "erro": null
+  },
+  "N01": {
+   "recall_regex": 0.0,
+   "page_recall_tudo": 0.0,
+   "page_recall_pais": 0.0,
+   "recall_juiz": null,
+   "evidencias": 24,
+   "segundos": 0.3,
+   "erro": null
+  },
+  "N02": {
+   "recall_regex": 0.0,
+   "page_recall_tudo": 1.0,
+   "page_recall_pais": 1.0,
+   "recall_juiz": null,
+   "evidencias": 24,
+   "segundos": 0.3,
+   "erro": null
+  },
+  "N03": {
+   "recall_regex": 0.0,
+   "page_recall_tudo": 1.0,
+   "page_recall_pais": 1.0,
+   "recall_juiz": null,
+   "evidencias": 24,
+   "segundos": 0.3,
+   "erro": null
+  },
+  "N04": {
+   "recall_regex": 0.0,
+   "page_recall_tudo": 0.0,
+   "page_recall_pais": 0.0,
+   "recall_juiz": null,
+   "evidencias": 24,
+   "segundos": 0.3,
+   "erro": null
+  },
+  "N05": {
+   "recall_regex": 0.0,
+   "page_recall_tudo": 1.0,
+   "page_recall_pais": 1.0,
+   "recall_juiz": null,
+   "evidencias": 24,
+   "segundos": 0.3,
+   "erro": null
+  },
+  "N06": {
+   "recall_regex": 0.0,
+   "page_recall_tudo": 0.0,
+   "page_recall_pais": 0.0,
+   "recall_juiz": null,
+   "evidencias": 24,
+   "segundos": 0.3,
+   "erro": null
+  },
+  "N07": {
+   "recall_regex": 0.0,
+   "page_recall_tudo": 0.0,
+   "page_recall_pais": 0.0,
+   "recall_juiz": null,
+   "evidencias": 24,
+   "segundos": 0.3,
+   "erro": null
+  },
+  "N08": {
+   "recall_regex": 0.0,
+   "page_recall_tudo": 0.0,
+   "page_recall_pais": 0.0,
+   "recall_juiz": null,
+   "evidencias": 24,
+   "segundos": 0.3,
+   "erro": null
+  },
+  "N09": {
+   "recall_regex": 0.0,
+   "page_recall_tudo": 0.0,
+   "page_recall_pais": 0.0,
+   "recall_juiz": null,
+   "evidencias": 24,
+   "segundos": 0.3,
+   "erro": null
+  },
+  "N10": {
+   "recall_regex": 0.0,
+   "page_recall_tudo": 0.0,
+   "page_recall_pais": 0.0,
+   "recall_juiz": null,
+   "evidencias": 24,
+   "segundos": 0.3,
+   "erro": null
+  },
+  "N11": {
+   "recall_regex": 0.0,
+   "page_recall_tudo": 0.0,
+   "page_recall_pais": 0.0,
+   "recall_juiz": null,
+   "evidencias": 23,
+   "segundos": 0.3,
+   "erro": null
+  },
+  "N12": {
+   "recall_regex": 0.0,
+   "page_recall_tudo": 0.0,
+   "page_recall_pais": 0.0,
+   "recall_juiz": null,
+   "evidencias": 19,
+   "segundos": 0.3,
+   "erro": null
+  },
+  "N13": {
+   "recall_regex": 1.0,
+   "page_recall_tudo": 1.0,
+   "page_recall_pais": 1.0,
+   "recall_juiz": null,
+   "evidencias": 23,
+   "segundos": 0.3,
+   "erro": null
+  },
+  "N14": {
+   "recall_regex": 0.0,
+   "page_recall_tudo": 0.0,
+   "page_recall_pais": 0.0,
+   "recall_juiz": null,
+   "evidencias": 21,
+   "segundos": 0.2,
+   "erro": null
+  },
+  "N15": {
+   "recall_regex": 0.0,
+   "page_recall_tudo": 0.0,
+   "page_recall_pais": 0.0,
+   "recall_juiz": null,
+   "evidencias": 24,
+   "segundos": 0.3,
+   "erro": null
+  },
+  "G01": {
+   "recall_regex": 0.0,
+   "page_recall_tudo": 0.0,
+   "page_recall_pais": 0.0,
+   "recall_juiz": null,
+   "evidencias": 24,
+   "segundos": 0.4,
+   "erro": null
+  },
+  "G02": {
+   "recall_regex": 0.0,
+   "page_recall_tudo": 0.0,
+   "page_recall_pais": 0.0,
+   "recall_juiz": null,
+   "evidencias": 24,
+   "segundos": 0.4,
+   "erro": null
+  },
+  "G03": {
+   "recall_regex": 0.0,
+   "page_recall_tudo": 1.0,
+   "page_recall_pais": 1.0,
+   "recall_juiz": null,
+   "evidencias": 24,
+   "segundos": 0.3,
+   "erro": null
+  },
+  "G04": {
+   "recall_regex": 0.0,
+   "page_recall_tudo": 0.0,
+   "page_recall_pais": 0.0,
+   "recall_juiz": null,
+   "evidencias": 21,
+   "segundos": 0.2,
+   "erro": null
+  },
+  "G05": {
+   "recall_regex": 0.0,
+   "page_recall_tudo": 0.0,
+   "page_recall_pais": 0.0,
+   "recall_juiz": null,
+   "evidencias": 24,
+   "segundos": 0.3,
+   "erro": null
+  },
+  "G06": {
+   "recall_regex": 0.0,
+   "page_recall_tudo": 0.0,
+   "page_recall_pais": 0.0,
+   "recall_juiz": null,
+   "evidencias": 22,
+   "segundos": 0.3,
+   "erro": null
+  },
+  "G07": {
+   "recall_regex": 0.0,
+   "page_recall_tudo": 0.0,
+   "page_recall_pais": 0.0,
+   "recall_juiz": null,
+   "evidencias": 24,
+   "segundos": 0.3,
+   "erro": null
+  },
+  "G08": {
+   "recall_regex": 0.0,
+   "page_recall_tudo": 0.0,
+   "page_recall_pais": 0.0,
+   "recall_juiz": null,
+   "evidencias": 24,
+   "segundos": 0.3,
+   "erro": null
+  },
+  "G09": {
+   "recall_regex": 0.0,
+   "page_recall_tudo": 0.0,
+   "page_recall_pais": 0.0,
+   "recall_juiz": null,
+   "evidencias": 24,
+   "segundos": 0.3,
+   "erro": null
+  },
+  "G10": {
+   "recall_regex": 0.0,
+   "page_recall_tudo": 0.0,
+   "page_recall_pais": 0.0,
+   "recall_juiz": null,
+   "evidencias": 20,
+   "segundos": 0.3,
+   "erro": null
+  },
+  "P01": {
+   "recall_regex": 1.0,
+   "page_recall_tudo": 1.0,
+   "page_recall_pais": 1.0,
+   "recall_juiz": null,
+   "evidencias": 24,
+   "segundos": 0.3,
+   "erro": null
+  },
+  "P02": {
+   "recall_regex": 0.0,
+   "page_recall_tudo": 0.0,
+   "page_recall_pais": 0.0,
+   "recall_juiz": null,
+   "evidencias": 24,
+   "segundos": 0.3,
+   "erro": null
+  },
+  "P03": {
+   "recall_regex": 1.0,
+   "page_recall_tudo": 1.0,
+   "page_recall_pais": 1.0,
+   "recall_juiz": null,
+   "evidencias": 24,
+   "segundos": 0.4,
+   "erro": null
+  },
+  "P04": {
+   "recall_regex": 0.3333333333333333,
+   "page_recall_tudo": 1.0,
+   "page_recall_pais": 0.0,
+   "recall_juiz": null,
+   "evidencias": 17,
+   "segundos": 0.3,
+   "erro": null
+  },
+  "P05": {
+   "recall_regex": 1.0,
+   "page_recall_tudo": 1.0,
+   "page_recall_pais": 1.0,
+   "recall_juiz": null,
+   "evidencias": 24,
+   "segundos": 0.3,
+   "erro": null
+  },
+  "P06": {
+   "recall_regex": 1.0,
+   "page_recall_tudo": 1.0,
+   "page_recall_pais": 1.0,
+   "recall_juiz": null,
+   "evidencias": 24,
+   "segundos": 0.4,
+   "erro": null
+  },
+  "P07": {
+   "recall_regex": 1.0,
+   "page_recall_tudo": 1.0,
+   "page_recall_pais": 1.0,
+   "recall_juiz": null,
+   "evidencias": 23,
+   "segundos": 0.3,
+   "erro": null
+  },
+  "P08": {
+   "recall_regex": 1.0,
+   "page_recall_tudo": 1.0,
+   "page_recall_pais": 1.0,
+   "recall_juiz": null,
+   "evidencias": 24,
+   "segundos": 0.3,
+   "erro": null
+  },
+  "P09": {
+   "recall_regex": 0.0,
+   "page_recall_tudo": 0.0,
+   "page_recall_pais": 0.0,
+   "recall_juiz": null,
+   "evidencias": 24,
+   "segundos": 0.3,
+   "erro": null
+  },
+  "P10": {
+   "recall_regex": 1.0,
+   "page_recall_tudo": 1.0,
+   "page_recall_pais": 1.0,
+   "recall_juiz": null,
+   "evidencias": 24,
+   "segundos": 0.3,
+   "erro": null
+  },
+  "M01": {
+   "recall_regex": 0.0,
+   "page_recall_tudo": 0.0,
+   "page_recall_pais": 0.0,
+   "recall_juiz": null,
+   "evidencias": 24,
+   "segundos": 0.3,
+   "erro": null
+  },
+  "M02": {
+   "recall_regex": 0.0,
+   "page_recall_tudo": 0.0,
+   "page_recall_pais": 0.0,
+   "recall_juiz": null,
+   "evidencias": 24,
+   "segundos": 0.3,
+   "erro": null
+  },
+  "M03": {
+   "recall_regex": 0.5,
+   "page_recall_tudo": 0.5,
+   "page_recall_pais": 0.5,
+   "recall_juiz": null,
+   "evidencias": 24,
+   "segundos": 0.3,
+   "erro": null
+  },
+  "M04": {
+   "recall_regex": 0.5,
+   "page_recall_tudo": 0.5,
+   "page_recall_pais": 0.5,
+   "recall_juiz": null,
+   "evidencias": 24,
+   "segundos": 0.4,
+   "erro": null
+  },
+  "M05": {
+   "recall_regex": 0.0,
+   "page_recall_tudo": 0.0,
+   "page_recall_pais": 0.0,
+   "recall_juiz": null,
+   "evidencias": 24,
+   "segundos": 0.3,
+   "erro": null
+  }
+ }
+}

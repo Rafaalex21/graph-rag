@@ -253,9 +253,11 @@
 > entrega: busca local, busca global, templates Cypher e Text2Cypher com guarda-corpos
 > esforço: G
 
-- [ ] **F6.1** Busca local (Cypher do cap. 7 adaptado) com limites de trechos, comunidades e relações
+- [x] **F6.1** Busca local (Cypher do cap. 7 adaptado) com limites de trechos, comunidades e relações
   - aceite: perguntas "quem é…" do golden set com recall de contexto ≥ 0,8
   - depende: F5.7
+  - resultado: ADR-046 (aceita com ressalva); `indexer.busca_local` (`entity_vec` + `entity_ft` só pelo nome citado, reranker sobre `nome: resumo`, Pais por RRF de citações e similaridade, tetos de 6 entidades/6 Pais/10 relações/2 comunidades/6.000 tokens); recall de contexto do juiz 1,00 nas 3 perguntas "quem é…" do golden (T01, T08, T15) e 1,00 nas 10 de `eval/golden_entidades.csv`; p50 de 0,3 s; 576 testes
+  - nota: o aceite tem n = 3 e a configuração foi ajustada olhando essas três (a primeira medição deu 0,50 e só o reranker resolveu a T15, cargo → pessoa); as 10 perguntas separadas são fáceis (1,00 também sem reranker) e não separam as configurações. O reranker baixou o recall por regex nas 55 perguntas com gabarito (0,45 → 0,41), que não são desta ferramenta. O redator (F7.5) deve citar as páginas dos itens `pai`, não as de entidade ou relação
 - [ ] **F6.2** Busca global *map-reduce* com escolha de nível e limiar de *rating*
   - aceite: ≤ 90 s no perfil `consultar`, com progresso por comunidade
   - depende: F5.6

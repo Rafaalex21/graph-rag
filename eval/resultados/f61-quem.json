@@ -1,0 +1,59 @@
+{
+ "perguntas": 3,
+ "limites": {
+  "candidatas": 25,
+  "ft": 2,
+  "entidades": 6,
+  "relacoes": 10,
+  "pais": 6,
+  "comunidades": 2,
+  "tokens": 6000
+ },
+ "recall_regex": {
+  "n": 3,
+  "media": 1.0
+ },
+ "page_recall_tudo": {
+  "n": 3,
+  "media": 1.0
+ },
+ "page_recall_pais": {
+  "n": 3,
+  "media": 1.0
+ },
+ "recall_juiz": {
+  "n": 3,
+  "media": 1.0
+ },
+ "segundos_p50": 0.3,
+ "segundos_max": 0.3,
+ "por_pergunta": {
+  "T01": {
+   "recall_regex": 1.0,
+   "page_recall_tudo": 1.0,
+   "page_recall_pais": 1.0,
+   "recall_juiz": 1.0,
+   "evidencias": 24,
+   "segundos": 0.3,
+   "erro": null
+  },
+  "T08": {
+   "recall_regex": 1.0,
+   "page_recall_tudo": 1.0,
+   "page_recall_pais": 1.0,
+   "recall_juiz": 1.0,
+   "evidencias": 13,
+   "segundos": 0.3,
+   "erro": null
+  },
+  "T15": {
+   "recall_regex": 1.0,
+   "page_recall_tudo": 1.0,
+   "page_recall_pais": 1.0,
+   "recall_juiz": 1.0,
+   "evidencias": 23,
+   "segundos": 0.3,
+   "erro": null
+  }
+ }
+}

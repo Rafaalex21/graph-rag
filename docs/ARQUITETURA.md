@@ -494,7 +494,7 @@ sequenceDiagram
 | `buscar_tabelas(pergunta)` | Números que vivem em tabelas | Vetor sobre `question_vec` → `Table.markdown` + página | 3 |
 | `fato_financeiro(metrica, entidade?, periodo?)` | "Qual foi a receita líquida em 2025?" | Template Cypher + mapeamento terminológico de métricas | 4, 5 |
 | `serie_metrica(metrica, entidade?)` | Evolução ao longo dos períodos | Template Cypher | 5 |
-| `entidade(nome)` | "Quem é…", "O que é a subsidiária…" | Busca local: `entity_vec` → vizinhança, relações resumidas, Pais e comunidades ranqueados | 7 |
+| `entidade(nome)` | "Quem é…", "O que é a subsidiária…" | Busca local: `entity_vec` (e `entity_ft` pelo nome citado) → reranker → resumo, Pais, relações resumidas e comunidades, com tetos ([ADR-046](./adr/ADR-046-busca-local.md)) | 7 |
 | `panorama(pergunta, nivel?)` | Perguntas temáticas e globais | Busca global *map-reduce* sobre relatórios com *rating* ≥ limiar | 7 |
 | `consultar_grafo(pergunta)` | Agregações e filtros sem template — rede de segurança | Text2Cypher | 4 |
 | `resposta_ja_dada(resposta)` | A resposta já está na conversa | Extração direta (ferramenta genérica do cap. 5) | 5 |

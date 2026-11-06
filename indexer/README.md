@@ -260,3 +260,17 @@ uv run python -m indexer.entidades_vec embutir
 uv run python -m indexer.entidades_vec autoteste
 uv run python -m indexer.entidades_vec verificar
 ```
+
+## Busca local (F6.1, ADR-046)
+
+`indexer.busca_local` é a ferramenta `entidade` da §7.2: pergunta → entidades parecidas (`entity_vec`, mais o `entity_ft` só para o que a pergunta cita pelo nome) → reranker sobre `nome: resumo` → resumo da entidade, Pais que a citam, relações resumidas e relatórios de comunidade, tudo com teto (6 entidades, 6 Pais, 10 relações, 2 comunidades, 6.000 tokens; o que o teto corta vem em `omitido`). Precisa do índice `entity_ft` (o orquestrador o cria no fim da etapa `entidades-vec`) e do llama-swap no ar:
+
+```powershell
+uv run python -m indexer.busca_local criar-indice
+uv run python -m indexer.busca_local buscar "Quem responde pelo conteúdo do formulário como Diretora Presidente?"
+uv run python -m indexer.busca_local medir --nome f61-quem --juiz            # as perguntas "quem é…" do golden
+uv run python -m indexer.busca_local medir --nome f61-entidades --golden ../eval/golden_entidades.csv --juiz
+uv run python -m indexer.busca_local medir --nome f61-todas --todas           # as 55 com gabarito, só recall por regex
+```
+
+`--sem-rerank` desliga o reranker (a busca fica na ordem do RRF); os tetos são flags (`--entidades`, `--pais`, `--relacoes`, `--comunidades`, `--tokens`, `--candidatas`, `--ft 0|1|2`). `medir` grava `eval/resultados/<nome>.json` (só números) e as respostas em `data/avaliacao/<nome>/`.
