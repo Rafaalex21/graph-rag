@@ -49,6 +49,34 @@ def _id_da_comunidade(nivel: int, membros: list[str]) -> str:
     return f"com:{nivel}:{h}"
 
 
+def refinar(atribuicoes: dict[str, list[int]]) -> tuple[dict[str, list[int]], list[int]]:
+    """Divide as comunidades que o Leiden deixou com mais de um pai (achado da F5.8, ADR-045).
+
+    O GDS promete níveis aninhados, mas no documento inteiro uma comunidade do nível 0 e uma do 1 tiveram
+    membros em dois pais. A saída sem arbitrariedade é a partição mais grossa que é, ao mesmo tempo,
+    refinamento do que o GDS deu e aninhada: cada entidade fica identificada pelo caminho `(comunidade no
+    nível n, no n+1, ..., no topo)`, e quem tem caminhos diferentes se separa. Comunidades que já aninhavam
+    ficam como estavam.
+    Devolve as novas atribuições (números renumerados, só a identidade importa) e, por nível, quantas
+    comunidades do GDS foram divididas."""
+    tamanhos = {len(v) for v in atribuicoes.values()}
+    if len(tamanhos) != 1:  # a hierarquia recusa com a mensagem certa
+        return atribuicoes, []
+    (n_niveis,) = tamanhos
+    caminhos = {e: [tuple(ids[n:]) for n in range(n_niveis)] for e, ids in atribuicoes.items()}
+    novas: dict[str, list[int]] = {e: [] for e in atribuicoes}
+    divididas = []
+    for n in range(n_niveis):
+        indice = {c: i for i, c in enumerate(sorted({p[n] for p in caminhos.values()}))}
+        for e, p in caminhos.items():
+            novas[e].append(indice[p[n]])
+        partes: dict[int, set[int]] = defaultdict(set)
+        for e, ids in atribuicoes.items():
+            partes[ids[n]].add(novas[e][n])
+        divididas.append(sum(1 for v in partes.values() if len(v) > 1))
+    return novas, divididas
+
+
 def hierarquia(atribuicoes: dict[str, list[int]]) -> list[dict]:
     """Comunidades por nível a partir de `entidade -> [comunidade no nível 0, no nível 1, ...]`.
 
@@ -165,18 +193,21 @@ def executar(driver: Any, banco: str = "neo4j") -> dict:
     finally:
         q("CALL gds.graph.drop($g, false) YIELD graphName RETURN graphName", g=GRAFO)
     atrib = {r["id"]: [int(x) for x in r["niveis"]] for r in fluxo}
-    coms = hierarquia(atrib)
+    gravadas, divididas = refinar(atrib)  # o GDS nem sempre aninha os níveis (ADR-045)
+    coms = hierarquia(gravadas)
     arestas = [(r["a"], r["b"], float(r["w"])) for r in q(ARESTAS)]
     por_nivel = []
     for n in range(len(stats["modularities"])):
-        particao = {e: ids[n] for e, ids in atrib.items()}
-        propria = modularidade(arestas, particao, PARAMETROS["gamma"])
+        propria = modularidade(arestas, {e: ids[n] for e, ids in atrib.items()}, PARAMETROS["gamma"])
+        gravada = modularidade(arestas, {e: ids[n] for e, ids in gravadas.items()}, PARAMETROS["gamma"])
         por_nivel.append(
             {
                 "nivel": n,
                 "comunidades": resumo_por_nivel(coms)[n],
                 "modularidade_gds": stats["modularities"][n],
-                "modularidade_recalculada": round(propria, 6),
+                "modularidade_recalculada": round(propria, 6),  # sobre a partição do GDS: tem de bater
+                "modularidade_gravada": round(gravada, 6),  # sobre a hierarquia gravada, depois de dividir
+                "comunidades_divididas": divididas[n],
                 "tamanhos": _tamanhos(coms, n),
             }
         )

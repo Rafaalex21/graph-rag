@@ -239,9 +239,11 @@
   - depende: F5.4
   - resultado: ADR-044 (aceita); 433 entidades embutidas em 4,3 s, segunda rodada com 0 (hash do texto); `entity_vec` ONLINE (1024, cosseno); recall@1 = 1,0 (433 de 433); sonda pelo nome 96,8% no top-3 e por apelido 97,4% (512 testes)
   - nota: as 14 que falham pelo nome são genéricas (`seguros`, `varejo`...), então a F6 combina `entity_vec` com `entity_ft`; as 4 entidades `PERSON` com nome vazio, `N/A`, `Desconhecido` e `null` (camada dirigida) foram recusadas no importador (`nome_valido`) e apagadas com a autorização do usuário: 429 entidades, 6 arestas `HOLDS_POSITION` saíram junto (15 → 9), recall@1 continua 1,0 e a sonda pelo nome sobe para 97,4% (543 testes)
-- [ ] **F5.8** Indexar o documento inteiro (423 páginas) com o pipeline das fases F1 a F5, numa execução noturna
+- [x] **F5.8** Indexar o documento inteiro (423 páginas) com o pipeline das fases F1 a F5, numa execução noturna
   - aceite: 423 páginas processadas; contagens do grafo registradas (Parent, Child, Table, FinancialFact, __Entity__, __Community__); consultas de sanidade da §6.4 sem órfãos; reexecutar não repete chamadas ao LLM
   - depende: F5.6, F5.7, F4.6
+  - resultado: ADR-045 (aceita com ressalva); 423 de 423 páginas (Docling 682 s); grafo com 477 Pais, 1.041 Filhos, 408 Tabelas, 1.243 `FinancialFact`, 2.474 `__Entity__` e 745 `__Community__` (330/156/130/129); sanidade da §6.4 com 0 órfãos; 5 índices ONLINE (`entity_vec` e `community_vec` com recall@1 = 1,0); 551 testes; `infra/indexar-documento.ps1` retomável; ~9,5 h de execução (a nota previa ~6,5 h)
+  - nota: reexecutar fez 0 chamadas em tabelas, extração dirigida, catálogo, extração aberta, resumos e vetores, mas o `resolver planejar` repetiu 6 chamadas (0,2%) e o Leiden mudou 52 relatórios; aceito com a ressalva pelo usuário. O documento inteiro mostrou duas dívidas: cobertura de métricas de 88,4% (1.099 de 1.243 fatos; critério da F4.6 era ≥ 95%, ampliar `contracts/metricas.json`) e cerca de 10 pares duplicados nas 30 entidades mais citadas (o critério da F5.3 aceitava até 2; falta regra de qualificador do emissor, plural e sigla). Correções feitas: erro 5xx do llama-swap, Leiden que não aninha (`refinar`), falso positivo de "(R1)" nos relatórios e de número de processo nas perguntas das tabelas
   - nota: ~6,5 h (ARQUITETURA §5.2); até esta tarefa o grafo cobre só o recorte da F1.2 (19% das páginas); rodar com o desktop leve (ADR-010); citações sempre com a página física do original (ADR-009)
 
 ## F6 · Recuperadores de grafo

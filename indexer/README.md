@@ -237,6 +237,20 @@ uv run python -m indexer.relatorios autoteste
 uv run python -m indexer.relatorios verificar
 ```
 
+## Documento inteiro (F5.8, ADR-045)
+
+O mesmo pipeline nas 423 páginas, sem o mapa do recorte (`--mapa` é opcional em `normalize` e `sections`; a página física é a do PDF). Os quatro primeiros passos são comandos próprios; o resto é o orquestrador `infra\indexar-documento.ps1`, que grava as etapas em `data\logs\f58_etapas.log` (leia por varredura, nunca com `tail -F`), o estado em `f58_estado.txt`, repete cada etapa até 3 vezes e é retomável. `-Esvaziar` apaga o grafo antes da carga (faça `neo4j-admin database dump` antes, com o Neo4j parado depois de um desligamento limpo):
+
+```powershell
+uv run --group parse python -m indexer.parse ..\data\raw\banco_do_brasil_formulario_referencia_2026.pdf --artefatos ..\infra\bin\modelos-docling --saida ..\data\parsed
+uv run python -m indexer.normalize ..\data\parsed\banco_do_brasil_formulario_referencia_2026.docling.json --saida ..\data\parsed
+uv run --group parse python -m indexer.sections ..\data\parsed\banco_do_brasil_formulario_referencia_2026.normalizado.json --pdf-original ..\data\raw\banco_do_brasil_formulario_referencia_2026.pdf --saida ..\data\parsed
+uv run python -m indexer.chunks ..\data\parsed\banco_do_brasil_formulario_referencia_2026.normalizado.json ..\data\parsed\banco_do_brasil_formulario_referencia_2026.secoes.json --saida ..\data\parsed
+cd ..; .\infra\indexar-documento.ps1 -Esvaziar      # ou -De <etapa> para retomar
+```
+
+Cuidado: `resolver planejar` **desfaz as fusões** no Neo4j; depois dele rode `resolver aplicar` e as etapas seguintes (resumos, comunidades, relatórios, vetores de entidade), que vêm do cache.
+
 ## Embeddings de entidade (F5.7, ADR-044)
 
 `indexer.entidades_vec` embute `nome (tipo). resumo` + apelidos de cada `__Entity__` no perfil `vetorizar` e cria o índice `entity_vec`; o hash do texto em `embeddingHash` faz a reexecução embutir só o que mudou. O autoteste re-embute pela CPU e exige a entidade em 1º lugar:

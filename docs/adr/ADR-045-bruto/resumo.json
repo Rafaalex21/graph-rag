@@ -1,0 +1,168 @@
+{
+ "gerado_por": "infra/indexar-documento.ps1 + indexer.* (ver ADR-045); contagens do grafo por consulta Cypher",
+ "paginas": {
+  "total": 423,
+  "com_texto": 423,
+  "docling_segundos": 682.0,
+  "segundos_por_pagina": 1.61,
+  "tabelas_lidas": 412,
+  "tabelas_apos_normalizar": 408
+ },
+ "grafo": {
+  "Document": 1,
+  "Section": 592,
+  "Parent": 477,
+  "Child": 1041,
+  "Table": 408,
+  "HypotheticalQuestion": 1659,
+  "FinancialFact": 1243,
+  "Metric": 97,
+  "Period": 50,
+  "__Entity__": 2474,
+  "Issuer": 1,
+  "__Community__": 745,
+  "RELATED_TO": 2772,
+  "SUMMARIZED_RELATIONSHIP": 2772,
+  "IN_COMMUNITY": 1649,
+  "PARENT_COMMUNITY": 616,
+  "OF_METRIC": 1099
+ },
+ "comunidades": {
+  "por_nivel": {
+   "0": 330,
+   "1": 156,
+   "2": 130,
+   "3": 129
+  },
+  "modularidade_gds": [
+   0.69667,
+   0.823,
+   0.83145,
+   0.83181
+  ],
+  "divididas_pelo_refinar": [
+   2,
+   0,
+   1,
+   0
+  ],
+  "projecao": {
+   "nos": 1649,
+   "arestas_nao_direcionadas": 1965
+  },
+  "entidades_sem_aresta_fora_do_emissor": 824,
+  "conteudos_distintos_de_relatorio": 406,
+  "relatorios_validos": 745,
+  "comunidades_com_contexto_omitido": 14,
+  "itens_omitidos": 964,
+  "nota_media": 6.48
+ },
+ "sanidade": {
+  "filhos_orfaos": 0,
+  "pais_sem_filho": 0,
+  "fatos_sem_evidencia": 0,
+  "entidades_sem_resumo": 0,
+  "entidades_sem_embedding": 0,
+  "comunidades_sem_relatorio": 0,
+  "comunidades_sem_embedding": 0,
+  "tabelas_sem_pai_ou_secao": 0,
+  "comunidades_com_mais_de_um_pai": 0
+ },
+ "recalls": {
+  "entity_vec_recall_at_1": 1.0,
+  "entity_sonda_nome_top3": 0.9297,
+  "entity_sonda_apelido_top3": 0.9327,
+  "community_vec_recall_at_1": 1.0,
+  "community_sonda_titulo_top3": 0.9893,
+  "question_vec_recall_at_1": 0.9922
+ },
+ "extracao_dirigida": {
+  "unidades": 827,
+  "validas": 827,
+  "validas_na_primeira": 798,
+  "fatos_propostos": 1876,
+  "fatos_aceitos": 1246,
+  "fatos_rejeitados": 630,
+  "fatos_no_grafo": 1243,
+  "fatos_com_metrica": 1099,
+  "cobertura_de_metricas": 0.8842,
+  "no_teto_de_fatos": 1
+ },
+ "extracao_aberta": {
+  "unidades": 477,
+  "validas": 477,
+  "validas_na_primeira": 467,
+  "entidades": 3794,
+  "relacoes": 3149,
+  "no_teto_de_entidades": 2,
+  "tokens_prompt": 965101,
+  "tokens_saida": 381687
+ },
+ "tabelas": {
+  "validas": 408,
+  "invalidas_antes_da_correcao": 3,
+  "perguntas": 1659,
+  "perguntas_velhas_apagadas": 39
+ },
+ "resolucao": {
+  "candidatos": 2515,
+  "sim": 750,
+  "nao": 1765,
+  "fusoes": 308,
+  "absorvidos": 438,
+  "conflitos": 45,
+  "entidades_antes_depois": [
+   2912,
+   2474
+  ]
+ },
+ "resumos": {
+  "descartadas_pelo_teto_do_emissor": 39,
+  "emissor_niveis": 2
+ },
+ "tempos_min": {
+  "parse_normalizacao_secoes_chunks": 12,
+  "tabelas": 39,
+  "extracao_dirigida": 90,
+  "catalogo": 15,
+  "extracao_aberta": 127,
+  "carga_embeddings_importacao": 5,
+  "resolucao": 130,
+  "resumos": 21,
+  "relatorios": 119,
+  "vetores_de_entidade": 10,
+  "execucao_total_aprox": 570,
+  "reexecucao_aprox": 50
+ },
+ "reexecucao": {
+  "chamadas_novas": {
+   "tabelas": 0,
+   "extracao_dirigida": 0,
+   "catalogo": 0,
+   "extracao_aberta": 0,
+   "resumos": 0,
+   "entidades_vec": 0,
+   "resolucao": 6,
+   "relatorios_apos_mudar_a_particao": 52
+  },
+  "cache_da_resolucao_antes_depois": [
+   2723,
+   2729
+  ]
+ },
+ "duplicatas_nas_30_mais_citadas": {
+  "pares_aproximados": 10,
+  "entidades_envolvidas_de_30": 9,
+  "criterio_da_f5_3": "ate 2"
+ },
+ "revisao_de_relatorios": {
+  "amostra": 7,
+  "fieis": 4,
+  "exagero_leve": 1,
+  "com_problema": 2,
+  "revisor": "eu; nenhuma pessoa conferiu"
+ },
+ "testes": {
+  "indexer_total": 551
+ }
+}

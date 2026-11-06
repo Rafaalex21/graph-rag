@@ -25,6 +25,7 @@ import json
 import os
 import sys
 import time
+import urllib.error
 import urllib.request
 from collections.abc import Callable
 from concurrent.futures import ThreadPoolExecutor
@@ -41,6 +42,7 @@ MODELO_LLM = "qwen36-35b-a3b"
 VERSAO_DO_PROMPT = "v3"
 MIN_TOKENS_PAI = 30  # Pais menores (títulos, linhas soltas) não têm o que extrair
 LIMITE_MARKDOWN = 14000  # caracteres; o mesmo teto da F2.7
+ESPERAS_DE_ERRO_DO_SERVIDOR = (5, 20)  # segundos antes de repetir um HTTP 5xx do llama-swap (F5.8)
 MAX_TOKENS_SAIDA = 8000  # 60 fatos ≈ 7 mil tokens; cabe no slot de 16 mil com um pedido de até ~6 mil
 DOCUMENTO = "Formulário de Referência 2026 (ano-base 2025) do Banco do Brasil S.A."
 
@@ -154,8 +156,22 @@ def gerador_llama(base: str, modelo: str = MODELO_LLM, timeout: int = 900) -> Ge
             data=json.dumps(corpo).encode("utf-8"),
             headers={"Content-Type": "application/json; charset=utf-8"},
         )
-        with urllib.request.urlopen(req, timeout=timeout) as r:
-            dados = json.load(r)
+        dados = None
+        motivo = ""
+        for tentativa in range(len(ESPERAS_DE_ERRO_DO_SERVIDOR) + 1):
+            try:
+                with urllib.request.urlopen(req, timeout=timeout) as r:
+                    dados = json.load(r)
+                break
+            except urllib.error.HTTPError as e:
+                if e.code < 500:
+                    raise
+                motivo = e.read().decode("utf-8", "replace")[:300]
+                if tentativa < len(ESPERAS_DE_ERRO_DO_SERVIDOR):
+                    time.sleep(ESPERAS_DE_ERRO_DO_SERVIDOR[tentativa])
+        if dados is None:  # falhou em todas as tentativas: a unidade vira inválida e a noite não para
+            return {"conteudo": "", "finish": "erro_do_servidor", "tokens_prompt": 0, "tokens_saida": 0,
+                    "motivo": motivo}  # fmt: skip
         escolha = dados["choices"][0]
         uso = dados.get("usage", {})
         return {
@@ -223,6 +239,8 @@ def ajustar_fatos(obj: dict) -> dict[str, int]:
 
 def validar(resposta: Resposta) -> tuple[dict | None, str | None, int]:
     """(objeto validado, None, reparos) ou (None, problema, 0). Saída cortada por tamanho é inválida."""
+    if resposta.get("finish") == "erro_do_servidor":
+        return None, f"erro do servidor: {resposta.get('motivo', '')}", 0
     if resposta.get("finish") == "length":
         return (
             None,

@@ -199,6 +199,28 @@ def test_prompt_pede_qualificador_unidade_declarada_e_resposta_possivel():
     )
 
 
+def test_numero_de_processo_e_identificador_e_nao_valor():
+    # achado da F5.8: 3 tabelas de processos judiciais ficavam inválidas por causa do número do processo
+    for pergunta in (
+        "Qual a probabilidade de perda no processo administrativo nº 12345.678901/2022-11?",
+        "Quais os valores no processo 1234567-89.2020.8.26.0100?",
+        "Qual o estágio do processo nº 2000.34.00.012345-6 no STJ?",
+    ):
+        ok = {**VALIDA, "perguntas": [pergunta, "Qual a dois?", "Qual a três?"]}
+        assert validar(ok) == [], pergunta
+
+
+def test_valor_perto_de_um_numero_de_processo_continua_barrado():
+    for pergunta in (
+        "No processo nº 12345.678901/2022-11 a autuação foi de 1.045.338?",
+        "O valor de 37,0 no processo 1234567-89.2020.8.26.0100 mudou?",
+        "O lucro subiu no 1.045.338?",  # o "no" da frase não é "nº"
+        "Qual o saldo de 1.045.338 em 2025?",  # milhar sem processo por perto
+    ):
+        com_valor = {**VALIDA, "perguntas": [pergunta, "Qual a dois?", "Qual a três?"]}
+        assert any("valor numérico" in e for e in validar(com_valor)), pergunta
+
+
 def test_numero_de_secao_nao_e_valor_e_cache_invalido_nao_e_reaproveitado(tmp_path):
     ok = {**VALIDA, "perguntas": ["O que mudou nas seções 7.3 e 7.4?", "Qual a dois?", "Qual a três?"]}
     assert validar(ok) == []

@@ -203,13 +203,18 @@ def main() -> None:
     ap = argparse.ArgumentParser(description=__doc__, formatter_class=argparse.RawDescriptionHelpFormatter)
     ap.add_argument("normalizado", type=Path)
     ap.add_argument("--pdf-original", type=Path, required=True)
-    ap.add_argument("--mapa", type=Path, required=True)
+    ap.add_argument(
+        "--mapa", type=Path, help="mapa recorte -> original; sem ele o documento é o próprio original (F5.8)"
+    )
     ap.add_argument("--saida", type=Path, required=True)
     a = ap.parse_args()
 
     elementos = json.loads(a.normalizado.read_text(encoding="utf-8"))["elementos"]
-    mapa = json.loads(a.mapa.read_text(encoding="utf-8"))["mapa"]
-    presentes = {m["original_fisica"] for m in mapa}
+    if a.mapa:
+        mapa = json.loads(a.mapa.read_text(encoding="utf-8"))["mapa"]
+        presentes = {m["original_fisica"] for m in mapa}
+    else:  # documento inteiro: as páginas presentes são as que o normalizador viu
+        presentes = {p for e in elementos for p in (e.get("paginas_originais") or [])}
 
     nos = construir_arvore(elementos)
     sumario = ler_sumario_pdf(a.pdf_original)

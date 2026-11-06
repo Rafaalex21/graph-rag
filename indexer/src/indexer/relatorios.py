@@ -102,6 +102,7 @@ def maximo_de_achados(n_entidades: int) -> int:
 
 
 ETIQUETA = re.compile(r"\b[ER]\d{1,3}\b")
+REVISAO_DE_NORMA = re.compile(r"\b\d{1,3} \(R\d\)")  # "33 (R1)" de "CPC 33 (R1)" (F5.8, ADR-045)
 
 
 def esquema(minimo: int, maximo: int = MAX_ACHADOS) -> dict:
@@ -191,7 +192,11 @@ def validar_relatorio(resposta: Any, contexto: dict, minimo: int, maximo: int = 
         raise RelatorioInvalido(f"achados: {n}, esperado de {minimo} a {maximo}")
     textos = [resposta["title"], resposta["summary"], resposta["rating_explanation"]]
     textos += [str(a.get(c, "")) for a in achados if isinstance(a, dict) for c in ("summary", "explanation")]
+    # "CPC 33 (R1)" é o nome de uma norma ("revisão 1"), não a etiqueta R1; só vale o que o contexto trouxe
+    legitimas = set(REVISAO_DE_NORMA.findall(contexto.get("texto", "")))
     for t in textos:
+        for nome in legitimas:
+            t = t.replace(nome, "")
         achou = ETIQUETA.search(t)
         if achou:
             raise RelatorioInvalido(f"etiqueta do contexto no texto: {achou.group()}")

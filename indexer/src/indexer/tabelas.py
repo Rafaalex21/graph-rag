@@ -36,6 +36,12 @@ MODELO_CPU = "qwen3-embed-0.6b"
 
 # valor com vírgula decimal ou milhar com ponto (anos, datas e números de seção como 7.3 não casam)
 VALOR_NA_PERGUNTA = re.compile(r"\d+,\d+|\d{1,3}(?:\.\d{3})+")
+# número de processo ("processo nº 12345.678901/2022-11", "processo 1234567-89.2020.8.26.0100") é
+# identificador, não valor: só sai da checagem o que vem logo depois de "processo", "autos", "ação" ou "nº"
+# (o "no" de "no 1.234" não conta, só o ordinal º/°) (F5.8, ADR-045)
+NUMERO_DE_PROCESSO = re.compile(
+    r"(?:processo|autos|ação|acao|n[º°]\.?|n\.º)\s*(?:n[º°]\.?\s*)?\d[\d.\-/]{6,}\d", re.IGNORECASE
+)
 
 ESQUEMA = {
     "type": "object",
@@ -189,7 +195,7 @@ def validar(resposta: Any) -> list[str]:
     if re.search(r"\bfator\b", resposta.get("descricao") or "", re.IGNORECASE):
         erros.append("a descrição usa a palavra 'fator'")
     for p in limpas:
-        if VALOR_NA_PERGUNTA.search(p):
+        if VALOR_NA_PERGUNTA.search(NUMERO_DE_PROCESSO.sub(" ", p)):
             erros.append(f"pergunta com valor numérico: {p[:40]}")
         if not p.endswith("?"):
             erros.append(f"não termina com '?': {p[:40]}")

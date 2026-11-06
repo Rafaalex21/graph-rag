@@ -119,6 +119,30 @@ def test_palavras_parecidas_com_etiqueta_nao_sao_barradas():
     assert validar_relatorio(ok, CTX, minimo=1)["title"].startswith("Resolução")
 
 
+CTX_CPC = {**CTX, "texto": "Entidades:\n[E1] CPC 33 (R1) - Benefícios a Empregados (REGULATION): norma."}
+
+
+def test_nome_de_norma_com_revisao_cpc_33_r1_nao_e_etiqueta_vazada():
+    # achado da F5.8: "(R1)" é "revisão 1" de um pronunciamento contábil; o modelo escrevia o nome certo
+    # e o validador o tomava pela etiqueta R1 (3 conteúdos, 5 comunidades sem relatório)
+    ok = relatorio(title="Aprovação do CPC 33 (R1) pela CVM", summary="O CPC 33 (R1) trata de benefícios.")
+    assert validar_relatorio(ok, CTX_CPC, minimo=1)["title"].startswith("Aprovação")
+
+
+def test_etiqueta_vazada_continua_barrada_mesmo_com_um_nome_com_revisao_no_contexto():
+    for texto in ("O CPC 33 (R1) e a relação R1 subiram.", "O CPC 33 (R1) e a entidade [E2] cresceram."):
+        with pytest.raises(RelatorioInvalido, match="etiqueta"):
+            validar_relatorio(relatorio(summary=texto), CTX_CPC, minimo=1)
+
+
+def test_revisao_que_nao_esta_no_contexto_continua_sendo_etiqueta():
+    # o modelo não pode inventar "(R1)" depois de um número: só vale o que o contexto trouxe
+    with pytest.raises(RelatorioInvalido, match="etiqueta"):
+        validar_relatorio(relatorio(summary="O CPC 99 (R1) mudou."), CTX_CPC, minimo=1)
+    with pytest.raises(RelatorioInvalido, match="etiqueta"):
+        validar_relatorio(relatorio(summary="O CPC 33 (R1) mudou."), CTX, minimo=1)  # contexto sem texto
+
+
 def test_relatorio_valido_troca_etiquetas_por_ids_e_aceita_colchetes_e_minusculas():
     resp = relatorio([achado(entidades=["[e1]", "E2", "E1"], relacoes=["R1"])] * 2)
     r = validar_relatorio(resp, CTX, minimo=2)
