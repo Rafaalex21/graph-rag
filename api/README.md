@@ -1,7 +1,7 @@
 # api
 
 API e agente do GraphRAG local (Node 24, TypeScript 6.0, Fastify). Hoje: a rota `GET /api/saude` (esqueleto
-da F0.8) e o cliente LLM (F7.1). O agente, as ferramentas e o SSE (ARQUITETURA §7 e §11) entram nas próximas
+da F0.8), o cliente LLM (F7.1), o atualizador de pergunta (F7.2) e o roteador (F7.3). O agente, as ferramentas e o SSE (ARQUITETURA §7 e §11) entram nas próximas
 tarefas da F7.
 
 O TypeScript fica **fixado em 6.0.x**: o Angular 22 e o `typescript-eslint` ainda não aceitam a 7.x.
@@ -41,6 +41,17 @@ pergunta só. Se o LLM falha, a pergunta segue inteira (`fallback`). Medir com o
 
 ```powershell
 npm run avaliar:decomposicao -- --nome f72-teste --grupo teste   # ajuste | teste | teste2
+```
+
+## Roteador (`src/agente/roteador.ts`, F7.3, ADR-054)
+
+`rotear(llm, pergunta)` escolhe, por *tool calling*, entre as 12 ferramentas da §7.2 (`CATALOGO`, com esquema Zod) e devolve
+`{rota, chamadas: [{nome, argumentos}], texto, descartadas, fallback}`. Argumentos ruins são descartados; sem nada
+aproveitável, a chamada é `buscar_trechos` (`fallback`). `rotearSubperguntas(llm, subperguntas, { executar })` roteia
+as saídas do atualizador por ondas (até 2 ao mesmo tempo). O roteador não executa as ferramentas. Medir:
+
+```powershell
+npm run avaliar:rotas -- --nome f73-teste3 --grupo teste3   # ajuste | teste | teste2 | teste3; --direto pula o atualizador
 ```
 
 Erros (`LlmIndisponivelError`, `LlmTimeoutError`, `LlmAbortadoError`, `LlmHttpError`,

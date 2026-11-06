@@ -1,0 +1,437 @@
+{
+  "modelo": "principal",
+  "caminho": "atualizador+roteador",
+  "geral": {
+    "n": 20,
+    "estrito": {
+      "ok": 9,
+      "taxa": 0.45
+    },
+    "aceito": {
+      "ok": 15,
+      "taxa": 0.75
+    }
+  },
+  "por_grupo": {
+    "teste2": {
+      "n": 20,
+      "estrito": {
+        "ok": 9,
+        "taxa": 0.45
+      },
+      "aceito": {
+        "ok": 15,
+        "taxa": 0.75
+      }
+    }
+  },
+  "por_rota": {
+    "buscar_trechos": {
+      "n": 5,
+      "estrito": {
+        "ok": 3,
+        "taxa": 0.6
+      },
+      "aceito": {
+        "ok": 3,
+        "taxa": 0.6
+      }
+    },
+    "buscar_tabelas": {
+      "n": 3,
+      "estrito": {
+        "ok": 0,
+        "taxa": 0
+      },
+      "aceito": {
+        "ok": 3,
+        "taxa": 1
+      }
+    },
+    "consultar_grafo": {
+      "n": 4,
+      "estrito": {
+        "ok": 1,
+        "taxa": 0.25
+      },
+      "aceito": {
+        "ok": 2,
+        "taxa": 0.5
+      }
+    },
+    "panorama": {
+      "n": 3,
+      "estrito": {
+        "ok": 1,
+        "taxa": 0.3333
+      },
+      "aceito": {
+        "ok": 3,
+        "taxa": 1
+      }
+    },
+    "varias": {
+      "n": 2,
+      "estrito": {
+        "ok": 1,
+        "taxa": 0.5
+      },
+      "aceito": {
+        "ok": 1,
+        "taxa": 0.5
+      }
+    },
+    "nenhuma": {
+      "n": 3,
+      "estrito": {
+        "ok": 3,
+        "taxa": 1
+      },
+      "aceito": {
+        "ok": 3,
+        "taxa": 1
+      }
+    }
+  },
+  "latencia_ms": {
+    "mediana": 3605,
+    "maximo": 5760
+  },
+  "fallbacks": 0,
+  "casos": [
+    {
+      "id": "H01",
+      "grupo": "teste2",
+      "rota_esperada": "buscar_trechos",
+      "estrito": false,
+      "aceito": false,
+      "motivo": "nenhuma ferramenta chamada",
+      "rotas": [
+        []
+      ],
+      "subperguntas": 1,
+      "fallbacks": [],
+      "fallback_atualizador": null,
+      "ms": 3732
+    },
+    {
+      "id": "H02",
+      "grupo": "teste2",
+      "rota_esperada": "buscar_trechos",
+      "estrito": true,
+      "aceito": true,
+      "motivo": "",
+      "rotas": [
+        [
+          "buscar_trechos"
+        ]
+      ],
+      "subperguntas": 1,
+      "fallbacks": [],
+      "fallback_atualizador": null,
+      "ms": 3327
+    },
+    {
+      "id": "H03",
+      "grupo": "teste2",
+      "rota_esperada": "buscar_trechos",
+      "estrito": true,
+      "aceito": true,
+      "motivo": "",
+      "rotas": [
+        [
+          "buscar_trechos"
+        ]
+      ],
+      "subperguntas": 1,
+      "fallbacks": [],
+      "fallback_atualizador": null,
+      "ms": 3528
+    },
+    {
+      "id": "H04",
+      "grupo": "teste2",
+      "rota_esperada": "buscar_trechos",
+      "estrito": true,
+      "aceito": true,
+      "motivo": "",
+      "rotas": [
+        [
+          "buscar_trechos"
+        ]
+      ],
+      "subperguntas": 1,
+      "fallbacks": [],
+      "fallback_atualizador": null,
+      "ms": 3380
+    },
+    {
+      "id": "H05",
+      "grupo": "teste2",
+      "rota_esperada": "buscar_trechos",
+      "estrito": false,
+      "aceito": false,
+      "motivo": "nenhuma ferramenta chamada",
+      "rotas": [
+        []
+      ],
+      "subperguntas": 1,
+      "fallbacks": [],
+      "fallback_atualizador": null,
+      "ms": 2705
+    },
+    {
+      "id": "H06",
+      "grupo": "teste2",
+      "rota_esperada": "buscar_tabelas",
+      "estrito": false,
+      "aceito": true,
+      "motivo": "chamou fato_financeiro, esperava buscar_tabelas",
+      "rotas": [
+        [
+          "fato_financeiro"
+        ]
+      ],
+      "subperguntas": 1,
+      "fallbacks": [],
+      "fallback_atualizador": null,
+      "ms": 3589
+    },
+    {
+      "id": "H07",
+      "grupo": "teste2",
+      "rota_esperada": "buscar_tabelas",
+      "estrito": false,
+      "aceito": true,
+      "motivo": "chamou fato_financeiro, esperava buscar_tabelas",
+      "rotas": [
+        [
+          "fato_financeiro"
+        ]
+      ],
+      "subperguntas": 1,
+      "fallbacks": [],
+      "fallback_atualizador": null,
+      "ms": 4257
+    },
+    {
+      "id": "H08",
+      "grupo": "teste2",
+      "rota_esperada": "buscar_tabelas",
+      "estrito": false,
+      "aceito": true,
+      "motivo": "chamou fato_financeiro, esperava buscar_tabelas",
+      "rotas": [
+        [
+          "fato_financeiro"
+        ]
+      ],
+      "subperguntas": 1,
+      "fallbacks": [],
+      "fallback_atualizador": null,
+      "ms": 3605
+    },
+    {
+      "id": "H09",
+      "grupo": "teste2",
+      "rota_esperada": "consultar_grafo",
+      "estrito": false,
+      "aceito": false,
+      "motivo": "fora das aceitas: buscar_tabelas",
+      "rotas": [
+        [
+          "buscar_tabelas"
+        ]
+      ],
+      "subperguntas": 1,
+      "fallbacks": [],
+      "fallback_atualizador": null,
+      "ms": 3692
+    },
+    {
+      "id": "H10",
+      "grupo": "teste2",
+      "rota_esperada": "consultar_grafo",
+      "estrito": true,
+      "aceito": true,
+      "motivo": "",
+      "rotas": [
+        [
+          "consultar_grafo"
+        ]
+      ],
+      "subperguntas": 1,
+      "fallbacks": [],
+      "fallback_atualizador": null,
+      "ms": 3603
+    },
+    {
+      "id": "H11",
+      "grupo": "teste2",
+      "rota_esperada": "consultar_grafo",
+      "estrito": false,
+      "aceito": false,
+      "motivo": "fora das aceitas: buscar_tabelas",
+      "rotas": [
+        [
+          "buscar_tabelas"
+        ]
+      ],
+      "subperguntas": 1,
+      "fallbacks": [],
+      "fallback_atualizador": null,
+      "ms": 3339
+    },
+    {
+      "id": "H12",
+      "grupo": "teste2",
+      "rota_esperada": "consultar_grafo",
+      "estrito": false,
+      "aceito": true,
+      "motivo": "chamou serie_metrica, esperava consultar_grafo",
+      "rotas": [
+        [
+          "serie_metrica"
+        ]
+      ],
+      "subperguntas": 1,
+      "fallbacks": [],
+      "fallback_atualizador": null,
+      "ms": 3873
+    },
+    {
+      "id": "H13",
+      "grupo": "teste2",
+      "rota_esperada": "panorama",
+      "estrito": true,
+      "aceito": true,
+      "motivo": "",
+      "rotas": [
+        [
+          "panorama"
+        ]
+      ],
+      "subperguntas": 1,
+      "fallbacks": [],
+      "fallback_atualizador": null,
+      "ms": 3688
+    },
+    {
+      "id": "H14",
+      "grupo": "teste2",
+      "rota_esperada": "panorama",
+      "estrito": false,
+      "aceito": true,
+      "motivo": "chamou buscar_trechos, esperava panorama",
+      "rotas": [
+        [
+          "buscar_trechos"
+        ]
+      ],
+      "subperguntas": 1,
+      "fallbacks": [],
+      "fallback_atualizador": null,
+      "ms": 3343
+    },
+    {
+      "id": "H15",
+      "grupo": "teste2",
+      "rota_esperada": "panorama",
+      "estrito": false,
+      "aceito": true,
+      "motivo": "chamou riscos, esperava panorama",
+      "rotas": [
+        [
+          "riscos"
+        ]
+      ],
+      "subperguntas": 1,
+      "fallbacks": [],
+      "fallback_atualizador": null,
+      "ms": 2767
+    },
+    {
+      "id": "H16",
+      "grupo": "teste2",
+      "rota_esperada": "varias",
+      "estrito": true,
+      "aceito": true,
+      "motivo": "",
+      "rotas": [
+        [
+          "pessoas_cargos"
+        ],
+        [
+          "fato_financeiro"
+        ]
+      ],
+      "subperguntas": 2,
+      "fallbacks": [],
+      "fallback_atualizador": null,
+      "ms": 5760
+    },
+    {
+      "id": "H17",
+      "grupo": "teste2",
+      "rota_esperada": "varias",
+      "estrito": false,
+      "aceito": false,
+      "motivo": "a subpergunta 1 ficou sem ferramenta",
+      "rotas": [
+        [
+          "pessoas_cargos"
+        ],
+        []
+      ],
+      "subperguntas": 2,
+      "fallbacks": [],
+      "fallback_atualizador": null,
+      "ms": 4342
+    },
+    {
+      "id": "H18",
+      "grupo": "teste2",
+      "rota_esperada": "nenhuma",
+      "estrito": true,
+      "aceito": true,
+      "motivo": "",
+      "rotas": [
+        []
+      ],
+      "subperguntas": 1,
+      "fallbacks": [],
+      "fallback_atualizador": null,
+      "ms": 2886
+    },
+    {
+      "id": "H19",
+      "grupo": "teste2",
+      "rota_esperada": "nenhuma",
+      "estrito": true,
+      "aceito": true,
+      "motivo": "",
+      "rotas": [
+        []
+      ],
+      "subperguntas": 1,
+      "fallbacks": [],
+      "fallback_atualizador": null,
+      "ms": 4647
+    },
+    {
+      "id": "H20",
+      "grupo": "teste2",
+      "rota_esperada": "nenhuma",
+      "estrito": true,
+      "aceito": true,
+      "motivo": "",
+      "rotas": [
+        []
+      ],
+      "subperguntas": 1,
+      "fallbacks": [],
+      "fallback_atualizador": null,
+      "ms": 3630
+    }
+  ]
+}

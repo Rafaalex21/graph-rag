@@ -1,0 +1,954 @@
+[
+ {
+  "id": "T01",
+  "grupo": "ajuste",
+  "pergunta": "Quem é o acionista controlador do Banco do Brasil e qual percentual do capital ele detém?",
+  "rota_esperada": "buscar_trechos",
+  "aceitas": [
+   "buscar_trechos",
+   "entidade"
+  ]
+ },
+ {
+  "id": "T02",
+  "grupo": "teste",
+  "pergunta": "Quais são os valores que guiam o Banco do Brasil?",
+  "rota_esperada": "buscar_trechos",
+  "aceitas": [
+   "buscar_trechos",
+   "panorama"
+  ]
+ },
+ {
+  "id": "T03",
+  "grupo": "ajuste",
+  "pergunta": "Em quantos grandes mercados o Banco do Brasil segmenta seus clientes e quais são?",
+  "rota_esperada": "buscar_trechos",
+  "aceitas": [
+   "buscar_trechos"
+  ]
+ },
+ {
+  "id": "T04",
+  "grupo": "teste",
+  "pergunta": "Que parcela do capital total da Broto S.A. o Banco do Brasil detém por meio de ações preferenciais?",
+  "rota_esperada": "buscar_trechos",
+  "aceitas": [
+   "buscar_trechos",
+   "buscar_tabelas",
+   "consultar_grafo"
+  ]
+ },
+ {
+  "id": "T05",
+  "grupo": "teste",
+  "pergunta": "Quais são os cinco segmentos divulgáveis em que as operações do Banco do Brasil estão divididas?",
+  "rota_esperada": "buscar_trechos",
+  "aceitas": [
+   "buscar_trechos",
+   "buscar_tabelas",
+   "panorama"
+  ]
+ },
+ {
+  "id": "T06",
+  "grupo": "teste",
+  "pergunta": "Qual o valor e o prazo do contrato de empréstimo formalizado em dezembro de 2022 com o New Development Bank?",
+  "rota_esperada": "buscar_trechos",
+  "aceitas": [
+   "buscar_trechos"
+  ]
+ },
+ {
+  "id": "T07",
+  "grupo": "ajuste",
+  "pergunta": "Em que ano foi criado o Programa de Compliance e Integridade do Banco do Brasil?",
+  "rota_esperada": "buscar_trechos",
+  "aceitas": [
+   "buscar_trechos"
+  ]
+ },
+ {
+  "id": "T08",
+  "grupo": "teste",
+  "pergunta": "Quem aprova a avaliação interna de risco de lavagem de dinheiro e financiamento do terrorismo (LD/FTP-C) do Banco?",
+  "rota_esperada": "buscar_trechos",
+  "aceitas": [
+   "buscar_trechos"
+  ]
+ },
+ {
+  "id": "T09",
+  "grupo": "teste",
+  "pergunta": "Existe relação conjugal, união estável ou parentesco até o segundo grau entre administradores do Banco do Brasil?",
+  "rota_esperada": "buscar_trechos",
+  "aceitas": [
+   "buscar_trechos"
+  ]
+ },
+ {
+  "id": "T10",
+  "grupo": "teste",
+  "pergunta": "Como o Banco evita conflito de interesses quando contrata a empresa de auditoria para outros serviços?",
+  "rota_esperada": "buscar_trechos",
+  "aceitas": [
+   "buscar_trechos",
+   "panorama"
+  ]
+ },
+ {
+  "id": "T11",
+  "grupo": "ajuste",
+  "pergunta": "O Banco do Brasil tem clientes responsáveis por mais de 10% da receita líquida total?",
+  "rota_esperada": "buscar_trechos",
+  "aceitas": [
+   "buscar_trechos"
+  ]
+ },
+ {
+  "id": "T12",
+  "grupo": "teste",
+  "pergunta": "Como são constituídas as reservas estatutárias para margem operacional e para equalização da remuneração do capital?",
+  "rota_esperada": "buscar_trechos",
+  "aceitas": [
+   "buscar_trechos"
+  ]
+ },
+ {
+  "id": "T13",
+  "grupo": "teste",
+  "pergunta": "Quantos membros compõem o Conselho de Administração e qual é o prazo de gestão?",
+  "rota_esperada": "buscar_trechos",
+  "aceitas": [
+   "buscar_trechos",
+   "pessoas_cargos"
+  ]
+ },
+ {
+  "id": "T14",
+  "grupo": "teste",
+  "pergunta": "Em que segmento especial da B3 as ações do Banco do Brasil são negociadas?",
+  "rota_esperada": "buscar_trechos",
+  "aceitas": [
+   "buscar_trechos"
+  ]
+ },
+ {
+  "id": "T15",
+  "grupo": "ajuste",
+  "pergunta": "Quem responde pelo conteúdo do formulário como Diretora Presidente?",
+  "rota_esperada": "entidade",
+  "aceitas": [
+   "entidade",
+   "pessoas_cargos",
+   "buscar_trechos"
+  ]
+ },
+ {
+  "id": "N01",
+  "grupo": "ajuste",
+  "pergunta": "Qual foi o lucro líquido do exercício de 2025 (IFRS)?",
+  "rota_esperada": "fato_financeiro",
+  "aceitas": [
+   "fato_financeiro",
+   "buscar_tabelas"
+  ]
+ },
+ {
+  "id": "N02",
+  "grupo": "teste",
+  "pergunta": "Qual foi a receita líquida de juros em 2025?",
+  "rota_esperada": "fato_financeiro",
+  "aceitas": [
+   "fato_financeiro",
+   "buscar_tabelas"
+  ]
+ },
+ {
+  "id": "N03",
+  "grupo": "ajuste",
+  "pergunta": "Quanto as receitas de juros com a carteira de crédito somaram em 2025?",
+  "rota_esperada": "buscar_tabelas",
+  "aceitas": [
+   "buscar_tabelas",
+   "fato_financeiro"
+  ]
+ },
+ {
+  "id": "N04",
+  "grupo": "teste",
+  "pergunta": "Qual foi o caixa líquido aplicado nas atividades de investimento em 2025?",
+  "rota_esperada": "buscar_tabelas",
+  "aceitas": [
+   "buscar_tabelas",
+   "fato_financeiro"
+  ]
+ },
+ {
+  "id": "N05",
+  "grupo": "teste",
+  "pergunta": "Qual o total das obrigações por empréstimos e repasses em 2025?",
+  "rota_esperada": "buscar_tabelas",
+  "aceitas": [
+   "buscar_tabelas",
+   "fato_financeiro"
+  ]
+ },
+ {
+  "id": "N06",
+  "grupo": "teste",
+  "pergunta": "Qual foi a receita total do segmento bancário em 2025 (consolidado gerencial)?",
+  "rota_esperada": "buscar_tabelas",
+  "aceitas": [
+   "buscar_tabelas",
+   "fato_financeiro",
+   "comparar_segmentos"
+  ]
+ },
+ {
+  "id": "N07",
+  "grupo": "teste",
+  "pergunta": "Qual foi o resultado de 2025 do indicador Lucro Líquido Ajustado?",
+  "rota_esperada": "buscar_tabelas",
+  "aceitas": [
+   "buscar_tabelas",
+   "fato_financeiro"
+  ]
+ },
+ {
+  "id": "N08",
+  "grupo": "teste",
+  "pergunta": "Qual foi a margem financeira bruta de 2025?",
+  "rota_esperada": "buscar_tabelas",
+  "aceitas": [
+   "buscar_tabelas",
+   "fato_financeiro"
+  ]
+ },
+ {
+  "id": "N09",
+  "grupo": "ajuste",
+  "pergunta": "Quantos funcionários o Banco do Brasil tinha em 31 de dezembro de 2025?",
+  "rota_esperada": "buscar_trechos",
+  "aceitas": [
+   "buscar_trechos",
+   "buscar_tabelas",
+   "fato_financeiro"
+  ]
+ },
+ {
+  "id": "N10",
+  "grupo": "teste",
+  "pergunta": "Qual a participação do Banco do Brasil no capital da BB Seguridade Participações S.A.?",
+  "rota_esperada": "buscar_tabelas",
+  "aceitas": [
+   "buscar_tabelas",
+   "buscar_trechos",
+   "entidade"
+  ]
+ },
+ {
+  "id": "N11",
+  "grupo": "teste",
+  "pergunta": "Qual foi o valor anual de remuneração da Diretoria Executiva em 2025?",
+  "rota_esperada": "buscar_tabelas",
+  "aceitas": [
+   "buscar_tabelas",
+   "consultar_grafo",
+   "buscar_trechos"
+  ]
+ },
+ {
+  "id": "N12",
+  "grupo": "ajuste",
+  "pergunta": "Qual o limite remanescente do capital autorizado para novas emissões de ações?",
+  "rota_esperada": "buscar_trechos",
+  "aceitas": [
+   "buscar_trechos",
+   "buscar_tabelas"
+  ]
+ },
+ {
+  "id": "N13",
+  "grupo": "teste",
+  "pergunta": "Qual foi o índice de rotatividade de empregados em 2025?",
+  "rota_esperada": "buscar_trechos",
+  "aceitas": [
+   "buscar_trechos",
+   "buscar_tabelas",
+   "fato_financeiro"
+  ]
+ },
+ {
+  "id": "N14",
+  "grupo": "ajuste",
+  "pergunta": "Quantos empregados se declararam de cor ou raça branca?",
+  "rota_esperada": "buscar_tabelas",
+  "aceitas": [
+   "buscar_tabelas",
+   "consultar_grafo"
+  ]
+ },
+ {
+  "id": "N15",
+  "grupo": "teste",
+  "pergunta": "Qual foi a receita do Banco do Brasil em 2025 e quanto dela veio do Brasil?",
+  "rota_esperada": "buscar_trechos",
+  "aceitas": [
+   "buscar_trechos",
+   "buscar_tabelas",
+   "fato_financeiro",
+   "comparar_segmentos"
+  ]
+ },
+ {
+  "id": "G01",
+  "grupo": "ajuste",
+  "pergunta": "Quantas das sociedades listadas no item de participações em sociedades têm 100% de participação do Banco do Brasil?",
+  "rota_esperada": "consultar_grafo",
+  "aceitas": [
+   "consultar_grafo"
+  ]
+ },
+ {
+  "id": "G02",
+  "grupo": "teste",
+  "pergunta": "Qual das sociedades listadas em participações tem a menor participação do Banco do Brasil?",
+  "rota_esperada": "consultar_grafo",
+  "aceitas": [
+   "consultar_grafo"
+  ]
+ },
+ {
+  "id": "G03",
+  "grupo": "teste",
+  "pergunta": "Somando Auditoria Interna e Riscos Corporativos, quantos empregados atuam nessas duas áreas?",
+  "rota_esperada": "consultar_grafo",
+  "aceitas": [
+   "consultar_grafo"
+  ]
+ },
+ {
+  "id": "G04",
+  "grupo": "ajuste",
+  "pergunta": "Em qual região do país há mais empregados que se declaram pardos?",
+  "rota_esperada": "consultar_grafo",
+  "aceitas": [
+   "consultar_grafo",
+   "comparar_segmentos"
+  ]
+ },
+ {
+  "id": "G05",
+  "grupo": "teste",
+  "pergunta": "Quantos empregados brancos há no Sudeste e no Sul somados?",
+  "rota_esperada": "consultar_grafo",
+  "aceitas": [
+   "consultar_grafo",
+   "comparar_segmentos"
+  ]
+ },
+ {
+  "id": "G06",
+  "grupo": "teste",
+  "pergunta": "Qual a diferença entre a maior e a menor remuneração individual da Diretoria Executiva em 2025?",
+  "rota_esperada": "consultar_grafo",
+  "aceitas": [
+   "consultar_grafo"
+  ]
+ },
+ {
+  "id": "G07",
+  "grupo": "teste",
+  "pergunta": "Somando a remuneração anual do Conselho de Administração e a do Conselho Fiscal em 2025, quanto dá?",
+  "rota_esperada": "consultar_grafo",
+  "aceitas": [
+   "consultar_grafo"
+  ]
+ },
+ {
+  "id": "G08",
+  "grupo": "teste",
+  "pergunta": "Quantos dos indicadores do resultado de 2025 são medidos em R$ bilhões?",
+  "rota_esperada": "consultar_grafo",
+  "aceitas": [
+   "consultar_grafo"
+  ]
+ },
+ {
+  "id": "G09",
+  "grupo": "ajuste",
+  "pergunta": "Em quais anos, entre 2023 e 2025, o lucro líquido do exercício caiu em relação ao ano anterior?",
+  "rota_esperada": "consultar_grafo",
+  "aceitas": [
+   "consultar_grafo",
+   "serie_metrica"
+  ]
+ },
+ {
+  "id": "G10",
+  "grupo": "teste",
+  "pergunta": "Em qual órgão a maior remuneração individual de 2025 foi a mais alta?",
+  "rota_esperada": "consultar_grafo",
+  "aceitas": [
+   "consultar_grafo"
+  ]
+ },
+ {
+  "id": "P01",
+  "grupo": "ajuste",
+  "pergunta": "Quais são os cinco principais fatores de risco do Banco do Brasil?",
+  "rota_esperada": "panorama",
+  "aceitas": [
+   "panorama",
+   "riscos"
+  ]
+ },
+ {
+  "id": "P02",
+  "grupo": "teste",
+  "pergunta": "Quais fatores de risco de mercado o Banco do Brasil considera?",
+  "rota_esperada": "panorama",
+  "aceitas": [
+   "panorama",
+   "riscos"
+  ]
+ },
+ {
+  "id": "P03",
+  "grupo": "teste",
+  "pergunta": "Quais são os principais mecanismos do programa de integridade do Banco para prevenir e combater a corrupção?",
+  "rota_esperada": "panorama",
+  "aceitas": [
+   "panorama",
+   "buscar_trechos"
+  ]
+ },
+ {
+  "id": "P04",
+  "grupo": "teste",
+  "pergunta": "Quais premissas das projeções de 2026 estão sob gestão da Administração e quais escapam ao seu controle?",
+  "rota_esperada": "panorama",
+  "aceitas": [
+   "panorama",
+   "buscar_trechos"
+  ]
+ },
+ {
+  "id": "P05",
+  "grupo": "ajuste",
+  "pergunta": "Que atividades o Conglomerado Banco do Brasil abrange por meio de suas entidades ligadas?",
+  "rota_esperada": "panorama",
+  "aceitas": [
+   "panorama",
+   "entidade"
+  ]
+ },
+ {
+  "id": "P06",
+  "grupo": "teste",
+  "pergunta": "Como o Banco do Brasil descreve sua atuação em sustentabilidade e na agenda ASG?",
+  "rota_esperada": "panorama",
+  "aceitas": [
+   "panorama"
+  ]
+ },
+ {
+  "id": "P07",
+  "grupo": "ajuste",
+  "pergunta": "O que explicou a elevação das receitas de juros com a carteira de crédito em 2025?",
+  "rota_esperada": "panorama",
+  "aceitas": [
+   "panorama",
+   "buscar_trechos"
+  ]
+ },
+ {
+  "id": "P08",
+  "grupo": "teste",
+  "pergunta": "Que fatores explicam o aumento do caixa líquido das atividades operacionais em 2025?",
+  "rota_esperada": "panorama",
+  "aceitas": [
+   "panorama",
+   "buscar_trechos"
+  ]
+ },
+ {
+  "id": "P09",
+  "grupo": "teste",
+  "pergunta": "Como está distribuída a posição acionária do Banco do Brasil?",
+  "rota_esperada": "panorama",
+  "aceitas": [
+   "panorama",
+   "buscar_trechos",
+   "entidade"
+  ]
+ },
+ {
+  "id": "P10",
+  "grupo": "teste",
+  "pergunta": "Como o Canal de Ética e Denúncias protege quem denuncia?",
+  "rota_esperada": "panorama",
+  "aceitas": [
+   "panorama",
+   "buscar_trechos"
+  ]
+ },
+ {
+  "id": "M01",
+  "grupo": "ajuste",
+  "pergunta": "Qual a participação do Banco do Brasil na BB Seguridade e que percentual da receita total de 2025 veio do segmento de seguridade?",
+  "rota_esperada": "varias",
+  "aceitas": []
+ },
+ {
+  "id": "M02",
+  "grupo": "ajuste",
+  "pergunta": "Quantas ações ordinárias a União Federal detém e que percentual do capital está em circulação?",
+  "rota_esperada": "varias",
+  "aceitas": []
+ },
+ {
+  "id": "M03",
+  "grupo": "teste",
+  "pergunta": "Quantos funcionários o Banco tinha ao fim de 2025 e qual foi o índice de rotatividade no exercício?",
+  "rota_esperada": "varias",
+  "aceitas": []
+ },
+ {
+  "id": "M04",
+  "grupo": "teste",
+  "pergunta": "Qual empresa audita o Banco do Brasil e que regra exige aprovação prévia para que ela preste outros serviços?",
+  "rota_esperada": "varias",
+  "aceitas": []
+ },
+ {
+  "id": "M05",
+  "grupo": "teste",
+  "pergunta": "Qual o capital autorizado do Banco, aprovado em abril de 2026, e que percentual do capital total a União detém?",
+  "rota_esperada": "varias",
+  "aceitas": []
+ },
+ {
+  "id": "F01",
+  "grupo": "ajuste",
+  "pergunta": "Olá, tudo bem?",
+  "rota_esperada": "nenhuma",
+  "aceitas": [
+   "nenhuma"
+  ]
+ },
+ {
+  "id": "F02",
+  "grupo": "teste",
+  "pergunta": "Qual foi o lucro líquido do Itaú Unibanco em 2025?",
+  "rota_esperada": "nenhuma",
+  "aceitas": [
+   "nenhuma",
+   "buscar_trechos"
+  ]
+ },
+ {
+  "id": "F03",
+  "grupo": "ajuste",
+  "pergunta": "Qual é a cotação da ação do Banco do Brasil hoje?",
+  "rota_esperada": "nenhuma",
+  "aceitas": [
+   "nenhuma",
+   "buscar_trechos"
+  ]
+ },
+ {
+  "id": "F04",
+  "grupo": "teste",
+  "pergunta": "Qual é a capital da França?",
+  "rota_esperada": "nenhuma",
+  "aceitas": [
+   "nenhuma"
+  ]
+ },
+ {
+  "id": "F05",
+  "grupo": "teste",
+  "pergunta": "Qual é o preço-alvo dos analistas para a ação do Banco do Brasil?",
+  "rota_esperada": "nenhuma",
+  "aceitas": [
+   "nenhuma",
+   "buscar_trechos"
+  ]
+ },
+ {
+  "id": "H01",
+  "grupo": "teste2",
+  "pergunta": "Em que cidade fica a sede do Banco do Brasil?",
+  "rota_esperada": "buscar_trechos",
+  "aceitas": [
+   "buscar_trechos"
+  ]
+ },
+ {
+  "id": "H02",
+  "grupo": "teste2",
+  "pergunta": "Quais são as atribuições do Comitê de Auditoria?",
+  "rota_esperada": "buscar_trechos",
+  "aceitas": [
+   "buscar_trechos",
+   "panorama"
+  ]
+ },
+ {
+  "id": "H03",
+  "grupo": "teste2",
+  "pergunta": "Qual é o prazo de mandato dos membros da Diretoria Executiva?",
+  "rota_esperada": "buscar_trechos",
+  "aceitas": [
+   "buscar_trechos",
+   "pessoas_cargos"
+  ]
+ },
+ {
+  "id": "H04",
+  "grupo": "teste2",
+  "pergunta": "Existe política de remuneração variável para os administradores?",
+  "rota_esperada": "buscar_trechos",
+  "aceitas": [
+   "buscar_trechos"
+  ]
+ },
+ {
+  "id": "H05",
+  "grupo": "teste2",
+  "pergunta": "Em que bolsa de valores as ações do Banco são negociadas?",
+  "rota_esperada": "buscar_trechos",
+  "aceitas": [
+   "buscar_trechos"
+  ]
+ },
+ {
+  "id": "H06",
+  "grupo": "teste2",
+  "pergunta": "Qual o valor das despesas de pessoal em 2025?",
+  "rota_esperada": "buscar_tabelas",
+  "aceitas": [
+   "buscar_tabelas",
+   "fato_financeiro"
+  ]
+ },
+ {
+  "id": "H07",
+  "grupo": "teste2",
+  "pergunta": "Quanto foi o total de ativos do Banco ao fim de 2025?",
+  "rota_esperada": "buscar_tabelas",
+  "aceitas": [
+   "buscar_tabelas",
+   "fato_financeiro"
+  ]
+ },
+ {
+  "id": "H08",
+  "grupo": "teste2",
+  "pergunta": "Qual o patrimônio líquido consolidado em 2025?",
+  "rota_esperada": "buscar_tabelas",
+  "aceitas": [
+   "buscar_tabelas",
+   "fato_financeiro"
+  ]
+ },
+ {
+  "id": "H09",
+  "grupo": "teste2",
+  "pergunta": "Qual órgão de administração tem a menor remuneração individual média em 2025?",
+  "rota_esperada": "consultar_grafo",
+  "aceitas": [
+   "consultar_grafo"
+  ]
+ },
+ {
+  "id": "H10",
+  "grupo": "teste2",
+  "pergunta": "Quantas subsidiárias integrais constam no quadro de participações societárias?",
+  "rota_esperada": "consultar_grafo",
+  "aceitas": [
+   "consultar_grafo"
+  ]
+ },
+ {
+  "id": "H11",
+  "grupo": "teste2",
+  "pergunta": "Qual a diferença entre o número de empregados homens e mulheres?",
+  "rota_esperada": "consultar_grafo",
+  "aceitas": [
+   "consultar_grafo"
+  ]
+ },
+ {
+  "id": "H12",
+  "grupo": "teste2",
+  "pergunta": "Em quais anos de 2023 a 2025 o patrimônio líquido aumentou em relação ao ano anterior?",
+  "rota_esperada": "consultar_grafo",
+  "aceitas": [
+   "consultar_grafo",
+   "serie_metrica"
+  ]
+ },
+ {
+  "id": "H13",
+  "grupo": "teste2",
+  "pergunta": "Como o Banco do Brasil trata a gestão de riscos climáticos?",
+  "rota_esperada": "panorama",
+  "aceitas": [
+   "panorama",
+   "riscos",
+   "buscar_trechos"
+  ]
+ },
+ {
+  "id": "H14",
+  "grupo": "teste2",
+  "pergunta": "Quais são os principais pontos da política de remuneração dos administradores?",
+  "rota_esperada": "panorama",
+  "aceitas": [
+   "panorama",
+   "buscar_trechos"
+  ]
+ },
+ {
+  "id": "H15",
+  "grupo": "teste2",
+  "pergunta": "Quais fatores de risco regulatório o Banco destaca?",
+  "rota_esperada": "panorama",
+  "aceitas": [
+   "panorama",
+   "riscos"
+  ]
+ },
+ {
+  "id": "H16",
+  "grupo": "teste2",
+  "pergunta": "Quantos membros tem o Conselho Fiscal e qual foi a receita líquida de juros em 2025?",
+  "rota_esperada": "varias",
+  "aceitas": []
+ },
+ {
+  "id": "H17",
+  "grupo": "teste2",
+  "pergunta": "Quem preside o Conselho de Administração e qual é o código de negociação das ações ordinárias?",
+  "rota_esperada": "varias",
+  "aceitas": []
+ },
+ {
+  "id": "H18",
+  "grupo": "teste2",
+  "pergunta": "Qual foi a receita do Bradesco em 2025?",
+  "rota_esperada": "nenhuma",
+  "aceitas": [
+   "nenhuma",
+   "buscar_trechos"
+  ]
+ },
+ {
+  "id": "H19",
+  "grupo": "teste2",
+  "pergunta": "Qual será a taxa Selic no fim de 2026?",
+  "rota_esperada": "nenhuma",
+  "aceitas": [
+   "nenhuma"
+  ]
+ },
+ {
+  "id": "H20",
+  "grupo": "teste2",
+  "pergunta": "Me conte uma piada sobre bancos.",
+  "rota_esperada": "nenhuma",
+  "aceitas": [
+   "nenhuma"
+  ]
+ },
+ {
+  "id": "Z01",
+  "grupo": "teste3",
+  "pergunta": "Qual é o CNPJ do Banco do Brasil?",
+  "rota_esperada": "buscar_trechos",
+  "aceitas": [
+   "buscar_trechos"
+  ]
+ },
+ {
+  "id": "Z02",
+  "grupo": "teste3",
+  "pergunta": "Quem é o auditor independente contratado pelo Banco?",
+  "rota_esperada": "buscar_trechos",
+  "aceitas": [
+   "buscar_trechos",
+   "entidade"
+  ]
+ },
+ {
+  "id": "Z03",
+  "grupo": "teste3",
+  "pergunta": "Como é feita a eleição do presidente do Conselho de Administração?",
+  "rota_esperada": "buscar_trechos",
+  "aceitas": [
+   "buscar_trechos"
+  ]
+ },
+ {
+  "id": "Z04",
+  "grupo": "teste3",
+  "pergunta": "O Banco possui política de distribuição de dividendos?",
+  "rota_esperada": "buscar_trechos",
+  "aceitas": [
+   "buscar_trechos"
+  ]
+ },
+ {
+  "id": "Z05",
+  "grupo": "teste3",
+  "pergunta": "Qual o endereço do site de relações com investidores?",
+  "rota_esperada": "buscar_trechos",
+  "aceitas": [
+   "buscar_trechos"
+  ]
+ },
+ {
+  "id": "Z06",
+  "grupo": "teste3",
+  "pergunta": "Qual o valor das provisões para créditos de liquidação duvidosa em 2025?",
+  "rota_esperada": "buscar_tabelas",
+  "aceitas": [
+   "buscar_tabelas",
+   "fato_financeiro"
+  ]
+ },
+ {
+  "id": "Z07",
+  "grupo": "teste3",
+  "pergunta": "Quanto o Banco recebeu de dividendos de coligadas em 2025?",
+  "rota_esperada": "buscar_tabelas",
+  "aceitas": [
+   "buscar_tabelas",
+   "fato_financeiro"
+  ]
+ },
+ {
+  "id": "Z08",
+  "grupo": "teste3",
+  "pergunta": "Qual foi o retorno sobre o patrimônio líquido em 2025?",
+  "rota_esperada": "fato_financeiro",
+  "aceitas": [
+   "fato_financeiro",
+   "buscar_tabelas",
+   "buscar_trechos"
+  ]
+ },
+ {
+  "id": "Z09",
+  "grupo": "teste3",
+  "pergunta": "Qual a média de remuneração por membro da Diretoria Executiva em 2025?",
+  "rota_esperada": "consultar_grafo",
+  "aceitas": [
+   "consultar_grafo"
+  ]
+ },
+ {
+  "id": "Z10",
+  "grupo": "teste3",
+  "pergunta": "Quantas sociedades do quadro de participações têm menos de 50% de participação do Banco?",
+  "rota_esperada": "consultar_grafo",
+  "aceitas": [
+   "consultar_grafo"
+  ]
+ },
+ {
+  "id": "Z11",
+  "grupo": "teste3",
+  "pergunta": "Qual a diferença entre a maior e a menor participação do Banco entre as sociedades listadas?",
+  "rota_esperada": "consultar_grafo",
+  "aceitas": [
+   "consultar_grafo"
+  ]
+ },
+ {
+  "id": "Z12",
+  "grupo": "teste3",
+  "pergunta": "Quantos empregados há no total, somando as regiões Norte e Nordeste?",
+  "rota_esperada": "consultar_grafo",
+  "aceitas": [
+   "consultar_grafo",
+   "comparar_segmentos"
+  ]
+ },
+ {
+  "id": "Z13",
+  "grupo": "teste3",
+  "pergunta": "Quais são as principais práticas de governança corporativa do Banco?",
+  "rota_esperada": "panorama",
+  "aceitas": [
+   "panorama",
+   "buscar_trechos"
+  ]
+ },
+ {
+  "id": "Z14",
+  "grupo": "teste3",
+  "pergunta": "Como o Banco gerencia o risco de crédito?",
+  "rota_esperada": "panorama",
+  "aceitas": [
+   "panorama",
+   "riscos",
+   "buscar_trechos"
+  ]
+ },
+ {
+  "id": "Z15",
+  "grupo": "teste3",
+  "pergunta": "O que motivou a variação do resultado de 2025 em relação a 2024?",
+  "rota_esperada": "panorama",
+  "aceitas": [
+   "panorama",
+   "buscar_trechos"
+  ]
+ },
+ {
+  "id": "Z16",
+  "grupo": "teste3",
+  "pergunta": "Qual é o CNPJ do Banco e quantos empregados ele tinha ao fim de 2025?",
+  "rota_esperada": "varias",
+  "aceitas": []
+ },
+ {
+  "id": "Z17",
+  "grupo": "teste3",
+  "pergunta": "Quem é a Diretora Presidente do Banco e qual é o valor do capital social?",
+  "rota_esperada": "varias",
+  "aceitas": []
+ },
+ {
+  "id": "Z18",
+  "grupo": "teste3",
+  "pergunta": "Qual é a fórmula de Bhaskara?",
+  "rota_esperada": "nenhuma",
+  "aceitas": [
+   "nenhuma"
+  ]
+ },
+ {
+  "id": "Z19",
+  "grupo": "teste3",
+  "pergunta": "Quanto o Santander lucrou em 2025?",
+  "rota_esperada": "nenhuma",
+  "aceitas": [
+   "nenhuma",
+   "buscar_trechos"
+  ]
+ },
+ {
+  "id": "Z20",
+  "grupo": "teste3",
+  "pergunta": "Você acha que devo comprar ações do Banco do Brasil?",
+  "rota_esperada": "nenhuma",
+  "aceitas": [
+   "nenhuma"
+  ]
+ }
+]
