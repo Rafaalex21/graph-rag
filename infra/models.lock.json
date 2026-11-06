@@ -66,6 +66,15 @@
       "arquitetura": "gemma4"
     },
     {
+      "papel": "text2cypher-especialista",
+      "repo": "mradermacher/text-to-cypher-Gemma-3-4B-Instruct-2025.04.0-GGUF",
+      "arquivo": "text-to-cypher-Gemma-3-4B-Instruct-2025.04.0.Q8_0.gguf",
+      "quantizacao": "Q8_0",
+      "bytes": 4130403040,
+      "sha256": "7acb37df4bd553835dc1982b30b3d5bb87e4ffa101fffbc2978bdbb2d2580292",
+      "arquitetura": "gemma3"
+    },
+    {
       "papel": "embeddings",
       "repo": "Qwen/Qwen3-Embedding-0.6B-GGUF",
       "arquivo": "Qwen3-Embedding-0.6B-Q8_0.gguf",

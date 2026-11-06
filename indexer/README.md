@@ -322,3 +322,12 @@ uv run pytest tests/test_text2cypher_grafo.py -v   # exemplos e gabaritos contra
 uv run pytest tests/test_guarda_cypher.py tests/test_guarda_cypher_grafo.py -v
 ```
 
+### Comparar outro LLM (F6.6, ADR-051)
+
+`medir` aceita outro modelo do llama-swap (`--llm`), outro formato de prompt (`--prompt completo|nativo|compacto`) e `--aquecer`, que mede a carga do modelo antes da primeira pergunta. `completo` é o prompt de 4 seções da F6.4; `nativo` e `compacto` são o formato de treino do especialista Gemma 3 4B (uma mensagem de usuário, sem `system`). O resumo traz acurácia por grupo, `rodaram` (consultas que ao menos executaram), `erros` por tipo e a latência com a primeira pergunta à parte. O resultado do especialista (0 a 1 de 15 contra 13 de 15 do Qwen) está no ADR-051.
+
+```powershell
+uv run python -m indexer.text2cypher medir --nome f66-especialista-compacto --llm gemma3-4b-text2cypher --prompt compacto
+uv run pytest tests/test_text2cypher_especialista.py -v
+```
+

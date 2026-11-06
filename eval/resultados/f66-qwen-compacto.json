@@ -1,0 +1,250 @@
+{
+  "modelo": "qwen36-35b-a3b",
+  "prompt": "compacto",
+  "carga_ms": null,
+  "teste": {
+    "n": 10,
+    "acertos": 0,
+    "acuracia": 0.0,
+    "rodaram": 8,
+    "taxa_rodou": 0.8
+  },
+  "ajuste": {
+    "n": 5,
+    "acertos": 0,
+    "acuracia": 0.0,
+    "rodaram": 4,
+    "taxa_rodou": 0.8
+  },
+  "geral": {
+    "n": 15,
+    "acertos": 0,
+    "acuracia": 0.0,
+    "rodaram": 12,
+    "taxa_rodou": 0.8
+  },
+  "erros": {
+    "bloqueada_pela_guarda": 3
+  },
+  "latencia_ms": {
+    "primeira": 3798,
+    "mediana": 3366,
+    "maximo": 17929,
+    "mediana_com_primeira": 3569,
+    "llm_mediana": 3327
+  },
+  "avisos_esquema": [],
+  "prompt_chars": 38472,
+  "casos": [
+    {
+      "id": "AG01",
+      "grupo": "teste",
+      "ok": false,
+      "erro": null,
+      "linhas": 1,
+      "latencia_ms": {
+        "llm": 3761,
+        "banco": 34,
+        "total": 3798
+      },
+      "bloqueada": null,
+      "corrigida": false
+    },
+    {
+      "id": "AG02",
+      "grupo": "teste",
+      "ok": false,
+      "erro": null,
+      "linhas": 1,
+      "latencia_ms": {
+        "llm": 2717,
+        "banco": 36,
+        "total": 2757
+      },
+      "bloqueada": null,
+      "corrigida": false
+    },
+    {
+      "id": "AG03",
+      "grupo": "teste",
+      "ok": false,
+      "erro": null,
+      "linhas": 1,
+      "latencia_ms": {
+        "llm": 2510,
+        "banco": 36,
+        "total": 2550
+      },
+      "bloqueada": null,
+      "corrigida": false
+    },
+    {
+      "id": "AG04",
+      "grupo": "ajuste",
+      "ok": false,
+      "erro": null,
+      "linhas": 1,
+      "latencia_ms": {
+        "llm": 2679,
+        "banco": 34,
+        "total": 2718
+      },
+      "bloqueada": null,
+      "corrigida": false
+    },
+    {
+      "id": "AG05",
+      "grupo": "teste",
+      "ok": false,
+      "erro": null,
+      "linhas": 1,
+      "latencia_ms": {
+        "llm": 2595,
+        "banco": 33,
+        "total": 2631
+      },
+      "bloqueada": null,
+      "corrigida": false
+    },
+    {
+      "id": "AG06",
+      "grupo": "ajuste",
+      "ok": false,
+      "erro": "bloqueada_pela_guarda: limit_invalido",
+      "linhas": 0,
+      "latencia_ms": {
+        "llm": 3143,
+        "banco": 0,
+        "total": 3148
+      },
+      "bloqueada": "limit_invalido",
+      "corrigida": false
+    },
+    {
+      "id": "AG07",
+      "grupo": "teste",
+      "ok": false,
+      "erro": null,
+      "linhas": 0,
+      "latencia_ms": {
+        "llm": 3779,
+        "banco": 48,
+        "total": 3831
+      },
+      "bloqueada": null,
+      "corrigida": false
+    },
+    {
+      "id": "AG08",
+      "grupo": "teste",
+      "ok": false,
+      "erro": null,
+      "linhas": 0,
+      "latencia_ms": {
+        "llm": 3853,
+        "banco": 48,
+        "total": 3906
+      },
+      "bloqueada": null,
+      "corrigida": false
+    },
+    {
+      "id": "AG09",
+      "grupo": "teste",
+      "ok": false,
+      "erro": null,
+      "linhas": 1,
+      "latencia_ms": {
+        "llm": 3132,
+        "banco": 28,
+        "total": 3164
+      },
+      "bloqueada": null,
+      "corrigida": false
+    },
+    {
+      "id": "AG10",
+      "grupo": "ajuste",
+      "ok": false,
+      "erro": null,
+      "linhas": 1,
+      "latencia_ms": {
+        "llm": 12037,
+        "banco": 85,
+        "total": 12125
+      },
+      "bloqueada": null,
+      "corrigida": false
+    },
+    {
+      "id": "AG11",
+      "grupo": "teste",
+      "ok": false,
+      "erro": "bloqueada_pela_guarda: limit_invalido",
+      "linhas": 0,
+      "latencia_ms": {
+        "llm": 3759,
+        "banco": 0,
+        "total": 3762
+      },
+      "bloqueada": "limit_invalido",
+      "corrigida": false
+    },
+    {
+      "id": "AG12",
+      "grupo": "teste",
+      "ok": false,
+      "erro": "bloqueada_pela_guarda: incompleta",
+      "linhas": 0,
+      "latencia_ms": {
+        "llm": 17925,
+        "banco": 1,
+        "total": 17929
+      },
+      "bloqueada": "incompleta",
+      "corrigida": false
+    },
+    {
+      "id": "AG13",
+      "grupo": "ajuste",
+      "ok": false,
+      "erro": null,
+      "linhas": 0,
+      "latencia_ms": {
+        "llm": 5281,
+        "banco": 57,
+        "total": 5343
+      },
+      "bloqueada": null,
+      "corrigida": false
+    },
+    {
+      "id": "AG14",
+      "grupo": "teste",
+      "ok": false,
+      "erro": null,
+      "linhas": 1,
+      "latencia_ms": {
+        "llm": 2522,
+        "banco": 30,
+        "total": 2558
+      },
+      "bloqueada": null,
+      "corrigida": false
+    },
+    {
+      "id": "AG15",
+      "grupo": "ajuste",
+      "ok": false,
+      "erro": null,
+      "linhas": 0,
+      "latencia_ms": {
+        "llm": 3511,
+        "banco": 55,
+        "total": 3569
+      },
+      "bloqueada": null,
+      "corrigida": false
+    }
+  ]
+}

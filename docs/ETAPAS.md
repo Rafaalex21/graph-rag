@@ -278,9 +278,11 @@
   - depende: F6.4
   - resultado: ADR-050; `indexer.guarda_cypher` (texto sem comentários, strings mascaradas, só leitura, sem procedimentos, `LIMIT 100` injetado ou reduzido; plano do `EXPLAIN` sem operador de escrita; sessão `READ`; 5 s; uma autocorreção para erro do banco ou nome inexistente, nunca para violação da guarda); **26 de 26 entradas maliciosas bloqueadas**, e contra o grafo real nós, relações e soma de `f.value` iguais antes e depois; 0 bloqueios indevidos nos 11 exemplos e nas 15 perguntas (13/15 e 9/10 no teste, como na F6.4, mediana de 3,0 s); 886 testes
   - nota: com 10 perguntas de injeção o Qwen **obedeceu em 4** (gerou `DETACH DELETE`, `CREATE`, `SET`, `runWrite`) e a guarda bloqueou as 4; o servidor, sozinho, também recusaria a escrita (sessão `READ`) mas deixaria passar `LOAD CSV`/`apoc.load.json` e o custo. A guarda protege o banco, não a resposta: leitura que devolve número errado passa (F7.4). A autocorreção não foi exercitada pelo LLM real nas 15 perguntas (testes com banco falso e grafo real)
-- [ ] **F6.6** Comparar o especialista Text2Cypher Gemma 3 4B com o LLM principal
+- [x] **F6.6** Comparar o especialista Text2Cypher Gemma 3 4B com o LLM principal
   - aceite: ADR com acurácia de execução e latência dos dois
   - depende: F6.4
+  - resultado: ADR-051; Gemma 3 4B Q8_0 (GGUF da comunidade, 4,1 GB, SHA-256 conferido com o do Hugging Face, perfil `especialista` no llama-swap) medido com 3 prompts nas 15 perguntas de `golden_agregacao.csv`, mesma guarda e mesma medida: **0/15 (`completo`, o do Qwen), 0/15 (`nativo`), 1/15 (`compacto`)** contra **13/15 do Qwen3.6-35B-A3B (9/10 no teste)**; mediana de 0,95 a 1,4 s contra 2,85 s, carga do modelo 4,5 s contra 14,2 s. Decisão: o Text2Cypher continua no Qwen; 913 testes (27 novos)
+  - nota: o especialista ignora o esquema (9 a 14 das 15 consultas nem citam `FinancialFact`) e **erra em silêncio** (11 a 14 das 15 rodam e devolvem vazio ou zero), então nem serve de primeira tentativa com fallback para o Qwen. Controle: o Qwen com o prompt compacto também cai para 0/15; o que separa os dois é seguir o prompt longo e específico do grafo. O especialista devolve `\n` literal entre as cláusulas (tratado em `extrair_cypher`). Limites: n = 15, prompt iterado só para o Qwen, nenhum ajuste fino do especialista
 
 ## F7 · Agente e API
 > objetivo: Orquestrar reescrita, rota, ferramentas, crítica e redação — e transmitir cada passo à interface.

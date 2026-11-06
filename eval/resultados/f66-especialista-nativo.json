@@ -1,0 +1,251 @@
+{
+  "modelo": "gemma3-4b-text2cypher",
+  "prompt": "nativo",
+  "carga_ms": 279,
+  "teste": {
+    "n": 10,
+    "acertos": 0,
+    "acuracia": 0.0,
+    "rodaram": 8,
+    "taxa_rodou": 0.8
+  },
+  "ajuste": {
+    "n": 5,
+    "acertos": 0,
+    "acuracia": 0.0,
+    "rodaram": 3,
+    "taxa_rodou": 0.6
+  },
+  "geral": {
+    "n": 15,
+    "acertos": 0,
+    "acuracia": 0.0,
+    "rodaram": 11,
+    "taxa_rodou": 0.733
+  },
+  "erros": {
+    "bloqueada_pela_guarda": 1,
+    "falha_na_execucao": 3
+  },
+  "latencia_ms": {
+    "primeira": 877,
+    "mediana": 1386,
+    "maximo": 5650,
+    "mediana_com_primeira": 1371,
+    "llm_mediana": 908
+  },
+  "avisos_esquema": [],
+  "prompt_chars": 38472,
+  "casos": [
+    {
+      "id": "AG01",
+      "grupo": "teste",
+      "ok": false,
+      "erro": null,
+      "linhas": 1,
+      "latencia_ms": {
+        "llm": 705,
+        "banco": 168,
+        "total": 877
+      },
+      "bloqueada": null,
+      "corrigida": false
+    },
+    {
+      "id": "AG02",
+      "grupo": "teste",
+      "ok": false,
+      "erro": null,
+      "linhas": 0,
+      "latencia_ms": {
+        "llm": 1747,
+        "banco": 201,
+        "total": 1951
+      },
+      "bloqueada": null,
+      "corrigida": false
+    },
+    {
+      "id": "AG03",
+      "grupo": "teste",
+      "ok": false,
+      "erro": null,
+      "linhas": 1,
+      "latencia_ms": {
+        "llm": 427,
+        "banco": 532,
+        "total": 963
+      },
+      "bloqueada": null,
+      "corrigida": true
+    },
+    {
+      "id": "AG04",
+      "grupo": "ajuste",
+      "ok": false,
+      "erro": null,
+      "linhas": 1,
+      "latencia_ms": {
+        "llm": 489,
+        "banco": 585,
+        "total": 1079
+      },
+      "bloqueada": null,
+      "corrigida": true
+    },
+    {
+      "id": "AG05",
+      "grupo": "teste",
+      "ok": false,
+      "erro": null,
+      "linhas": 0,
+      "latencia_ms": {
+        "llm": 1437,
+        "banco": 1489,
+        "total": 2930
+      },
+      "bloqueada": null,
+      "corrigida": true
+    },
+    {
+      "id": "AG06",
+      "grupo": "ajuste",
+      "ok": false,
+      "erro": "bloqueada_pela_guarda: incompleta",
+      "linhas": 0,
+      "latencia_ms": {
+        "llm": 5646,
+        "banco": 1,
+        "total": 5650
+      },
+      "bloqueada": "incompleta",
+      "corrigida": false
+    },
+    {
+      "id": "AG07",
+      "grupo": "teste",
+      "ok": false,
+      "erro": null,
+      "linhas": 1,
+      "latencia_ms": {
+        "llm": 871,
+        "banco": 116,
+        "total": 990
+      },
+      "bloqueada": null,
+      "corrigida": false
+    },
+    {
+      "id": "AG08",
+      "grupo": "teste",
+      "ok": false,
+      "erro": "falha_na_execucao: {neo4j_code: Neo.ClientError.Statement.SyntaxError} {message: Variable `vigilancia_e_limpeza` not defined (line 1, column 270 (offset: 269))\r\n\"EXPLAIN MATCH (t1:Terceirizado) WHERE t1.atividade_desemp",
+      "linhas": 0,
+      "latencia_ms": {
+        "llm": 1050,
+        "banco": 1050,
+        "total": 2104
+      },
+      "bloqueada": null,
+      "corrigida": true
+    },
+    {
+      "id": "AG09",
+      "grupo": "teste",
+      "ok": false,
+      "erro": null,
+      "linhas": 0,
+      "latencia_ms": {
+        "llm": 631,
+        "banco": 769,
+        "total": 1402
+      },
+      "bloqueada": null,
+      "corrigida": true
+    },
+    {
+      "id": "AG10",
+      "grupo": "ajuste",
+      "ok": false,
+      "erro": null,
+      "linhas": 1,
+      "latencia_ms": {
+        "llm": 597,
+        "banco": 62,
+        "total": 662
+      },
+      "bloqueada": null,
+      "corrigida": false
+    },
+    {
+      "id": "AG11",
+      "grupo": "teste",
+      "ok": false,
+      "erro": null,
+      "linhas": 0,
+      "latencia_ms": {
+        "llm": 608,
+        "banco": 760,
+        "total": 1371
+      },
+      "bloqueada": null,
+      "corrigida": true
+    },
+    {
+      "id": "AG12",
+      "grupo": "teste",
+      "ok": false,
+      "erro": "falha_na_execucao: {neo4j_code: Neo.ClientError.Statement.SyntaxError} {message: All sub queries in an UNION must have the same return column names (line 1, column 128 (offset: 127))\r\n\"EXPLAIN MATCH (p:Person) WITH p.ty",
+      "linhas": 0,
+      "latencia_ms": {
+        "llm": 944,
+        "banco": 987,
+        "total": 1935
+      },
+      "bloqueada": null,
+      "corrigida": true
+    },
+    {
+      "id": "AG13",
+      "grupo": "ajuste",
+      "ok": false,
+      "erro": null,
+      "linhas": 0,
+      "latencia_ms": {
+        "llm": 1298,
+        "banco": 66,
+        "total": 1366
+      },
+      "bloqueada": null,
+      "corrigida": false
+    },
+    {
+      "id": "AG14",
+      "grupo": "teste",
+      "ok": false,
+      "erro": null,
+      "linhas": 1,
+      "latencia_ms": {
+        "llm": 781,
+        "banco": 62,
+        "total": 847
+      },
+      "bloqueada": null,
+      "corrigida": false
+    },
+    {
+      "id": "AG15",
+      "grupo": "ajuste",
+      "ok": false,
+      "erro": "falha_na_execucao: {neo4j_code: Neo.ClientError.Statement.SyntaxError} {message: Aggregation column contains implicit grouping expressions. For example, in 'RETURN n.a, n.a + n.b + count(*)' the aggregation expression '",
+      "linhas": 0,
+      "latencia_ms": {
+        "llm": 1338,
+        "banco": 1465,
+        "total": 2806
+      },
+      "bloqueada": null,
+      "corrigida": true
+    }
+  ]
+}

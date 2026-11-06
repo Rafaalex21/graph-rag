@@ -384,6 +384,80 @@ def montar_prompt(
     return [{"role": "system", "content": sistema}, {"role": "user", "content": usuario}]
 
 
+INSTRUCAO_ESPECIALISTA = (
+    "Generate Cypher statement to query a graph database. "
+    "Use only the provided relationship types and properties in the schema."
+)  # o formato de treino do neo4j/text-to-cypher-Gemma-3-4B (F6.6): sem papel system, em inglês
+
+
+def montar_prompt_especialista(
+    pergunta: str, esquema_txt: str, candidatos: list[str] | None = None
+) -> list[dict]:
+    """O prompt no formato em que o especialista foi treinado: uma mensagem de usuário com a instrução,
+    `Schema:`, `Question:` e `Cypher output:`. Leva o mesmo esquema e os mesmos rótulos candidatos que o
+    Qwen recebe; não leva terminologia, regras nem exemplos (o que o formato nativo não previa)."""
+    partes = [INSTRUCAO_ESPECIALISTA, f"Schema: {esquema_txt}"]
+    if candidatos:
+        partes.append(
+            "Existing values of f.metric closest to the question:\n" + "\n".join(f"- {r}" for r in candidatos)
+        )
+    partes.append(f"Question: {pergunta.strip()}")
+    partes.append("Cypher output:")
+    return [{"role": "user", "content": "\n".join(partes)}]
+
+
+VARIANTES = ("completo", "nativo", "compacto")
+_SECOES_LONGAS = ("Rótulos existentes em FinancialFact.metric", "Exemplos de recorte", "Valores de exemplo")
+
+
+def compactar_esquema(esquema_txt: str) -> str:
+    """Só a estrutura (nós, relações, `Entidade`): corta a partir da primeira seção longa (a lista dos 687
+    rótulos de `f.metric`, os recortes e os valores de exemplo). O especialista foi treinado com esquemas
+    desse tamanho; os rótulos que importam voltam como candidatos da pergunta."""
+    linhas = esquema_txt.split("\n")
+    for i, linha in enumerate(linhas):
+        if linha.startswith(_SECOES_LONGAS):
+            return "\n".join(linhas[:i])
+    return esquema_txt
+
+
+def montar_mensagens(
+    variante: str,
+    pergunta: str,
+    esquema_txt: str,
+    terminologia_txt: str,
+    exemplos: list[dict],
+    candidatos: list[str] | None = None,
+) -> list[dict]:
+    """`completo` é o prompt de 4 seções da F6.4 (o mesmo para qualquer LLM); `nativo` é o formato do
+    especialista com o mesmo esquema longo; `compacto` é o formato do especialista com a estrutura só."""
+    if variante == "completo":
+        return montar_prompt(pergunta, esquema_txt, terminologia_txt, exemplos, candidatos)
+    if variante == "nativo":
+        return montar_prompt_especialista(pergunta, esquema_txt, candidatos)
+    if variante == "compacto":
+        return montar_prompt_especialista(pergunta, compactar_esquema(esquema_txt), candidatos)
+    raise ValueError(f"variante de prompt desconhecida: {variante!r} (use {', '.join(VARIANTES)})")
+
+
+def aquecer(base: str, modelo: str, timeout: int = 300) -> int:
+    """Pede 1 token ao modelo e devolve os ms: com o llama-swap, é o tempo de carregar o modelo (a primeira
+    chamada depois de trocar de perfil). Propaga a falha do servidor: um erro não é uma medida."""
+    import urllib.request
+
+    corpo = {"model": modelo, "messages": [{"role": "user", "content": "ok"}], "max_tokens": 1,
+             "temperature": 0.0}  # fmt: skip
+    req = urllib.request.Request(
+        f"{base}/v1/chat/completions",
+        data=json.dumps(corpo).encode("utf-8"),
+        headers={"Content-Type": "application/json; charset=utf-8"},
+    )
+    t0 = time.perf_counter()
+    with urllib.request.urlopen(req, timeout=timeout) as r:
+        r.read()
+    return round((time.perf_counter() - t0) * 1000)
+
+
 def chat_cypher(base: str, modelo: str = "qwen36-35b-a3b", timeout: int = 120) -> GeraCypher:
     """Mensagens → texto pelo `/v1/chat/completions`: temperatura 0 (a mesma pergunta dá a mesma consulta),
     sem raciocínio, até 600 tokens (uma agregação com CASE cabe em ~250)."""
@@ -420,6 +494,37 @@ _INICIO = re.compile(
 )
 
 
+_CLAUSULA = re.compile(
+    r"\s*(?:MATCH|OPTIONAL|WITH|WHERE|RETURN|ORDER|SKIP|LIMIT|UNWIND|UNION|CALL)\b", re.IGNORECASE
+)
+
+
+def _quebras_literais(texto: str) -> str:
+    """`\\n`, `\\r` e `\\t` escritos com barra, fora de string, viram espaço. Cypher não tem essa sequência
+    fora de aspas; o especialista (treinado com Cypher dentro de JSON) a devolve entre as cláusulas."""
+    saida: list[str] = []
+    aspas, i = "", 0
+    while i < len(texto):
+        c = texto[i]
+        if aspas:
+            saida.append(c)
+            if c == "\\" and i + 1 < len(texto):
+                saida.append(texto[i + 1])
+                i += 1
+            elif c == aspas:
+                aspas = ""
+        elif c in "'\"`":
+            aspas = c
+            saida.append(c)
+        elif c == "\\" and texto[i + 1 : i + 2] in ("n", "r", "t"):
+            saida.append(" ")
+            i += 1
+        else:
+            saida.append(c)
+        i += 1
+    return "".join(saida)
+
+
 def extrair_cypher(texto: str) -> str:
     """A primeira consulta do texto: sem cerca ```, sem prosa antes, sem `Cypher:`, sem o que vem depois do
     primeiro `;` fora de aspas. `ValueError` quando não há Cypher."""
@@ -429,11 +534,18 @@ def extrair_cypher(texto: str) -> str:
         t = m.group(1).strip()
     elif t.startswith("```"):
         t = t.strip("`").strip()
-    t = re.sub(r"^\s*cypher\s*:\s*", "", t, flags=re.IGNORECASE)
+    t = re.sub(r"^\s*cypher(?:\s+output)?\s*:\s*", "", t, flags=re.IGNORECASE)
+    t = _quebras_literais(t)
     achado = _INICIO.search(t)
     if not achado:
         raise ValueError("sem_cypher")
     t = t[achado.start(1) :]
+    # prosa depois de uma linha em branco ("Explanation: ...") não é Cypher; uma consulta com linha em branco
+    # no meio continua se o que vem depois abre com uma cláusula
+    for quebra in re.finditer(r"\n[ \t]*\n", t):
+        if not _CLAUSULA.match(t[quebra.end() :]):
+            t = t[: quebra.start()]
+            break
     aspas = ""
     for i, c in enumerate(t):
         if aspas:
@@ -523,8 +635,10 @@ def perguntar(
     timeout: float = TIMEOUT_S,
     rotulos: list[str] | None = None,
     autocorrigir: bool = True,
+    prompt: str = "completo",
 ) -> dict:
-    """Pergunta → Cypher → guarda → linhas. Nunca levanta: falhas voltam em `erro`. `rotulos` são todos os
+    """Pergunta → Cypher → guarda → linhas. Nunca levanta: falhas voltam em `erro`. `prompt` escolhe a
+    variante (`completo` ou `nativo`, a do especialista, F6.6). `rotulos` são todos os
     `f.metric` do grafo; deles saem os candidatos mais parecidos com a pergunta. A guarda (F6.5) valida o
     texto, olha o plano do `EXPLAIN` e só então executa; erro do banco ou nome inexistente tem uma
     autocorreção; violação da guarda não tem (`erro = "bloqueada_pela_guarda: ..."`)."""
@@ -535,6 +649,9 @@ def perguntar(
     }  # fmt: skip
     if not (pergunta or "").strip():
         saida["erro"] = "pergunta_vazia"
+        return saida
+    if prompt not in VARIANTES:
+        saida["erro"] = f"prompt_invalido: {prompt!r} (use {', '.join(VARIANTES)})"
         return saida
     if esquema_texto is None:
         esquema, saida["avisos_esquema"] = descobrir_esquema(driver, banco)
@@ -547,7 +664,7 @@ def perguntar(
     if exemplos is None:
         exemplos = carregar_exemplos()
     candidatos = rotulos_candidatos(pergunta, rotulos or [])
-    mensagens = montar_prompt(pergunta, esquema_texto, terminologia_texto, exemplos, candidatos)
+    mensagens = montar_mensagens(prompt, pergunta, esquema_texto, terminologia_texto, exemplos, candidatos)
     t1 = time.perf_counter()
     try:
         bruto = gera(mensagens)
@@ -679,25 +796,53 @@ def medir(driver: Any, gera: GeraCypher, casos: list[dict], banco: str = "neo4j"
             "bloqueada": r["guarda"]["bloqueada"], "corrigida": r["guarda"]["corrigida"],
         })  # fmt: skip
 
-    def taxa(sel: list[dict]) -> dict:
-        return {
-            "n": len(sel),
-            "acertos": sum(x["ok"] for x in sel),
-            "acuracia": round(sum(x["ok"] for x in sel) / max(1, len(sel)), 3),
-        }
+    return {
+        **resumir_casos(por_caso),
+        "avisos_esquema": avisos,
+        "prompt_chars": len(esquema_txt) + len(termos),
+        "casos": por_caso,
+    }
 
-    tempos = [x["latencia_ms"].get("total", 0) for x in por_caso]
+
+def resumir_casos(por_caso: list[dict]) -> dict:
+    """Acurácia de execução por grupo, quantas consultas ao menos rodaram, os erros por tipo e a latência.
+    A primeira chamada fica à parte: depois de trocar de perfil ela leva a carga do modelo, e misturá-la à
+    mediana esconderia o tempo de regime."""
+
+    def taxa(sel: list[dict]) -> dict:
+        n, rodaram = len(sel), sum(x["erro"] is None for x in sel)
+        acertos = sum(x["ok"] for x in sel)
+        return {
+            "n": n, "acertos": acertos, "acuracia": round(acertos / max(1, n), 3),
+            "rodaram": rodaram, "taxa_rodou": round(rodaram / max(1, n), 3),
+        }  # fmt: skip
+
+    erros: dict[str, int] = {}
+    for x in por_caso:
+        if x["erro"]:
+            tipo = x["erro"].split(":")[0]
+            erros[tipo] = erros.get(tipo, 0) + 1
+
+    def total(x: dict) -> int:
+        return x["latencia_ms"].get("total", x["latencia_ms"].get("llm", 0))
+
+    tempos = [total(x) for x in por_caso]
+    demais = por_caso[1:] or por_caso
+    t_demais = [total(x) for x in demais]
     return {
         "teste": taxa([x for x in por_caso if x["grupo"] == "teste"]),
         "ajuste": taxa([x for x in por_caso if x["grupo"] == "ajuste"]),
         "geral": taxa(por_caso),
+        "erros": erros,
         "latencia_ms": {
-            "mediana": round(statistics.median(tempos)) if tempos else 0,
-            "maximo": max(tempos, default=0),
+            "primeira": tempos[0] if tempos else 0,
+            "mediana": round(statistics.median(t_demais)) if t_demais else 0,
+            "maximo": max(t_demais, default=0),
+            "mediana_com_primeira": round(statistics.median(tempos)) if tempos else 0,
+            "llm_mediana": round(statistics.median(x["latencia_ms"].get("llm", 0) for x in demais))
+            if demais
+            else 0,
         },
-        "avisos_esquema": avisos,
-        "prompt_chars": len(esquema_txt) + len(termos),
-        "casos": por_caso,
     }
 
 
@@ -712,9 +857,11 @@ def main() -> None:  # pragma: no cover - orquestração de CLI; as peças acima
     m = sub.add_parser("medir")
     m.add_argument("--nome", default="f64")
     m.add_argument("--grupo", choices=["ajuste", "teste"], help="só um grupo")
+    m.add_argument("--aquecer", action="store_true", help="mede a carga do modelo antes da 1ª pergunta")
     for s in (p, m):
         s.add_argument("--swap", default="http://127.0.0.1:8080")
         s.add_argument("--llm", default="qwen36-35b-a3b")
+        s.add_argument("--prompt", choices=VARIANTES, default="completo")
         s.add_argument("--raiz", type=Path, default=RAIZ)
         s.add_argument("--banco", default="neo4j")
     a = ap.parse_args()
@@ -731,13 +878,15 @@ def main() -> None:  # pragma: no cover - orquestração de CLI; as peças acima
                     a.pergunta, formatar_esquema(esquema), terminologia(ler_catalogo()), carregar_exemplos()
                 )
                 print(msgs[0]["content"])
-            r = perguntar(driver, a.pergunta, chat, banco=a.banco)
+            r = perguntar(driver, a.pergunta, chat, banco=a.banco, prompt=a.prompt)
             print(json.dumps(r, ensure_ascii=False, indent=2, default=str))
             return
         casos = ler_golden(a.raiz / "eval" / "golden_agregacao.csv")
         if a.grupo:
             casos = [c for c in casos if c["grupo"] == a.grupo]
-        r = medir(driver, chat, casos, a.banco)
+        carga = aquecer(a.swap, a.llm) if a.aquecer else None
+        r = medir(driver, chat, casos, a.banco, prompt=a.prompt)
+        r["modelo"], r["prompt"], r["carga_ms"] = a.llm, a.prompt, carga
         detalhes = a.raiz / "data" / "avaliacao"
         detalhes.mkdir(parents=True, exist_ok=True)
         (detalhes / f"{a.nome}-detalhes.json").write_text(
@@ -745,8 +894,10 @@ def main() -> None:  # pragma: no cover - orquestração de CLI; as peças acima
         )
         # o arquivo versionado leva só os números: nada do documento (ADR-009)
         resumo = {
-            k: r[k] for k in ("teste", "ajuste", "geral", "latencia_ms", "avisos_esquema", "prompt_chars")
-        }
+            k: r[k]
+            for k in ("modelo", "prompt", "carga_ms", "teste", "ajuste", "geral", "erros", "latencia_ms",
+                      "avisos_esquema", "prompt_chars")
+        }  # fmt: skip
         resumo["casos"] = [
             {
                 k: x[k]

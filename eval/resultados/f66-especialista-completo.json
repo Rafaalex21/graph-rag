@@ -1,0 +1,251 @@
+{
+  "modelo": "gemma3-4b-text2cypher",
+  "prompt": "completo",
+  "carga_ms": null,
+  "teste": {
+    "n": 10,
+    "acertos": 0,
+    "acuracia": 0.0,
+    "rodaram": 9,
+    "taxa_rodou": 0.9
+  },
+  "ajuste": {
+    "n": 5,
+    "acertos": 0,
+    "acuracia": 0.0,
+    "rodaram": 4,
+    "taxa_rodou": 0.8
+  },
+  "geral": {
+    "n": 15,
+    "acertos": 0,
+    "acuracia": 0.0,
+    "rodaram": 13,
+    "taxa_rodou": 0.867
+  },
+  "erros": {
+    "bloqueada_pela_guarda": 1,
+    "falha_na_execucao": 1
+  },
+  "latencia_ms": {
+    "primeira": 2900,
+    "mediana": 1037,
+    "maximo": 3212,
+    "mediana_com_primeira": 1062,
+    "llm_mediana": 946
+  },
+  "avisos_esquema": [],
+  "prompt_chars": 38472,
+  "casos": [
+    {
+      "id": "AG01",
+      "grupo": "teste",
+      "ok": false,
+      "erro": null,
+      "linhas": 1,
+      "latencia_ms": {
+        "llm": 2849,
+        "banco": 47,
+        "total": 2900
+      },
+      "bloqueada": null,
+      "corrigida": false
+    },
+    {
+      "id": "AG02",
+      "grupo": "teste",
+      "ok": false,
+      "erro": null,
+      "linhas": 1,
+      "latencia_ms": {
+        "llm": 958,
+        "banco": 100,
+        "total": 1062
+      },
+      "bloqueada": null,
+      "corrigida": false
+    },
+    {
+      "id": "AG03",
+      "grupo": "teste",
+      "ok": false,
+      "erro": null,
+      "linhas": 1,
+      "latencia_ms": {
+        "llm": 685,
+        "banco": 50,
+        "total": 738
+      },
+      "bloqueada": null,
+      "corrigida": false
+    },
+    {
+      "id": "AG04",
+      "grupo": "ajuste",
+      "ok": false,
+      "erro": null,
+      "linhas": 1,
+      "latencia_ms": {
+        "llm": 383,
+        "banco": 565,
+        "total": 952
+      },
+      "bloqueada": null,
+      "corrigida": true
+    },
+    {
+      "id": "AG05",
+      "grupo": "teste",
+      "ok": false,
+      "erro": null,
+      "linhas": 1,
+      "latencia_ms": {
+        "llm": 946,
+        "banco": 63,
+        "total": 1012
+      },
+      "bloqueada": null,
+      "corrigida": false
+    },
+    {
+      "id": "AG06",
+      "grupo": "ajuste",
+      "ok": false,
+      "erro": "bloqueada_pela_guarda: limit_invalido",
+      "linhas": 0,
+      "latencia_ms": {
+        "llm": 591,
+        "banco": 0,
+        "total": 595
+      },
+      "bloqueada": "limit_invalido",
+      "corrigida": false
+    },
+    {
+      "id": "AG07",
+      "grupo": "teste",
+      "ok": false,
+      "erro": null,
+      "linhas": 1,
+      "latencia_ms": {
+        "llm": 967,
+        "banco": 103,
+        "total": 1073
+      },
+      "bloqueada": null,
+      "corrigida": false
+    },
+    {
+      "id": "AG08",
+      "grupo": "teste",
+      "ok": false,
+      "erro": null,
+      "linhas": 1,
+      "latencia_ms": {
+        "llm": 917,
+        "banco": 57,
+        "total": 978
+      },
+      "bloqueada": null,
+      "corrigida": false
+    },
+    {
+      "id": "AG09",
+      "grupo": "teste",
+      "ok": false,
+      "erro": null,
+      "linhas": 0,
+      "latencia_ms": {
+        "llm": 1287,
+        "banco": 154,
+        "total": 1444
+      },
+      "bloqueada": null,
+      "corrigida": false
+    },
+    {
+      "id": "AG10",
+      "grupo": "ajuste",
+      "ok": false,
+      "erro": null,
+      "linhas": 1,
+      "latencia_ms": {
+        "llm": 362,
+        "banco": 28,
+        "total": 394
+      },
+      "bloqueada": null,
+      "corrigida": false
+    },
+    {
+      "id": "AG11",
+      "grupo": "teste",
+      "ok": false,
+      "erro": null,
+      "linhas": 0,
+      "latencia_ms": {
+        "llm": 904,
+        "banco": 996,
+        "total": 1904
+      },
+      "bloqueada": null,
+      "corrigida": true
+    },
+    {
+      "id": "AG12",
+      "grupo": "teste",
+      "ok": false,
+      "erro": "falha_na_execucao: {neo4j_code: Neo.ClientError.Statement.SyntaxError} {message: Variable `f` not defined (line 1, column 387 (offset: 386))\r\n\"EXPLAIN MATCH (f:FinancialFact)-[:FOR_PERIOD]->(p:Period)  WHERE p.id STARTS",
+      "linhas": 0,
+      "latencia_ms": {
+        "llm": 1575,
+        "banco": 1634,
+        "total": 3212
+      },
+      "bloqueada": null,
+      "corrigida": true
+    },
+    {
+      "id": "AG13",
+      "grupo": "ajuste",
+      "ok": false,
+      "erro": null,
+      "linhas": 1,
+      "latencia_ms": {
+        "llm": 945,
+        "banco": 55,
+        "total": 1004
+      },
+      "bloqueada": null,
+      "corrigida": false
+    },
+    {
+      "id": "AG14",
+      "grupo": "teste",
+      "ok": false,
+      "erro": null,
+      "linhas": 1,
+      "latencia_ms": {
+        "llm": 1259,
+        "banco": 76,
+        "total": 1338
+      },
+      "bloqueada": null,
+      "corrigida": false
+    },
+    {
+      "id": "AG15",
+      "grupo": "ajuste",
+      "ok": false,
+      "erro": null,
+      "linhas": 1,
+      "latencia_ms": {
+        "llm": 1330,
+        "banco": 94,
+        "total": 1428
+      },
+      "bloqueada": null,
+      "corrigida": false
+    }
+  ]
+}

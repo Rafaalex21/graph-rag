@@ -1,6 +1,6 @@
 # llama-swap v267 — perfis do GraphRAG local (ARQUITETURA §9, ADR-001 revisada, ADR-010)
 # Sobe por infra/swap.ps1, que define GRAG_ROOT (barras normais) e GRAG_ROOT_WIN (barras invertidas).
-# Perfis (matrix.sets): indexar · vetorizar · consultar · consultar-rapido · avaliar
+# Perfis (matrix.sets): indexar · vetorizar · consultar · consultar-rapido · avaliar · especialista (F6.6)
 healthCheckTimeout: 300
 startPort: 10001
 logLevel: info
@@ -64,6 +64,16 @@ models:
       -m ${modelos}/gemma-4-26B_q4_0-it.gguf
       -c 16384 -ngl 99 -fa on --jinja --reasoning-budget 512
 
+  # Especialista Text2Cypher (F6.6, ADR-051): neo4j/text-to-cypher-Gemma-3-4B convertido por mradermacher.
+  # Inteiro na GPU (4,1 GB); contexto de 16k cobre o prompt completo (~8k tokens) com folga. Só para comparar
+  # com o LLM principal; o padrão do agente continua sendo o qwen36-35b-a3b.
+  "gemma3-4b-text2cypher":
+    name: "Neo4j Text2Cypher Gemma 3 4B Q8_0"
+    cmd: |
+      "${vk}" --host 127.0.0.1 --port ${PORT}
+      -m ${modelos}/text-to-cypher-Gemma-3-4B-Instruct-2025.04.0.Q8_0.gguf
+      -c 16384 -ngl 99 -fa on --jinja
+
 routing:
   router:
     use: matrix
@@ -76,6 +86,7 @@ routing:
           el: qwen3-embed-0.6b-lote
           r:  qwen3-rerank-0.6b
           j:  gemma4-26b-a4b-juiz
+          s:  gemma3-4b-text2cypher
         # Modelos fora de qualquer conjunto rodam sozinhos (expulsam os demais): é o caso de el e j.
         sets:
           indexar:           "q"
@@ -83,3 +94,4 @@ routing:
           consultar-rapido:  "g & e & r"
           vetorizar:         "el"
           avaliar:           "j"
+          especialista:      "s & e & r"
