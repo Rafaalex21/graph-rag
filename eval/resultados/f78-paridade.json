@@ -1,0 +1,589 @@
+{
+  "nome": "f78-paridade",
+  "data": "2026-11-06",
+  "comando": "npm run avaliar:paridade",
+  "casos": 54,
+  "iguais": 54,
+  "so_ordem": 0,
+  "diferentes": 0,
+  "falhas": 0,
+  "segundos": 48.4,
+  "com_lista_vazia_extra_no_ts": [
+    "riscos-categoria-invalida",
+    "eventos-ano-fora"
+  ],
+  "por_ferramenta": {
+    "fato": {
+      "casos": 17,
+      "iguais": 17
+    },
+    "serie": {
+      "casos": 8,
+      "iguais": 8
+    },
+    "comparar": {
+      "casos": 5,
+      "iguais": 5
+    },
+    "riscos": {
+      "casos": 9,
+      "iguais": 9
+    },
+    "eventos": {
+      "casos": 7,
+      "iguais": 7
+    },
+    "pessoas": {
+      "casos": 8,
+      "iguais": 8
+    }
+  },
+  "itens": [
+    {
+      "id": "fato-lucro",
+      "ferramenta": "fato",
+      "erro_python": null,
+      "erro_ts": null,
+      "n_evidencias_python": 1,
+      "n_evidencias_ts": 1,
+      "veredito": "igual",
+      "diferencas": []
+    },
+    {
+      "id": "fato-lucro-2025",
+      "ferramenta": "fato",
+      "erro_python": null,
+      "erro_ts": null,
+      "n_evidencias_python": 1,
+      "n_evidencias_ts": 1,
+      "veredito": "igual",
+      "diferencas": []
+    },
+    {
+      "id": "fato-lucro-2024",
+      "ferramenta": "fato",
+      "erro_python": null,
+      "erro_ts": null,
+      "n_evidencias_python": 0,
+      "n_evidencias_ts": 0,
+      "veredito": "igual",
+      "diferencas": []
+    },
+    {
+      "id": "fato-lucro-4t25",
+      "ferramenta": "fato",
+      "erro_python": null,
+      "erro_ts": null,
+      "n_evidencias_python": 0,
+      "n_evidencias_ts": 0,
+      "veredito": "igual",
+      "diferencas": []
+    },
+    {
+      "id": "fato-lucro-alias",
+      "ferramenta": "fato",
+      "erro_python": null,
+      "erro_ts": null,
+      "n_evidencias_python": 1,
+      "n_evidencias_ts": 1,
+      "veredito": "igual",
+      "diferencas": []
+    },
+    {
+      "id": "fato-ativo-total",
+      "ferramenta": "fato",
+      "erro_python": null,
+      "erro_ts": null,
+      "n_evidencias_python": 1,
+      "n_evidencias_ts": 1,
+      "veredito": "igual",
+      "diferencas": []
+    },
+    {
+      "id": "fato-basileia",
+      "ferramenta": "fato",
+      "erro_python": null,
+      "erro_ts": null,
+      "n_evidencias_python": 1,
+      "n_evidencias_ts": 1,
+      "veredito": "igual",
+      "diferencas": []
+    },
+    {
+      "id": "fato-roe",
+      "ferramenta": "fato",
+      "erro_python": null,
+      "erro_ts": null,
+      "n_evidencias_python": 1,
+      "n_evidencias_ts": 1,
+      "veredito": "igual",
+      "diferencas": []
+    },
+    {
+      "id": "fato-empregados",
+      "ferramenta": "fato",
+      "erro_python": null,
+      "erro_ts": null,
+      "n_evidencias_python": 3,
+      "n_evidencias_ts": 3,
+      "veredito": "igual",
+      "diferencas": []
+    },
+    {
+      "id": "fato-lucro-consorcios",
+      "ferramenta": "fato",
+      "erro_python": null,
+      "erro_ts": null,
+      "n_evidencias_python": 1,
+      "n_evidencias_ts": 1,
+      "veredito": "igual",
+      "diferencas": []
+    },
+    {
+      "id": "fato-carteira-dimensao",
+      "ferramenta": "fato",
+      "erro_python": null,
+      "erro_ts": null,
+      "n_evidencias_python": 0,
+      "n_evidencias_ts": 0,
+      "veredito": "igual",
+      "diferencas": []
+    },
+    {
+      "id": "fato-carteira-total",
+      "ferramenta": "fato",
+      "erro_python": null,
+      "erro_ts": null,
+      "n_evidencias_python": 2,
+      "n_evidencias_ts": 2,
+      "veredito": "igual",
+      "diferencas": []
+    },
+    {
+      "id": "fato-eps",
+      "ferramenta": "fato",
+      "erro_python": null,
+      "erro_ts": null,
+      "n_evidencias_python": 0,
+      "n_evidencias_ts": 0,
+      "veredito": "igual",
+      "diferencas": []
+    },
+    {
+      "id": "fato-metrica-desconhecida",
+      "ferramenta": "fato",
+      "erro_python": "metrica_desconhecida",
+      "erro_ts": "metrica_desconhecida",
+      "n_evidencias_python": 0,
+      "n_evidencias_ts": 0,
+      "veredito": "igual",
+      "diferencas": []
+    },
+    {
+      "id": "fato-periodo-invalido",
+      "ferramenta": "fato",
+      "erro_python": "periodo_invalido",
+      "erro_ts": "periodo_invalido",
+      "n_evidencias_python": 0,
+      "n_evidencias_ts": 0,
+      "veredito": "igual",
+      "diferencas": []
+    },
+    {
+      "id": "fato-entidade-desconhecida",
+      "ferramenta": "fato",
+      "erro_python": "entidade_desconhecida",
+      "erro_ts": "entidade_desconhecida",
+      "n_evidencias_python": 0,
+      "n_evidencias_ts": 0,
+      "veredito": "igual",
+      "diferencas": []
+    },
+    {
+      "id": "fato-futuro",
+      "ferramenta": "fato",
+      "erro_python": null,
+      "erro_ts": null,
+      "n_evidencias_python": 0,
+      "n_evidencias_ts": 0,
+      "veredito": "igual",
+      "diferencas": []
+    },
+    {
+      "id": "serie-lucro",
+      "ferramenta": "serie",
+      "erro_python": null,
+      "erro_ts": null,
+      "n_evidencias_python": 1,
+      "n_evidencias_ts": 1,
+      "veredito": "igual",
+      "diferencas": []
+    },
+    {
+      "id": "serie-lucro-trimestral",
+      "ferramenta": "serie",
+      "erro_python": null,
+      "erro_ts": null,
+      "n_evidencias_python": 0,
+      "n_evidencias_ts": 0,
+      "veredito": "igual",
+      "diferencas": []
+    },
+    {
+      "id": "serie-lucro-misto",
+      "ferramenta": "serie",
+      "erro_python": null,
+      "erro_ts": null,
+      "n_evidencias_python": 1,
+      "n_evidencias_ts": 1,
+      "veredito": "igual",
+      "diferencas": []
+    },
+    {
+      "id": "serie-ativo",
+      "ferramenta": "serie",
+      "erro_python": null,
+      "erro_ts": null,
+      "n_evidencias_python": 1,
+      "n_evidencias_ts": 1,
+      "veredito": "igual",
+      "diferencas": []
+    },
+    {
+      "id": "serie-basileia",
+      "ferramenta": "serie",
+      "erro_python": null,
+      "erro_ts": null,
+      "n_evidencias_python": 3,
+      "n_evidencias_ts": 3,
+      "veredito": "igual",
+      "diferencas": []
+    },
+    {
+      "id": "serie-carteira-dimensao",
+      "ferramenta": "serie",
+      "erro_python": null,
+      "erro_ts": null,
+      "n_evidencias_python": 0,
+      "n_evidencias_ts": 0,
+      "veredito": "igual",
+      "diferencas": []
+    },
+    {
+      "id": "serie-tipo-invalido",
+      "ferramenta": "serie",
+      "erro_python": "tipo_periodo_invalido",
+      "erro_ts": "tipo_periodo_invalido",
+      "n_evidencias_python": 0,
+      "n_evidencias_ts": 0,
+      "veredito": "igual",
+      "diferencas": []
+    },
+    {
+      "id": "serie-desconhecida",
+      "ferramenta": "serie",
+      "erro_python": "metrica_desconhecida",
+      "erro_ts": "metrica_desconhecida",
+      "n_evidencias_python": 0,
+      "n_evidencias_ts": 0,
+      "veredito": "igual",
+      "diferencas": []
+    },
+    {
+      "id": "comparar-carteira",
+      "ferramenta": "comparar",
+      "erro_python": null,
+      "erro_ts": null,
+      "n_evidencias_python": 11,
+      "n_evidencias_ts": 11,
+      "veredito": "igual",
+      "diferencas": []
+    },
+    {
+      "id": "comparar-carteira-2025",
+      "ferramenta": "comparar",
+      "erro_python": null,
+      "erro_ts": null,
+      "n_evidencias_python": 11,
+      "n_evidencias_ts": 11,
+      "veredito": "igual",
+      "diferencas": []
+    },
+    {
+      "id": "comparar-segmentos",
+      "ferramenta": "comparar",
+      "erro_python": null,
+      "erro_ts": null,
+      "n_evidencias_python": 0,
+      "n_evidencias_ts": 0,
+      "veredito": "igual",
+      "diferencas": []
+    },
+    {
+      "id": "comparar-lucro",
+      "ferramenta": "comparar",
+      "erro_python": null,
+      "erro_ts": null,
+      "n_evidencias_python": 0,
+      "n_evidencias_ts": 0,
+      "veredito": "igual",
+      "diferencas": []
+    },
+    {
+      "id": "comparar-desconhecida",
+      "ferramenta": "comparar",
+      "erro_python": "metrica_desconhecida",
+      "erro_ts": "metrica_desconhecida",
+      "n_evidencias_python": 0,
+      "n_evidencias_ts": 0,
+      "veredito": "igual",
+      "diferencas": []
+    },
+    {
+      "id": "riscos-todos",
+      "ferramenta": "riscos",
+      "erro_python": null,
+      "erro_ts": null,
+      "n_evidencias_python": 10,
+      "n_evidencias_ts": 10,
+      "veredito": "igual",
+      "diferencas": []
+    },
+    {
+      "id": "riscos-mercado",
+      "ferramenta": "riscos",
+      "erro_python": null,
+      "erro_ts": null,
+      "n_evidencias_python": 10,
+      "n_evidencias_ts": 10,
+      "veredito": "igual",
+      "diferencas": []
+    },
+    {
+      "id": "riscos-credito",
+      "ferramenta": "riscos",
+      "erro_python": null,
+      "erro_ts": null,
+      "n_evidencias_python": 10,
+      "n_evidencias_ts": 10,
+      "veredito": "igual",
+      "diferencas": []
+    },
+    {
+      "id": "riscos-sem-categoria",
+      "ferramenta": "riscos",
+      "erro_python": null,
+      "erro_ts": null,
+      "n_evidencias_python": 10,
+      "n_evidencias_ts": 10,
+      "veredito": "igual",
+      "diferencas": []
+    },
+    {
+      "id": "riscos-categoria-invalida",
+      "ferramenta": "riscos",
+      "erro_python": "categoria_invalida",
+      "erro_ts": "categoria_invalida",
+      "n_evidencias_python": 0,
+      "n_evidencias_ts": 0,
+      "veredito": "igual",
+      "diferencas": [],
+      "listas_vazias_extras_no_ts": [
+        "$.riscos"
+      ]
+    },
+    {
+      "id": "riscos-tema-liquidez",
+      "ferramenta": "riscos",
+      "erro_python": null,
+      "erro_ts": null,
+      "n_evidencias_python": 10,
+      "n_evidencias_ts": 10,
+      "veredito": "igual",
+      "diferencas": []
+    },
+    {
+      "id": "riscos-tema-cambio",
+      "ferramenta": "riscos",
+      "erro_python": null,
+      "erro_ts": null,
+      "n_evidencias_python": 10,
+      "n_evidencias_ts": 10,
+      "veredito": "igual",
+      "diferencas": []
+    },
+    {
+      "id": "riscos-tema-categoria",
+      "ferramenta": "riscos",
+      "erro_python": null,
+      "erro_ts": null,
+      "n_evidencias_python": 9,
+      "n_evidencias_ts": 9,
+      "veredito": "igual",
+      "diferencas": []
+    },
+    {
+      "id": "riscos-tema-sem-resultado",
+      "ferramenta": "riscos",
+      "erro_python": null,
+      "erro_ts": null,
+      "n_evidencias_python": 0,
+      "n_evidencias_ts": 0,
+      "veredito": "igual",
+      "diferencas": []
+    },
+    {
+      "id": "eventos-2025",
+      "ferramenta": "eventos",
+      "erro_python": null,
+      "erro_ts": null,
+      "n_evidencias_python": 5,
+      "n_evidencias_ts": 5,
+      "veredito": "igual",
+      "diferencas": []
+    },
+    {
+      "id": "eventos-2024",
+      "ferramenta": "eventos",
+      "erro_python": null,
+      "erro_ts": null,
+      "n_evidencias_python": 1,
+      "n_evidencias_ts": 1,
+      "veredito": "igual",
+      "diferencas": []
+    },
+    {
+      "id": "eventos-2023",
+      "ferramenta": "eventos",
+      "erro_python": null,
+      "erro_ts": null,
+      "n_evidencias_python": 3,
+      "n_evidencias_ts": 3,
+      "veredito": "igual",
+      "diferencas": []
+    },
+    {
+      "id": "eventos-tema-aquisicao",
+      "ferramenta": "eventos",
+      "erro_python": null,
+      "erro_ts": null,
+      "n_evidencias_python": 5,
+      "n_evidencias_ts": 5,
+      "veredito": "igual",
+      "diferencas": []
+    },
+    {
+      "id": "eventos-tema-ano",
+      "ferramenta": "eventos",
+      "erro_python": null,
+      "erro_ts": null,
+      "n_evidencias_python": 1,
+      "n_evidencias_ts": 1,
+      "veredito": "igual",
+      "diferencas": []
+    },
+    {
+      "id": "eventos-sem-filtro",
+      "ferramenta": "eventos",
+      "erro_python": null,
+      "erro_ts": null,
+      "n_evidencias_python": 10,
+      "n_evidencias_ts": 10,
+      "veredito": "igual",
+      "diferencas": []
+    },
+    {
+      "id": "eventos-ano-fora",
+      "ferramenta": "eventos",
+      "erro_python": "ano_invalido",
+      "erro_ts": "ano_invalido",
+      "n_evidencias_python": 0,
+      "n_evidencias_ts": 0,
+      "veredito": "igual",
+      "diferencas": [],
+      "listas_vazias_extras_no_ts": [
+        "$.eventos"
+      ]
+    },
+    {
+      "id": "pessoas-presidente",
+      "ferramenta": "pessoas",
+      "erro_python": null,
+      "erro_ts": null,
+      "n_evidencias_python": 10,
+      "n_evidencias_ts": 10,
+      "veredito": "igual",
+      "diferencas": []
+    },
+    {
+      "id": "pessoas-diretora-presidente",
+      "ferramenta": "pessoas",
+      "erro_python": null,
+      "erro_ts": null,
+      "n_evidencias_python": 1,
+      "n_evidencias_ts": 1,
+      "veredito": "igual",
+      "diferencas": []
+    },
+    {
+      "id": "pessoas-conselheiro",
+      "ferramenta": "pessoas",
+      "erro_python": null,
+      "erro_ts": null,
+      "n_evidencias_python": 10,
+      "n_evidencias_ts": 10,
+      "veredito": "igual",
+      "diferencas": []
+    },
+    {
+      "id": "pessoas-nome",
+      "ferramenta": "pessoas",
+      "erro_python": null,
+      "erro_ts": null,
+      "n_evidencias_python": 4,
+      "n_evidencias_ts": 4,
+      "veredito": "igual",
+      "diferencas": []
+    },
+    {
+      "id": "pessoas-orgao",
+      "ferramenta": "pessoas",
+      "erro_python": null,
+      "erro_ts": null,
+      "n_evidencias_python": 1,
+      "n_evidencias_ts": 1,
+      "veredito": "igual",
+      "diferencas": []
+    },
+    {
+      "id": "pessoas-cargo-orgao",
+      "ferramenta": "pessoas",
+      "erro_python": null,
+      "erro_ts": null,
+      "n_evidencias_python": 1,
+      "n_evidencias_ts": 1,
+      "veredito": "igual",
+      "diferencas": []
+    },
+    {
+      "id": "pessoas-sem-filtro",
+      "ferramenta": "pessoas",
+      "erro_python": "filtro_obrigatorio",
+      "erro_ts": "filtro_obrigatorio",
+      "n_evidencias_python": 0,
+      "n_evidencias_ts": 0,
+      "veredito": "igual",
+      "diferencas": []
+    },
+    {
+      "id": "pessoas-inexistente",
+      "ferramenta": "pessoas",
+      "erro_python": null,
+      "erro_ts": null,
+      "n_evidencias_python": 0,
+      "n_evidencias_ts": 0,
+      "veredito": "igual",
+      "diferencas": []
+    }
+  ]
+}

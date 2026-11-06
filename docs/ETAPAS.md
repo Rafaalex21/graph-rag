@@ -318,10 +318,12 @@
 - [ ] **F7.7** Telemetria em JSONL por requisição (rota, ferramentas, tokens, latência)
   - aceite: relatório diário gerado a partir dos logs
   - depende: F7.6
-- [ ] **F7.8** Executor de ferramentas em TypeScript: contrato `evidence[]`, `neo4j-driver` (sessão `READ`) e os templates Cypher da F6.3
+- [x] **F7.8** Executor de ferramentas em TypeScript: contrato `evidence[]`, `neo4j-driver` (sessão `READ`) e os templates Cypher da F6.3
   - aceite: `fato_financeiro`, `serie_metrica`, `comparar_segmentos`, `riscos`, `eventos` e `pessoas_cargos` devolvem, no grafo real, os mesmos valores, escalas, divergências e páginas que o Python nas perguntas do teste de contrato da F6.3; `pessoas_cargos` sem filtro recusa
   - depende: F7.3, F6.3
   - nota: decisão da ADR-055 (portar para TypeScript, §3). O roteador (F7.3) só escolhe; o executor recebe `{nome, argumentos}` e devolve `evidence[]` com `id`, tipo, página, texto e score. Paridade conferida contra a saída do Python, que fica como referência até a F7.11
+  - resultado: ADR-056; `api/src/ferramentas/` (`criarExecutor`, os seis templates com Cypher fixo e somente leitura, `GrafoNeo4j` sobre `neo4j-driver` 6.3.0 em sessão `READ`, contrato `evidencias[]`). **Paridade: 54/54 chamadas idênticas ao Python no grafo real** (`npm run avaliar:paridade`, `eval/paridade_templates.json`: 34 com evidências, 9 erros esperados, 0 só de ordem, 0 falhas), e o contrato contra o grafo real (N01, N02, T15 com os valores do golden; `pessoas_cargos` sem filtro recusa; nenhum template escreve no grafo) passa. 323 testes na API (169 novos, escritos antes do código). A primeira rodada deu 52/54: a única divergência é **deliberada** e documentada (nos erros de validação o TypeScript devolve a lista vazia onde o Python omite a chave), tratada por regra explícita do comparador e listada no relatório
+  - nota: a paridade prova igualdade com o Python, não correção, e só cobre as 54 chamadas (qualificadores e `limite` fora do padrão só têm teste com grafo falso). As seis ferramentas restantes seguem sem execução em TypeScript (`ferramenta_nao_portada`): F7.9 e F7.10
 - [ ] **F7.9** Buscas em TypeScript: `buscar_trechos`, `buscar_tabelas`, `entidade` e `resposta_ja_dada`
   - aceite: embedding de consulta e rerank pelo cliente da F7.1; page recall@k por regex nas perguntas do golden com gabarito não inferior ao do Python (F3.3), e T15 (cargo → pessoa) resolvida pela `entidade`
   - depende: F7.8, F6.1

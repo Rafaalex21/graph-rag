@@ -1,8 +1,8 @@
 # api
 
 API e agente do GraphRAG local (Node 24, TypeScript 6.0, Fastify). Hoje: a rota `GET /api/saude` (esqueleto
-da F0.8), o cliente LLM (F7.1), o atualizador de pergunta (F7.2) e o roteador (F7.3). O agente, as ferramentas e o SSE (ARQUITETURA §7 e §11) entram nas próximas
-tarefas da F7.
+da F0.8), o cliente LLM (F7.1), o atualizador de pergunta (F7.2), o roteador (F7.3) e o executor com os seis templates
+Cypher (F7.8). As demais ferramentas, o agente completo e o SSE (ARQUITETURA §7 e §11) entram nas próximas tarefas da F7.
 
 O TypeScript fica **fixado em 6.0.x**: o Angular 22 e o `typescript-eslint` ainda não aceitam a 7.x.
 
@@ -53,6 +53,27 @@ as saídas do atualizador por ondas (até 2 ao mesmo tempo). O roteador não exe
 ```powershell
 npm run avaliar:rotas -- --nome f73-teste3 --grupo teste3   # ajuste | teste | teste2 | teste3; --direto pula o atualizador
 ```
+
+## Executor e templates Cypher (`src/ferramentas`, F7.8, ADR-056)
+
+`criarExecutor({ grafo })` recebe o `{nome, argumentos}` do roteador e devolve o resultado da ferramenta no contrato
+`evidencias[]` (`id`, `tipo`, `paginas`, `caminho`, `texto`, `score`, mais `aviso`, `erro`, `sugestoes`, `omitido`).
+Nunca lança: ferramenta desconhecida, ainda não portada (F7.9 e F7.10) e exceção viram `erro`. Portadas: `fato_financeiro`,
+`serie_metrica`, `comparar_segmentos`, `riscos`, `eventos` e `pessoas_cargos`, com Cypher fixo e somente leitura
+(`GrafoNeo4j`, sessão `READ`; credenciais do `.env` da raiz).
+
+```ts
+import { GrafoNeo4j, criarExecutor } from "./ferramentas/index.ts";
+
+const grafo = GrafoNeo4j.conectar();
+const executor = criarExecutor({ grafo });
+const r = await executor.executar({ nome: "fato_financeiro", argumentos: { metrica: "lucro líquido", periodo: "2025" } });
+await grafo.fechar();
+```
+
+Paridade com o Python no grafo real (Neo4j no ar e `uv` no PATH): `npm run avaliar:paridade` roda as 54 chamadas de
+`eval/paridade_templates.json` nos dois lados e sai com código 1 se algo diferir. O contrato contra o grafo real
+(`test/ferramentas/templates.integracao.test.ts`) é pulado sem o Neo4j.
 
 Erros (`LlmIndisponivelError`, `LlmTimeoutError`, `LlmAbortadoError`, `LlmHttpError`,
 `LlmRespostaInvalidaError`) têm uma classe por causa. Só rede e 5xx ganham uma nova tentativa. A primeira
