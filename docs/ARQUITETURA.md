@@ -492,8 +492,10 @@ sequenceDiagram
 |---|---|---|---|
 | `buscar_trechos(pergunta)` | Fatos textuais, "o que o relatório diz sobre…" | Reescrita opcional (step-back/HyDE) → vetor em `child_vec` (k×4) ± full-text → deduplicação por Pai → rerank → 6 Pais | 2, 3 |
 | `buscar_tabelas(pergunta)` | Números que vivem em tabelas | Vetor sobre `question_vec` → `Table.markdown` + página | 3 |
-| `fato_financeiro(metrica, entidade?, periodo?)` | "Qual foi a receita líquida em 2025?" | Template Cypher + mapeamento terminológico de métricas | 4, 5 |
-| `serie_metrica(metrica, entidade?)` | Evolução ao longo dos períodos | Template Cypher | 5 |
+| `fato_financeiro(metrica, entidade?, periodo?)` | "Qual foi a receita líquida em 2025?" | Template Cypher + mapeamento terminológico de métricas; total sem recorte, ano-base quando falta o período, valores em várias escalas unidos e divergências marcadas ([ADR-048](./adr/ADR-048-templates-cypher.md)) | 4, 5 |
+| `serie_metrica(metrica, entidade?)` | Evolução ao longo dos períodos | Template Cypher; um ponto por período, sem preencher lacunas; variação só entre períodos vizinhos | 5 |
+| `comparar_segmentos(metrica, segmentos?, periodo?)` | Mesma métrica em recortes (Rurais, Pessoas Físicas...) | Template Cypher sobre `OF_METRIC.dimension` (o grafo não tem `HAS_SEGMENT` com fatos) | 5 |
+| `riscos(tema?, categoria?)`, `eventos(tema?, ano?)`, `pessoas_cargos(cargo?, nome?, orgao?)` | Fatores de risco, eventos datados, quem ocupa um cargo | Templates Cypher com páginas; sem filtro de cargo/nome/órgão, `pessoas_cargos` recusa | 5 |
 | `entidade(nome)` | "Quem é…", "O que é a subsidiária…" | Busca local: `entity_vec` (e `entity_ft` pelo nome citado) → reranker → resumo, Pais, relações resumidas e comunidades, com tetos ([ADR-046](./adr/ADR-046-busca-local.md)) | 7 |
 | `panorama(pergunta, nivel?)` | Perguntas temáticas e globais | Busca global *map-reduce* sobre relatórios com *rating* ≥ limiar: nível 1, 16 comunidades em lotes, pontos notados, reduce opcional, ≤ 60 s medidos; pontos sem página ([ADR-047](./adr/ADR-047-busca-global.md)) | 7 |
 | `consultar_grafo(pergunta)` | Agregações e filtros sem template — rede de segurança | Text2Cypher | 4 |

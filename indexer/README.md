@@ -286,3 +286,17 @@ uv run python -m indexer.busca_global medir --nome f62-n2 --nivel 2 --sem-reduce
 ```
 
 Cada limite é uma flag (`--nivel`, `--rating`, `--candidatas`, `--lote-chars`, `--max-por-relatorio`, `--max-pontos-por-lote`, `--paralelismo`, `--pontos`, `--nota-minima`, `--tokens`, `--orcamento-s`); `--sem-reduce` devolve só os pontos. `medir` grava `eval/resultados/<nome>.json` (só números).
+
+## Templates Cypher (F6.3, ADR-048)
+
+`indexer.templates_cypher` reúne as ferramentas estruturadas da §7.2: `fato_financeiro`, `serie_metrica`, `comparar_segmentos`, `riscos`, `eventos` e `pessoas_cargos`. Cada uma resolve o texto do roteador (métrica pelo catálogo, período como `2025-FY`/`2025-Q4`/`2025-12-31`, nome exato da entidade) e roda uma consulta fixa, somente leitura e com `LIMIT`. Devolve `evidencias[]` (mais `fatos`, `pontos`, `segmentos` ou `pessoas`), `aviso`, `erro` e `sugestoes`; valores divergentes no documento vêm marcados (`conflito`) e o que o grafo não tem não é preenchido. Precisa do Neo4j no ar:
+
+```powershell
+uv run python -m indexer.templates_cypher fato "lucro líquido" --periodo 2025
+uv run python -m indexer.templates_cypher serie "carteira de crédito"
+uv run python -m indexer.templates_cypher comparar "carteira de crédito" --segmentos Rurais Imobiliário --periodo 2025
+uv run python -m indexer.templates_cypher riscos --tema "risco cibernético"
+uv run python -m indexer.templates_cypher eventos --ano 2025
+uv run python -m indexer.templates_cypher pessoas --cargo "diretora presidente"
+uv run pytest tests/test_templates_grafo.py -v     # contrato contra o grafo real (pulado sem o Neo4j)
+```

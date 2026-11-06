@@ -263,9 +263,11 @@
   - depende: F5.6
   - resultado: ADR-047 (aceita com ressalva); `indexer.busca_global` (`community_vec` nível 1, `rating` ≥ 5, 16 comunidades em lotes, mapa com pontos notados em JSON validado, seleção sem repetição até 12 pontos/5.000 tokens, reduce opcional de ≤ 150 palavras, orçamento de 45 s, callback `progresso` por lote); máximo de 56,1 s e p50 de 39,2 s nas 10 perguntas panorama com o reduce; 599 testes
   - nota: o tempo passa com folga, mas o recall de contexto do juiz é 0,50 (n = 10, uma rodada): as perguntas que pedem números ou texto de política (P04, P06, P09) não estão nos relatórios de comunidade. Nível 1 foi melhor que 0 (0,42) e 2 (0,42). Os pontos não têm página, então a F7.5 não cita página para `panorama`. A primeira versão levou 88,6 s e foi reduzida
-- [ ] **F6.3** Templates Cypher: `fato_financeiro`, `serie_metrica`, `comparar_segmentos`, `riscos`, `eventos`, `pessoas_cargos`
+- [x] **F6.3** Templates Cypher: `fato_financeiro`, `serie_metrica`, `comparar_segmentos`, `riscos`, `eventos`, `pessoas_cargos`
   - aceite: testes de contrato contra o grafo real
   - depende: F4.6
+  - resultado: ADR-048 (aceita com ressalva); `indexer.templates_cypher` (consultas fixas, somente leitura, com `LIMIT`; métrica pelo catálogo, período, entidade e escala resolvidos antes; valores em pt-BR); `tests/test_templates_grafo.py`: 12 testes de contrato contra o grafo real, que batem N01 (R$ 16.782 milhões, p. 93), N02 (R$ 101.011 milhões, p. 93) e T15 (a diretora presidente) com o golden; `EXPLAIN` das 6 consultas e nenhuma escrita no grafo; 90 testes com grafo falso; 701 testes no total; 10 a 100 ms por chamada
+  - nota: o grafo limita a resposta: o lucro do emissor só existe para 2025 (a série tem um ponto e não inventa 2023 e 2024, então G09 fica para tabelas ou Text2Cypher), `carteira de crédito` devolve dois totais divergentes (marcados com `conflito`), 55% dos riscos sem categoria e 93% dos eventos sem data. `HAS_SEGMENT` não existe: o segmento é o recorte `OF_METRIC.dimension`. `pessoas_cargos` acha a presidente pelo resumo da pessoa, não por título, e marca cargos gravados como nome
 - [ ] **F6.4** Text2Cypher com esquema (APOC), terminologia, *few-shot* e instruções de formato
   - aceite: acurácia de execução ≥ 70% nas perguntas de agregação
   - depende: F4.6
