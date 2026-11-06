@@ -1,0 +1,95 @@
+{
+ "perguntas": 10,
+ "limites": {
+  "nivel": 1,
+  "rating": 5,
+  "candidatas": 16,
+  "lote_chars": 14000,
+  "max_por_relatorio": 4500,
+  "max_pontos_por_lote": 6,
+  "paralelismo": 2,
+  "pontos": 12,
+  "nota_minima": 1,
+  "tokens": 5000,
+  "orcamento_s": 45
+ },
+ "recall_juiz": {
+  "n": 10,
+  "media": 0.495
+ },
+ "segundos_p50": 39.15,
+ "segundos_max": 56.1,
+ "dentro_de_90_s": true,
+ "por_pergunta": {
+  "P01": {
+   "segundos": 41.9,
+   "recall_juiz": 0.6,
+   "pontos": 12,
+   "truncado_por_tempo": null,
+   "erro": null
+  },
+  "P02": {
+   "segundos": 47.1,
+   "recall_juiz": 0.5,
+   "pontos": 12,
+   "truncado_por_tempo": null,
+   "erro": null
+  },
+  "P03": {
+   "segundos": 56.1,
+   "recall_juiz": 0.4,
+   "pontos": 12,
+   "truncado_por_tempo": null,
+   "erro": null
+  },
+  "P04": {
+   "segundos": 33.5,
+   "recall_juiz": 0.0,
+   "pontos": 11,
+   "truncado_por_tempo": null,
+   "erro": null
+  },
+  "P05": {
+   "segundos": 40.0,
+   "recall_juiz": 1.0,
+   "pontos": 12,
+   "truncado_por_tempo": null,
+   "erro": null
+  },
+  "P06": {
+   "segundos": 48.2,
+   "recall_juiz": 0.2,
+   "pontos": 12,
+   "truncado_por_tempo": null,
+   "erro": null
+  },
+  "P07": {
+   "segundos": 29.5,
+   "recall_juiz": 0.5,
+   "pontos": 6,
+   "truncado_por_tempo": null,
+   "erro": null
+  },
+  "P08": {
+   "segundos": 38.3,
+   "recall_juiz": 1.0,
+   "pontos": 12,
+   "truncado_por_tempo": null,
+   "erro": null
+  },
+  "P09": {
+   "segundos": 22.5,
+   "recall_juiz": 0.0,
+   "pontos": 3,
+   "truncado_por_tempo": null,
+   "erro": null
+  },
+  "P10": {
+   "segundos": 22.2,
+   "recall_juiz": 0.75,
+   "pontos": 4,
+   "truncado_por_tempo": null,
+   "erro": null
+  }
+ }
+}

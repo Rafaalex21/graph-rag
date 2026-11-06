@@ -258,9 +258,11 @@
   - depende: F5.7
   - resultado: ADR-046 (aceita com ressalva); `indexer.busca_local` (`entity_vec` + `entity_ft` só pelo nome citado, reranker sobre `nome: resumo`, Pais por RRF de citações e similaridade, tetos de 6 entidades/6 Pais/10 relações/2 comunidades/6.000 tokens); recall de contexto do juiz 1,00 nas 3 perguntas "quem é…" do golden (T01, T08, T15) e 1,00 nas 10 de `eval/golden_entidades.csv`; p50 de 0,3 s; 576 testes
   - nota: o aceite tem n = 3 e a configuração foi ajustada olhando essas três (a primeira medição deu 0,50 e só o reranker resolveu a T15, cargo → pessoa); as 10 perguntas separadas são fáceis (1,00 também sem reranker) e não separam as configurações. O reranker baixou o recall por regex nas 55 perguntas com gabarito (0,45 → 0,41), que não são desta ferramenta. O redator (F7.5) deve citar as páginas dos itens `pai`, não as de entidade ou relação
-- [ ] **F6.2** Busca global *map-reduce* com escolha de nível e limiar de *rating*
+- [x] **F6.2** Busca global *map-reduce* com escolha de nível e limiar de *rating*
   - aceite: ≤ 90 s no perfil `consultar`, com progresso por comunidade
   - depende: F5.6
+  - resultado: ADR-047 (aceita com ressalva); `indexer.busca_global` (`community_vec` nível 1, `rating` ≥ 5, 16 comunidades em lotes, mapa com pontos notados em JSON validado, seleção sem repetição até 12 pontos/5.000 tokens, reduce opcional de ≤ 150 palavras, orçamento de 45 s, callback `progresso` por lote); máximo de 56,1 s e p50 de 39,2 s nas 10 perguntas panorama com o reduce; 599 testes
+  - nota: o tempo passa com folga, mas o recall de contexto do juiz é 0,50 (n = 10, uma rodada): as perguntas que pedem números ou texto de política (P04, P06, P09) não estão nos relatórios de comunidade. Nível 1 foi melhor que 0 (0,42) e 2 (0,42). Os pontos não têm página, então a F7.5 não cita página para `panorama`. A primeira versão levou 88,6 s e foi reduzida
 - [ ] **F6.3** Templates Cypher: `fato_financeiro`, `serie_metrica`, `comparar_segmentos`, `riscos`, `eventos`, `pessoas_cargos`
   - aceite: testes de contrato contra o grafo real
   - depende: F4.6

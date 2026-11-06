@@ -274,3 +274,15 @@ uv run python -m indexer.busca_local medir --nome f61-todas --todas           # 
 ```
 
 `--sem-rerank` desliga o reranker (a busca fica na ordem do RRF); os tetos são flags (`--entidades`, `--pais`, `--relacoes`, `--comunidades`, `--tokens`, `--candidatas`, `--ft 0|1|2`). `medir` grava `eval/resultados/<nome>.json` (só números) e as respostas em `data/avaliacao/<nome>/`.
+
+## Busca global (F6.2, ADR-047)
+
+`indexer.busca_global` é a ferramenta `panorama` da §7.2: pergunta → comunidades do nível escolhido (padrão 1) com `rating` ≥ 5, as 16 mais parecidas (`community_vec`) → **mapa** (o Qwen3.6 lê lotes de relatórios e devolve pontos curtos com nota de 0 a 10) → melhores pontos sem repetição (12, até 5.000 tokens) → **reduce** opcional (síntese de ≤ 150 palavras). Orçamento de 45 s para o mapa; `progresso(evento)` informa `selecao`, `mapa` (por lote, com `comunidades_feitas` de `comunidades_total`), `sintese` e `fim`. Os pontos não têm página (vêm de relatórios). Precisa de Neo4j e llama-swap (perfil `consultar`) no ar:
+
+```powershell
+uv run python -m indexer.busca_global buscar "Quais são os cinco principais fatores de risco do Banco do Brasil?"
+uv run python -m indexer.busca_global medir --nome f62-n1 --juiz              # P01–P10 do golden
+uv run python -m indexer.busca_global medir --nome f62-n2 --nivel 2 --sem-reduce --pontos 24 --tokens 8000 --juiz
+```
+
+Cada limite é uma flag (`--nivel`, `--rating`, `--candidatas`, `--lote-chars`, `--max-por-relatorio`, `--max-pontos-por-lote`, `--paralelismo`, `--pontos`, `--nota-minima`, `--tokens`, `--orcamento-s`); `--sem-reduce` devolve só os pontos. `medir` grava `eval/resultados/<nome>.json` (só números).
