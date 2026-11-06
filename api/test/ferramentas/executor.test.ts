@@ -15,8 +15,10 @@ import { describe, expect, it } from "vitest";
 import { CATALOGO } from "../../src/agente/roteador.ts";
 import {
   CONSULTAS,
+  FERRAMENTAS_DE_BUSCA,
   FERRAMENTAS_DE_TEMPLATE,
   NAO_PORTADAS,
+  type LlmDeBusca,
   criarExecutor,
   normalizarCategoria,
   type GrafoLeitura,
@@ -46,8 +48,45 @@ function grafo(respostas: Record<string, Record<string, unknown>[]> = {}) {
 describe("consistência com o catálogo do roteador", () => {
   it("toda ferramenta que o roteador pode chamar é portada ou está declarada como não portada, sem sobra", () => {
     const doRoteador = CATALOGO.map((f) => f.nome).sort();
-    const conhecidas = [...FERRAMENTAS_DE_TEMPLATE, ...NAO_PORTADAS].sort();
+    const conhecidas = [...FERRAMENTAS_DE_TEMPLATE, ...FERRAMENTAS_DE_BUSCA, ...NAO_PORTADAS].sort();
     expect(conhecidas).toEqual(doRoteador);
+  });
+
+  it("as buscas sem o cliente LLM respondem erro, não exceção; resposta_ja_dada não precisa dele", async () => {
+    const { g } = grafo();
+    const ex = criarExecutor({ grafo: g, catalogo: CAT });
+    for (const [nome, argumentos] of [
+      ["buscar_trechos", { pergunta: "x" }],
+      ["buscar_tabelas", { pergunta: "x" }],
+      ["entidade", { nome: "x" }],
+    ] as const) {
+      const r = await ex.executar({ nome, argumentos });
+      expect(r.erro).toBe("llm_nao_configurado");
+      expect(r.evidencias).toEqual([]);
+    }
+    const ok = await ex.executar({ nome: "resposta_ja_dada", argumentos: { resposta: "O lucro foi X [p. 6]." } });
+    expect(ok.erro).toBeNull();
+    expect(ok.evidencias[0]?.tipo).toBe("conversa");
+    const vazio = await ex.executar({ nome: "resposta_ja_dada", argumentos: {} });
+    expect(vazio.erro).toBe("resposta_vazia");
+  });
+
+  it("com o LLM, as buscas passam a pergunta e uma exceção do LLM vira erro no resultado", async () => {
+    const { g } = grafo();
+    const quebrado: LlmDeBusca = {
+      embeddingDeConsulta: async () => {
+        throw new Error("sem llama-swap");
+      },
+      embeddings: async () => {
+        throw new Error("sem llama-swap");
+      },
+      rerank: async () => [],
+    };
+    const ex = criarExecutor({ grafo: g, catalogo: CAT, llm: quebrado });
+    const r = await ex.executar({ nome: "buscar_trechos", argumentos: { pergunta: "Quem preside?" } });
+    expect(r.erro).toMatch(/sem llama-swap/);
+    const e = await ex.executar({ nome: "entidade", argumentos: { nome: "União" } });
+    expect(e.erro).toMatch(/sem llama-swap/);
   });
 
   it("o executor lista as 12 ferramentas e as não portadas respondem erro, não exceção", async () => {
@@ -90,7 +129,7 @@ describe("executor", () => {
     const a = await ex.executar({ nome: "pesquisar_web", argumentos: {} });
     expect(a.erro).toBe("ferramenta_desconhecida");
     expect(a.evidencias).toEqual([]);
-    for (const nome of ["buscar_trechos", "buscar_tabelas", "entidade", "panorama", "consultar_grafo", "resposta_ja_dada"]) {
+    for (const nome of ["panorama", "consultar_grafo"]) {
       const r = await ex.executar({ nome, argumentos: { pergunta: "x", nome: "x", resposta: "x" } });
       expect(r.erro, nome).toBe("ferramenta_nao_portada");
       expect(r.evidencias, nome).toEqual([]);

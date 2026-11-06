@@ -10,7 +10,7 @@
  */
 import type { Metrica } from "./catalogo.ts";
 import { lerCatalogo } from "./catalogo.ts";
-import { envelope, evidencia, type Envelope, type Evidencia } from "./contrato.ts";
+import { envelope, evidencia, falhar, fechar, mensagemDe, type Envelope, type Evidencia } from "./contrato.ts";
 import type { GrafoLeitura } from "./grafo.ts";
 import {
   consolidarFatos,
@@ -164,19 +164,6 @@ const numeros = (v: unknown): number[] => (Array.isArray(v) ? v.filter((p): p is
 function rodar(grafo: GrafoLeitura, nome: NomeConsulta, parametros: Record<string, unknown> = {}): Promise<Linha[]> {
   return grafo.consultar(CONSULTAS[nome], parametros);
 }
-
-function fechar<T extends Envelope>(saida: T, t0: number): T {
-  saida.latencia_ms = Math.round((performance.now() - t0) * 10) / 10;
-  return saida;
-}
-
-function falhar<T extends Envelope>(saida: T, t0: number, codigo: string, extra: Partial<Envelope> = {}): T {
-  saida.erro = codigo;
-  Object.assign(saida, extra);
-  return fechar(saida, t0);
-}
-
-const mensagemDe = (e: unknown) => (e instanceof Error ? e.message : String(e));
 
 interface Contexto {
   metrica: Metrica;

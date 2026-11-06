@@ -199,6 +199,7 @@ def main() -> None:
     b.add_argument("--stepback", action="store_true", help="busca também com uma pergunta mais geral (LLM)")
     b.add_argument("--hyde", action="store_true", help="busca também com um trecho hipotético (LLM)")
     b.add_argument("--llm", default=MODELO_LLM, help="modelo que reescreve a consulta")
+    b.add_argument("--json", action="store_true", help="saída completa em JSON (usada pela paridade da F7.9)")
     m = sub.add_parser("medir")
     m.add_argument("--perguntas", type=Path, default=Path("../eval/perguntas_latencia.txt"))
     m.add_argument("--sem-sonda", action="store_true")
@@ -226,6 +227,9 @@ def main() -> None:
                 stepback=rew["stepback"],
                 hyde=rew["hyde"],
             )
+            if a.json:
+                print(json.dumps({**r, "reescrita": rew}, ensure_ascii=False, indent=2))
+                return
             for p in r["pais"]:
                 pag = p["pageStart"] if p["pageStart"] == p["pageEnd"] else f"{p['pageStart']}-{p['pageEnd']}"
                 print(

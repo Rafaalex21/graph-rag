@@ -58,9 +58,11 @@ npm run avaliar:rotas -- --nome f73-teste3 --grupo teste3   # ajuste | teste | t
 
 `criarExecutor({ grafo })` recebe o `{nome, argumentos}` do roteador e devolve o resultado da ferramenta no contrato
 `evidencias[]` (`id`, `tipo`, `paginas`, `caminho`, `texto`, `score`, mais `aviso`, `erro`, `sugestoes`, `omitido`).
-Nunca lança: ferramenta desconhecida, ainda não portada (F7.9 e F7.10) e exceção viram `erro`. Portadas: `fato_financeiro`,
-`serie_metrica`, `comparar_segmentos`, `riscos`, `eventos` e `pessoas_cargos`, com Cypher fixo e somente leitura
-(`GrafoNeo4j`, sessão `READ`; credenciais do `.env` da raiz).
+Nunca lança: ferramenta desconhecida, ainda não portada (`panorama` e `consultar_grafo`, F7.10) e exceção viram `erro`.
+Portadas: `fato_financeiro`, `serie_metrica`, `comparar_segmentos`, `riscos`, `eventos` e `pessoas_cargos`, com Cypher
+fixo e somente leitura (`GrafoNeo4j`, sessão `READ`; credenciais do `.env` da raiz), e, a partir da F7.9 (ADR-057),
+`buscar_trechos`, `buscar_tabelas`, `entidade` e `resposta_ja_dada`, que precisam do `llm` (`criarExecutor({ grafo, llm })`,
+um `ClienteLlm`; sem ele devolvem `llm_nao_configurado`).
 
 ```ts
 import { GrafoNeo4j, criarExecutor } from "./ferramentas/index.ts";
@@ -74,6 +76,11 @@ await grafo.fechar();
 Paridade com o Python no grafo real (Neo4j no ar e `uv` no PATH): `npm run avaliar:paridade` roda as 54 chamadas de
 `eval/paridade_templates.json` nos dois lados e sai com código 1 se algo diferir. O contrato contra o grafo real
 (`test/ferramentas/templates.integracao.test.ts`) é pulado sem o Neo4j.
+
+Paridade das buscas (F7.9; Neo4j, llama-swap e `uv` no ar): `npm run avaliar:busca` compara `buscar_trechos` nas 55
+perguntas do golden com página e `entidade` em 12 nomes com o Python, mede o page recall dos dois lados e a página de
+`buscar_tabelas`. Leva ~25 minutos. A nota do reranker muda conforme o servidor já tenha visto a consulta, então a
+comparação é TS (a frio) → Python → TS (a quente) com tolerância de 1e-3 (ver o ADR-057).
 
 Erros (`LlmIndisponivelError`, `LlmTimeoutError`, `LlmAbortadoError`, `LlmHttpError`,
 `LlmRespostaInvalidaError`) têm uma classe por causa. Só rede e 5xx ganham uma nova tentativa. A primeira

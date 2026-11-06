@@ -28,6 +28,13 @@ describe("paraNeo4j", () => {
     expect(paraNeo4j(null)).toBeNull();
     expect(paraNeo4j(false)).toBe(false);
   });
+
+  it("vetor de embedding (floats, com um 0 no meio) continua lista de floats", () => {
+    const v = [0.12, 0, -0.5, 1];
+    const r = paraNeo4j(v) as unknown[];
+    expect(r).toEqual(v);
+    expect(r.some((x) => neo4j.isInt(x))).toBe(false);
+  });
 });
 
 describe("paraJs", () => {

@@ -50,6 +50,21 @@ export function evidencia(
   return { id, tipo, paginas: rotuloDePaginas(paginas), caminho, texto, score };
 }
 
+/** Marca a latência do envelope, em milissegundos com uma casa, e o devolve. */
+export function fechar<T extends Envelope>(saida: T, t0: number): T {
+  saida.latencia_ms = Math.round((performance.now() - t0) * 10) / 10;
+  return saida;
+}
+
+/** Fecha o envelope com um código de erro (e campos extras, como `sugestoes` ou `aviso`). */
+export function falhar<T extends Envelope>(saida: T, t0: number, codigo: string, extra: Partial<Envelope> = {}): T {
+  saida.erro = codigo;
+  Object.assign(saida, extra);
+  return fechar(saida, t0);
+}
+
+export const mensagemDe = (e: unknown): string => (e instanceof Error ? e.message : String(e));
+
 export interface ChamadaFerramenta {
   nome: string;
   argumentos: Record<string, unknown>;

@@ -1,0 +1,1279 @@
+{
+  "nome": "f79-busca",
+  "data": "2026-11-06",
+  "comando": "npm run avaliar:busca",
+  "trechos": {
+    "perguntas": 55,
+    "iguais": 50,
+    "ruido_do_reranker": 1,
+    "diferentes": 4,
+    "falhas": 0,
+    "tolerancia_de_nota": 0.001,
+    "maior_dif_de_nota": 0.045777,
+    "trocas_de_ordem": 2,
+    "efeito_do_cache_do_servidor": {
+      "perguntas_em_que_a_nota_muda_a_frio": 21,
+      "maior_dif_de_nota": 0.102635
+    },
+    "chao_de_ruido_python_contra_python": {
+      "perguntas": 10,
+      "maior_dif_de_nota": 0,
+      "conjuntos_diferentes": 0,
+      "ordens_diferentes": 0
+    },
+    "page_recall": {
+      "@1": {
+        "python": 0.4727,
+        "ts": 0.4727
+      },
+      "@3": {
+        "python": 0.5788,
+        "ts": 0.5788
+      },
+      "@6": {
+        "python": 0.6273,
+        "ts": 0.6273
+      }
+    },
+    "ms_ts_p50": 710.5
+  },
+  "entidades": {
+    "nomes": 12,
+    "iguais": 12,
+    "so_ordem": 0,
+    "diferentes": 0,
+    "falhas": 0,
+    "t15": {
+      "nome_da_pergunta": true,
+      "por_cargo": true
+    }
+  },
+  "tabelas": {
+    "perguntas": 9,
+    "acerto_de_pagina": {
+      "@1": 0.5556,
+      "@3": 0.7778
+    }
+  },
+  "itens": {
+    "trechos": [
+      {
+        "id": "T01",
+        "categoria": "factual_textual",
+        "veredito": "ruido_do_reranker",
+        "diferencas": [],
+        "recall_python": {
+          "1": 1,
+          "3": 1,
+          "6": 1
+        },
+        "recall_ts": {
+          "1": 1,
+          "3": 1,
+          "6": 1
+        },
+        "ms_ts": 779.6
+      },
+      {
+        "id": "T02",
+        "categoria": "factual_textual",
+        "veredito": "igual",
+        "diferencas": [],
+        "recall_python": {
+          "1": 1,
+          "3": 1,
+          "6": 1
+        },
+        "recall_ts": {
+          "1": 1,
+          "3": 1,
+          "6": 1
+        },
+        "ms_ts": 749.7
+      },
+      {
+        "id": "T03",
+        "categoria": "factual_textual",
+        "veredito": "igual",
+        "diferencas": [],
+        "recall_python": {
+          "1": 1,
+          "3": 1,
+          "6": 1
+        },
+        "recall_ts": {
+          "1": 1,
+          "3": 1,
+          "6": 1
+        },
+        "ms_ts": 678.2
+      },
+      {
+        "id": "T04",
+        "categoria": "factual_textual",
+        "veredito": "diferente",
+        "diferencas": [
+          {
+            "caminho": "nota (dif 0.045777)",
+            "tipo": "valor"
+          }
+        ],
+        "recall_python": {
+          "1": 1,
+          "3": 1,
+          "6": 1
+        },
+        "recall_ts": {
+          "1": 1,
+          "3": 1,
+          "6": 1
+        },
+        "ms_ts": 689.8
+      },
+      {
+        "id": "T05",
+        "categoria": "factual_textual",
+        "veredito": "igual",
+        "diferencas": [],
+        "recall_python": {
+          "1": 1,
+          "3": 1,
+          "6": 1
+        },
+        "recall_ts": {
+          "1": 1,
+          "3": 1,
+          "6": 1
+        },
+        "ms_ts": 638.8
+      },
+      {
+        "id": "T06",
+        "categoria": "factual_textual",
+        "veredito": "igual",
+        "diferencas": [],
+        "recall_python": {
+          "1": 1,
+          "3": 1,
+          "6": 1
+        },
+        "recall_ts": {
+          "1": 1,
+          "3": 1,
+          "6": 1
+        },
+        "ms_ts": 900
+      },
+      {
+        "id": "T07",
+        "categoria": "factual_textual",
+        "veredito": "igual",
+        "diferencas": [],
+        "recall_python": {
+          "1": 1,
+          "3": 1,
+          "6": 1
+        },
+        "recall_ts": {
+          "1": 1,
+          "3": 1,
+          "6": 1
+        },
+        "ms_ts": 959.4
+      },
+      {
+        "id": "T08",
+        "categoria": "factual_textual",
+        "veredito": "igual",
+        "diferencas": [],
+        "recall_python": {
+          "1": 1,
+          "3": 1,
+          "6": 1
+        },
+        "recall_ts": {
+          "1": 1,
+          "3": 1,
+          "6": 1
+        },
+        "ms_ts": 1206.8
+      },
+      {
+        "id": "T09",
+        "categoria": "factual_textual",
+        "veredito": "igual",
+        "diferencas": [],
+        "recall_python": {
+          "1": 1,
+          "3": 1,
+          "6": 1
+        },
+        "recall_ts": {
+          "1": 1,
+          "3": 1,
+          "6": 1
+        },
+        "ms_ts": 903.3
+      },
+      {
+        "id": "T10",
+        "categoria": "factual_textual",
+        "veredito": "igual",
+        "diferencas": [],
+        "recall_python": {
+          "1": 1,
+          "3": 1,
+          "6": 1
+        },
+        "recall_ts": {
+          "1": 1,
+          "3": 1,
+          "6": 1
+        },
+        "ms_ts": 995.6
+      },
+      {
+        "id": "T11",
+        "categoria": "factual_textual",
+        "veredito": "igual",
+        "diferencas": [],
+        "recall_python": {
+          "1": 1,
+          "3": 1,
+          "6": 1
+        },
+        "recall_ts": {
+          "1": 1,
+          "3": 1,
+          "6": 1
+        },
+        "ms_ts": 716
+      },
+      {
+        "id": "T12",
+        "categoria": "factual_textual",
+        "veredito": "igual",
+        "diferencas": [],
+        "recall_python": {
+          "1": 0,
+          "3": 0,
+          "6": 0
+        },
+        "recall_ts": {
+          "1": 0,
+          "3": 0,
+          "6": 0
+        },
+        "ms_ts": 1011.3
+      },
+      {
+        "id": "T13",
+        "categoria": "factual_textual",
+        "veredito": "igual",
+        "diferencas": [],
+        "recall_python": {
+          "1": 1,
+          "3": 1,
+          "6": 1
+        },
+        "recall_ts": {
+          "1": 1,
+          "3": 1,
+          "6": 1
+        },
+        "ms_ts": 1116
+      },
+      {
+        "id": "T14",
+        "categoria": "factual_textual",
+        "veredito": "diferente",
+        "diferencas": [
+          {
+            "caminho": "só no Python: f2fd5162e93d46d7",
+            "tipo": "pai"
+          },
+          {
+            "caminho": "só no TS: a3ab12c7f5f04c06",
+            "tipo": "pai"
+          }
+        ],
+        "recall_python": {
+          "1": 1,
+          "3": 1,
+          "6": 1
+        },
+        "recall_ts": {
+          "1": 1,
+          "3": 1,
+          "6": 1
+        },
+        "ms_ts": 738.4
+      },
+      {
+        "id": "T15",
+        "categoria": "factual_textual",
+        "veredito": "igual",
+        "diferencas": [],
+        "recall_python": {
+          "1": 0,
+          "3": 1,
+          "6": 1
+        },
+        "recall_ts": {
+          "1": 0,
+          "3": 1,
+          "6": 1
+        },
+        "ms_ts": 655.2
+      },
+      {
+        "id": "N01",
+        "categoria": "numerica",
+        "veredito": "igual",
+        "diferencas": [],
+        "recall_python": {
+          "1": 0,
+          "3": 0,
+          "6": 1
+        },
+        "recall_ts": {
+          "1": 0,
+          "3": 0,
+          "6": 1
+        },
+        "ms_ts": 418.5
+      },
+      {
+        "id": "N02",
+        "categoria": "numerica",
+        "veredito": "igual",
+        "diferencas": [],
+        "recall_python": {
+          "1": 1,
+          "3": 1,
+          "6": 1
+        },
+        "recall_ts": {
+          "1": 1,
+          "3": 1,
+          "6": 1
+        },
+        "ms_ts": 518.5
+      },
+      {
+        "id": "N03",
+        "categoria": "numerica",
+        "veredito": "igual",
+        "diferencas": [],
+        "recall_python": {
+          "1": 0,
+          "3": 1,
+          "6": 1
+        },
+        "recall_ts": {
+          "1": 0,
+          "3": 1,
+          "6": 1
+        },
+        "ms_ts": 703.6
+      },
+      {
+        "id": "N04",
+        "categoria": "numerica",
+        "veredito": "igual",
+        "diferencas": [],
+        "recall_python": {
+          "1": 0,
+          "3": 0,
+          "6": 0
+        },
+        "recall_ts": {
+          "1": 0,
+          "3": 0,
+          "6": 0
+        },
+        "ms_ts": 465
+      },
+      {
+        "id": "N05",
+        "categoria": "numerica",
+        "veredito": "igual",
+        "diferencas": [],
+        "recall_python": {
+          "1": 1,
+          "3": 1,
+          "6": 1
+        },
+        "recall_ts": {
+          "1": 1,
+          "3": 1,
+          "6": 1
+        },
+        "ms_ts": 565.6
+      },
+      {
+        "id": "N06",
+        "categoria": "numerica",
+        "veredito": "igual",
+        "diferencas": [],
+        "recall_python": {
+          "1": 0,
+          "3": 0,
+          "6": 1
+        },
+        "recall_ts": {
+          "1": 0,
+          "3": 0,
+          "6": 1
+        },
+        "ms_ts": 579.1
+      },
+      {
+        "id": "N07",
+        "categoria": "numerica",
+        "veredito": "igual",
+        "diferencas": [],
+        "recall_python": {
+          "1": 0,
+          "3": 0,
+          "6": 0
+        },
+        "recall_ts": {
+          "1": 0,
+          "3": 0,
+          "6": 0
+        },
+        "ms_ts": 397.6
+      },
+      {
+        "id": "N08",
+        "categoria": "numerica",
+        "veredito": "igual",
+        "diferencas": [],
+        "recall_python": {
+          "1": 0,
+          "3": 0,
+          "6": 0
+        },
+        "recall_ts": {
+          "1": 0,
+          "3": 0,
+          "6": 0
+        },
+        "ms_ts": 455
+      },
+      {
+        "id": "N09",
+        "categoria": "numerica",
+        "veredito": "igual",
+        "diferencas": [],
+        "recall_python": {
+          "1": 1,
+          "3": 1,
+          "6": 1
+        },
+        "recall_ts": {
+          "1": 1,
+          "3": 1,
+          "6": 1
+        },
+        "ms_ts": 720.2
+      },
+      {
+        "id": "N10",
+        "categoria": "numerica",
+        "veredito": "igual",
+        "diferencas": [],
+        "recall_python": {
+          "1": 0,
+          "3": 0,
+          "6": 0
+        },
+        "recall_ts": {
+          "1": 0,
+          "3": 0,
+          "6": 0
+        },
+        "ms_ts": 841.1
+      },
+      {
+        "id": "N11",
+        "categoria": "numerica",
+        "veredito": "diferente",
+        "diferencas": [
+          {
+            "caminho": "nota (dif 0.010974)",
+            "tipo": "valor"
+          }
+        ],
+        "recall_python": {
+          "1": 0,
+          "3": 0,
+          "6": 0
+        },
+        "recall_ts": {
+          "1": 0,
+          "3": 0,
+          "6": 0
+        },
+        "ms_ts": 486.6
+      },
+      {
+        "id": "N12",
+        "categoria": "numerica",
+        "veredito": "igual",
+        "diferencas": [],
+        "recall_python": {
+          "1": 0,
+          "3": 0,
+          "6": 0
+        },
+        "recall_ts": {
+          "1": 0,
+          "3": 0,
+          "6": 0
+        },
+        "ms_ts": 794.2
+      },
+      {
+        "id": "N13",
+        "categoria": "numerica",
+        "veredito": "igual",
+        "diferencas": [],
+        "recall_python": {
+          "1": 1,
+          "3": 1,
+          "6": 1
+        },
+        "recall_ts": {
+          "1": 1,
+          "3": 1,
+          "6": 1
+        },
+        "ms_ts": 445.3
+      },
+      {
+        "id": "N14",
+        "categoria": "numerica",
+        "veredito": "igual",
+        "diferencas": [],
+        "recall_python": {
+          "1": 0,
+          "3": 1,
+          "6": 1
+        },
+        "recall_ts": {
+          "1": 0,
+          "3": 1,
+          "6": 1
+        },
+        "ms_ts": 634.8
+      },
+      {
+        "id": "N15",
+        "categoria": "numerica",
+        "veredito": "igual",
+        "diferencas": [],
+        "recall_python": {
+          "1": 1,
+          "3": 1,
+          "6": 1
+        },
+        "recall_ts": {
+          "1": 1,
+          "3": 1,
+          "6": 1
+        },
+        "ms_ts": 698.2
+      },
+      {
+        "id": "G01",
+        "categoria": "agregacao_filtro",
+        "veredito": "diferente",
+        "diferencas": [
+          {
+            "caminho": "nota (dif 0.001882)",
+            "tipo": "valor"
+          }
+        ],
+        "recall_python": {
+          "1": 0,
+          "3": 0,
+          "6": 0
+        },
+        "recall_ts": {
+          "1": 0,
+          "3": 0,
+          "6": 0
+        },
+        "ms_ts": 776.7
+      },
+      {
+        "id": "G02",
+        "categoria": "agregacao_filtro",
+        "veredito": "igual",
+        "diferencas": [],
+        "recall_python": {
+          "1": 0,
+          "3": 0,
+          "6": 0
+        },
+        "recall_ts": {
+          "1": 0,
+          "3": 0,
+          "6": 0
+        },
+        "ms_ts": 787.7
+      },
+      {
+        "id": "G03",
+        "categoria": "agregacao_filtro",
+        "veredito": "igual",
+        "diferencas": [],
+        "recall_python": {
+          "1": 1,
+          "3": 1,
+          "6": 1
+        },
+        "recall_ts": {
+          "1": 1,
+          "3": 1,
+          "6": 1
+        },
+        "ms_ts": 1099.7
+      },
+      {
+        "id": "G04",
+        "categoria": "agregacao_filtro",
+        "veredito": "igual",
+        "diferencas": [],
+        "recall_python": {
+          "1": 0,
+          "3": 0,
+          "6": 0
+        },
+        "recall_ts": {
+          "1": 0,
+          "3": 0,
+          "6": 0
+        },
+        "ms_ts": 576.7
+      },
+      {
+        "id": "G05",
+        "categoria": "agregacao_filtro",
+        "veredito": "igual",
+        "diferencas": [],
+        "recall_python": {
+          "1": 0,
+          "3": 0,
+          "6": 0
+        },
+        "recall_ts": {
+          "1": 0,
+          "3": 0,
+          "6": 0
+        },
+        "ms_ts": 608.7
+      },
+      {
+        "id": "G06",
+        "categoria": "agregacao_filtro",
+        "veredito": "igual",
+        "diferencas": [],
+        "recall_python": {
+          "1": 0,
+          "3": 0,
+          "6": 0
+        },
+        "recall_ts": {
+          "1": 0,
+          "3": 0,
+          "6": 0
+        },
+        "ms_ts": 470.5
+      },
+      {
+        "id": "G07",
+        "categoria": "agregacao_filtro",
+        "veredito": "igual",
+        "diferencas": [],
+        "recall_python": {
+          "1": 0,
+          "3": 0,
+          "6": 0
+        },
+        "recall_ts": {
+          "1": 0,
+          "3": 0,
+          "6": 0
+        },
+        "ms_ts": 710.5
+      },
+      {
+        "id": "G08",
+        "categoria": "agregacao_filtro",
+        "veredito": "igual",
+        "diferencas": [],
+        "recall_python": {
+          "1": 0,
+          "3": 0,
+          "6": 0
+        },
+        "recall_ts": {
+          "1": 0,
+          "3": 0,
+          "6": 0
+        },
+        "ms_ts": 494.6
+      },
+      {
+        "id": "G09",
+        "categoria": "agregacao_filtro",
+        "veredito": "igual",
+        "diferencas": [],
+        "recall_python": {
+          "1": 0,
+          "3": 0,
+          "6": 0
+        },
+        "recall_ts": {
+          "1": 0,
+          "3": 0,
+          "6": 0
+        },
+        "ms_ts": 534.3
+      },
+      {
+        "id": "G10",
+        "categoria": "agregacao_filtro",
+        "veredito": "igual",
+        "diferencas": [],
+        "recall_python": {
+          "1": 0,
+          "3": 0,
+          "6": 0
+        },
+        "recall_ts": {
+          "1": 0,
+          "3": 0,
+          "6": 0
+        },
+        "ms_ts": 503.7
+      },
+      {
+        "id": "P01",
+        "categoria": "tematica_global",
+        "veredito": "igual",
+        "diferencas": [],
+        "recall_python": {
+          "1": 0,
+          "3": 1,
+          "6": 1
+        },
+        "recall_ts": {
+          "1": 0,
+          "3": 1,
+          "6": 1
+        },
+        "ms_ts": 959.4
+      },
+      {
+        "id": "P02",
+        "categoria": "tematica_global",
+        "veredito": "igual",
+        "diferencas": [],
+        "recall_python": {
+          "1": 1,
+          "3": 1,
+          "6": 1
+        },
+        "recall_ts": {
+          "1": 1,
+          "3": 1,
+          "6": 1
+        },
+        "ms_ts": 920.5
+      },
+      {
+        "id": "P03",
+        "categoria": "tematica_global",
+        "veredito": "igual",
+        "diferencas": [],
+        "recall_python": {
+          "1": 0,
+          "3": 0.3333333333333333,
+          "6": 1
+        },
+        "recall_ts": {
+          "1": 0,
+          "3": 0.3333333333333333,
+          "6": 1
+        },
+        "ms_ts": 965.8
+      },
+      {
+        "id": "P04",
+        "categoria": "tematica_global",
+        "veredito": "igual",
+        "diferencas": [],
+        "recall_python": {
+          "1": 1,
+          "3": 1,
+          "6": 1
+        },
+        "recall_ts": {
+          "1": 1,
+          "3": 1,
+          "6": 1
+        },
+        "ms_ts": 689
+      },
+      {
+        "id": "P05",
+        "categoria": "tematica_global",
+        "veredito": "igual",
+        "diferencas": [],
+        "recall_python": {
+          "1": 1,
+          "3": 1,
+          "6": 1
+        },
+        "recall_ts": {
+          "1": 1,
+          "3": 1,
+          "6": 1
+        },
+        "ms_ts": 749.3
+      },
+      {
+        "id": "P06",
+        "categoria": "tematica_global",
+        "veredito": "igual",
+        "diferencas": [],
+        "recall_python": {
+          "1": 0,
+          "3": 1,
+          "6": 1
+        },
+        "recall_ts": {
+          "1": 0,
+          "3": 1,
+          "6": 1
+        },
+        "ms_ts": 645.8
+      },
+      {
+        "id": "P07",
+        "categoria": "tematica_global",
+        "veredito": "igual",
+        "diferencas": [],
+        "recall_python": {
+          "1": 1,
+          "3": 1,
+          "6": 1
+        },
+        "recall_ts": {
+          "1": 1,
+          "3": 1,
+          "6": 1
+        },
+        "ms_ts": 646.3
+      },
+      {
+        "id": "P08",
+        "categoria": "tematica_global",
+        "veredito": "igual",
+        "diferencas": [],
+        "recall_python": {
+          "1": 1,
+          "3": 1,
+          "6": 1
+        },
+        "recall_ts": {
+          "1": 1,
+          "3": 1,
+          "6": 1
+        },
+        "ms_ts": 586.3
+      },
+      {
+        "id": "P09",
+        "categoria": "tematica_global",
+        "veredito": "igual",
+        "diferencas": [],
+        "recall_python": {
+          "1": 0,
+          "3": 0,
+          "6": 0
+        },
+        "recall_ts": {
+          "1": 0,
+          "3": 0,
+          "6": 0
+        },
+        "ms_ts": 995.4
+      },
+      {
+        "id": "P10",
+        "categoria": "tematica_global",
+        "veredito": "igual",
+        "diferencas": [],
+        "recall_python": {
+          "1": 1,
+          "3": 1,
+          "6": 1
+        },
+        "recall_ts": {
+          "1": 1,
+          "3": 1,
+          "6": 1
+        },
+        "ms_ts": 989.1
+      },
+      {
+        "id": "M01",
+        "categoria": "multi_hop",
+        "veredito": "igual",
+        "diferencas": [],
+        "recall_python": {
+          "1": 0,
+          "3": 0,
+          "6": 0
+        },
+        "recall_ts": {
+          "1": 0,
+          "3": 0,
+          "6": 0
+        },
+        "ms_ts": 771
+      },
+      {
+        "id": "M02",
+        "categoria": "multi_hop",
+        "veredito": "igual",
+        "diferencas": [],
+        "recall_python": {
+          "1": 0,
+          "3": 0.5,
+          "6": 0.5
+        },
+        "recall_ts": {
+          "1": 0,
+          "3": 0.5,
+          "6": 0.5
+        },
+        "ms_ts": 895.9
+      },
+      {
+        "id": "M03",
+        "categoria": "multi_hop",
+        "veredito": "igual",
+        "diferencas": [],
+        "recall_python": {
+          "1": 0.5,
+          "3": 0.5,
+          "6": 0.5
+        },
+        "recall_ts": {
+          "1": 0.5,
+          "3": 0.5,
+          "6": 0.5
+        },
+        "ms_ts": 590.6
+      },
+      {
+        "id": "M04",
+        "categoria": "multi_hop",
+        "veredito": "igual",
+        "diferencas": [],
+        "recall_python": {
+          "1": 0.5,
+          "3": 0.5,
+          "6": 0.5
+        },
+        "recall_ts": {
+          "1": 0.5,
+          "3": 0.5,
+          "6": 0.5
+        },
+        "ms_ts": 882.7
+      },
+      {
+        "id": "M05",
+        "categoria": "multi_hop",
+        "veredito": "igual",
+        "diferencas": [],
+        "recall_python": {
+          "1": 0,
+          "3": 0,
+          "6": 0
+        },
+        "recall_ts": {
+          "1": 0,
+          "3": 0,
+          "6": 0
+        },
+        "ms_ts": 1004.3
+      }
+    ],
+    "entidades": [
+      {
+        "nome": "Tarciana Paula Gomes Medeiros",
+        "veredito": "igual",
+        "diferencas": [],
+        "evidencias_python": 17,
+        "evidencias_ts": 17
+      },
+      {
+        "nome": "Diretora Presidente",
+        "veredito": "igual",
+        "diferencas": [],
+        "evidencias_python": 24,
+        "evidencias_ts": 24
+      },
+      {
+        "nome": "União Federal",
+        "veredito": "igual",
+        "diferencas": [],
+        "evidencias_python": 24,
+        "evidencias_ts": 24
+      },
+      {
+        "nome": "Banco do Brasil",
+        "veredito": "igual",
+        "diferencas": [],
+        "evidencias_python": 24,
+        "evidencias_ts": 24
+      },
+      {
+        "nome": "BB Consórcios",
+        "veredito": "igual",
+        "diferencas": [],
+        "evidencias_python": 24,
+        "evidencias_ts": 24
+      },
+      {
+        "nome": "Previ",
+        "veredito": "igual",
+        "diferencas": [],
+        "evidencias_python": 24,
+        "evidencias_ts": 24
+      },
+      {
+        "nome": "Conselho Fiscal",
+        "veredito": "igual",
+        "diferencas": [],
+        "evidencias_python": 23,
+        "evidencias_ts": 23
+      },
+      {
+        "nome": "Conselho de Administração",
+        "veredito": "igual",
+        "diferencas": [],
+        "evidencias_python": 24,
+        "evidencias_ts": 24
+      },
+      {
+        "nome": "Comitê de Auditoria",
+        "veredito": "igual",
+        "diferencas": [],
+        "evidencias_python": 24,
+        "evidencias_ts": 24
+      },
+      {
+        "nome": "Tesouro Nacional",
+        "veredito": "igual",
+        "diferencas": [],
+        "evidencias_python": 24,
+        "evidencias_ts": 24
+      },
+      {
+        "nome": "Banco Central",
+        "veredito": "igual",
+        "diferencas": [],
+        "evidencias_python": 24,
+        "evidencias_ts": 24
+      },
+      {
+        "nome": "Fulano de Tal Inexistente",
+        "veredito": "igual",
+        "diferencas": [],
+        "evidencias_python": 19,
+        "evidencias_ts": 19
+      }
+    ],
+    "tabelas": [
+      {
+        "id": "N03",
+        "pergunta_do_golden": true,
+        "paginas_gabarito": [
+          94
+        ],
+        "acerto": {
+          "1": 1,
+          "3": 1
+        },
+        "ms": 86.2
+      },
+      {
+        "id": "N04",
+        "pergunta_do_golden": true,
+        "paginas_gabarito": [
+          92
+        ],
+        "acerto": {
+          "1": 1,
+          "3": 1
+        },
+        "ms": 102.6
+      },
+      {
+        "id": "N05",
+        "pergunta_do_golden": true,
+        "paginas_gabarito": [
+          90
+        ],
+        "acerto": {
+          "1": 1,
+          "3": 1
+        },
+        "ms": 81.9
+      },
+      {
+        "id": "N06",
+        "pergunta_do_golden": true,
+        "paginas_gabarito": [
+          12
+        ],
+        "acerto": {
+          "1": 1,
+          "3": 1
+        },
+        "ms": 93.7
+      },
+      {
+        "id": "N07",
+        "pergunta_do_golden": true,
+        "paginas_gabarito": [
+          113
+        ],
+        "acerto": {
+          "1": 0,
+          "3": 0
+        },
+        "ms": 83.9
+      },
+      {
+        "id": "N08",
+        "pergunta_do_golden": true,
+        "paginas_gabarito": [
+          113
+        ],
+        "acerto": {
+          "1": 0,
+          "3": 0
+        },
+        "ms": 76.5
+      },
+      {
+        "id": "N10",
+        "pergunta_do_golden": true,
+        "paginas_gabarito": [
+          205
+        ],
+        "acerto": {
+          "1": 1,
+          "3": 1
+        },
+        "ms": 77.2
+      },
+      {
+        "id": "N11",
+        "pergunta_do_golden": true,
+        "paginas_gabarito": [
+          333
+        ],
+        "acerto": {
+          "1": 0,
+          "3": 1
+        },
+        "ms": 74.2
+      },
+      {
+        "id": "N14",
+        "pergunta_do_golden": true,
+        "paginas_gabarito": [
+          366
+        ],
+        "acerto": {
+          "1": 0,
+          "3": 1
+        },
+        "ms": 74
+      }
+    ],
+    "ruido": [
+      {
+        "id": "T01",
+        "max_dif_score": 0,
+        "mesmo_conjunto": true,
+        "mesma_ordem": true
+      },
+      {
+        "id": "T02",
+        "max_dif_score": 0,
+        "mesmo_conjunto": true,
+        "mesma_ordem": true
+      },
+      {
+        "id": "T03",
+        "max_dif_score": 0,
+        "mesmo_conjunto": true,
+        "mesma_ordem": true
+      },
+      {
+        "id": "T04",
+        "max_dif_score": 0,
+        "mesmo_conjunto": true,
+        "mesma_ordem": true
+      },
+      {
+        "id": "T05",
+        "max_dif_score": 0,
+        "mesmo_conjunto": true,
+        "mesma_ordem": true
+      },
+      {
+        "id": "T06",
+        "max_dif_score": 0,
+        "mesmo_conjunto": true,
+        "mesma_ordem": true
+      },
+      {
+        "id": "T07",
+        "max_dif_score": 0,
+        "mesmo_conjunto": true,
+        "mesma_ordem": true
+      },
+      {
+        "id": "T08",
+        "max_dif_score": 0,
+        "mesmo_conjunto": true,
+        "mesma_ordem": true
+      },
+      {
+        "id": "T09",
+        "max_dif_score": 0,
+        "mesmo_conjunto": true,
+        "mesma_ordem": true
+      },
+      {
+        "id": "T10",
+        "max_dif_score": 0,
+        "mesmo_conjunto": true,
+        "mesma_ordem": true
+      }
+    ]
+  }
+}

@@ -7,13 +7,15 @@
 import { lerCatalogo, type Metrica } from "./catalogo.ts";
 import { envelope, type ChamadaFerramenta, type Envelope } from "./contrato.ts";
 import type { GrafoLeitura } from "./grafo.ts";
+import { buscarTabelas, buscarTrechos, respostaJaDada, type LlmDeBusca } from "./busca.ts";
+import { buscarEntidade } from "./entidade.ts";
 import { compararSegmentos, eventos, fatoFinanceiro, pessoasCargos, riscos, serieMetrica } from "./templates.ts";
 import { normalizar } from "./texto.ts";
 
 export type FerramentaExecutavel = (argumentos: Record<string, unknown>) => Promise<Envelope>;
 
-/** As ferramentas do roteador que ainda não têm execução em TypeScript (F7.9 e F7.10). */
-export const NAO_PORTADAS: readonly string[] = ["buscar_trechos", "buscar_tabelas", "entidade", "panorama", "consultar_grafo", "resposta_ja_dada"];
+/** As ferramentas do roteador que ainda não têm execução em TypeScript (F7.10). */
+export const NAO_PORTADAS: readonly string[] = ["panorama", "consultar_grafo"];
 
 const CATEGORIAS: Record<string, string> = {
   market: "market", mercado: "market",
@@ -57,7 +59,9 @@ function erroDe(nome: string, codigo: string, aviso: string | null = null): Enve
 export interface OpcoesExecutor {
   grafo: GrafoLeitura;
   catalogo?: readonly Metrica[];
-  /** Ferramentas além das de template (F7.9, F7.10); uma entrada tira o nome de `NAO_PORTADAS`. */
+  /** Embedding de consulta e reranker, para `buscar_trechos`, `buscar_tabelas` e `entidade`. Sem ele elas respondem `llm_nao_configurado`. */
+  llm?: LlmDeBusca;
+  /** Ferramentas além das portadas (F7.10); uma entrada tira o nome de `NAO_PORTADAS`. */
   extras?: Record<string, FerramentaExecutavel>;
 }
 
@@ -72,6 +76,8 @@ export function criarExecutor(opcoes: OpcoesExecutor): Executor {
   const { grafo } = opcoes;
   let catalogo = opcoes.catalogo;
   const metricas = () => (catalogo ??= lerCatalogo());
+  const comLlm = async (nome: string, f: (llm: LlmDeBusca) => Promise<Envelope>): Promise<Envelope> =>
+    opcoes.llm ? f(opcoes.llm) : erroDe(nome, "llm_nao_configurado", "O executor foi criado sem o cliente LLM que esta busca exige.");
 
   const portadas: Record<string, FerramentaExecutavel> = {
     fato_financeiro: (a) =>
@@ -92,6 +98,10 @@ export function criarExecutor(opcoes: OpcoesExecutor): Executor {
     },
     eventos: (a) => eventos(grafo, sem({ tema: texto(a["tema"]), ano: numero(a["ano"]) })),
     pessoas_cargos: (a) => pessoasCargos(grafo, sem({ cargo: texto(a["cargo"]), nome: texto(a["nome"]), orgao: texto(a["orgao"]) })),
+    buscar_trechos: (a) => comLlm("buscar_trechos", (llm) => buscarTrechos(grafo, llm, texto(a["pergunta"]) ?? "")),
+    buscar_tabelas: (a) => comLlm("buscar_tabelas", (llm) => buscarTabelas(grafo, llm, texto(a["pergunta"]) ?? "")),
+    entidade: (a) => comLlm("entidade", (llm) => buscarEntidade(grafo, llm, texto(a["nome"]) ?? "")),
+    resposta_ja_dada: async (a) => respostaJaDada({ resposta: texto(a["resposta"]) ?? "" }),
   };
   const tabela: Record<string, FerramentaExecutavel> = { ...portadas, ...(opcoes.extras ?? {}) };
 
@@ -116,5 +126,6 @@ export function criarExecutor(opcoes: OpcoesExecutor): Executor {
   };
 }
 
-/** Atalho para quem só quer a lista de nomes conhecidos. */
+/** As ferramentas de template Cypher (F7.8) e as de busca (F7.9), para quem só quer a lista de nomes. */
 export const FERRAMENTAS_DE_TEMPLATE = ["fato_financeiro", "serie_metrica", "comparar_segmentos", "riscos", "eventos", "pessoas_cargos"] as const;
+export const FERRAMENTAS_DE_BUSCA = ["buscar_trechos", "buscar_tabelas", "entidade", "resposta_ja_dada"] as const;

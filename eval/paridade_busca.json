@@ -1,0 +1,17 @@
+{
+  "descricao": "Entradas da paridade das buscas (F7.9): o Python (indexer.reranker e indexer.busca_local, F2.6 e F6.1) contra o TypeScript (api/src/ferramentas/busca.ts e entidade.ts) no grafo real. As perguntas de buscar_trechos e buscar_tabelas vêm de eval/golden.csv em tempo de execução; aqui ficam só os nomes de entidades (sem trecho do documento, ADR-009).",
+  "entidades": [
+    "Tarciana Paula Gomes Medeiros",
+    "Diretora Presidente",
+    "União Federal",
+    "Banco do Brasil",
+    "BB Consórcios",
+    "Previ",
+    "Conselho Fiscal",
+    "Conselho de Administração",
+    "Comitê de Auditoria",
+    "Tesouro Nacional",
+    "Banco Central",
+    "Fulano de Tal Inexistente"
+  ]
+}

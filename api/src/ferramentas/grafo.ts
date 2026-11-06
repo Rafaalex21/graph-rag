@@ -58,10 +58,17 @@ export function paraJs(valor: unknown): unknown {
   return valor;
 }
 
-/** O contrário, para os parâmetros: um número inteiro de JS iria como FLOAT e `LIMIT $n` o recusaria. */
+/**
+ * O contrário, para os parâmetros: um número inteiro de JS iria como FLOAT e `LIMIT $n` o recusaria. Uma lista com
+ * ao menos um número fracionário é um vetor de embedding e fica como está (um `0` solto entre floats viraria
+ * INTEGER e o índice vetorial receberia uma lista de tipos misturados).
+ */
 export function paraNeo4j(valor: unknown): unknown {
   if (typeof valor === "number" && Number.isInteger(valor)) return neo4j.int(valor);
-  if (Array.isArray(valor)) return valor.map(paraNeo4j);
+  if (Array.isArray(valor)) {
+    if (valor.some((x) => typeof x === "number" && Number.isFinite(x) && !Number.isInteger(x))) return valor;
+    return valor.map(paraNeo4j);
+  }
   return valor;
 }
 
