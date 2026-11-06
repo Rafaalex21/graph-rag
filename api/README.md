@@ -58,11 +58,18 @@ npm run avaliar:rotas -- --nome f73-teste3 --grupo teste3   # ajuste | teste | t
 
 `criarExecutor({ grafo })` recebe o `{nome, argumentos}` do roteador e devolve o resultado da ferramenta no contrato
 `evidencias[]` (`id`, `tipo`, `paginas`, `caminho`, `texto`, `score`, mais `aviso`, `erro`, `sugestoes`, `omitido`).
-Nunca lança: ferramenta desconhecida, ainda não portada (`panorama` e `consultar_grafo`, F7.10) e exceção viram `erro`.
+Nunca lança: ferramenta desconhecida, cliente LLM ausente e exceção viram `erro`.
 Portadas: `fato_financeiro`, `serie_metrica`, `comparar_segmentos`, `riscos`, `eventos` e `pessoas_cargos`, com Cypher
 fixo e somente leitura (`GrafoNeo4j`, sessão `READ`; credenciais do `.env` da raiz), e, a partir da F7.9 (ADR-057),
 `buscar_trechos`, `buscar_tabelas`, `entidade` e `resposta_ja_dada`, que precisam do `llm` (`criarExecutor({ grafo, llm })`,
 um `ClienteLlm`; sem ele devolvem `llm_nao_configurado`).
+
+Desde a F7.10 (ADR-058) as 12 ferramentas do roteador têm execução: `panorama` (busca global *map-reduce* sobre os
+relatórios de comunidade; leva de 20 a 56 s, com `progressoPanorama` repassando `selecao`, `mapa`, `sintese` e `fim`) e
+`consultar_grafo` (Text2Cypher). Esta última executa texto escrito por um LLM, então passa pela guarda de
+`ferramentas/guarda.ts` (texto, plano do `EXPLAIN`, sessão `READ` com 5 s e teto de 50 linhas) e só roda num acesso ao
+grafo que saiba `explicar` e `executarLivre` (`GrafoNeo4j` sabe; senão `grafo_sem_cypher_livre`). O resultado é
+hipótese: a guarda protege o banco, não a resposta. Os pontos do `panorama` não têm página.
 
 ```ts
 import { GrafoNeo4j, criarExecutor } from "./ferramentas/index.ts";
@@ -81,6 +88,12 @@ Paridade das buscas (F7.9; Neo4j, llama-swap e `uv` no ar): `npm run avaliar:bus
 perguntas do golden com página e `entidade` em 12 nomes com o Python, mede o page recall dos dois lados e a página de
 `buscar_tabelas`. Leva ~25 minutos. A nota do reranker muda conforme o servidor já tenha visto a consulta, então a
 comparação é TS (a frio) → Python → TS (a quente) com tolerância de 1e-3 (ver o ADR-057).
+
+Medida da F7.10 (Neo4j, llama-swap e `uv` no ar): `npm run avaliar:consultar` compara o prompt do Text2Cypher com o do
+Python nas 23 perguntas de `eval/golden_agregacao.csv`, mede a execução certa nas 15 dos grupos `ajuste` e `teste` e o
+tempo do `panorama` nas 10 perguntas temáticas (~9 minutos; `--somente prompt,cypher,panorama`). A guarda contra o grafo
+real é `test/ferramentas/guarda.integracao.test.ts` (pulado sem o Neo4j); a lista das 26 entradas maliciosas está em
+`test/ferramentas/guarda.casos.ts`.
 
 Erros (`LlmIndisponivelError`, `LlmTimeoutError`, `LlmAbortadoError`, `LlmHttpError`,
 `LlmRespostaInvalidaError`) têm uma classe por causa. Só rede e 5xx ganham uma nova tentativa. A primeira

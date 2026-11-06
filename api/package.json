@@ -17,6 +17,7 @@
     "avaliar:rotas": "node src/avaliacao/cli-rotas.ts",
     "avaliar:paridade": "node src/avaliacao/cli-paridade.ts",
     "avaliar:busca": "node src/avaliacao/cli-busca.ts",
+    "avaliar:consultar": "node src/avaliacao/cli-consultar.ts",
     "test": "vitest run"
   },
   "dependencies": {

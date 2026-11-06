@@ -16,9 +16,11 @@ import { CATALOGO } from "../../src/agente/roteador.ts";
 import {
   CONSULTAS,
   FERRAMENTAS_DE_BUSCA,
+  FERRAMENTAS_DE_CONSULTA,
   FERRAMENTAS_DE_TEMPLATE,
   NAO_PORTADAS,
   type LlmDeBusca,
+  type LlmDePanorama,
   criarExecutor,
   normalizarCategoria,
   type GrafoLeitura,
@@ -48,8 +50,9 @@ function grafo(respostas: Record<string, Record<string, unknown>[]> = {}) {
 describe("consistência com o catálogo do roteador", () => {
   it("toda ferramenta que o roteador pode chamar é portada ou está declarada como não portada, sem sobra", () => {
     const doRoteador = CATALOGO.map((f) => f.nome).sort();
-    const conhecidas = [...FERRAMENTAS_DE_TEMPLATE, ...FERRAMENTAS_DE_BUSCA, ...NAO_PORTADAS].sort();
+    const conhecidas = [...FERRAMENTAS_DE_TEMPLATE, ...FERRAMENTAS_DE_BUSCA, ...FERRAMENTAS_DE_CONSULTA, ...NAO_PORTADAS].sort();
     expect(conhecidas).toEqual(doRoteador);
+    expect(NAO_PORTADAS).toEqual([]); // as 12 do roteador têm execução em TypeScript desde a F7.10
   });
 
   it("as buscas sem o cliente LLM respondem erro, não exceção; resposta_ja_dada não precisa dele", async () => {
@@ -89,15 +92,48 @@ describe("consistência com o catálogo do roteador", () => {
     expect(e.erro).toMatch(/sem llama-swap/);
   });
 
-  it("o executor lista as 12 ferramentas e as não portadas respondem erro, não exceção", async () => {
+  it("o executor lista as 12 ferramentas; panorama e consultar_grafo sem o cliente LLM respondem erro, não exceção", async () => {
     const { g } = grafo();
     const ex = criarExecutor({ grafo: g, catalogo: CAT });
     expect([...ex.ferramentas].sort()).toEqual(CATALOGO.map((f) => f.nome).sort());
-    for (const nome of NAO_PORTADAS) {
+    for (const nome of FERRAMENTAS_DE_CONSULTA) {
       const r = await ex.executar({ nome, argumentos: { pergunta: "x" } });
-      expect(r.erro).toBe("ferramenta_nao_portada");
-      expect(r.evidencias).toEqual([]);
+      expect(r.erro, nome).toBe("llm_nao_configurado");
+      expect(r.evidencias, nome).toEqual([]);
     }
+  });
+
+  it("consultar_grafo com um acesso ao grafo que não sabe Cypher livre recusa, em vez de rodar sem a guarda", async () => {
+    const { g } = grafo();
+    const llm: LlmDeBusca & Partial<LlmDePanorama> = { embeddingDeConsulta: async () => [1], embeddings: async () => [[1]], rerank: async () => [], chat: async () => ({ texto: "MATCH (n) DETACH DELETE n" }) };
+    const r = await criarExecutor({ grafo: g, catalogo: CAT, llm }).executar({ nome: "consultar_grafo", argumentos: { pergunta: "x" } });
+    expect(r.erro).toBe("grafo_sem_cypher_livre");
+  });
+
+  it("panorama passa a pergunta e o nível do roteador, e o progresso chega a quem pediu", async () => {
+    const pedidos: Record<string, unknown>[] = [];
+    const g: GrafoLeitura = {
+      consultar: async (_c, p = {}) => {
+        pedidos.push(p);
+        return [];
+      },
+    };
+    const eventos: string[] = [];
+    const llm: LlmDeBusca & Partial<LlmDePanorama> = {
+      embeddingDeConsulta: async () => [1, 0],
+      embeddings: async () => [[1, 0]],
+      rerank: async () => [],
+      chat: async () => ({ texto: "" }),
+      chatJson: async () => ({ valor: { pontos: [] } }),
+    };
+    const ex = criarExecutor({ grafo: g, catalogo: CAT, llm, progressoPanorama: (e) => eventos.push(e.fase) });
+    const r = await ex.executar({ nome: "panorama", argumentos: { pergunta: "Quais os riscos?", nivel: 2 } });
+    expect(r.erro).toBeNull();
+    expect(r.ferramenta).toBe("panorama");
+    expect(pedidos[0]).toMatchObject({ nivel: 2 });
+    expect(eventos).toContain("selecao");
+    await ex.executar({ nome: "panorama", argumentos: { pergunta: "Quais os riscos?", nivel: 9 } });
+    expect(pedidos[1]).toMatchObject({ nivel: 1 }); // fora de 0 a 3 vale o padrão
   });
 });
 
@@ -123,17 +159,12 @@ describe("normalizarCategoria", () => {
 });
 
 describe("executor", () => {
-  it("ferramenta desconhecida e ferramenta ainda não portada viram erro, não exceção", async () => {
+  it("ferramenta desconhecida vira erro, não exceção", async () => {
     const { g } = grafo();
     const ex = criarExecutor({ grafo: g, catalogo: CAT });
     const a = await ex.executar({ nome: "pesquisar_web", argumentos: {} });
     expect(a.erro).toBe("ferramenta_desconhecida");
     expect(a.evidencias).toEqual([]);
-    for (const nome of ["panorama", "consultar_grafo"]) {
-      const r = await ex.executar({ nome, argumentos: { pergunta: "x", nome: "x", resposta: "x" } });
-      expect(r.erro, nome).toBe("ferramenta_nao_portada");
-      expect(r.evidencias, nome).toEqual([]);
-    }
   });
 
   it("despacha as seis ferramentas de template com os argumentos delas", async () => {
@@ -216,7 +247,7 @@ describe("executor", () => {
       },
     });
     expect((await ex.executar({ nome: "buscar_trechos", argumentos: { pergunta: "x" } })).erro).toBeNull();
-    expect((await ex.executar({ nome: "panorama", argumentos: { pergunta: "x" } })).erro).toBe("ferramenta_nao_portada");
+    expect((await ex.executar({ nome: "panorama", argumentos: { pergunta: "x" } })).erro).toBe("llm_nao_configurado");
     expect((await ex.executar({ nome: "riscos", argumentos: {} })).ferramenta).toBe("riscos");
   });
 

@@ -4,10 +4,28 @@
  */
 import { readFileSync } from "node:fs";
 import neo4j, { type Driver } from "neo4j-driver";
+import type { Notificacao, PlanoNo } from "./guarda.ts";
 
 export interface GrafoLeitura {
   consultar(cypher: string, parametros?: Record<string, unknown>): Promise<Record<string, unknown>[]>;
 }
+
+export interface ResultadoExplain {
+  /** Raiz do plano do `EXPLAIN` (`operatorType` e `children`); `null` se o servidor não mandou. */
+  plano: PlanoNo | null;
+  notificacoes: Notificacao[];
+}
+
+/**
+ * O que o Text2Cypher (F7.10) pede além de `consultar`: o `EXPLAIN` de uma consulta que veio de um LLM (nada executa)
+ * e a execução dela numa sessão de leitura, com tempo-limite no servidor e teto de linhas.
+ */
+export interface GrafoCypher extends GrafoLeitura {
+  explicar(cypher: string, timeoutMs: number): Promise<ResultadoExplain>;
+  executarLivre(cypher: string, opcoes: { timeoutMs: number; maxLinhas: number }): Promise<{ linhas: Record<string, unknown>[]; truncado: boolean }>;
+}
+
+export const temCypherLivre = (g: GrafoLeitura): g is GrafoCypher => typeof (g as Partial<GrafoCypher>).explicar === "function" && typeof (g as Partial<GrafoCypher>).executarLivre === "function";
 
 export interface ConfigGrafo {
   uri: string;
@@ -72,7 +90,15 @@ export function paraNeo4j(valor: unknown): unknown {
   return valor;
 }
 
-export class GrafoNeo4j implements GrafoLeitura {
+/** Plano do driver → só o que a guarda lê, recursivamente (o objeto do driver traz também argumentos e identificadores). */
+function copiarPlano(p: unknown): PlanoNo | null {
+  if (!p || typeof p !== "object") return null;
+  const o = p as { operatorType?: unknown; children?: unknown };
+  const filhos = Array.isArray(o.children) ? o.children.map(copiarPlano).filter((x): x is PlanoNo => x !== null) : [];
+  return { operatorType: String(o.operatorType ?? ""), children: filhos };
+}
+
+export class GrafoNeo4j implements GrafoCypher {
   readonly #driver: Driver;
   readonly #banco: string;
 
@@ -96,6 +122,37 @@ export class GrafoNeo4j implements GrafoLeitura {
     const params = Object.fromEntries(Object.entries(parametros).map(([k, v]) => [k, paraNeo4j(v)]));
     const r = await this.#driver.executeQuery(cypher, params, { database: this.#banco, routing: neo4j.routing.READ });
     return r.records.map((rec) => paraJs(rec.toObject()) as Record<string, unknown>);
+  }
+
+  /** `EXPLAIN` numa sessão de leitura: o plano não executa nada. Erro de sintaxe lança. */
+  async explicar(cypher: string, timeoutMs: number): Promise<ResultadoExplain> {
+    const sessao = this.#driver.session({ database: this.#banco, defaultAccessMode: neo4j.session.READ });
+    try {
+      const { summary } = await sessao.run(`EXPLAIN ${cypher}`, {}, { timeout: timeoutMs });
+      const notificacoes = (summary.notifications ?? []).map((n) => ({ code: n.code, title: n.title, description: n.description }));
+      return { plano: copiarPlano(summary.plan), notificacoes };
+    } finally {
+      await sessao.close();
+    }
+  }
+
+  /** Executa numa sessão de leitura, com tempo-limite no servidor; lê no máximo `maxLinhas` e avisa se havia mais. */
+  async executarLivre(cypher: string, opcoes: { timeoutMs: number; maxLinhas: number }): Promise<{ linhas: Record<string, unknown>[]; truncado: boolean }> {
+    const sessao = this.#driver.session({ database: this.#banco, defaultAccessMode: neo4j.session.READ });
+    try {
+      const linhas: Record<string, unknown>[] = [];
+      let truncado = false;
+      for await (const registro of sessao.run(cypher, {}, { timeout: opcoes.timeoutMs })) {
+        if (linhas.length >= opcoes.maxLinhas) {
+          truncado = true;
+          break;
+        }
+        linhas.push(paraJs(registro.toObject()) as Record<string, unknown>);
+      }
+      return { linhas, truncado };
+    } finally {
+      await sessao.close();
+    }
   }
 
   async fechar(): Promise<void> {

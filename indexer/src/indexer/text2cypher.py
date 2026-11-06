@@ -26,6 +26,7 @@ import csv
 import json
 import re
 import statistics
+import sys
 import time
 import unicodedata
 import warnings
@@ -846,6 +847,24 @@ def resumir_casos(por_caso: list[dict]) -> dict:
     }
 
 
+def prompts_das_perguntas(driver: Any, perguntas: list[str], banco: str = "neo4j") -> list[dict]:
+    """Os candidatos e as mensagens que o Python mandaria ao LLM em cada pergunta, sem chamar o LLM.
+    A porta em TypeScript (F7.10) monta o prompt por conta própria e compara com esta saída: prompt
+    igual é a condição para a acurácia medida aqui valer lá."""
+    from indexer.catalogo import ler_catalogo
+
+    esquema, _ = descobrir_esquema(driver, banco)
+    esquema_txt = formatar_esquema(esquema)
+    termos = terminologia(ler_catalogo())
+    exemplos = carregar_exemplos()
+    saida = []
+    for pergunta in perguntas:
+        candidatos = rotulos_candidatos(pergunta, esquema["rotulos_todos"])
+        mensagens = montar_prompt(pergunta, esquema_txt, termos, exemplos, candidatos)
+        saida.append({"pergunta": pergunta, "candidatos": candidatos, "mensagens": mensagens})
+    return saida
+
+
 def main() -> None:  # pragma: no cover - orquestração de CLI; as peças acima têm testes
     from indexer.grafo import conectar
 
@@ -858,7 +877,11 @@ def main() -> None:  # pragma: no cover - orquestração de CLI; as peças acima
     m.add_argument("--nome", default="f64")
     m.add_argument("--grupo", choices=["ajuste", "teste"], help="só um grupo")
     m.add_argument("--aquecer", action="store_true", help="mede a carga do modelo antes da 1ª pergunta")
-    for s in (p, m):
+    q = sub.add_parser(
+        "prompt", help="só as mensagens do prompt de cada pergunta, em JSON (paridade da F7.10)"
+    )
+    q.add_argument("perguntas", nargs="+")
+    for s in (p, m, q):
         s.add_argument("--swap", default="http://127.0.0.1:8080")
         s.add_argument("--llm", default="qwen36-35b-a3b")
         s.add_argument("--prompt", choices=VARIANTES, default="completo")
@@ -868,6 +891,10 @@ def main() -> None:  # pragma: no cover - orquestração de CLI; as peças acima
 
     driver = conectar(a.raiz)
     try:
+        if a.acao == "prompt":
+            saida = prompts_das_perguntas(driver, a.perguntas, a.banco)
+            sys.stdout.buffer.write(json.dumps(saida, ensure_ascii=False).encode("utf-8"))
+            return
         chat = chat_cypher(a.swap, a.llm)
         if a.acao == "perguntar":
             if a.mostrar_prompt:
