@@ -28,11 +28,13 @@ import re
 import statistics
 import time
 import unicodedata
+import warnings
 from collections.abc import Callable
 from pathlib import Path
 from typing import Any
 
 from indexer.busca_local import rotulo_de_paginas
+from indexer.guarda_cypher import avisos_do_plano, plano_com_escrita, preparar
 
 RAIZ = Path(__file__).resolve().parents[3]
 EXEMPLOS = RAIZ / "api" / "prompts" / "cypher-examples.json"
@@ -42,7 +44,7 @@ CANDIDATOS_POR_PERGUNTA = 12
 RECORTES_POR_METRICA = 5
 MAX_CHARS_ROTULOS = 16000  # ~5 mil tokens; o prefixo do prompt é igual em toda pergunta e fica no cache
 LIMITE_LINHAS = 50
-TIMEOUT_S = 10
+TIMEOUT_S = 5  # §7.3; a F6.4 usava 10 s
 MAX_DESPEJO = 5  # mais linhas que isso no resultado não prova que a resposta certa estava lá
 # Propriedades que nunca vão ao prompt: vetores e textos longos estourariam o contexto sem ajudar a consulta.
 OCULTAS = {
@@ -410,7 +412,10 @@ def chat_cypher(base: str, modelo: str = "qwen36-35b-a3b", timeout: int = 120) -
 
 _INICIO = re.compile(
     r"^[ \t]*((?:MATCH|OPTIONAL\s+MATCH|UNWIND|CALL|WITH|RETURN)\b"
-    r"|(?i:match|optional\s+match|unwind|call)\b)",
+    # escrita e administração também iniciam consulta: chegam à guarda e são bloqueadas lá, em vez de
+    # sumirem como "sem_cypher"
+    r"|(?:CREATE|MERGE|DELETE|DETACH|SET|REMOVE|DROP|LOAD|FOREACH|USE|SHOW|EXPLAIN|PROFILE)\b"
+    r"|(?i:match|optional\s+match|unwind|call|create|merge|delete|detach|drop|load|show)\b)",
     re.MULTILINE,
 )
 
@@ -466,6 +471,20 @@ def executar(
     return linhas, truncado
 
 
+def explicar(driver: Any, cypher: str, banco: str = "neo4j", timeout: float = TIMEOUT_S) -> dict:
+    """`EXPLAIN` numa sessão de leitura: o plano não executa nada. Devolve `bloqueio` (operador de escrita),
+    `desconhecidos` (nomes que o grafo não tem) e `outros` avisos. Erro de sintaxe levanta."""
+    from neo4j import Query
+
+    with driver.session(database=banco, default_access_mode="READ") as sessao:
+        resumo = sessao.run(Query("EXPLAIN " + cypher, timeout=timeout)).consume()
+    with warnings.catch_warnings():  # `notifications` é o formato com código e descrição; o novo não os traz
+        warnings.simplefilter("ignore", DeprecationWarning)
+        notificacoes = resumo.notifications
+    desconhecidos, outros = avisos_do_plano(notificacoes)
+    return {"bloqueio": plano_com_escrita(resumo.plan), "desconhecidos": desconhecidos, "outros": outros}
+
+
 def _texto_da_linha(linha: dict) -> str:
     return "; ".join(f"{k}={v}" for k, v in linha.items() if v is not None)
 
@@ -503,9 +522,12 @@ def perguntar(
     limite_linhas: int = LIMITE_LINHAS,
     timeout: float = TIMEOUT_S,
     rotulos: list[str] | None = None,
+    autocorrigir: bool = True,
 ) -> dict:
-    """Pergunta → Cypher → linhas. Nunca levanta: falhas voltam em `erro`. `rotulos` são todos os `f.metric`
-    do grafo; deles saem os candidatos mais parecidos com a pergunta."""
+    """Pergunta → Cypher → guarda → linhas. Nunca levanta: falhas voltam em `erro`. `rotulos` são todos os
+    `f.metric` do grafo; deles saem os candidatos mais parecidos com a pergunta. A guarda (F6.5) valida o
+    texto, olha o plano do `EXPLAIN` e só então executa; erro do banco ou nome inexistente tem uma
+    autocorreção; violação da guarda não tem (`erro = "bloqueada_pela_guarda: ..."`)."""
     t0 = time.perf_counter()
     saida: dict = {
         "pergunta": pergunta, "cypher": None, "linhas": [], "evidencias": [], "truncado": False,
@@ -540,10 +562,56 @@ def perguntar(
         saida["erro"] = "sem_cypher"
         saida["latencia_ms"] = {"llm": round((t2 - t1) * 1000)}
         return saida
-    try:
-        saida["linhas"], saida["truncado"] = executar(driver, saida["cypher"], banco, limite_linhas, timeout)
-    except Exception as e:
-        saida["erro"] = f"falha_na_execucao: {str(e)[:200]}"
+    guarda: dict = {"corrigida": False, "avisos": [], "bloqueada": None}
+    saida["guarda"] = guarda
+    atual = saida["cypher"]
+    for tentativa in range(2 if autocorrigir else 1):
+        ultima = tentativa == (1 if autocorrigir else 0)
+        pedido, saida["erro"] = None, None
+        final, motivo = preparar(atual)  # barreira 1: o texto; nada vai ao banco se falhar
+        if motivo:
+            guarda["bloqueada"] = motivo
+            saida["erro"] = f"bloqueada_pela_guarda: {motivo}"
+            break
+        saida["cypher"] = final
+        try:
+            plano = explicar(driver, final, banco, timeout)  # barreira 2: o plano, sem executar
+            if plano["bloqueio"]:
+                guarda["bloqueada"] = plano["bloqueio"]
+                saida["erro"] = f"bloqueada_pela_guarda: {plano['bloqueio']} (plano)"
+                break
+            guarda["avisos"] = plano["outros"]
+            if plano["desconhecidos"]:
+                guarda["avisos"] = plano["desconhecidos"] + plano["outros"]
+                if not ultima:
+                    pedido = "O Neo4j avisou que estes nomes não existem no grafo: " + "; ".join(
+                        plano["desconhecidos"]
+                    )
+            if pedido is None:
+                saida["linhas"], saida["truncado"] = executar(driver, final, banco, limite_linhas, timeout)
+        except Exception as e:
+            saida["erro"] = f"falha_na_execucao: {str(e)[:200]}"
+            pedido = f"A consulta falhou no Neo4j com este erro: {str(e)[:300]}"
+        if pedido is None or ultima:
+            break
+        try:  # a única autocorreção: devolve ao LLM a consulta e o erro, e revalida o que ele responder
+            nova = gera([
+                *mensagens,
+                {"role": "assistant", "content": final},
+                {"role": "user", "content": f"{pedido}\nConsulta: {final}\nCorrija e responda "
+                 "SOMENTE CYPHER, SEM BLOCOS DE CÓDIGO."},
+            ])  # fmt: skip
+            atual = extrair_cypher(nova)
+        except ValueError:
+            saida["erro"] = "sem_cypher"
+            break
+        except Exception as e:
+            saida["erro"] = f"falha_no_llm: {type(e).__name__}: {str(e)[:150]}"
+            break
+        guarda["corrigida"] = True
+        saida["linhas"], saida["truncado"] = [], False
+    if saida["erro"]:
+        saida["linhas"] = []
     t3 = time.perf_counter()
     saida["latencia_ms"] = {"llm": round((t2 - t1) * 1000), "banco": round((t3 - t2) * 1000),
                             "total": round((t3 - t0) * 1000)}  # fmt: skip
@@ -608,6 +676,7 @@ def medir(driver: Any, gera: GeraCypher, casos: list[dict], banco: str = "neo4j"
         por_caso.append({
             "id": c["id"], "grupo": c["grupo"], "ok": ok, "erro": r["erro"], "linhas": len(r["linhas"]),
             "latencia_ms": r["latencia_ms"], "cypher": r["cypher"], "resultado": r["linhas"][:5],
+            "bloqueada": r["guarda"]["bloqueada"], "corrigida": r["guarda"]["corrigida"],
         })  # fmt: skip
 
     def taxa(sel: list[dict]) -> dict:
@@ -679,7 +748,11 @@ def main() -> None:  # pragma: no cover - orquestração de CLI; as peças acima
             k: r[k] for k in ("teste", "ajuste", "geral", "latencia_ms", "avisos_esquema", "prompt_chars")
         }
         resumo["casos"] = [
-            {k: x[k] for k in ("id", "grupo", "ok", "erro", "linhas", "latencia_ms")} for x in r["casos"]
+            {
+                k: x[k]
+                for k in ("id", "grupo", "ok", "erro", "linhas", "latencia_ms", "bloqueada", "corrigida")
+            }
+            for x in r["casos"]
         ]
         saida = a.raiz / "eval" / "resultados" / f"{a.nome}.json"
         saida.write_text(json.dumps(resumo, ensure_ascii=False, indent=2), encoding="utf-8")

@@ -60,6 +60,19 @@ ESQUEMA = {
 }  # fmt: skip
 
 
+class Resultado:
+    """O que `session.run` devolve: iterável de linhas e `consume()` com o resumo (plano e avisos)."""
+
+    def __init__(self, linhas):
+        self.linhas = linhas
+
+    def __iter__(self):
+        return iter(self.linhas)
+
+    def consume(self):
+        return type("Resumo", (), {"plan": None, "notifications": []})()
+
+
 class Sessao:
     def __init__(self, linhas=None, falha=None):
         self.linhas, self.falha, self.consultas = linhas or [], falha, []
@@ -74,7 +87,7 @@ class Sessao:
         self.consultas.append((cypher, kw))
         if self.falha:
             raise self.falha
-        return iter(self.linhas)
+        return Resultado(self.linhas)
 
 
 class BancoFalso:

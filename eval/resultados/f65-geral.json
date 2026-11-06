@@ -1,0 +1,235 @@
+{
+  "teste": {
+    "n": 10,
+    "acertos": 9,
+    "acuracia": 0.9
+  },
+  "ajuste": {
+    "n": 5,
+    "acertos": 4,
+    "acuracia": 0.8
+  },
+  "geral": {
+    "n": 15,
+    "acertos": 13,
+    "acuracia": 0.867
+  },
+  "latencia_ms": {
+    "mediana": 3009,
+    "maximo": 3972
+  },
+  "avisos_esquema": [],
+  "prompt_chars": 38472,
+  "casos": [
+    {
+      "id": "AG01",
+      "grupo": "teste",
+      "ok": true,
+      "erro": null,
+      "linhas": 1,
+      "latencia_ms": {
+        "llm": 3129,
+        "banco": 48,
+        "total": 3180
+      },
+      "bloqueada": null,
+      "corrigida": false
+    },
+    {
+      "id": "AG02",
+      "grupo": "teste",
+      "ok": false,
+      "erro": null,
+      "linhas": 1,
+      "latencia_ms": {
+        "llm": 2688,
+        "banco": 23,
+        "total": 2716
+      },
+      "bloqueada": null,
+      "corrigida": false
+    },
+    {
+      "id": "AG03",
+      "grupo": "teste",
+      "ok": true,
+      "erro": null,
+      "linhas": 1,
+      "latencia_ms": {
+        "llm": 2180,
+        "banco": 45,
+        "total": 2230
+      },
+      "bloqueada": null,
+      "corrigida": false
+    },
+    {
+      "id": "AG04",
+      "grupo": "ajuste",
+      "ok": false,
+      "erro": null,
+      "linhas": 1,
+      "latencia_ms": {
+        "llm": 3217,
+        "banco": 44,
+        "total": 3264
+      },
+      "bloqueada": null,
+      "corrigida": false
+    },
+    {
+      "id": "AG05",
+      "grupo": "teste",
+      "ok": true,
+      "erro": null,
+      "linhas": 1,
+      "latencia_ms": {
+        "llm": 2253,
+        "banco": 33,
+        "total": 2289
+      },
+      "bloqueada": null,
+      "corrigida": false
+    },
+    {
+      "id": "AG06",
+      "grupo": "ajuste",
+      "ok": true,
+      "erro": null,
+      "linhas": 1,
+      "latencia_ms": {
+        "llm": 2956,
+        "banco": 49,
+        "total": 3009
+      },
+      "bloqueada": null,
+      "corrigida": false
+    },
+    {
+      "id": "AG07",
+      "grupo": "teste",
+      "ok": true,
+      "erro": null,
+      "linhas": 1,
+      "latencia_ms": {
+        "llm": 2398,
+        "banco": 21,
+        "total": 2423
+      },
+      "bloqueada": null,
+      "corrigida": false
+    },
+    {
+      "id": "AG08",
+      "grupo": "teste",
+      "ok": true,
+      "erro": null,
+      "linhas": 1,
+      "latencia_ms": {
+        "llm": 3922,
+        "banco": 45,
+        "total": 3972
+      },
+      "bloqueada": null,
+      "corrigida": false
+    },
+    {
+      "id": "AG09",
+      "grupo": "teste",
+      "ok": true,
+      "erro": null,
+      "linhas": 1,
+      "latencia_ms": {
+        "llm": 3304,
+        "banco": 25,
+        "total": 3334
+      },
+      "bloqueada": null,
+      "corrigida": false
+    },
+    {
+      "id": "AG10",
+      "grupo": "ajuste",
+      "ok": true,
+      "erro": null,
+      "linhas": 1,
+      "latencia_ms": {
+        "llm": 2379,
+        "banco": 31,
+        "total": 2414
+      },
+      "bloqueada": null,
+      "corrigida": false
+    },
+    {
+      "id": "AG11",
+      "grupo": "teste",
+      "ok": true,
+      "erro": null,
+      "linhas": 1,
+      "latencia_ms": {
+        "llm": 2755,
+        "banco": 40,
+        "total": 2800
+      },
+      "bloqueada": null,
+      "corrigida": false
+    },
+    {
+      "id": "AG12",
+      "grupo": "teste",
+      "ok": true,
+      "erro": null,
+      "linhas": 1,
+      "latencia_ms": {
+        "llm": 3288,
+        "banco": 45,
+        "total": 3338
+      },
+      "bloqueada": null,
+      "corrigida": false
+    },
+    {
+      "id": "AG13",
+      "grupo": "ajuste",
+      "ok": true,
+      "erro": null,
+      "linhas": 1,
+      "latencia_ms": {
+        "llm": 3153,
+        "banco": 23,
+        "total": 3181
+      },
+      "bloqueada": null,
+      "corrigida": false
+    },
+    {
+      "id": "AG14",
+      "grupo": "teste",
+      "ok": true,
+      "erro": null,
+      "linhas": 1,
+      "latencia_ms": {
+        "llm": 2467,
+        "banco": 41,
+        "total": 2512
+      },
+      "bloqueada": null,
+      "corrigida": false
+    },
+    {
+      "id": "AG15",
+      "grupo": "ajuste",
+      "ok": true,
+      "erro": null,
+      "linhas": 1,
+      "latencia_ms": {
+        "llm": 3778,
+        "banco": 24,
+        "total": 3806
+      },
+      "bloqueada": null,
+      "corrigida": false
+    }
+  ]
+}
