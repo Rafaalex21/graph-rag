@@ -291,9 +291,11 @@
 > entrega: API TypeScript com SSE, oito ferramentas e telemetria
 > esforço: G
 
-- [ ] **F7.1** Cliente LLM em TypeScript (SDK OpenAI → llama-swap) com perfis, tempos-limite e `chat_template_kwargs`
+- [x] **F7.1** Cliente LLM em TypeScript (SDK OpenAI → llama-swap) com perfis, tempos-limite e `chat_template_kwargs`
   - aceite: testes de integração para chat, *tool call*, embeddings e rerank
   - depende: F0.6, F0.8
+  - resultado: ADR-052; `api/src/llm/` (`ClienteLlm`: `chat`, `chatJson`, `chamarFerramentas`, `chatStream`, `embeddings`, `embeddingDeConsulta`, `rerank`, `modelos`) sobre `openai` 7.43.0 fixado; perfis `principal` (Qwen, `enable_thinking: false`) e `rapido` (gpt-oss, `reasoning_effort: low`); tempo-limite e `AbortSignal` por chamada, tempo ocioso no fluxo, erros por causa (`LlmIndisponivel/Timeout/Abortado/Http/RespostaInvalida`), uma nova tentativa só para rede e 5xx; vetores conferidos (1024 dimensões, norma 1). **47 testes unitários** (servidor HTTP de mentira, escritos antes do código) e **8 de integração** contra o llama-swap real (pulados sem ele); 56 testes na API. Medido: embedding de consulta 79 ms, rerank de 24 trechos 513 ms, chat Qwen 1,3 s (carga 13,9 s), 1º token em 253 ms, *tool call* 1,1 a 2,3 s
+  - nota: o iterador de fluxo do SDK engole o cancelamento (parece fim normal); o cliente confere o sinal depois do laço. O Qwen escolheu a ferramenta certa nas 3 perguntas de teste, mas a acurácia de rota é da F7.3. A carga a frio (13,9 s) é do llama-swap: a F7.6 deve aquecer o modelo e o `/api/saude` informar
 - [ ] **F7.2** Atualizador de pergunta com decomposição em subperguntas
   - aceite: 10 perguntas compostas decompostas corretamente
   - depende: F7.1
