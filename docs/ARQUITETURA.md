@@ -718,7 +718,7 @@ O Neo4j roda **nativo no Windows** (`infra/neo4j.ps1 instalar | iniciar | parar 
 | `cypher` | `{query, linhas, ms}` | Cada consulta executada |
 | `evidencia` | `{id, tipo: "pai" \| "tabela" \| "fato" \| "entidade" \| "comunidade", pagina, trecho, score}` | Contexto recuperado |
 | `token` | `{t}` | Streaming do redator |
-| `fim` | `{resposta, citacoes: [{id, pagina}], metricas: {latenciaMs, tokensEntrada, tokensSaida, rota}}` | Fim |
+| `fim` | `{mensagemId, resposta, citacoes: [{id, pagina}], metricas: {latenciaMs, tokensEntrada, tokensSaida, rota}}` | Fim |
 | `erro` | `{codigo, mensagem}` | Falha |
 
 O contrato executável está em `contracts/api.openapi.yaml` (ADR-062) e prevalece sobre estas tabelas: `etapa` ganhou o tipo `reparo`, o `evidencia` leva `pagina` como rótulo (`p. 6`) ou `null`, o `fim` leva `metricas.estado`, e a API recusa `mode` diferente de `auto` e `profile` diferente de `consultar` com 400.
@@ -732,6 +732,10 @@ O contrato executável está em `contracts/api.openapi.yaml` (ADR-062) e prevale
 | `GET /api/grafo/vizinhanca?entidade=…&profundidade=1` | `{nos, arestas}` para o explorador |
 | `GET /api/saude` | Estado de cada modelo no `llama-swap`, do Neo4j e dos índices |
 | `POST /api/feedback` | `{mensagemId, nota: 1 \| -1, comentario?}` |
+
+### 11.3 Telemetria (F7.7, ADR-063)
+
+Cada requisição vira **uma linha JSON** em `data/logs/telemetria/AAAA-MM-DD.jsonl` (dia local): no `/api/chat`, o resultado (`fim`, `erro`, `cancelada` ou `recusada`), o estado do ciclo, as ferramentas com chamadas, erros, evidências e tempo, os tokens, o modo do redator e o tempo de cada etapa; nas demais rotas, o padrão da rota (`/api/fonte/:id`), o status e o tempo. O `id` do registro é o `mensagemId` do evento `fim`, a chave que liga a telemetria ao `POST /api/feedback`. O log **não guarda** o texto da pergunta (só tamanho e hash), da resposta nem das evidências; `TELEMETRIA_TEXTO=1` liga o texto da pergunta. `npm run relatorio:telemetria -- --dia AAAA-MM-DD` gera `relatorio-AAAA-MM-DD.md` e `.json` ao lado do log.
 
 ---
 

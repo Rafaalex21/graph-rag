@@ -22,6 +22,7 @@
     "avaliar:ciclo": "node src/avaliacao/cli-ciclo.ts",
     "avaliar:redator": "node src/avaliacao/cli-redator.ts",
     "avaliar:api": "node test/http/medir-api.ts",
+    "relatorio:telemetria": "node src/telemetria/cli-relatorio.ts",
     "test": "vitest run"
   },
   "dependencies": {

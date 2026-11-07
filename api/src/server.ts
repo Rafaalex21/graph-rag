@@ -6,6 +6,7 @@ import { redigir } from "./agente/redator.ts";
 import { GrafoNeo4j, criarExecutor } from "./ferramentas/index.ts";
 import { sondaLlamaSwap } from "./http/saude.ts";
 import { ClienteLlm } from "./llm/index.ts";
+import { criarRegistrador } from "./telemetria/registro.ts";
 
 const RAIZ = fileURLToPath(new URL("../../", import.meta.url));
 const porta = Number(process.env["API_PORT"] ?? 3000);
@@ -14,6 +15,9 @@ const baseUrl = process.env["LLAMA_SWAP_URL"] ?? "http://127.0.0.1:8080";
 const grafo = GrafoNeo4j.conectar();
 const llm = new ClienteLlm({ baseUrl });
 const executor = criarExecutor({ grafo, llm });
+const registrarErro = (contexto: string, erro: unknown) => console.error(`[${contexto}] ${erro instanceof Error ? `${erro.name}: ${erro.message}` : String(erro)}`);
+// F7.7: um registro por requisição em data/logs/telemetria/AAAA-MM-DD.jsonl; sem o texto da pergunta, salvo TELEMETRIA_TEXTO=1
+const telemetria = criarRegistrador({ pasta: process.env["TELEMETRIA_DIR"] ?? join(RAIZ, "data", "logs", "telemetria"), registrarErro });
 
 const app = criarApp({
   ciclo: (pergunta, opcoes) => executarCiclo(llm, executor, pergunta, opcoes),
@@ -22,7 +26,9 @@ const app = criarApp({
   llm: sondaLlamaSwap(baseUrl),
   pdf: process.env["DOCUMENTO_PDF"] ?? join(RAIZ, "data", "raw", "banco_do_brasil_formulario_referencia_2026.pdf"),
   arquivoDeFeedback: process.env["FEEDBACK_JSONL"] ?? join(RAIZ, "data", "logs", "feedback.jsonl"),
-  registrarErro: (contexto, erro) => console.error(`[${contexto}] ${erro instanceof Error ? `${erro.name}: ${erro.message}` : String(erro)}`),
+  telemetria,
+  telemetriaComTexto: process.env["TELEMETRIA_TEXTO"] === "1",
+  registrarErro,
 });
 
 // RNF-1: escuta só no endereço local.
@@ -55,6 +61,6 @@ if (process.env["API_AQUECER"] !== "0") void aquecer();
 
 for (const sinal of ["SIGINT", "SIGTERM"] as const) {
   process.on(sinal, () => {
-    void app.close().then(() => grafo.fechar()).finally(() => process.exit(0));
+    void app.close().then(() => telemetria.aguardar()).then(() => grafo.fechar()).finally(() => process.exit(0));
   });
 }

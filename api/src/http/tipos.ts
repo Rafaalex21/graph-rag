@@ -1,6 +1,7 @@
 import type { OpcoesCiclo, ResultadoCiclo } from "../agente/ciclo.ts";
 import type { EntradaRedator, OpcoesRedator, RespostaRedator } from "../agente/redator.ts";
 import type { GrafoLeitura } from "../ferramentas/index.ts";
+import type { Registrador } from "../telemetria/registro.ts";
 
 /** O que a API precisa saber do llama-swap para o `/api/saude`. */
 export interface SondaLlm {
@@ -28,6 +29,10 @@ export interface DependenciasApp {
   maxPerguntas?: number;
   /** Tempo máximo de cada sonda do `/api/saude` (padrão 2 s). */
   tempoDaSondaMs?: number;
+  /** Grava um registro por requisição (F7.7). Sem ele a API funciona sem telemetria. */
+  telemetria?: Registrador;
+  /** Guarda também o texto da pergunta no registro (`TELEMETRIA_TEXTO=1`); desligado por padrão. */
+  telemetriaComTexto?: boolean;
   /** Recebe o erro real de uma falha interna (a resposta ao cliente é genérica). */
   registrarErro?: (contexto: string, erro: unknown) => void;
 }

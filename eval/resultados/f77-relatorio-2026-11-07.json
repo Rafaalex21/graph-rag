@@ -1,0 +1,261 @@
+{
+  "dia": "2026-11-07",
+  "linhas_invalidas": 0,
+  "chat": {
+    "total": 14,
+    "resultados": {
+      "fim": 9,
+      "recusada": 3,
+      "cancelada": 2
+    },
+    "estados": {
+      "suficiente": 4,
+      "incompleta": 3,
+      "sem_consulta": 2
+    },
+    "codigos": {
+      "requisicao_invalida": 1,
+      "modo_nao_implementado": 1,
+      "ocupado": 1
+    },
+    "tokens": {
+      "entrada": 85763,
+      "saida": 2933
+    },
+    "latencia_ms": {
+      "total": {
+        "n": 9,
+        "p50": 16237,
+        "p95": 44338,
+        "max": 44338
+      },
+      "primeiro_evento": {
+        "n": 9,
+        "p50": 0,
+        "p95": 4,
+        "max": 4
+      },
+      "primeiro_token": {
+        "n": 9,
+        "p50": 13751,
+        "p95": 39193,
+        "max": 39193
+      },
+      "atualizar": {
+        "n": 9,
+        "p50": 2287,
+        "p95": 4517,
+        "max": 4517
+      },
+      "rotear": {
+        "n": 9,
+        "p50": 4183,
+        "p95": 9255,
+        "max": 9255
+      },
+      "executar": {
+        "n": 9,
+        "p50": 1753.2,
+        "p95": 23343,
+        "max": 23343
+      },
+      "criticar": {
+        "n": 9,
+        "p50": 1838,
+        "p95": 9968,
+        "max": 9968
+      },
+      "redator": {
+        "n": 9,
+        "p50": 4800,
+        "p95": 10196,
+        "max": 10196
+      }
+    },
+    "ferramentas": [
+      {
+        "nome": "buscar_trechos",
+        "requisicoes": 7,
+        "chamadas": 16,
+        "erros": 0,
+        "taxa_de_erro": 0,
+        "ms_por_chamada": {
+          "n": 7,
+          "p50": 1010.6,
+          "p95": 1753.1,
+          "max": 1753.1
+        }
+      },
+      {
+        "nome": "fato_financeiro",
+        "requisicoes": 2,
+        "chamadas": 3,
+        "erros": 1,
+        "taxa_de_erro": 0.3333333333333333,
+        "ms_por_chamada": {
+          "n": 2,
+          "p50": 12.8,
+          "p95": 553.6,
+          "max": 553.6
+        }
+      },
+      {
+        "nome": "buscar_tabelas",
+        "requisicoes": 2,
+        "chamadas": 2,
+        "erros": 0,
+        "taxa_de_erro": 0,
+        "ms_por_chamada": {
+          "n": 2,
+          "p50": 127.7,
+          "p95": 312,
+          "max": 312
+        }
+      },
+      {
+        "nome": "consultar_grafo",
+        "requisicoes": 2,
+        "chamadas": 2,
+        "erros": 0,
+        "taxa_de_erro": 0,
+        "ms_por_chamada": {
+          "n": 2,
+          "p50": 3638.3,
+          "p95": 19836.4,
+          "max": 19836.4
+        }
+      },
+      {
+        "nome": "comparar_segmentos",
+        "requisicoes": 1,
+        "chamadas": 1,
+        "erros": 0,
+        "taxa_de_erro": 0,
+        "ms_por_chamada": {
+          "n": 1,
+          "p50": 19.1,
+          "p95": 19.1,
+          "max": 19.1
+        }
+      },
+      {
+        "nome": "riscos",
+        "requisicoes": 1,
+        "chamadas": 1,
+        "erros": 0,
+        "taxa_de_erro": 0,
+        "ms_por_chamada": {
+          "n": 1,
+          "p50": 186.1,
+          "p95": 186.1,
+          "max": 186.1
+        }
+      }
+    ],
+    "redator": {
+      "com_reparo": 1,
+      "cortadas": 0,
+      "modelo_fixo": 0,
+      "fallbacks": {}
+    }
+  },
+  "http": [
+    {
+      "rota": "/api/fonte/:id",
+      "total": 27,
+      "status": {
+        "200": 27
+      },
+      "ms": {
+        "n": 27,
+        "p50": 2.5,
+        "p95": 15.5,
+        "max": 314.6
+      }
+    },
+    {
+      "rota": "/api/saude",
+      "total": 4,
+      "status": {
+        "200": 4
+      },
+      "ms": {
+        "n": 4,
+        "p50": 9.4,
+        "p95": 269.1,
+        "max": 269.1
+      }
+    },
+    {
+      "rota": "/api/grafo/vizinhanca",
+      "total": 3,
+      "status": {
+        "200": 2,
+        "404": 1
+      },
+      "ms": {
+        "n": 3,
+        "p50": 116,
+        "p95": 295.1,
+        "max": 295.1
+      }
+    },
+    {
+      "rota": "/api/feedback",
+      "total": 2,
+      "status": {
+        "201": 2
+      },
+      "ms": {
+        "n": 2,
+        "p50": 0.7,
+        "p95": 1.1,
+        "max": 1.1
+      }
+    },
+    {
+      "rota": "/api/chat",
+      "total": 1,
+      "status": {
+        "400": 1
+      },
+      "ms": {
+        "n": 1,
+        "p50": 0.9,
+        "p95": 0.9,
+        "max": 0.9
+      }
+    },
+    {
+      "rota": "/api/documento/pdf",
+      "total": 1,
+      "status": {
+        "206": 1
+      },
+      "ms": {
+        "n": 1,
+        "p50": 4.7,
+        "p95": 4.7,
+        "max": 4.7
+      }
+    },
+    {
+      "rota": "desconhecida",
+      "total": 1,
+      "status": {
+        "404": 1
+      },
+      "ms": {
+        "n": 1,
+        "p50": 0.2,
+        "p95": 0.2,
+        "max": 0.2
+      }
+    }
+  ],
+  "feedback": {
+    "positivas": 2,
+    "negativas": 0,
+    "invalidas": 0
+  }
+}

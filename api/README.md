@@ -2,7 +2,7 @@
 
 API e agente do GraphRAG local (Node 24, TypeScript 6.0, Fastify): o cliente LLM (F7.1), o agente (atualizador, roteador,
 executor das 12 ferramentas, crítico e redator, F7.2 a F7.11) e a API HTTP com SSE (F7.6, `src/http/`, contrato em
-[`contracts/api.openapi.yaml`](../contracts/api.openapi.yaml)). A telemetria (F7.7) é a próxima.
+[`contracts/api.openapi.yaml`](../contracts/api.openapi.yaml)). A telemetria (F7.7, `src/telemetria/`, ADR-063) grava um registro por requisição em `data/logs/telemetria/` e `npm run relatorio:telemetria -- --dia AAAA-MM-DD` gera o relatório do dia.
 
 O TypeScript fica **fixado em 6.0.x**: o Angular 22 e o `typescript-eslint` ainda não aceitam a 7.x.
 

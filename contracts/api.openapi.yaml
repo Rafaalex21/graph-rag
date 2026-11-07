@@ -282,9 +282,14 @@ components:
 
     EventoFim:
       type: object
-      required: [resposta, citacoes, metricas]
+      required: [mensagemId, resposta, citacoes, metricas]
       additionalProperties: false
       properties:
+        mensagemId:
+          description: O id desta resposta; é o mesmo `id` do registro de telemetria e o que o cliente manda em `POST /api/feedback`.
+          type: string
+          minLength: 1
+          maxLength: 100
         resposta: { type: string, description: "Texto final, com as páginas no lugar dos marcadores [E#]" }
         citacoes:
           type: array
