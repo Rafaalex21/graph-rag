@@ -1,6 +1,6 @@
 # ADR-061 · Redator: toda frase com número cita uma evidência que existe, mas a 1ª medida deu 93,75% (45 de 48), abaixo dos 100% do aceite; os 3 casos eram defeitos da régua e a reavaliação pós-hoc dá 100%
 
-- **Estado:** proposta (07/11/2026): o aceite de 100% só vale com a régua corrigida depois de medir, e quem decide se isso basta é o dono do projeto
+- **Estado:** aceita (07/11/2026): o aceite de 100% vale com a régua corrigida depois de medir (pós-hoc), por decisão do dono do projeto; a medida original (93,75%) permanece registrada
 - **Data:** 2026-11-07
 - **Tarefa(s):** F7.5
 
