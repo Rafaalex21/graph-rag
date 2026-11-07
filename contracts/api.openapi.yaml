@@ -1,0 +1,405 @@
+openapi: 3.1.0
+info:
+  title: GraphRAG local — API do agente
+  version: 0.1.0
+  description: |
+    Contrato da API (ARQUITETURA §11), escrito antes das rotas (F7.6). A API escuta só em 127.0.0.1 (RNF-1).
+    Os testes de contrato (`api/test/http/contrato.test.ts`) leem este arquivo e validam cada resposta da API
+    contra os esquemas daqui; mudar uma rota sem mudar o contrato quebra o teste.
+
+    Páginas são sempre o rótulo do documento (`p. 6`, `p. 6-7`, `p. 6, 9, 12`), nunca um número solto, e `null`
+    quando o item não tem página (pontos do `panorama`, entidades, comunidades): nada é inventado.
+servers:
+  - url: http://127.0.0.1:3000
+
+paths:
+  /api/chat:
+    post:
+      operationId: chat
+      summary: Faz uma pergunta e recebe a resposta em fluxo (SSE)
+      description: |
+        Responde `text/event-stream`. Cada evento é `event: <nome>` e `data: <json>`. O primeiro evento sai em até 1 s
+        (RNF-2), antes de qualquer chamada ao LLM. A sequência é: `etapa`* (reescrita, rota, ferramenta_inicio,
+        ferramenta_fim, critica), `cypher`* e `evidencia`* (depois das etapas), `token`* e, por último, `fim`; ou
+        `erro`, que encerra o fluxo. O fluxo sempre termina em `fim` ou `erro`. Se o cliente desconecta, o trabalho
+        é cancelado.
+
+        Cada evento tem o esquema listado em `x-eventos`.
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema: { $ref: "#/components/schemas/ChatRequest" }
+      responses:
+        "200":
+          description: Fluxo de eventos
+          content:
+            text/event-stream:
+              schema: { type: string }
+        "400":
+          description: Corpo inválido, ou `mode`/`profile` ainda não implementado
+          content:
+            application/json:
+              schema: { $ref: "#/components/schemas/Erro" }
+        "429":
+          description: Já há 2 perguntas em andamento (os 2 slots do llama-server); tente de novo em instantes (`ocupado`)
+          content:
+            application/json:
+              schema: { $ref: "#/components/schemas/Erro" }
+      x-eventos:
+        etapa: { $ref: "#/components/schemas/EventoEtapa" }
+        cypher: { $ref: "#/components/schemas/EventoCypher" }
+        evidencia: { $ref: "#/components/schemas/EventoEvidencia" }
+        token: { $ref: "#/components/schemas/EventoToken" }
+        fim: { $ref: "#/components/schemas/EventoFim" }
+        erro: { $ref: "#/components/schemas/Erro" }
+
+  /api/fonte/{id}:
+    get:
+      operationId: fonte
+      summary: O trecho que uma citação aponta (alimenta o visualizador)
+      parameters:
+        - name: id
+          in: path
+          required: true
+          schema: { type: string, minLength: 1, maxLength: 200 }
+      responses:
+        "200":
+          description: A fonte
+          content:
+            application/json:
+              schema: { $ref: "#/components/schemas/Fonte" }
+        "400":
+          description: Id grande demais
+          content:
+            application/json:
+              schema: { $ref: "#/components/schemas/Erro" }
+        "404":
+          description: Nenhum item do grafo com esse id
+          content:
+            application/json:
+              schema: { $ref: "#/components/schemas/Erro" }
+        "503":
+          description: Neo4j fora do ar
+          content:
+            application/json:
+              schema: { $ref: "#/components/schemas/Erro" }
+
+  /api/documento/pdf:
+    get:
+      operationId: documentoPdf
+      summary: O PDF original, para o pdf.js (aceita `Range`)
+      parameters:
+        - name: Range
+          in: header
+          required: false
+          schema: { type: string, pattern: "^bytes=\\d*-\\d*$" }
+      responses:
+        "200":
+          description: O arquivo inteiro
+          content:
+            application/pdf:
+              schema: { type: string, format: binary }
+        "206":
+          description: A faixa pedida
+          content:
+            application/pdf:
+              schema: { type: string, format: binary }
+        "404":
+          description: O PDF não está no disco
+          content:
+            application/json:
+              schema: { $ref: "#/components/schemas/Erro" }
+        "416":
+          description: Faixa fora do arquivo
+          content:
+            application/json:
+              schema: { $ref: "#/components/schemas/Erro" }
+
+  /api/grafo/vizinhanca:
+    get:
+      operationId: grafoVizinhanca
+      summary: A vizinhança de uma entidade, para o explorador do grafo
+      parameters:
+        - name: entidade
+          in: query
+          required: true
+          description: Nome ou id da entidade.
+          schema: { type: string, minLength: 1, maxLength: 200 }
+        - name: profundidade
+          in: query
+          required: false
+          schema: { type: integer, minimum: 1, maximum: 2, default: 1 }
+      responses:
+        "200":
+          description: Nós e arestas (no máximo 100 nós; `truncado` avisa quando havia mais)
+          content:
+            application/json:
+              schema: { $ref: "#/components/schemas/Vizinhanca" }
+        "400":
+          description: Parâmetro ausente ou fora da faixa
+          content:
+            application/json:
+              schema: { $ref: "#/components/schemas/Erro" }
+        "404":
+          description: Entidade não encontrada
+          content:
+            application/json:
+              schema: { $ref: "#/components/schemas/Erro" }
+        "503":
+          description: Neo4j fora do ar
+          content:
+            application/json:
+              schema: { $ref: "#/components/schemas/Erro" }
+
+  /api/saude:
+    get:
+      operationId: saude
+      summary: Estado do serviço, dos modelos, do Neo4j e dos índices
+      description: Sempre responde 200; `status` é `degradado` se algo estiver fora do ar.
+      responses:
+        "200":
+          description: O estado
+          content:
+            application/json:
+              schema: { $ref: "#/components/schemas/Saude" }
+
+  /api/feedback:
+    post:
+      operationId: feedback
+      summary: Registra a nota de uma resposta
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema: { $ref: "#/components/schemas/FeedbackRequest" }
+      responses:
+        "201":
+          description: Registrado
+          content:
+            application/json:
+              schema: { $ref: "#/components/schemas/FeedbackRegistrado" }
+        "400":
+          description: Corpo inválido
+          content:
+            application/json:
+              schema: { $ref: "#/components/schemas/Erro" }
+        "500":
+          description: Não foi possível gravar
+          content:
+            application/json:
+              schema: { $ref: "#/components/schemas/Erro" }
+
+components:
+  schemas:
+    Erro:
+      type: object
+      required: [codigo, mensagem]
+      additionalProperties: false
+      properties:
+        codigo: { type: string, minLength: 1 }
+        mensagem: { type: string }
+
+    Turno:
+      type: object
+      required: [papel, texto]
+      additionalProperties: false
+      properties:
+        papel: { enum: [usuario, assistente] }
+        texto: { type: string, maxLength: 8000 }
+
+    ChatRequest:
+      type: object
+      required: [conversationId, message]
+      additionalProperties: false
+      properties:
+        conversationId: { type: string, minLength: 1, maxLength: 100 }
+        message: { type: string, minLength: 1, maxLength: 4000 }
+        mode:
+          description: Só `auto` está implementado; os outros valores da §11 voltam 400 `modo_nao_implementado`.
+          enum: [auto, trechos, tabelas, local, global, cypher]
+          default: auto
+        profile:
+          description: Só `consultar` está implementado; `consultar-rapido` volta 400 `perfil_nao_implementado`.
+          enum: [consultar, consultar-rapido]
+          default: consultar
+        historico:
+          description: Os últimos turnos da conversa (o atualizador usa 4).
+          type: array
+          maxItems: 20
+          items: { $ref: "#/components/schemas/Turno" }
+
+    EventoEtapa:
+      type: object
+      required: [tipo, detalhe]
+      additionalProperties: false
+      properties:
+        tipo:
+          description: |
+            `reparo`: o redator achou frase com número sem citação e reescreve a resposta uma vez; o cliente descarta os
+            `token` já recebidos e usa o texto de `fim`.
+          enum: [reescrita, rota, ferramenta_inicio, ferramenta_fim, critica, reparo]
+        detalhe: { type: object }
+
+    EventoCypher:
+      type: object
+      required: [query, linhas, ms]
+      additionalProperties: false
+      properties:
+        query: { type: string }
+        linhas: { type: integer, minimum: 0 }
+        ms: { type: number, minimum: 0 }
+
+    EventoEvidencia:
+      type: object
+      required: [id, tipo, pagina, trecho, score]
+      additionalProperties: false
+      properties:
+        id: { type: string, minLength: 1 }
+        tipo:
+          description: O tipo que a ferramenta deu à evidência.
+          type: string
+          minLength: 1
+        pagina: { type: [string, "null"] }
+        trecho: { type: string, description: "Começo do texto (até 400 caracteres)" }
+        score: { type: number }
+
+    EventoToken:
+      description: Um pedaço da resposta como o modelo escreveu, ainda com os marcadores `[E#]`; o texto final, com as páginas, vem em `fim`.
+      type: object
+      required: [t]
+      additionalProperties: false
+      properties:
+        t: { type: string }
+
+    Citacao:
+      type: object
+      required: [id, pagina]
+      additionalProperties: false
+      properties:
+        id: { type: string, minLength: 1 }
+        pagina: { type: [string, "null"] }
+
+    EventoFim:
+      type: object
+      required: [resposta, citacoes, metricas]
+      additionalProperties: false
+      properties:
+        resposta: { type: string, description: "Texto final, com as páginas no lugar dos marcadores [E#]" }
+        citacoes:
+          type: array
+          items: { $ref: "#/components/schemas/Citacao" }
+        metricas:
+          type: object
+          required: [latenciaMs, tokensEntrada, tokensSaida, rota, estado]
+          additionalProperties: false
+          properties:
+            latenciaMs: { type: integer, minimum: 0 }
+            tokensEntrada: { type: integer, minimum: 0 }
+            tokensSaida: { type: integer, minimum: 0 }
+            rota:
+              description: As ferramentas chamadas, sem repetição; vazia quando o roteador recusou a pergunta.
+              type: array
+              items: { type: string }
+            estado: { enum: [suficiente, incompleta, ausente, sem_consulta] }
+
+    Fonte:
+      type: object
+      required: [tipo, pagina, texto, secao]
+      additionalProperties: false
+      properties:
+        tipo: { enum: [pai, filho, tabela, fato, entidade, comunidade] }
+        pagina: { type: [string, "null"] }
+        texto: { type: string }
+        secao: { type: [string, "null"] }
+
+    NoDoGrafo:
+      type: object
+      required: [id, rotulo, tipo]
+      additionalProperties: false
+      properties:
+        id: { type: string }
+        rotulo: { type: string }
+        tipo: { type: string }
+
+    ArestaDoGrafo:
+      type: object
+      required: [origem, destino, tipo]
+      additionalProperties: false
+      properties:
+        origem: { type: string }
+        destino: { type: string }
+        tipo: { type: string }
+
+    Vizinhanca:
+      type: object
+      required: [entidade, nos, arestas, truncado]
+      additionalProperties: false
+      properties:
+        entidade: { $ref: "#/components/schemas/NoDoGrafo" }
+        nos:
+          type: array
+          maxItems: 100
+          items: { $ref: "#/components/schemas/NoDoGrafo" }
+        arestas:
+          type: array
+          items: { $ref: "#/components/schemas/ArestaDoGrafo" }
+        truncado: { type: boolean }
+
+    Saude:
+      type: object
+      required: [status, servico, versao, llm, modelos, neo4j, indices]
+      additionalProperties: false
+      properties:
+        status: { enum: [ok, degradado] }
+        servico: { type: string }
+        versao: { type: string }
+        llm:
+          type: object
+          required: [estado, ms]
+          additionalProperties: false
+          properties:
+            estado: { enum: [ok, indisponivel, nao_configurado] }
+            ms: { type: number, minimum: 0 }
+        modelos:
+          description: Os modelos que o llama-swap serve e se estão carregados na memória (o 1º uso de um modelo frio leva ~14 s).
+          type: array
+          items:
+            type: object
+            required: [nome, carregado]
+            additionalProperties: false
+            properties:
+              nome: { type: string }
+              carregado: { type: boolean }
+        neo4j:
+          type: object
+          required: [estado, ms]
+          additionalProperties: false
+          properties:
+            estado: { enum: [ok, indisponivel, nao_configurado] }
+            ms: { type: number, minimum: 0 }
+        indices:
+          type: array
+          items:
+            type: object
+            required: [nome, estado]
+            additionalProperties: false
+            properties:
+              nome: { type: string }
+              estado: { type: string }
+
+    FeedbackRequest:
+      type: object
+      required: [mensagemId, nota]
+      additionalProperties: false
+      properties:
+        mensagemId: { type: string, minLength: 1, maxLength: 100 }
+        nota: { enum: [1, -1] }
+        comentario: { type: string, maxLength: 1000 }
+
+    FeedbackRegistrado:
+      type: object
+      required: [registrado]
+      additionalProperties: false
+      properties:
+        registrado: { const: true }

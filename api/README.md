@@ -1,8 +1,8 @@
 # api
 
-API e agente do GraphRAG local (Node 24, TypeScript 6.0, Fastify). Hoje: a rota `GET /api/saude` (esqueleto
-da F0.8), o cliente LLM (F7.1), o atualizador de pergunta (F7.2), o roteador (F7.3) e o executor com os seis templates
-Cypher (F7.8). As demais ferramentas, o agente completo e o SSE (ARQUITETURA §7 e §11) entram nas próximas tarefas da F7.
+API e agente do GraphRAG local (Node 24, TypeScript 6.0, Fastify): o cliente LLM (F7.1), o agente (atualizador, roteador,
+executor das 12 ferramentas, crítico e redator, F7.2 a F7.11) e a API HTTP com SSE (F7.6, `src/http/`, contrato em
+[`contracts/api.openapi.yaml`](../contracts/api.openapi.yaml)). A telemetria (F7.7) é a próxima.
 
 O TypeScript fica **fixado em 6.0.x**: o Angular 22 e o `typescript-eslint` ainda não aceitam a 7.x.
 
@@ -14,6 +14,25 @@ npm run lint
 npm run typecheck          # src e testes
 npm run build
 ```
+
+## API HTTP (`src/app.ts`, `src/http/`, F7.6, ADR-062)
+
+`npm start` (depois do `build`) ou `npm run dev` sobe a API em `127.0.0.1:3000` (`API_PORT`), liga o Neo4j (`.env`) e o llama-swap
+(`LLAMA_SWAP_URL`) e aquece o Neo4j e os três modelos em segundo plano (`API_AQUECER=0` desliga). Rotas, todas no formato de erro
+`{codigo, mensagem}` do contrato:
+
+| Rota | Faz |
+|---|---|
+| `POST /api/chat` | SSE: eventos `etapa`, `cypher`, `evidencia`, `token`, `fim` ou `erro`; o primeiro sai antes de qualquer chamada ao LLM; no máximo 2 perguntas ao mesmo tempo (a 3ª leva 429); o cliente que sai cancela o trabalho. Só `mode: auto` e `profile: consultar` |
+| `GET /api/fonte/:id` | O Pai, Filho, tabela, fato, entidade ou comunidade que uma citação aponta, com página e seção |
+| `GET /api/documento/pdf` | O PDF original, com `Range` (`DOCUMENTO_PDF` troca o arquivo) |
+| `GET /api/grafo/vizinhanca?entidade=&profundidade=` | Nós e arestas de uma entidade (até 100 nós, profundidade 1 ou 2) |
+| `GET /api/saude` | llama-swap (modelos e quais estão carregados), Neo4j e índices; sempre 200 |
+| `POST /api/feedback` | Grava a nota em `data/logs/feedback.jsonl` (`FEEDBACK_JSONL` troca o arquivo) |
+
+`criarApp(deps)` recebe o ciclo, o redator, o grafo e as sondas como dependências, para os testes usarem dublês. Os testes de
+contrato (`test/http/`) leem o YAML e validam cada resposta e cada evento contra os esquemas dele; `npm run avaliar:api` mede a API
+no ar (primeiro evento nas 60 perguntas, fluxo inteiro, rotas).
 
 ## Cliente LLM (`src/llm`, F7.1, ADR-052)
 

@@ -132,6 +132,30 @@ describe("ferramenta que falha", () => {
   });
 });
 
+describe("consulta Cypher gerada (F7.6: evento `cypher` da API)", () => {
+  it("a consulta e o número de linhas de `consultar_grafo` vão para a execução e para o evento; as outras ferramentas não têm", async () => {
+    const f = llmFalso({ subs: [{ pergunta: P1 }], rotas: { [P1]: [{ nome: "consultar_grafo", argumentos: { pergunta: P1 } }, { nome: "buscar_trechos", argumentos: { pergunta: P1 } }] } });
+    const { executor } = executorFalso({
+      consultar_grafo: () => ({ ...env("consultar_grafo", [ev("c1", "p. 6")]), cypher: "MATCH (f:FinancialFact) RETURN f.value AS v", linhas: [{ v: 1 }, { v: 2 }] }) as Envelope,
+      buscar_trechos: () => env("buscar_trechos", [ev("t1", "p. 7")]),
+    });
+    const eventos: EventoAgente[] = [];
+    const r = await executarAgente(f.llm, executor, "x", { progresso: (e) => eventos.push(e), complementar: false });
+    const exec = r.subperguntas[0]?.execucoes ?? [];
+    expect(exec.find((x) => x.ferramenta === "consultar_grafo")?.cypher).toEqual({ query: "MATCH (f:FinancialFact) RETURN f.value AS v", linhas: 2 });
+    expect(exec.find((x) => x.ferramenta === "buscar_trechos")?.cypher).toBeNull();
+    const fim = eventos.find((e) => e.fase === "execucao");
+    expect(fim?.fase === "execucao" && fim.ferramentas.find((x) => x.ferramenta === "consultar_grafo")?.cypher).toEqual({ query: "MATCH (f:FinancialFact) RETURN f.value AS v", linhas: 2 });
+  });
+
+  it("consultar_grafo sem consulta (a guarda bloqueou, nada rodou) não tem cypher", async () => {
+    const f = llmFalso({ subs: [{ pergunta: P1 }], rotas: { [P1]: [{ nome: "consultar_grafo", argumentos: { pergunta: P1 } }] } });
+    const { executor } = executorFalso({ consultar_grafo: () => ({ ...env("consultar_grafo", [], { erro: "guarda_bloqueou" }), cypher: null, linhas: [] }) as Envelope });
+    const r = await executarAgente(f.llm, executor, "x", { complementar: false });
+    expect(r.subperguntas[0]?.execucoes[0]?.cypher).toBeNull();
+  });
+});
+
 describe("lista plana de evidências", () => {
   it("não repete a mesma evidência e leva a subpergunta e a ferramenta de origem", async () => {
     const f = llmFalso({ subs: [{ pergunta: P1 }, { pergunta: P2 }], rotas: {} });

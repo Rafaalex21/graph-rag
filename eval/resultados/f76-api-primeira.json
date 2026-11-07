@@ -1,0 +1,250 @@
+{
+  "nome": "f76-api",
+  "data": "2026-11-07",
+  "comando": "npm run avaliar:api",
+  "primeiro_evento": {
+    "perguntas": 60,
+    "maximo_ms": 34,
+    "mediana_ms": 1,
+    "acima_de_1000_ms": [],
+    "todos_etapa": true
+  },
+  "fluxo_inteiro": [
+    {
+      "id": "T01",
+      "eventos": {
+        "etapa": 6,
+        "evidencia": 6,
+        "token": 31,
+        "fim": 1
+      },
+      "terminou_em": "fim",
+      "fins": 1,
+      "invalidos": [],
+      "primeiro_evento_ms": 1,
+      "primeiro_token_ms": 14152,
+      "fim_ms": 15030,
+      "estado": "suficiente",
+      "citacoes": 1
+    },
+    {
+      "id": "T05",
+      "eventos": {
+        "etapa": 17,
+        "evidencia": 14,
+        "token": 103,
+        "fim": 1
+      },
+      "terminou_em": "fim",
+      "fins": 1,
+      "invalidos": [],
+      "primeiro_evento_ms": 1,
+      "primeiro_token_ms": 21693,
+      "fim_ms": 24791,
+      "estado": "incompleta",
+      "citacoes": 1
+    },
+    {
+      "id": "N01",
+      "eventos": {
+        "etapa": 7,
+        "evidencia": 7,
+        "token": 44,
+        "fim": 1
+      },
+      "terminou_em": "fim",
+      "fins": 1,
+      "invalidos": [],
+      "primeiro_evento_ms": 1,
+      "primeiro_token_ms": 9812,
+      "fim_ms": 11240,
+      "estado": "suficiente",
+      "citacoes": 2
+    },
+    {
+      "id": "N06",
+      "eventos": {
+        "etapa": 21,
+        "evidencia": 16,
+        "token": 93,
+        "fim": 1
+      },
+      "terminou_em": "fim",
+      "fins": 1,
+      "invalidos": [],
+      "primeiro_evento_ms": 1,
+      "primeiro_token_ms": 23099,
+      "fim_ms": 25811,
+      "estado": "incompleta",
+      "citacoes": 1
+    },
+    {
+      "id": "G03",
+      "eventos": {
+        "etapa": 16,
+        "cypher": 1,
+        "evidencia": 16,
+        "token": 91,
+        "fim": 1
+      },
+      "terminou_em": "fim",
+      "fins": 1,
+      "invalidos": [],
+      "primeiro_evento_ms": 1,
+      "primeiro_token_ms": 40376,
+      "fim_ms": 43145,
+      "estado": "incompleta",
+      "citacoes": 2
+    },
+    {
+      "id": "P02",
+      "eventos": {
+        "etapa": 7,
+        "evidencia": 16,
+        "token": 290,
+        "fim": 1
+      },
+      "terminou_em": "fim",
+      "fins": 1,
+      "invalidos": [],
+      "primeiro_evento_ms": 1,
+      "primeiro_token_ms": 7696,
+      "fim_ms": 16386,
+      "estado": "suficiente",
+      "citacoes": 8
+    },
+    {
+      "id": "M02",
+      "eventos": {
+        "etapa": 10,
+        "cypher": 1,
+        "evidencia": 11,
+        "token": 77,
+        "fim": 1
+      },
+      "terminou_em": "fim",
+      "fins": 1,
+      "invalidos": [],
+      "primeiro_evento_ms": 2,
+      "primeiro_token_ms": 13876,
+      "fim_ms": 16395,
+      "estado": "suficiente",
+      "citacoes": 3
+    },
+    {
+      "id": "F01",
+      "eventos": {
+        "etapa": 3,
+        "token": 20,
+        "fim": 1
+      },
+      "terminou_em": "fim",
+      "fins": 1,
+      "invalidos": [],
+      "primeiro_evento_ms": 1,
+      "primeiro_token_ms": 3292,
+      "fim_ms": 3945,
+      "estado": "sem_consulta",
+      "citacoes": 0
+    },
+    {
+      "id": "F02",
+      "eventos": {
+        "etapa": 3,
+        "token": 10,
+        "fim": 1
+      },
+      "terminou_em": "fim",
+      "fins": 1,
+      "invalidos": [],
+      "primeiro_evento_ms": 1,
+      "primeiro_token_ms": 3486,
+      "fim_ms": 3810,
+      "estado": "sem_consulta",
+      "citacoes": 0
+    }
+  ],
+  "saude": {
+    "status": 200,
+    "ms": 10,
+    "invalido": [],
+    "estado": "ok",
+    "modelos": [
+      {
+        "nome": "gemma3-4b-text2cypher",
+        "carregado": false
+      },
+      {
+        "nome": "gemma4-26b-a4b-juiz",
+        "carregado": false
+      },
+      {
+        "nome": "gpt-oss-20b",
+        "carregado": false
+      },
+      {
+        "nome": "qwen3-embed-0.6b",
+        "carregado": true
+      },
+      {
+        "nome": "qwen3-embed-0.6b-lote",
+        "carregado": false
+      },
+      {
+        "nome": "qwen3-rerank-0.6b",
+        "carregado": true
+      },
+      {
+        "nome": "qwen36-35b-a3b",
+        "carregado": true
+      }
+    ],
+    "indices": 17
+  },
+  "fontes": {
+    "pedidas": 30,
+    "achadas": 30,
+    "por_tipo": {
+      "pai": 28,
+      "fato": 2
+    },
+    "invalidas": [],
+    "nao_achadas": []
+  },
+  "vizinhanca": {
+    "bb_1": {
+      "status": 404,
+      "ms": 68,
+      "nos": null,
+      "arestas": null,
+      "truncado": null,
+      "invalido": []
+    },
+    "bb_2": {
+      "status": 404,
+      "ms": 7,
+      "nos": null,
+      "arestas": null,
+      "truncado": null,
+      "invalido": []
+    },
+    "inexistente": {
+      "status": 404,
+      "ms": 9,
+      "nos": null,
+      "arestas": null,
+      "truncado": null,
+      "invalido": []
+    }
+  },
+  "pdf": {
+    "status": 206,
+    "bytes": 1024,
+    "content_range": "bytes 0-1023/8719214",
+    "comeca_com_pdf": true
+  },
+  "feedback": {
+    "status": 201,
+    "invalido": []
+  }
+}

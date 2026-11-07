@@ -721,6 +721,8 @@ O Neo4j roda **nativo no Windows** (`infra/neo4j.ps1 instalar | iniciar | parar 
 | `fim` | `{resposta, citacoes: [{id, pagina}], metricas: {latenciaMs, tokensEntrada, tokensSaida, rota}}` | Fim |
 | `erro` | `{codigo, mensagem}` | Falha |
 
+O contrato executável está em `contracts/api.openapi.yaml` (ADR-062) e prevalece sobre estas tabelas: `etapa` ganhou o tipo `reparo`, o `evidencia` leva `pagina` como rótulo (`p. 6`) ou `null`, o `fim` leva `metricas.estado`, e a API recusa `mode` diferente de `auto` e `profile` diferente de `consultar` com 400.
+
 ### 11.2 Demais rotas
 
 | Método e rota | Retorno |

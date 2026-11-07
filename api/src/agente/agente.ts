@@ -43,6 +43,8 @@ export interface Execucao {
   latencia_ms: number | null;
   /** `true` na chamada a `buscar_trechos` que o agente acrescentou (opção `complementar`), não escolhida pelo roteador. */
   complemento: boolean;
+  /** A consulta Cypher que `consultar_grafo` gerou e rodou, com o número de linhas; `null` nas outras ferramentas e quando nada rodou. */
+  cypher: { query: string; linhas: number } | null;
 }
 
 export type TipoAnotacao = "erro_da_ferramenta" | "excecao" | "fallback_do_atualizador" | "fallback_do_roteador" | "chamada_descartada";
@@ -91,7 +93,7 @@ export interface ResultadoAgente {
 export type EventoAgente =
   | { fase: "atualizacao"; subperguntas: number; fallback: string | null; ms: number }
   | { fase: "roteamento"; indice: number; onda: number; rota: "ferramentas" | "nenhuma"; ferramentas: string[]; fallback: string | null; ms: number }
-  | { fase: "execucao"; indice: number; ferramentas: { ferramenta: string; erro: string | null; evidencias: number; ms: number }[]; evidencias: number; ms: number }
+  | { fase: "execucao"; indice: number; ferramentas: { ferramenta: string; erro: string | null; evidencias: number; ms: number; cypher: Execucao["cypher"] }[]; evidencias: number; ms: number }
   | { fase: "fim"; evidencias: number; ms: number };
 
 export interface OpcoesAgente {
@@ -152,6 +154,12 @@ const mensagemDe = (e: unknown): string => (e instanceof Error ? e.message : Str
 const arredonda = (ms: number) => Math.round(ms * 10) / 10;
 const chaveDaEvidencia = (e: Evidencia) => `${e.tipo}\u0000${e.id}`;
 
+/** `consultar_grafo` põe `cypher` e `linhas` no envelope; as outras ferramentas não. */
+function cypherDe(r: Envelope): Execucao["cypher"] {
+  const x = r as Envelope & { cypher?: unknown; linhas?: unknown };
+  return typeof x.cypher === "string" && x.cypher.trim() !== "" ? { query: x.cypher, linhas: Array.isArray(x.linhas) ? x.linhas.length : 0 } : null;
+}
+
 async function executarChamada(executor: ExecutorDoAgente, chamada: ChamadaRoteada, complemento = false): Promise<{ execucao: Execucao; evidencias: Evidencia[]; excecao: boolean }> {
   const t = performance.now();
   try {
@@ -167,6 +175,7 @@ async function executarChamada(executor: ExecutorDoAgente, chamada: ChamadaRotea
         ms: arredonda(performance.now() - t),
         latencia_ms: typeof r.latencia_ms === "number" ? r.latencia_ms : null,
         complemento,
+        cypher: cypherDe(r),
       },
       evidencias: r.evidencias,
       excecao: false,
@@ -174,7 +183,7 @@ async function executarChamada(executor: ExecutorDoAgente, chamada: ChamadaRotea
   } catch (e) {
     if (e instanceof LlmAbortadoError) throw e;
     return {
-      execucao: { ferramenta: chamada.nome, argumentos: chamada.argumentos, erro: mensagemDe(e), aviso: null, evidencias: 0, omitido: {}, ms: arredonda(performance.now() - t), latencia_ms: null, complemento },
+      execucao: { ferramenta: chamada.nome, argumentos: chamada.argumentos, erro: mensagemDe(e), aviso: null, evidencias: 0, omitido: {}, ms: arredonda(performance.now() - t), latencia_ms: null, complemento, cypher: null },
       evidencias: [],
       excecao: true,
     };
@@ -246,7 +255,7 @@ export async function executarAgente(llm: LlmDoAgente, executor: ExecutorDoAgent
         avisa({
           fase: "execucao",
           indice: sub.indice,
-          ferramentas: parcial.execucoes.map((e) => ({ ferramenta: e.ferramenta, erro: e.erro, evidencias: e.evidencias, ms: e.ms })),
+          ferramentas: parcial.execucoes.map((e) => ({ ferramenta: e.ferramenta, erro: e.erro, evidencias: e.evidencias, ms: e.ms, cypher: e.cypher })),
           evidencias: parcial.evidencias.reduce((s, l) => s + l.length, 0),
           ms: msExecutar,
         });
