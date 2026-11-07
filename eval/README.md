@@ -16,6 +16,7 @@ Avaliação do GraphRAG (ARQUITETURA §13, fase F3). Tudo aqui mede contra o **F
 | `perguntas_latencia.txt` | 20 perguntas sem gabarito, só para medir latência (F2.5) |
 | `calibracao_juiz.csv` | Os 20 rótulos de correção da F3.4 (`c`/`p`/`i`) e quem os deu; a planilha de leitura fica em `data/avaliacao/` |
 | `resultados/` | Um relatório por execução (`<nome>.json`, sem texto do documento): métricas do juiz (F3.2), page recall@k, acerto numérico e latência (F3.3), no geral, no recorte e por categoria, e a nota de cada pergunta |
+| `resultados/f711-agente-v1.json`, `f711-agente-v2.json` | Medida do agente da F7.11 nas 60 perguntas (`npm run avaliar:agente` em `api/`, com Neo4j e llama-swap no ar): execução sem erro de infraestrutura, rota, tempo por etapa e page recall @1/@3/@6 contra o Python (`f79-busca.json`). A v1 é a medida pré-registrada; a v2 (`--complementar`) é pós-hoc. Só ids, números e nomes de ferramenta (ADR-009); as saídas completas ficam em `data/avaliacao/` |
 | `resultados/v0.md` | A tabela da escada de ablações A0 a A3r (F3.5, ADR-031), só nas perguntas com `no_recorte` = sim; gerada por `python -m indexer.tabela` |
 
 ## Colunas do `golden.csv`

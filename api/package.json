@@ -18,6 +18,7 @@
     "avaliar:paridade": "node src/avaliacao/cli-paridade.ts",
     "avaliar:busca": "node src/avaliacao/cli-busca.ts",
     "avaliar:consultar": "node src/avaliacao/cli-consultar.ts",
+    "avaliar:agente": "node src/avaliacao/cli-agente.ts",
     "test": "vitest run"
   },
   "dependencies": {

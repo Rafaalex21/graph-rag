@@ -1,0 +1,1916 @@
+{
+  "nome": "f711-agente-v2",
+  "data": "2026-11-07",
+  "comando": "npm run avaliar:agente -- --complementar --nome f711-agente-v2",
+  "complementar": true,
+  "perguntas": 60,
+  "execucao": {
+    "sem_excecao": 60,
+    "sem_erro_de_infra": 60,
+    "sem_nenhum_erro_de_ferramenta": 57,
+    "erros_de_infra": {},
+    "erros_de_dominio": {
+      "fato_financeiro:metrica_desconhecida": 3
+    },
+    "fallback_do_atualizador": 0,
+    "fallback_do_roteador": 0
+  },
+  "rotas": {
+    "por_rota": {
+      "ferramentas": 55,
+      "nenhuma": 5
+    },
+    "ferramentas": {
+      "buscar_trechos": 19,
+      "panorama": 6,
+      "consultar_grafo": 10,
+      "pessoas_cargos": 2,
+      "entidade": 1,
+      "fato_financeiro": 10,
+      "buscar_tabelas": 7,
+      "comparar_segmentos": 1,
+      "serie_metrica": 1,
+      "riscos": 2
+    },
+    "com_mais_de_uma_subpergunta": 8,
+    "estrito": 33,
+    "aceito": 54,
+    "avaliadas": 60
+  },
+  "tempo_s": {
+    "total": {
+      "p50": 4.74775,
+      "max": 47.3521
+    },
+    "atualizar": {
+      "p50": 2.1805000000000003,
+      "max": 3.873
+    },
+    "rotear": {
+      "p50": 1.671,
+      "max": 19.51
+    },
+    "executar": {
+      "p50": 0.9092,
+      "max": 43.4591
+    }
+  },
+  "page_recall": {
+    "perguntas": 55,
+    "agente": {
+      "@1": 0.3636,
+      "@3": 0.4727,
+      "@6": 0.5364
+    },
+    "python": {
+      "@1": 0.4727,
+      "@3": 0.5788,
+      "@6": 0.6273
+    },
+    "nao_inferior_ao_python": false,
+    "sobre_todas_as_evidencias": 0.6909,
+    "evidencias_por_pergunta": 8.9636
+  },
+  "itens": [
+    {
+      "id": "T01",
+      "categoria": "factual_textual",
+      "rota_esperada": "buscar_trechos",
+      "rota": "ferramentas",
+      "subperguntas": 1,
+      "ferramentas": [
+        "buscar_trechos"
+      ],
+      "fallback_atualizador": null,
+      "fallbacks_roteador": [],
+      "erros_de_infra": [],
+      "erros_de_dominio": [],
+      "excecao": null,
+      "evidencias": 6,
+      "com_pagina": 6,
+      "ms": {
+        "atualizar": 2925,
+        "rotear": 1848,
+        "executar": 926.8,
+        "total": 5700.8
+      },
+      "recall": {
+        "1": 1,
+        "3": 1,
+        "6": 1
+      },
+      "recall_total": 1,
+      "rota_estrita": true,
+      "rota_aceita": true
+    },
+    {
+      "id": "T02",
+      "categoria": "factual_textual",
+      "rota_esperada": "buscar_trechos",
+      "rota": "ferramentas",
+      "subperguntas": 1,
+      "ferramentas": [
+        "panorama"
+      ],
+      "fallback_atualizador": null,
+      "fallbacks_roteador": [],
+      "erros_de_infra": [],
+      "erros_de_dominio": [],
+      "excecao": null,
+      "evidencias": 13,
+      "com_pagina": 6,
+      "ms": {
+        "atualizar": 1689,
+        "rotear": 1457,
+        "executar": 32212,
+        "total": 35357.9
+      },
+      "recall": {
+        "1": 0,
+        "3": 0,
+        "6": 0
+      },
+      "recall_total": 1,
+      "rota_estrita": false,
+      "rota_aceita": true
+    },
+    {
+      "id": "T03",
+      "categoria": "factual_textual",
+      "rota_esperada": "buscar_trechos",
+      "rota": "ferramentas",
+      "subperguntas": 1,
+      "ferramentas": [
+        "buscar_trechos"
+      ],
+      "fallback_atualizador": null,
+      "fallbacks_roteador": [],
+      "erros_de_infra": [],
+      "erros_de_dominio": [],
+      "excecao": null,
+      "evidencias": 6,
+      "com_pagina": 6,
+      "ms": {
+        "atualizar": 2428,
+        "rotear": 1335,
+        "executar": 633.9,
+        "total": 4397.6
+      },
+      "recall": {
+        "1": 1,
+        "3": 1,
+        "6": 1
+      },
+      "recall_total": 1,
+      "rota_estrita": true,
+      "rota_aceita": true
+    },
+    {
+      "id": "T04",
+      "categoria": "factual_textual",
+      "rota_esperada": "buscar_trechos",
+      "rota": "ferramentas",
+      "subperguntas": 1,
+      "ferramentas": [
+        "consultar_grafo"
+      ],
+      "fallback_atualizador": null,
+      "fallbacks_roteador": [],
+      "erros_de_infra": [],
+      "erros_de_dominio": [],
+      "excecao": null,
+      "evidencias": 6,
+      "com_pagina": 6,
+      "ms": {
+        "atualizar": 2790,
+        "rotear": 1810,
+        "executar": 18998.9,
+        "total": 23599.5
+      },
+      "recall": {
+        "1": 1,
+        "3": 1,
+        "6": 1
+      },
+      "recall_total": 1,
+      "rota_estrita": false,
+      "rota_aceita": true
+    },
+    {
+      "id": "T05",
+      "categoria": "factual_textual",
+      "rota_esperada": "buscar_trechos",
+      "rota": "ferramentas",
+      "subperguntas": 1,
+      "ferramentas": [
+        "buscar_trechos"
+      ],
+      "fallback_atualizador": null,
+      "fallbacks_roteador": [],
+      "erros_de_infra": [],
+      "erros_de_dominio": [],
+      "excecao": null,
+      "evidencias": 6,
+      "com_pagina": 6,
+      "ms": {
+        "atualizar": 2114,
+        "rotear": 1640,
+        "executar": 716.8,
+        "total": 4471.4
+      },
+      "recall": {
+        "1": 1,
+        "3": 1,
+        "6": 1
+      },
+      "recall_total": 1,
+      "rota_estrita": true,
+      "rota_aceita": true
+    },
+    {
+      "id": "T06",
+      "categoria": "factual_textual",
+      "rota_esperada": "buscar_trechos",
+      "rota": "ferramentas",
+      "subperguntas": 1,
+      "ferramentas": [
+        "buscar_trechos"
+      ],
+      "fallback_atualizador": null,
+      "fallbacks_roteador": [],
+      "erros_de_infra": [],
+      "erros_de_dominio": [],
+      "excecao": null,
+      "evidencias": 6,
+      "com_pagina": 6,
+      "ms": {
+        "atualizar": 2961,
+        "rotear": 1636,
+        "executar": 981.1,
+        "total": 5578.5
+      },
+      "recall": {
+        "1": 1,
+        "3": 1,
+        "6": 1
+      },
+      "recall_total": 1,
+      "rota_estrita": true,
+      "rota_aceita": true
+    },
+    {
+      "id": "T07",
+      "categoria": "factual_textual",
+      "rota_esperada": "buscar_trechos",
+      "rota": "ferramentas",
+      "subperguntas": 1,
+      "ferramentas": [
+        "buscar_trechos"
+      ],
+      "fallback_atualizador": null,
+      "fallbacks_roteador": [],
+      "erros_de_infra": [],
+      "erros_de_dominio": [],
+      "excecao": null,
+      "evidencias": 6,
+      "com_pagina": 6,
+      "ms": {
+        "atualizar": 2053,
+        "rotear": 1553,
+        "executar": 955,
+        "total": 4561.8
+      },
+      "recall": {
+        "1": 1,
+        "3": 1,
+        "6": 1
+      },
+      "recall_total": 1,
+      "rota_estrita": true,
+      "rota_aceita": true
+    },
+    {
+      "id": "T08",
+      "categoria": "factual_textual",
+      "rota_esperada": "buscar_trechos",
+      "rota": "ferramentas",
+      "subperguntas": 1,
+      "ferramentas": [
+        "buscar_trechos"
+      ],
+      "fallback_atualizador": null,
+      "fallbacks_roteador": [],
+      "erros_de_infra": [],
+      "erros_de_dominio": [],
+      "excecao": null,
+      "evidencias": 6,
+      "com_pagina": 6,
+      "ms": {
+        "atualizar": 2509,
+        "rotear": 1924,
+        "executar": 1284.3,
+        "total": 5717.8
+      },
+      "recall": {
+        "1": 1,
+        "3": 1,
+        "6": 1
+      },
+      "recall_total": 1,
+      "rota_estrita": true,
+      "rota_aceita": true
+    },
+    {
+      "id": "T09",
+      "categoria": "factual_textual",
+      "rota_esperada": "buscar_trechos",
+      "rota": "ferramentas",
+      "subperguntas": 1,
+      "ferramentas": [
+        "pessoas_cargos"
+      ],
+      "fallback_atualizador": null,
+      "fallbacks_roteador": [],
+      "erros_de_infra": [],
+      "erros_de_dominio": [],
+      "excecao": null,
+      "evidencias": 7,
+      "com_pagina": 7,
+      "ms": {
+        "atualizar": 2782,
+        "rotear": 1216,
+        "executar": 972,
+        "total": 4970.4
+      },
+      "recall": {
+        "1": 0,
+        "3": 1,
+        "6": 1
+      },
+      "recall_total": 1,
+      "rota_estrita": false,
+      "rota_aceita": false
+    },
+    {
+      "id": "T10",
+      "categoria": "factual_textual",
+      "rota_esperada": "buscar_trechos",
+      "rota": "ferramentas",
+      "subperguntas": 1,
+      "ferramentas": [
+        "panorama"
+      ],
+      "fallback_atualizador": null,
+      "fallbacks_roteador": [],
+      "erros_de_infra": [],
+      "erros_de_dominio": [],
+      "excecao": null,
+      "evidencias": 14,
+      "com_pagina": 6,
+      "ms": {
+        "atualizar": 2419,
+        "rotear": 1593,
+        "executar": 32408.6,
+        "total": 36419.8
+      },
+      "recall": {
+        "1": 0,
+        "3": 0,
+        "6": 0
+      },
+      "recall_total": 1,
+      "rota_estrita": false,
+      "rota_aceita": true
+    },
+    {
+      "id": "T11",
+      "categoria": "factual_textual",
+      "rota_esperada": "buscar_trechos",
+      "rota": "ferramentas",
+      "subperguntas": 1,
+      "ferramentas": [
+        "buscar_trechos"
+      ],
+      "fallback_atualizador": null,
+      "fallbacks_roteador": [],
+      "erros_de_infra": [],
+      "erros_de_dominio": [],
+      "excecao": null,
+      "evidencias": 6,
+      "com_pagina": 6,
+      "ms": {
+        "atualizar": 2079,
+        "rotear": 1519,
+        "executar": 500.4,
+        "total": 4098.7
+      },
+      "recall": {
+        "1": 1,
+        "3": 1,
+        "6": 1
+      },
+      "recall_total": 1,
+      "rota_estrita": true,
+      "rota_aceita": true
+    },
+    {
+      "id": "T12",
+      "categoria": "factual_textual",
+      "rota_esperada": "buscar_trechos",
+      "rota": "ferramentas",
+      "subperguntas": 1,
+      "ferramentas": [
+        "buscar_trechos"
+      ],
+      "fallback_atualizador": null,
+      "fallbacks_roteador": [],
+      "erros_de_infra": [],
+      "erros_de_dominio": [],
+      "excecao": null,
+      "evidencias": 6,
+      "com_pagina": 6,
+      "ms": {
+        "atualizar": 2666,
+        "rotear": 1717,
+        "executar": 987.4,
+        "total": 5370
+      },
+      "recall": {
+        "1": 0,
+        "3": 0,
+        "6": 0
+      },
+      "recall_total": 0,
+      "rota_estrita": true,
+      "rota_aceita": true
+    },
+    {
+      "id": "T13",
+      "categoria": "factual_textual",
+      "rota_esperada": "buscar_trechos",
+      "rota": "ferramentas",
+      "subperguntas": 2,
+      "ferramentas": [
+        "consultar_grafo",
+        "buscar_trechos"
+      ],
+      "fallback_atualizador": null,
+      "fallbacks_roteador": [],
+      "erros_de_infra": [],
+      "erros_de_dominio": [],
+      "excecao": null,
+      "evidencias": 10,
+      "com_pagina": 10,
+      "ms": {
+        "atualizar": 3086,
+        "rotear": 3951,
+        "executar": 3843.2,
+        "total": 7833.1
+      },
+      "recall": {
+        "1": 0,
+        "3": 1,
+        "6": 1
+      },
+      "recall_total": 1,
+      "rota_estrita": false,
+      "rota_aceita": false
+    },
+    {
+      "id": "T14",
+      "categoria": "factual_textual",
+      "rota_esperada": "buscar_trechos",
+      "rota": "ferramentas",
+      "subperguntas": 1,
+      "ferramentas": [
+        "entidade"
+      ],
+      "fallback_atualizador": null,
+      "fallbacks_roteador": [],
+      "erros_de_infra": [],
+      "erros_de_dominio": [],
+      "excecao": null,
+      "evidencias": 26,
+      "com_pagina": 24,
+      "ms": {
+        "atualizar": 1948,
+        "rotear": 1181,
+        "executar": 911.4,
+        "total": 4040.3
+      },
+      "recall": {
+        "1": 0,
+        "3": 0,
+        "6": 0
+      },
+      "recall_total": 1,
+      "rota_estrita": false,
+      "rota_aceita": false
+    },
+    {
+      "id": "T15",
+      "categoria": "factual_textual",
+      "rota_esperada": "entidade",
+      "rota": "ferramentas",
+      "subperguntas": 1,
+      "ferramentas": [
+        "pessoas_cargos"
+      ],
+      "fallback_atualizador": null,
+      "fallbacks_roteador": [],
+      "erros_de_infra": [],
+      "erros_de_dominio": [],
+      "excecao": null,
+      "evidencias": 7,
+      "com_pagina": 7,
+      "ms": {
+        "atualizar": 2049,
+        "rotear": 1191,
+        "executar": 658,
+        "total": 3898.1
+      },
+      "recall": {
+        "1": 1,
+        "3": 1,
+        "6": 1
+      },
+      "recall_total": 1,
+      "rota_estrita": false,
+      "rota_aceita": true
+    },
+    {
+      "id": "N01",
+      "categoria": "numerica",
+      "rota_esperada": "fato_financeiro",
+      "rota": "ferramentas",
+      "subperguntas": 1,
+      "ferramentas": [
+        "fato_financeiro"
+      ],
+      "fallback_atualizador": null,
+      "fallbacks_roteador": [],
+      "erros_de_infra": [],
+      "erros_de_dominio": [],
+      "excecao": null,
+      "evidencias": 7,
+      "com_pagina": 7,
+      "ms": {
+        "atualizar": 1885,
+        "rotear": 1774,
+        "executar": 458.9,
+        "total": 4118
+      },
+      "recall": {
+        "1": 1,
+        "3": 1,
+        "6": 1
+      },
+      "recall_total": 1,
+      "rota_estrita": true,
+      "rota_aceita": true
+    },
+    {
+      "id": "N02",
+      "categoria": "numerica",
+      "rota_esperada": "fato_financeiro",
+      "rota": "ferramentas",
+      "subperguntas": 1,
+      "ferramentas": [
+        "fato_financeiro"
+      ],
+      "fallback_atualizador": null,
+      "fallbacks_roteador": [],
+      "erros_de_infra": [],
+      "erros_de_dominio": [],
+      "excecao": null,
+      "evidencias": 7,
+      "com_pagina": 7,
+      "ms": {
+        "atualizar": 1845,
+        "rotear": 1735,
+        "executar": 489.9,
+        "total": 4069.4
+      },
+      "recall": {
+        "1": 1,
+        "3": 1,
+        "6": 1
+      },
+      "recall_total": 1,
+      "rota_estrita": true,
+      "rota_aceita": true
+    },
+    {
+      "id": "N03",
+      "categoria": "numerica",
+      "rota_esperada": "buscar_tabelas",
+      "rota": "ferramentas",
+      "subperguntas": 1,
+      "ferramentas": [
+        "fato_financeiro"
+      ],
+      "fallback_atualizador": null,
+      "fallbacks_roteador": [],
+      "erros_de_infra": [],
+      "erros_de_dominio": [
+        "fato_financeiro:metrica_desconhecida"
+      ],
+      "excecao": null,
+      "evidencias": 6,
+      "com_pagina": 6,
+      "ms": {
+        "atualizar": 2057,
+        "rotear": 1826,
+        "executar": 785,
+        "total": 4668
+      },
+      "recall": {
+        "1": 0,
+        "3": 1,
+        "6": 1
+      },
+      "recall_total": 1,
+      "rota_estrita": false,
+      "rota_aceita": true
+    },
+    {
+      "id": "N04",
+      "categoria": "numerica",
+      "rota_esperada": "buscar_tabelas",
+      "rota": "ferramentas",
+      "subperguntas": 1,
+      "ferramentas": [
+        "fato_financeiro"
+      ],
+      "fallback_atualizador": null,
+      "fallbacks_roteador": [],
+      "erros_de_infra": [],
+      "erros_de_dominio": [
+        "fato_financeiro:metrica_desconhecida"
+      ],
+      "excecao": null,
+      "evidencias": 6,
+      "com_pagina": 6,
+      "ms": {
+        "atualizar": 1896,
+        "rotear": 1778,
+        "executar": 534.3,
+        "total": 4208.8
+      },
+      "recall": {
+        "1": 0,
+        "3": 0,
+        "6": 0
+      },
+      "recall_total": 0,
+      "rota_estrita": false,
+      "rota_aceita": true
+    },
+    {
+      "id": "N05",
+      "categoria": "numerica",
+      "rota_esperada": "buscar_tabelas",
+      "rota": "ferramentas",
+      "subperguntas": 1,
+      "ferramentas": [
+        "fato_financeiro"
+      ],
+      "fallback_atualizador": null,
+      "fallbacks_roteador": [],
+      "erros_de_infra": [],
+      "erros_de_dominio": [],
+      "excecao": null,
+      "evidencias": 7,
+      "com_pagina": 7,
+      "ms": {
+        "atualizar": 2077,
+        "rotear": 1907,
+        "executar": 635,
+        "total": 4619.6
+      },
+      "recall": {
+        "1": 1,
+        "3": 1,
+        "6": 1
+      },
+      "recall_total": 1,
+      "rota_estrita": false,
+      "rota_aceita": true
+    },
+    {
+      "id": "N06",
+      "categoria": "numerica",
+      "rota_esperada": "buscar_tabelas",
+      "rota": "ferramentas",
+      "subperguntas": 1,
+      "ferramentas": [
+        "fato_financeiro"
+      ],
+      "fallback_atualizador": null,
+      "fallbacks_roteador": [],
+      "erros_de_infra": [],
+      "erros_de_dominio": [],
+      "excecao": null,
+      "evidencias": 7,
+      "com_pagina": 7,
+      "ms": {
+        "atualizar": 2189,
+        "rotear": 1661,
+        "executar": 629.1,
+        "total": 4479.3
+      },
+      "recall": {
+        "1": 0,
+        "3": 0,
+        "6": 1
+      },
+      "recall_total": 1,
+      "rota_estrita": false,
+      "rota_aceita": true
+    },
+    {
+      "id": "N07",
+      "categoria": "numerica",
+      "rota_esperada": "buscar_tabelas",
+      "rota": "ferramentas",
+      "subperguntas": 1,
+      "ferramentas": [
+        "fato_financeiro"
+      ],
+      "fallback_atualizador": null,
+      "fallbacks_roteador": [],
+      "erros_de_infra": [],
+      "erros_de_dominio": [],
+      "excecao": null,
+      "evidencias": 6,
+      "com_pagina": 6,
+      "ms": {
+        "atualizar": 2109,
+        "rotear": 1795,
+        "executar": 461.6,
+        "total": 4365.1
+      },
+      "recall": {
+        "1": 0,
+        "3": 0,
+        "6": 0
+      },
+      "recall_total": 0,
+      "rota_estrita": false,
+      "rota_aceita": true
+    },
+    {
+      "id": "N08",
+      "categoria": "numerica",
+      "rota_esperada": "buscar_tabelas",
+      "rota": "ferramentas",
+      "subperguntas": 1,
+      "ferramentas": [
+        "fato_financeiro"
+      ],
+      "fallback_atualizador": null,
+      "fallbacks_roteador": [],
+      "erros_de_infra": [],
+      "erros_de_dominio": [],
+      "excecao": null,
+      "evidencias": 6,
+      "com_pagina": 6,
+      "ms": {
+        "atualizar": 1820,
+        "rotear": 1757,
+        "executar": 464.6,
+        "total": 4041.2
+      },
+      "recall": {
+        "1": 0,
+        "3": 0,
+        "6": 0
+      },
+      "recall_total": 0,
+      "rota_estrita": false,
+      "rota_aceita": true
+    },
+    {
+      "id": "N09",
+      "categoria": "numerica",
+      "rota_esperada": "buscar_trechos",
+      "rota": "ferramentas",
+      "subperguntas": 1,
+      "ferramentas": [
+        "buscar_tabelas"
+      ],
+      "fallback_atualizador": null,
+      "fallbacks_roteador": [],
+      "erros_de_infra": [],
+      "erros_de_dominio": [],
+      "excecao": null,
+      "evidencias": 9,
+      "com_pagina": 9,
+      "ms": {
+        "atualizar": 2136,
+        "rotear": 1709,
+        "executar": 787.2,
+        "total": 4632.7
+      },
+      "recall": {
+        "1": 0,
+        "3": 0,
+        "6": 1
+      },
+      "recall_total": 1,
+      "rota_estrita": false,
+      "rota_aceita": true
+    },
+    {
+      "id": "N10",
+      "categoria": "numerica",
+      "rota_esperada": "buscar_tabelas",
+      "rota": "ferramentas",
+      "subperguntas": 1,
+      "ferramentas": [
+        "buscar_trechos"
+      ],
+      "fallback_atualizador": null,
+      "fallbacks_roteador": [],
+      "erros_de_infra": [],
+      "erros_de_dominio": [],
+      "excecao": null,
+      "evidencias": 6,
+      "com_pagina": 6,
+      "ms": {
+        "atualizar": 2474,
+        "rotear": 1652,
+        "executar": 840.5,
+        "total": 4966.9
+      },
+      "recall": {
+        "1": 0,
+        "3": 0,
+        "6": 0
+      },
+      "recall_total": 0,
+      "rota_estrita": false,
+      "rota_aceita": true
+    },
+    {
+      "id": "N11",
+      "categoria": "numerica",
+      "rota_esperada": "buscar_tabelas",
+      "rota": "ferramentas",
+      "subperguntas": 1,
+      "ferramentas": [
+        "buscar_tabelas"
+      ],
+      "fallback_atualizador": null,
+      "fallbacks_roteador": [],
+      "erros_de_infra": [],
+      "erros_de_dominio": [],
+      "excecao": null,
+      "evidencias": 9,
+      "com_pagina": 9,
+      "ms": {
+        "atualizar": 2114,
+        "rotear": 1568,
+        "executar": 558.3,
+        "total": 4240.6
+      },
+      "recall": {
+        "1": 0,
+        "3": 1,
+        "6": 1
+      },
+      "recall_total": 1,
+      "rota_estrita": true,
+      "rota_aceita": true
+    },
+    {
+      "id": "N12",
+      "categoria": "numerica",
+      "rota_esperada": "buscar_trechos",
+      "rota": "ferramentas",
+      "subperguntas": 1,
+      "ferramentas": [
+        "buscar_trechos"
+      ],
+      "fallback_atualizador": null,
+      "fallbacks_roteador": [],
+      "erros_de_infra": [],
+      "erros_de_dominio": [],
+      "excecao": null,
+      "evidencias": 6,
+      "com_pagina": 6,
+      "ms": {
+        "atualizar": 1821,
+        "rotear": 1516,
+        "executar": 741.6,
+        "total": 4078.7
+      },
+      "recall": {
+        "1": 0,
+        "3": 0,
+        "6": 0
+      },
+      "recall_total": 0,
+      "rota_estrita": true,
+      "rota_aceita": true
+    },
+    {
+      "id": "N13",
+      "categoria": "numerica",
+      "rota_esperada": "buscar_trechos",
+      "rota": "ferramentas",
+      "subperguntas": 1,
+      "ferramentas": [
+        "fato_financeiro"
+      ],
+      "fallback_atualizador": null,
+      "fallbacks_roteador": [],
+      "erros_de_infra": [],
+      "erros_de_dominio": [
+        "fato_financeiro:metrica_desconhecida"
+      ],
+      "excecao": null,
+      "evidencias": 6,
+      "com_pagina": 6,
+      "ms": {
+        "atualizar": 1969,
+        "rotear": 1765,
+        "executar": 557.5,
+        "total": 4291.3
+      },
+      "recall": {
+        "1": 1,
+        "3": 1,
+        "6": 1
+      },
+      "recall_total": 1,
+      "rota_estrita": false,
+      "rota_aceita": true
+    },
+    {
+      "id": "N14",
+      "categoria": "numerica",
+      "rota_esperada": "buscar_tabelas",
+      "rota": "ferramentas",
+      "subperguntas": 1,
+      "ferramentas": [
+        "buscar_tabelas"
+      ],
+      "fallback_atualizador": null,
+      "fallbacks_roteador": [],
+      "erros_de_infra": [],
+      "erros_de_dominio": [],
+      "excecao": null,
+      "evidencias": 9,
+      "com_pagina": 9,
+      "ms": {
+        "atualizar": 1716,
+        "rotear": 1539,
+        "executar": 716.1,
+        "total": 3971.1
+      },
+      "recall": {
+        "1": 0,
+        "3": 1,
+        "6": 1
+      },
+      "recall_total": 1,
+      "rota_estrita": true,
+      "rota_aceita": true
+    },
+    {
+      "id": "N15",
+      "categoria": "numerica",
+      "rota_esperada": "buscar_trechos",
+      "rota": "ferramentas",
+      "subperguntas": 2,
+      "ferramentas": [
+        "fato_financeiro",
+        "comparar_segmentos"
+      ],
+      "fallback_atualizador": null,
+      "fallbacks_roteador": [],
+      "erros_de_infra": [],
+      "erros_de_dominio": [],
+      "excecao": null,
+      "evidencias": 8,
+      "com_pagina": 8,
+      "ms": {
+        "atualizar": 3402,
+        "rotear": 5188,
+        "executar": 1473.7,
+        "total": 7084.2
+      },
+      "recall": {
+        "1": 1,
+        "3": 1,
+        "6": 1
+      },
+      "recall_total": 1,
+      "rota_estrita": false,
+      "rota_aceita": true
+    },
+    {
+      "id": "G01",
+      "categoria": "agregacao_filtro",
+      "rota_esperada": "consultar_grafo",
+      "rota": "ferramentas",
+      "subperguntas": 1,
+      "ferramentas": [
+        "consultar_grafo"
+      ],
+      "fallback_atualizador": null,
+      "fallbacks_roteador": [],
+      "erros_de_infra": [],
+      "erros_de_dominio": [],
+      "excecao": null,
+      "evidencias": 7,
+      "com_pagina": 6,
+      "ms": {
+        "atualizar": 2883,
+        "rotear": 1915,
+        "executar": 15426.4,
+        "total": 20224.3
+      },
+      "recall": {
+        "1": 0,
+        "3": 0,
+        "6": 0
+      },
+      "recall_total": 0,
+      "rota_estrita": true,
+      "rota_aceita": true
+    },
+    {
+      "id": "G02",
+      "categoria": "agregacao_filtro",
+      "rota_esperada": "consultar_grafo",
+      "rota": "ferramentas",
+      "subperguntas": 1,
+      "ferramentas": [
+        "consultar_grafo"
+      ],
+      "fallback_atualizador": null,
+      "fallbacks_roteador": [],
+      "erros_de_infra": [],
+      "erros_de_dominio": [],
+      "excecao": null,
+      "evidencias": 7,
+      "com_pagina": 7,
+      "ms": {
+        "atualizar": 2397,
+        "rotear": 1640,
+        "executar": 3892.3,
+        "total": 7929
+      },
+      "recall": {
+        "1": 0,
+        "3": 0,
+        "6": 0
+      },
+      "recall_total": 0,
+      "rota_estrita": true,
+      "rota_aceita": true
+    },
+    {
+      "id": "G03",
+      "categoria": "agregacao_filtro",
+      "rota_esperada": "consultar_grafo",
+      "rota": "ferramentas",
+      "subperguntas": 1,
+      "ferramentas": [
+        "consultar_grafo"
+      ],
+      "fallback_atualizador": null,
+      "fallbacks_roteador": [],
+      "erros_de_infra": [],
+      "erros_de_dominio": [],
+      "excecao": null,
+      "evidencias": 7,
+      "com_pagina": 7,
+      "ms": {
+        "atualizar": 2200,
+        "rotear": 1803,
+        "executar": 3313.4,
+        "total": 7316.8
+      },
+      "recall": {
+        "1": 1,
+        "3": 1,
+        "6": 1
+      },
+      "recall_total": 1,
+      "rota_estrita": true,
+      "rota_aceita": true
+    },
+    {
+      "id": "G04",
+      "categoria": "agregacao_filtro",
+      "rota_esperada": "consultar_grafo",
+      "rota": "ferramentas",
+      "subperguntas": 1,
+      "ferramentas": [
+        "consultar_grafo"
+      ],
+      "fallback_atualizador": null,
+      "fallbacks_roteador": [],
+      "erros_de_infra": [],
+      "erros_de_dominio": [],
+      "excecao": null,
+      "evidencias": 6,
+      "com_pagina": 6,
+      "ms": {
+        "atualizar": 1876,
+        "rotear": 1597,
+        "executar": 3763.5,
+        "total": 7236.9
+      },
+      "recall": {
+        "1": 0,
+        "3": 0,
+        "6": 0
+      },
+      "recall_total": 0,
+      "rota_estrita": true,
+      "rota_aceita": true
+    },
+    {
+      "id": "G05",
+      "categoria": "agregacao_filtro",
+      "rota_esperada": "consultar_grafo",
+      "rota": "ferramentas",
+      "subperguntas": 1,
+      "ferramentas": [
+        "consultar_grafo"
+      ],
+      "fallback_atualizador": null,
+      "fallbacks_roteador": [],
+      "erros_de_infra": [],
+      "erros_de_dominio": [],
+      "excecao": null,
+      "evidencias": 7,
+      "com_pagina": 7,
+      "ms": {
+        "atualizar": 1987,
+        "rotear": 1705,
+        "executar": 2434.6,
+        "total": 6126.7
+      },
+      "recall": {
+        "1": 0,
+        "3": 0,
+        "6": 0
+      },
+      "recall_total": 0,
+      "rota_estrita": true,
+      "rota_aceita": true
+    },
+    {
+      "id": "G06",
+      "categoria": "agregacao_filtro",
+      "rota_esperada": "consultar_grafo",
+      "rota": "ferramentas",
+      "subperguntas": 1,
+      "ferramentas": [
+        "buscar_tabelas"
+      ],
+      "fallback_atualizador": null,
+      "fallbacks_roteador": [],
+      "erros_de_infra": [],
+      "erros_de_dominio": [],
+      "excecao": null,
+      "evidencias": 9,
+      "com_pagina": 9,
+      "ms": {
+        "atualizar": 2353,
+        "rotear": 1590,
+        "executar": 555.7,
+        "total": 4499
+      },
+      "recall": {
+        "1": 0,
+        "3": 0,
+        "6": 0
+      },
+      "recall_total": 0,
+      "rota_estrita": false,
+      "rota_aceita": false
+    },
+    {
+      "id": "G07",
+      "categoria": "agregacao_filtro",
+      "rota_esperada": "consultar_grafo",
+      "rota": "ferramentas",
+      "subperguntas": 1,
+      "ferramentas": [
+        "buscar_tabelas"
+      ],
+      "fallback_atualizador": null,
+      "fallbacks_roteador": [],
+      "erros_de_infra": [],
+      "erros_de_dominio": [],
+      "excecao": null,
+      "evidencias": 9,
+      "com_pagina": 9,
+      "ms": {
+        "atualizar": 2382,
+        "rotear": 1637,
+        "executar": 743.1,
+        "total": 4761.5
+      },
+      "recall": {
+        "1": 0,
+        "3": 0,
+        "6": 0
+      },
+      "recall_total": 0,
+      "rota_estrita": false,
+      "rota_aceita": false
+    },
+    {
+      "id": "G08",
+      "categoria": "agregacao_filtro",
+      "rota_esperada": "consultar_grafo",
+      "rota": "ferramentas",
+      "subperguntas": 1,
+      "ferramentas": [
+        "consultar_grafo"
+      ],
+      "fallback_atualizador": null,
+      "fallbacks_roteador": [],
+      "erros_de_infra": [],
+      "erros_de_dominio": [],
+      "excecao": null,
+      "evidencias": 7,
+      "com_pagina": 6,
+      "ms": {
+        "atualizar": 2048,
+        "rotear": 1719,
+        "executar": 2818.9,
+        "total": 6586.3
+      },
+      "recall": {
+        "1": 0,
+        "3": 0,
+        "6": 0
+      },
+      "recall_total": 0,
+      "rota_estrita": true,
+      "rota_aceita": true
+    },
+    {
+      "id": "G09",
+      "categoria": "agregacao_filtro",
+      "rota_esperada": "consultar_grafo",
+      "rota": "ferramentas",
+      "subperguntas": 1,
+      "ferramentas": [
+        "serie_metrica"
+      ],
+      "fallback_atualizador": null,
+      "fallbacks_roteador": [],
+      "erros_de_infra": [],
+      "erros_de_dominio": [],
+      "excecao": null,
+      "evidencias": 7,
+      "com_pagina": 7,
+      "ms": {
+        "atualizar": 3069,
+        "rotear": 1291,
+        "executar": 541.2,
+        "total": 4901.1
+      },
+      "recall": {
+        "1": 1,
+        "3": 1,
+        "6": 1
+      },
+      "recall_total": 1,
+      "rota_estrita": false,
+      "rota_aceita": true
+    },
+    {
+      "id": "G10",
+      "categoria": "agregacao_filtro",
+      "rota_esperada": "consultar_grafo",
+      "rota": "ferramentas",
+      "subperguntas": 1,
+      "ferramentas": [
+        "buscar_tabelas"
+      ],
+      "fallback_atualizador": null,
+      "fallbacks_roteador": [],
+      "erros_de_infra": [],
+      "erros_de_dominio": [],
+      "excecao": null,
+      "evidencias": 9,
+      "com_pagina": 9,
+      "ms": {
+        "atualizar": 2018,
+        "rotear": 1781,
+        "executar": 504,
+        "total": 4303.2
+      },
+      "recall": {
+        "1": 0,
+        "3": 1,
+        "6": 1
+      },
+      "recall_total": 1,
+      "rota_estrita": false,
+      "rota_aceita": false
+    },
+    {
+      "id": "P01",
+      "categoria": "tematica_global",
+      "rota_esperada": "panorama",
+      "rota": "ferramentas",
+      "subperguntas": 1,
+      "ferramentas": [
+        "riscos"
+      ],
+      "fallback_atualizador": null,
+      "fallbacks_roteador": [],
+      "erros_de_infra": [],
+      "erros_de_dominio": [],
+      "excecao": null,
+      "evidencias": 16,
+      "com_pagina": 16,
+      "ms": {
+        "atualizar": 2140,
+        "rotear": 711,
+        "executar": 907,
+        "total": 3757.7
+      },
+      "recall": {
+        "1": 0,
+        "3": 0,
+        "6": 0
+      },
+      "recall_total": 1,
+      "rota_estrita": false,
+      "rota_aceita": true
+    },
+    {
+      "id": "P02",
+      "categoria": "tematica_global",
+      "rota_esperada": "panorama",
+      "rota": "ferramentas",
+      "subperguntas": 1,
+      "ferramentas": [
+        "riscos"
+      ],
+      "fallback_atualizador": null,
+      "fallbacks_roteador": [],
+      "erros_de_infra": [],
+      "erros_de_dominio": [],
+      "excecao": null,
+      "evidencias": 16,
+      "com_pagina": 16,
+      "ms": {
+        "atualizar": 2121,
+        "rotear": 1082,
+        "executar": 964.3,
+        "total": 4167.2
+      },
+      "recall": {
+        "1": 1,
+        "3": 1,
+        "6": 1
+      },
+      "recall_total": 1,
+      "rota_estrita": false,
+      "rota_aceita": true
+    },
+    {
+      "id": "P03",
+      "categoria": "tematica_global",
+      "rota_esperada": "panorama",
+      "rota": "ferramentas",
+      "subperguntas": 1,
+      "ferramentas": [
+        "panorama"
+      ],
+      "fallback_atualizador": null,
+      "fallbacks_roteador": [],
+      "erros_de_infra": [],
+      "erros_de_dominio": [],
+      "excecao": null,
+      "evidencias": 18,
+      "com_pagina": 6,
+      "ms": {
+        "atualizar": 2172,
+        "rotear": 1721,
+        "executar": 43459.1,
+        "total": 47352.1
+      },
+      "recall": {
+        "1": 0,
+        "3": 0,
+        "6": 0
+      },
+      "recall_total": 1,
+      "rota_estrita": true,
+      "rota_aceita": true
+    },
+    {
+      "id": "P04",
+      "categoria": "tematica_global",
+      "rota_esperada": "panorama",
+      "rota": "ferramentas",
+      "subperguntas": 2,
+      "ferramentas": [
+        "buscar_trechos"
+      ],
+      "fallback_atualizador": null,
+      "fallbacks_roteador": [],
+      "erros_de_infra": [],
+      "erros_de_dominio": [],
+      "excecao": null,
+      "evidencias": 7,
+      "com_pagina": 7,
+      "ms": {
+        "atualizar": 3785,
+        "rotear": 4118,
+        "executar": 1589.6,
+        "total": 6825.7
+      },
+      "recall": {
+        "1": 1,
+        "3": 1,
+        "6": 1
+      },
+      "recall_total": 1,
+      "rota_estrita": false,
+      "rota_aceita": true
+    },
+    {
+      "id": "P05",
+      "categoria": "tematica_global",
+      "rota_esperada": "panorama",
+      "rota": "ferramentas",
+      "subperguntas": 1,
+      "ferramentas": [
+        "panorama"
+      ],
+      "fallback_atualizador": null,
+      "fallbacks_roteador": [],
+      "erros_de_infra": [],
+      "erros_de_dominio": [],
+      "excecao": null,
+      "evidencias": 17,
+      "com_pagina": 6,
+      "ms": {
+        "atualizar": 2470,
+        "rotear": 1681,
+        "executar": 35383,
+        "total": 39534.3
+      },
+      "recall": {
+        "1": 0,
+        "3": 0,
+        "6": 0
+      },
+      "recall_total": 1,
+      "rota_estrita": true,
+      "rota_aceita": true
+    },
+    {
+      "id": "P06",
+      "categoria": "tematica_global",
+      "rota_esperada": "panorama",
+      "rota": "ferramentas",
+      "subperguntas": 1,
+      "ferramentas": [
+        "panorama"
+      ],
+      "fallback_atualizador": null,
+      "fallbacks_roteador": [],
+      "erros_de_infra": [],
+      "erros_de_dominio": [],
+      "excecao": null,
+      "evidencias": 18,
+      "com_pagina": 6,
+      "ms": {
+        "atualizar": 2432,
+        "rotear": 1600,
+        "executar": 42805.6,
+        "total": 46837.6
+      },
+      "recall": {
+        "1": 0,
+        "3": 0,
+        "6": 0
+      },
+      "recall_total": 1,
+      "rota_estrita": true,
+      "rota_aceita": true
+    },
+    {
+      "id": "P07",
+      "categoria": "tematica_global",
+      "rota_esperada": "panorama",
+      "rota": "ferramentas",
+      "subperguntas": 1,
+      "ferramentas": [
+        "panorama"
+      ],
+      "fallback_atualizador": null,
+      "fallbacks_roteador": [],
+      "erros_de_infra": [],
+      "erros_de_dominio": [],
+      "excecao": null,
+      "evidencias": 11,
+      "com_pagina": 6,
+      "ms": {
+        "atualizar": 2615,
+        "rotear": 1766,
+        "executar": 24529.7,
+        "total": 28911.6
+      },
+      "recall": {
+        "1": 0,
+        "3": 0,
+        "6": 1
+      },
+      "recall_total": 1,
+      "rota_estrita": true,
+      "rota_aceita": true
+    },
+    {
+      "id": "P08",
+      "categoria": "tematica_global",
+      "rota_esperada": "panorama",
+      "rota": "ferramentas",
+      "subperguntas": 1,
+      "ferramentas": [
+        "buscar_trechos"
+      ],
+      "fallback_atualizador": null,
+      "fallbacks_roteador": [],
+      "erros_de_infra": [],
+      "erros_de_dominio": [],
+      "excecao": null,
+      "evidencias": 6,
+      "com_pagina": 6,
+      "ms": {
+        "atualizar": 2492,
+        "rotear": 1655,
+        "executar": 587.2,
+        "total": 4734
+      },
+      "recall": {
+        "1": 1,
+        "3": 1,
+        "6": 1
+      },
+      "recall_total": 1,
+      "rota_estrita": false,
+      "rota_aceita": true
+    },
+    {
+      "id": "P09",
+      "categoria": "tematica_global",
+      "rota_esperada": "panorama",
+      "rota": "ferramentas",
+      "subperguntas": 1,
+      "ferramentas": [
+        "buscar_trechos"
+      ],
+      "fallback_atualizador": null,
+      "fallbacks_roteador": [],
+      "erros_de_infra": [],
+      "erros_de_dominio": [],
+      "excecao": null,
+      "evidencias": 6,
+      "com_pagina": 6,
+      "ms": {
+        "atualizar": 2208,
+        "rotear": 1440,
+        "executar": 770.1,
+        "total": 4418.2
+      },
+      "recall": {
+        "1": 0,
+        "3": 0,
+        "6": 0
+      },
+      "recall_total": 0,
+      "rota_estrita": false,
+      "rota_aceita": true
+    },
+    {
+      "id": "P10",
+      "categoria": "tematica_global",
+      "rota_esperada": "panorama",
+      "rota": "ferramentas",
+      "subperguntas": 1,
+      "ferramentas": [
+        "buscar_trechos"
+      ],
+      "fallback_atualizador": null,
+      "fallbacks_roteador": [],
+      "erros_de_infra": [],
+      "erros_de_dominio": [],
+      "excecao": null,
+      "evidencias": 6,
+      "com_pagina": 6,
+      "ms": {
+        "atualizar": 2227,
+        "rotear": 1480,
+        "executar": 2376.4,
+        "total": 6083.4
+      },
+      "recall": {
+        "1": 1,
+        "3": 1,
+        "6": 1
+      },
+      "recall_total": 1,
+      "rota_estrita": false,
+      "rota_aceita": true
+    },
+    {
+      "id": "M01",
+      "categoria": "multi_hop",
+      "rota_esperada": "varias",
+      "rota": "ferramentas",
+      "subperguntas": 2,
+      "ferramentas": [
+        "consultar_grafo",
+        "buscar_trechos"
+      ],
+      "fallback_atualizador": null,
+      "fallbacks_roteador": [],
+      "erros_de_infra": [],
+      "erros_de_dominio": [],
+      "excecao": null,
+      "evidencias": 14,
+      "com_pagina": 14,
+      "ms": {
+        "atualizar": 3873,
+        "rotear": 19510,
+        "executar": 18404.4,
+        "total": 23727.3
+      },
+      "recall": {
+        "1": 0,
+        "3": 0,
+        "6": 0
+      },
+      "recall_total": 0,
+      "rota_estrita": true,
+      "rota_aceita": true
+    },
+    {
+      "id": "M02",
+      "categoria": "multi_hop",
+      "rota_esperada": "varias",
+      "rota": "ferramentas",
+      "subperguntas": 2,
+      "ferramentas": [
+        "consultar_grafo",
+        "buscar_trechos"
+      ],
+      "fallback_atualizador": null,
+      "fallbacks_roteador": [],
+      "erros_de_infra": [],
+      "erros_de_dominio": [],
+      "excecao": null,
+      "evidencias": 12,
+      "com_pagina": 11,
+      "ms": {
+        "atualizar": 3198,
+        "rotear": 3996,
+        "executar": 4401.3,
+        "total": 7953.6
+      },
+      "recall": {
+        "1": 0,
+        "3": 0,
+        "6": 0
+      },
+      "recall_total": 0.5,
+      "rota_estrita": true,
+      "rota_aceita": true
+    },
+    {
+      "id": "M03",
+      "categoria": "multi_hop",
+      "rota_esperada": "varias",
+      "rota": "ferramentas",
+      "subperguntas": 2,
+      "ferramentas": [
+        "buscar_tabelas"
+      ],
+      "fallback_atualizador": null,
+      "fallbacks_roteador": [],
+      "erros_de_infra": [],
+      "erros_de_dominio": [],
+      "excecao": null,
+      "evidencias": 14,
+      "com_pagina": 14,
+      "ms": {
+        "atualizar": 3630,
+        "rotear": 4287,
+        "executar": 1969.7,
+        "total": 7004.5
+      },
+      "recall": {
+        "1": 0,
+        "3": 0,
+        "6": 0.5
+      },
+      "recall_total": 1,
+      "rota_estrita": true,
+      "rota_aceita": true
+    },
+    {
+      "id": "M04",
+      "categoria": "multi_hop",
+      "rota_esperada": "varias",
+      "rota": "ferramentas",
+      "subperguntas": 2,
+      "ferramentas": [
+        "buscar_trechos"
+      ],
+      "fallback_atualizador": null,
+      "fallbacks_roteador": [],
+      "erros_de_infra": [],
+      "erros_de_dominio": [],
+      "excecao": null,
+      "evidencias": 9,
+      "com_pagina": 9,
+      "ms": {
+        "atualizar": 3544,
+        "rotear": 3028,
+        "executar": 2998.3,
+        "total": 9570.7
+      },
+      "recall": {
+        "1": 0,
+        "3": 0,
+        "6": 0
+      },
+      "recall_total": 0.5,
+      "rota_estrita": true,
+      "rota_aceita": true
+    },
+    {
+      "id": "M05",
+      "categoria": "multi_hop",
+      "rota_esperada": "varias",
+      "rota": "ferramentas",
+      "subperguntas": 2,
+      "ferramentas": [
+        "buscar_trechos"
+      ],
+      "fallback_atualizador": null,
+      "fallbacks_roteador": [],
+      "erros_de_infra": [],
+      "erros_de_dominio": [],
+      "excecao": null,
+      "evidencias": 12,
+      "com_pagina": 12,
+      "ms": {
+        "atualizar": 3514,
+        "rotear": 3881,
+        "executar": 2845.2,
+        "total": 7075.1
+      },
+      "recall": {
+        "1": 0,
+        "3": 0,
+        "6": 0
+      },
+      "recall_total": 0,
+      "rota_estrita": true,
+      "rota_aceita": true
+    },
+    {
+      "id": "F01",
+      "categoria": "fora_do_escopo",
+      "rota_esperada": "nenhuma",
+      "rota": "nenhuma",
+      "subperguntas": 1,
+      "ferramentas": [],
+      "fallback_atualizador": null,
+      "fallbacks_roteador": [],
+      "erros_de_infra": [],
+      "erros_de_dominio": [],
+      "excecao": null,
+      "evidencias": 0,
+      "com_pagina": 0,
+      "ms": {
+        "atualizar": 1720,
+        "rotear": 588,
+        "executar": 0,
+        "total": 2308.3
+      },
+      "recall": null,
+      "recall_total": null,
+      "rota_estrita": true,
+      "rota_aceita": true
+    },
+    {
+      "id": "F02",
+      "categoria": "fora_do_escopo",
+      "rota_esperada": "nenhuma",
+      "rota": "nenhuma",
+      "subperguntas": 1,
+      "ferramentas": [],
+      "fallback_atualizador": null,
+      "fallbacks_roteador": [],
+      "erros_de_infra": [],
+      "erros_de_dominio": [],
+      "excecao": null,
+      "evidencias": 0,
+      "com_pagina": 0,
+      "ms": {
+        "atualizar": 1989,
+        "rotear": 789,
+        "executar": 0,
+        "total": 2777.6
+      },
+      "recall": null,
+      "recall_total": null,
+      "rota_estrita": true,
+      "rota_aceita": true
+    },
+    {
+      "id": "F03",
+      "categoria": "fora_do_escopo",
+      "rota_esperada": "nenhuma",
+      "rota": "nenhuma",
+      "subperguntas": 1,
+      "ferramentas": [],
+      "fallback_atualizador": null,
+      "fallbacks_roteador": [],
+      "erros_de_infra": [],
+      "erros_de_dominio": [],
+      "excecao": null,
+      "evidencias": 0,
+      "com_pagina": 0,
+      "ms": {
+        "atualizar": 1757,
+        "rotear": 774,
+        "executar": 0,
+        "total": 2530.9
+      },
+      "recall": null,
+      "recall_total": null,
+      "rota_estrita": true,
+      "rota_aceita": true
+    },
+    {
+      "id": "F04",
+      "categoria": "fora_do_escopo",
+      "rota_esperada": "nenhuma",
+      "rota": "nenhuma",
+      "subperguntas": 1,
+      "ferramentas": [],
+      "fallback_atualizador": null,
+      "fallbacks_roteador": [],
+      "erros_de_infra": [],
+      "erros_de_dominio": [],
+      "excecao": null,
+      "evidencias": 0,
+      "com_pagina": 0,
+      "ms": {
+        "atualizar": 1772,
+        "rotear": 1978,
+        "executar": 0,
+        "total": 3749.6
+      },
+      "recall": null,
+      "recall_total": null,
+      "rota_estrita": true,
+      "rota_aceita": true
+    },
+    {
+      "id": "F05",
+      "categoria": "fora_do_escopo",
+      "rota_esperada": "nenhuma",
+      "rota": "nenhuma",
+      "subperguntas": 1,
+      "ferramentas": [],
+      "fallback_atualizador": null,
+      "fallbacks_roteador": [],
+      "erros_de_infra": [],
+      "erros_de_dominio": [],
+      "excecao": null,
+      "evidencias": 0,
+      "com_pagina": 0,
+      "ms": {
+        "atualizar": 1948,
+        "rotear": 808,
+        "executar": 0,
+        "total": 2755.6
+      },
+      "recall": null,
+      "recall_total": null,
+      "rota_estrita": true,
+      "rota_aceita": true
+    }
+  ]
+}

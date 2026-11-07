@@ -95,6 +95,8 @@ tempo do `panorama` nas 10 perguntas temáticas (~9 minutos; `--somente prompt,c
 real é `test/ferramentas/guarda.integracao.test.ts` (pulado sem o Neo4j); a lista das 26 entradas maliciosas está em
 `test/ferramentas/guarda.casos.ts`.
 
+Agente (F7.11, ADR-059): `executarAgente(llm, executor, pergunta, { historico, concorrencia, companhia, signal, progresso, complementar })` em `src/agente/agente.ts` liga o atualizador, o roteador (por ondas, até 2 subperguntas juntas) e o executor, e devolve `subperguntas[]` (rota, chamadas, execuções com tempo, evidências), `evidencias[]` plana e sem repetição, `etapas_ms`, `anotacoes` (falhas de ferramenta, exceções, caminhos seguros) e `uso`. Nada derruba a pergunta; só o `AbortSignal` do chamador sobe. `progresso` recebe os eventos `atualizacao`, `roteamento`, `execucao` e `fim`. `complementar` (desligada por padrão, pós-hoc) acrescenta uma `buscar_trechos` a toda rota especializada. Medida nas 60 perguntas do golden (Neo4j e llama-swap no ar, ~10 min): `npm run avaliar:agente` (`--complementar`, `--nome`, `--somente`, `--limite`); sai com código 1 se houver erro de infraestrutura ou o page recall for inferior ao do Python, o que acontece hoje.
+
 Erros (`LlmIndisponivelError`, `LlmTimeoutError`, `LlmAbortadoError`, `LlmHttpError`,
 `LlmRespostaInvalidaError`) têm uma classe por causa. Só rede e 5xx ganham uma nova tentativa. A primeira
 chamada de cada modelo inclui a carga dele (14 s o Qwen). Para rodar a integração:
