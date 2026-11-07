@@ -1,0 +1,21 @@
+{
+  "descricao": "Perguntas de AJUSTE do prompt do crítico (F7.4), todas fora de eval/golden.csv. Servem só para achar defeito grosseiro no prompt antes de medir o golden; o rótulo das respondíveis é palpite (não conferido no documento), o das ausentes é pelo assunto. O golden (F01-F05 e as 55 respondíveis) é o teste e não foi usado para escrever o prompt.",
+  "casos": [
+    { "id": "A01", "pergunta": "Qual foi o lucro líquido do Bradesco em 2025?", "esperado": "ausente" },
+    { "id": "A02", "pergunta": "Qual será a taxa Selic ao fim de 2026?", "esperado": "ausente" },
+    { "id": "A03", "pergunta": "Quanto está custando o dólar hoje?", "esperado": "ausente" },
+    { "id": "A04", "pergunta": "Quem foi o campeão da Copa do Mundo de 2022?", "esperado": "ausente" },
+    { "id": "A05", "pergunta": "Os bancos de investimento recomendam comprar ou vender as ações do Banco do Brasil?", "esperado": "ausente" },
+    { "id": "A06", "pergunta": "Como estará o tempo em São Paulo amanhã?", "esperado": "ausente" },
+    { "id": "A07", "pergunta": "Qual será o lucro líquido do Banco do Brasil em 2031?", "esperado": "ausente" },
+    { "id": "A08", "pergunta": "Qual foi o preço de fechamento da ação do Banco do Brasil ontem?", "esperado": "ausente" },
+    { "id": "A09", "pergunta": "Qual é o salário do presidente da Caixa Econômica Federal?", "esperado": "ausente" },
+    { "id": "A10", "pergunta": "Em que estádio o Banco do Brasil patrocina o time de futebol da sua preferência?", "esperado": "ausente" },
+    { "id": "R01", "pergunta": "Qual o valor do capital social do Banco do Brasil?", "esperado": "respondivel" },
+    { "id": "R02", "pergunta": "Onde fica a sede do Banco do Brasil?", "esperado": "respondivel" },
+    { "id": "R03", "pergunta": "Quem é o diretor de relações com investidores?", "esperado": "respondivel" },
+    { "id": "R04", "pergunta": "Quais são as regras para a distribuição de dividendos do Banco?", "esperado": "respondivel" },
+    { "id": "R05", "pergunta": "Quantas agências o Banco do Brasil tinha em 2025?", "esperado": "respondivel" },
+    { "id": "R06", "pergunta": "Qual é o prazo de mandato dos membros do Conselho Fiscal?", "esperado": "respondivel" }
+  ]
+}

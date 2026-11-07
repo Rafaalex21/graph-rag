@@ -140,7 +140,7 @@ export function montarMensagens(pergunta: string, historico: Turno[]): Mensagem[
   ];
 }
 
-const chave = (texto: string) =>
+export const chave = (texto: string) =>
   texto
     .normalize("NFD")
     .replace(/\p{Diacritic}/gu, "")

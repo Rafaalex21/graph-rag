@@ -14,7 +14,7 @@
  */
 import type { ChamadaFerramenta, Envelope, Evidencia } from "../ferramentas/contrato.ts";
 import { LlmAbortadoError } from "../llm/index.ts";
-import { atualizarPergunta, type LlmDeJson, type SubPergunta, type Turno } from "./atualizador.ts";
+import { atualizarPergunta, type LlmDeJson, type PerguntaAtualizada, type SubPergunta, type Turno } from "./atualizador.ts";
 import { rotearSubperguntas, type ChamadaRoteada, type LlmDeFerramentas, type SubRoteada } from "./roteador.ts";
 
 export type LlmDoAgente = LlmDeJson & LlmDeFerramentas;
@@ -115,6 +115,11 @@ export interface OpcoesAgente {
    * as evidências de cada subpergunta. Padrão: ligado (v3 do ADR-059, decidida depois de ver as rodadas 1 e 2).
    */
   paginasPrimeiro?: boolean;
+  /**
+   * Subperguntas já prontas: o atualizador não roda e elas vão direto ao roteador. É a rodada extra do crítico (F7.4),
+   * cujas perguntas já saem autônomas.
+   */
+  subperguntas?: SubPergunta[];
 }
 
 const SEM_COMPLEMENTO = new Set(["buscar_trechos", "resposta_ja_dada"]);
@@ -208,7 +213,9 @@ export async function executarAgente(llm: LlmDoAgente, executor: ExecutorDoAgent
   };
   if (original === "") return { ...vazio, erro: "pergunta_vazia" };
 
-  const atualizada = await atualizarPergunta(llm, original, opcoes.historico ?? [], opcoes.signal ? { signal: opcoes.signal } : {});
+  const atualizada: PerguntaAtualizada = opcoes.subperguntas
+    ? { original, autonoma: original, subperguntas: opcoes.subperguntas, fallback: null, uso: { entrada: 0, saida: 0 }, ms: 0 }
+    : await atualizarPergunta(llm, original, opcoes.historico ?? [], opcoes.signal ? { signal: opcoes.signal } : {});
   const subperguntas: SubPergunta[] = atualizada.subperguntas.length > 0 ? atualizada.subperguntas : [{ pergunta: original, dependeDe: [] }];
   avisa({ fase: "atualizacao", subperguntas: subperguntas.length, fallback: atualizada.fallback, ms: atualizada.ms });
 

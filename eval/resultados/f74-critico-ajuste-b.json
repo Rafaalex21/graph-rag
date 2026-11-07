@@ -1,0 +1,143 @@
+{
+  "nome": "f74-critico-ajuste-b",
+  "data": "2026-11-07",
+  "comando": "npm run avaliar:ciclo -- --ajuste",
+  "conjunto": "ajuste",
+  "perguntas": 4,
+  "rodadas": {
+    "maximo": 1,
+    "ate_duas": true,
+    "por_numero": {
+      "1": 4
+    }
+  },
+  "ausente": {
+    "recusas": 4,
+    "respondidas_como_ausentes": 4,
+    "estados": {
+      "sem_consulta": 3,
+      "ausente": 1
+    },
+    "pediram_rodada_extra": []
+  },
+  "respondiveis": {
+    "n": 0,
+    "estados": {},
+    "ausente_por_engano": [],
+    "com_rodada_extra": 0
+  },
+  "execucao": {
+    "sem_excecao": 4,
+    "sem_erro_de_infra": 4,
+    "fallbacks_do_critico": {}
+  },
+  "tempo_s": {
+    "total": {
+      "p50": 3.9457000000000004,
+      "max": 5.833699999999999
+    },
+    "critico": {
+      "p50": 1.816,
+      "max": 1.816
+    }
+  },
+  "page_recall": null,
+  "itens": [
+    {
+      "id": "A07",
+      "categoria": "ajuste",
+      "esperado": "ausente",
+      "estado": "sem_consulta",
+      "rodadas": 1,
+      "decisoes": [
+        "sem_critica"
+      ],
+      "fallbacks_do_critico": [],
+      "perguntas_extras": 0,
+      "erros_de_infra": [],
+      "excecao": null,
+      "evidencias": 0,
+      "ms": {
+        "atualizar": 2581,
+        "rotear": 1808,
+        "executar": 0,
+        "criticar": 0,
+        "total": 4391.1
+      },
+      "recall": null,
+      "recall_antes_da_rodada_extra": null
+    },
+    {
+      "id": "A08",
+      "categoria": "ajuste",
+      "esperado": "ausente",
+      "estado": "sem_consulta",
+      "rodadas": 1,
+      "decisoes": [
+        "sem_critica"
+      ],
+      "fallbacks_do_critico": [],
+      "perguntas_extras": 0,
+      "erros_de_infra": [],
+      "excecao": null,
+      "evidencias": 0,
+      "ms": {
+        "atualizar": 2375,
+        "rotear": 952,
+        "executar": 0,
+        "criticar": 0,
+        "total": 3327.7
+      },
+      "recall": null,
+      "recall_antes_da_rodada_extra": null
+    },
+    {
+      "id": "A09",
+      "categoria": "ajuste",
+      "esperado": "ausente",
+      "estado": "sem_consulta",
+      "rodadas": 1,
+      "decisoes": [
+        "sem_critica"
+      ],
+      "fallbacks_do_critico": [],
+      "perguntas_extras": 0,
+      "erros_de_infra": [],
+      "excecao": null,
+      "evidencias": 0,
+      "ms": {
+        "atualizar": 2451,
+        "rotear": 1049,
+        "executar": 0,
+        "criticar": 0,
+        "total": 3500.3
+      },
+      "recall": null,
+      "recall_antes_da_rodada_extra": null
+    },
+    {
+      "id": "A10",
+      "categoria": "ajuste",
+      "esperado": "ausente",
+      "estado": "ausente",
+      "rodadas": 1,
+      "decisoes": [
+        "ausente"
+      ],
+      "fallbacks_do_critico": [],
+      "perguntas_extras": 0,
+      "erros_de_infra": [],
+      "excecao": null,
+      "evidencias": 7,
+      "ms": {
+        "atualizar": 1030,
+        "rotear": 2141,
+        "executar": 846.3,
+        "criticar": 1816,
+        "total": 5833.7
+      },
+      "recall": null,
+      "recall_antes_da_rodada_extra": null
+    }
+  ]
+}

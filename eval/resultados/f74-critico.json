@@ -1,0 +1,1963 @@
+{
+  "nome": "f74-critico",
+  "data": "2026-11-07",
+  "comando": "npm run avaliar:ciclo",
+  "conjunto": "golden",
+  "perguntas": 60,
+  "rodadas": {
+    "maximo": 2,
+    "ate_duas": true,
+    "por_numero": {
+      "1": 26,
+      "2": 34
+    }
+  },
+  "ausente": {
+    "recusas": 5,
+    "respondidas_como_ausentes": 5,
+    "estados": {
+      "sem_consulta": 5
+    },
+    "pediram_rodada_extra": []
+  },
+  "respondiveis": {
+    "n": 55,
+    "estados": {
+      "suficiente": 27,
+      "incompleta": 28
+    },
+    "ausente_por_engano": [],
+    "com_rodada_extra": 34
+  },
+  "execucao": {
+    "sem_excecao": 60,
+    "sem_erro_de_infra": 60,
+    "fallbacks_do_critico": {
+      "sem_rodada_extra": 28
+    }
+  },
+  "tempo_s": {
+    "total": {
+      "p50": 16.915,
+      "max": 185.2776
+    },
+    "critico": {
+      "p50": 7.581,
+      "max": 10.649
+    }
+  },
+  "page_recall": {
+    "perguntas": 55,
+    "ciclo": {
+      "@1": 0.4545,
+      "@3": 0.5515,
+      "@6": 0.6091
+    },
+    "agente_f711_v3": {
+      "@1": 0.4364,
+      "@3": 0.5697,
+      "@6": 0.6273
+    },
+    "so_as_com_rodada_extra": {
+      "n": 34,
+      "antes": {
+        "@1": 0.2941,
+        "@3": 0.4216,
+        "@6": 0.5
+      },
+      "depois": {
+        "@1": 0.2941,
+        "@3": 0.4216,
+        "@6": 0.5
+      }
+    }
+  },
+  "itens": [
+    {
+      "id": "T01",
+      "categoria": "factual_textual",
+      "esperado": "respondivel",
+      "estado": "suficiente",
+      "rodadas": 1,
+      "decisoes": [
+        "suficiente"
+      ],
+      "fallbacks_do_critico": [],
+      "perguntas_extras": 0,
+      "erros_de_infra": [],
+      "excecao": null,
+      "evidencias": 6,
+      "ms": {
+        "atualizar": 2888,
+        "rotear": 1882,
+        "executar": 870.7,
+        "criticar": 1240,
+        "total": 6883.8
+      },
+      "recall": {
+        "1": 1,
+        "3": 1,
+        "6": 1
+      },
+      "recall_antes_da_rodada_extra": null
+    },
+    {
+      "id": "T02",
+      "categoria": "factual_textual",
+      "esperado": "respondivel",
+      "estado": "incompleta",
+      "rodadas": 2,
+      "decisoes": [
+        "buscar_mais",
+        "incompleta"
+      ],
+      "fallbacks_do_critico": [
+        "sem_rodada_extra"
+      ],
+      "perguntas_extras": 3,
+      "erros_de_infra": [],
+      "excecao": null,
+      "evidencias": 42,
+      "ms": {
+        "atualizar": 2159,
+        "rotear": 8335,
+        "executar": 172006.5,
+        "criticar": 8508,
+        "total": 118026.9
+      },
+      "recall": {
+        "1": 1,
+        "3": 1,
+        "6": 1
+      },
+      "recall_antes_da_rodada_extra": {
+        "1": 1,
+        "3": 1,
+        "6": 1
+      }
+    },
+    {
+      "id": "T03",
+      "categoria": "factual_textual",
+      "esperado": "respondivel",
+      "estado": "incompleta",
+      "rodadas": 2,
+      "decisoes": [
+        "buscar_mais",
+        "incompleta"
+      ],
+      "fallbacks_do_critico": [
+        "sem_rodada_extra"
+      ],
+      "perguntas_extras": 3,
+      "erros_de_infra": [],
+      "excecao": null,
+      "evidencias": 30,
+      "ms": {
+        "atualizar": 2366,
+        "rotear": 7656,
+        "executar": 151752.6,
+        "criticar": 9176,
+        "total": 104541.2
+      },
+      "recall": {
+        "1": 1,
+        "3": 1,
+        "6": 1
+      },
+      "recall_antes_da_rodada_extra": {
+        "1": 1,
+        "3": 1,
+        "6": 1
+      }
+    },
+    {
+      "id": "T04",
+      "categoria": "factual_textual",
+      "esperado": "respondivel",
+      "estado": "incompleta",
+      "rodadas": 2,
+      "decisoes": [
+        "buscar_mais",
+        "incompleta"
+      ],
+      "fallbacks_do_critico": [
+        "sem_rodada_extra"
+      ],
+      "perguntas_extras": 3,
+      "erros_de_infra": [],
+      "excecao": null,
+      "evidencias": 36,
+      "ms": {
+        "atualizar": 2818,
+        "rotear": 7986,
+        "executar": 77977.5,
+        "criticar": 9755,
+        "total": 58958.2
+      },
+      "recall": {
+        "1": 0,
+        "3": 0,
+        "6": 0
+      },
+      "recall_antes_da_rodada_extra": {
+        "1": 0,
+        "3": 0,
+        "6": 0
+      }
+    },
+    {
+      "id": "T05",
+      "categoria": "factual_textual",
+      "esperado": "respondivel",
+      "estado": "incompleta",
+      "rodadas": 2,
+      "decisoes": [
+        "buscar_mais",
+        "incompleta"
+      ],
+      "fallbacks_do_critico": [
+        "sem_rodada_extra"
+      ],
+      "perguntas_extras": 3,
+      "erros_de_infra": [],
+      "excecao": null,
+      "evidencias": 15,
+      "ms": {
+        "atualizar": 2568,
+        "rotear": 14533,
+        "executar": 35260.8,
+        "criticar": 7634,
+        "total": 47463.5
+      },
+      "recall": {
+        "1": 1,
+        "3": 1,
+        "6": 1
+      },
+      "recall_antes_da_rodada_extra": {
+        "1": 1,
+        "3": 1,
+        "6": 1
+      }
+    },
+    {
+      "id": "T06",
+      "categoria": "factual_textual",
+      "esperado": "respondivel",
+      "estado": "suficiente",
+      "rodadas": 1,
+      "decisoes": [
+        "suficiente"
+      ],
+      "fallbacks_do_critico": [],
+      "perguntas_extras": 0,
+      "erros_de_infra": [],
+      "excecao": null,
+      "evidencias": 6,
+      "ms": {
+        "atualizar": 2563,
+        "rotear": 1641,
+        "executar": 2205.5,
+        "criticar": 1544,
+        "total": 7954.6
+      },
+      "recall": {
+        "1": 1,
+        "3": 1,
+        "6": 1
+      },
+      "recall_antes_da_rodada_extra": null
+    },
+    {
+      "id": "T07",
+      "categoria": "factual_textual",
+      "esperado": "respondivel",
+      "estado": "suficiente",
+      "rodadas": 1,
+      "decisoes": [
+        "suficiente"
+      ],
+      "fallbacks_do_critico": [],
+      "perguntas_extras": 0,
+      "erros_de_infra": [],
+      "excecao": null,
+      "evidencias": 6,
+      "ms": {
+        "atualizar": 2100,
+        "rotear": 1618,
+        "executar": 919.7,
+        "criticar": 1226,
+        "total": 5863.7
+      },
+      "recall": {
+        "1": 1,
+        "3": 1,
+        "6": 1
+      },
+      "recall_antes_da_rodada_extra": null
+    },
+    {
+      "id": "T08",
+      "categoria": "factual_textual",
+      "esperado": "respondivel",
+      "estado": "incompleta",
+      "rodadas": 2,
+      "decisoes": [
+        "buscar_mais",
+        "incompleta"
+      ],
+      "fallbacks_do_critico": [
+        "sem_rodada_extra"
+      ],
+      "perguntas_extras": 3,
+      "erros_de_infra": [],
+      "excecao": null,
+      "evidencias": 11,
+      "ms": {
+        "atualizar": 2535,
+        "rotear": 8649,
+        "executar": 6343,
+        "criticar": 9805,
+        "total": 22629.3
+      },
+      "recall": {
+        "1": 1,
+        "3": 1,
+        "6": 1
+      },
+      "recall_antes_da_rodada_extra": {
+        "1": 1,
+        "3": 1,
+        "6": 1
+      }
+    },
+    {
+      "id": "T09",
+      "categoria": "factual_textual",
+      "esperado": "respondivel",
+      "estado": "suficiente",
+      "rodadas": 1,
+      "decisoes": [
+        "suficiente"
+      ],
+      "fallbacks_do_critico": [],
+      "perguntas_extras": 0,
+      "erros_de_infra": [],
+      "excecao": null,
+      "evidencias": 6,
+      "ms": {
+        "atualizar": 2871,
+        "rotear": 1838,
+        "executar": 922.3,
+        "criticar": 1334,
+        "total": 6965.3
+      },
+      "recall": {
+        "1": 1,
+        "3": 1,
+        "6": 1
+      },
+      "recall_antes_da_rodada_extra": null
+    },
+    {
+      "id": "T10",
+      "categoria": "factual_textual",
+      "esperado": "respondivel",
+      "estado": "suficiente",
+      "rodadas": 1,
+      "decisoes": [
+        "suficiente"
+      ],
+      "fallbacks_do_critico": [],
+      "perguntas_extras": 0,
+      "erros_de_infra": [],
+      "excecao": null,
+      "evidencias": 6,
+      "ms": {
+        "atualizar": 2441,
+        "rotear": 1661,
+        "executar": 1121,
+        "criticar": 1234,
+        "total": 6457.4
+      },
+      "recall": {
+        "1": 1,
+        "3": 1,
+        "6": 1
+      },
+      "recall_antes_da_rodada_extra": null
+    },
+    {
+      "id": "T11",
+      "categoria": "factual_textual",
+      "esperado": "respondivel",
+      "estado": "suficiente",
+      "rodadas": 1,
+      "decisoes": [
+        "suficiente"
+      ],
+      "fallbacks_do_critico": [],
+      "perguntas_extras": 0,
+      "erros_de_infra": [],
+      "excecao": null,
+      "evidencias": 6,
+      "ms": {
+        "atualizar": 2714,
+        "rotear": 1552,
+        "executar": 531.6,
+        "criticar": 1184,
+        "total": 5980.7
+      },
+      "recall": {
+        "1": 1,
+        "3": 1,
+        "6": 1
+      },
+      "recall_antes_da_rodada_extra": null
+    },
+    {
+      "id": "T12",
+      "categoria": "factual_textual",
+      "esperado": "respondivel",
+      "estado": "incompleta",
+      "rodadas": 2,
+      "decisoes": [
+        "buscar_mais",
+        "incompleta"
+      ],
+      "fallbacks_do_critico": [
+        "sem_rodada_extra"
+      ],
+      "perguntas_extras": 3,
+      "erros_de_infra": [],
+      "excecao": null,
+      "evidencias": 17,
+      "ms": {
+        "atualizar": 2711,
+        "rotear": 7877,
+        "executar": 5399.3,
+        "criticar": 8877,
+        "total": 20660.5
+      },
+      "recall": {
+        "1": 0,
+        "3": 0,
+        "6": 0
+      },
+      "recall_antes_da_rodada_extra": {
+        "1": 0,
+        "3": 0,
+        "6": 0
+      }
+    },
+    {
+      "id": "T13",
+      "categoria": "factual_textual",
+      "esperado": "respondivel",
+      "estado": "incompleta",
+      "rodadas": 2,
+      "decisoes": [
+        "buscar_mais",
+        "incompleta"
+      ],
+      "fallbacks_do_critico": [
+        "sem_rodada_extra"
+      ],
+      "perguntas_extras": 2,
+      "erros_de_infra": [],
+      "excecao": null,
+      "evidencias": 11,
+      "ms": {
+        "atualizar": 2502,
+        "rotear": 5735,
+        "executar": 5474.3,
+        "criticar": 8264,
+        "total": 18848.9
+      },
+      "recall": {
+        "1": 1,
+        "3": 1,
+        "6": 1
+      },
+      "recall_antes_da_rodada_extra": {
+        "1": 1,
+        "3": 1,
+        "6": 1
+      }
+    },
+    {
+      "id": "T14",
+      "categoria": "factual_textual",
+      "esperado": "respondivel",
+      "estado": "suficiente",
+      "rodadas": 2,
+      "decisoes": [
+        "buscar_mais",
+        "suficiente"
+      ],
+      "fallbacks_do_critico": [],
+      "perguntas_extras": 3,
+      "erros_de_infra": [],
+      "excecao": null,
+      "evidencias": 30,
+      "ms": {
+        "atualizar": 1949,
+        "rotear": 6832,
+        "executar": 4733,
+        "criticar": 7018,
+        "total": 16625
+      },
+      "recall": {
+        "1": 0,
+        "3": 0,
+        "6": 0
+      },
+      "recall_antes_da_rodada_extra": {
+        "1": 0,
+        "3": 0,
+        "6": 0
+      }
+    },
+    {
+      "id": "T15",
+      "categoria": "factual_textual",
+      "esperado": "respondivel",
+      "estado": "suficiente",
+      "rodadas": 1,
+      "decisoes": [
+        "suficiente"
+      ],
+      "fallbacks_do_critico": [],
+      "perguntas_extras": 0,
+      "erros_de_infra": [],
+      "excecao": null,
+      "evidencias": 7,
+      "ms": {
+        "atualizar": 2086,
+        "rotear": 1223,
+        "executar": 646.5,
+        "criticar": 1122,
+        "total": 5078.4
+      },
+      "recall": {
+        "1": 1,
+        "3": 1,
+        "6": 1
+      },
+      "recall_antes_da_rodada_extra": null
+    },
+    {
+      "id": "N01",
+      "categoria": "numerica",
+      "esperado": "respondivel",
+      "estado": "suficiente",
+      "rodadas": 1,
+      "decisoes": [
+        "suficiente"
+      ],
+      "fallbacks_do_critico": [],
+      "perguntas_extras": 0,
+      "erros_de_infra": [],
+      "excecao": null,
+      "evidencias": 7,
+      "ms": {
+        "atualizar": 2029,
+        "rotear": 1751,
+        "executar": 442.1,
+        "criticar": 1218,
+        "total": 5440.2
+      },
+      "recall": {
+        "1": 1,
+        "3": 1,
+        "6": 1
+      },
+      "recall_antes_da_rodada_extra": null
+    },
+    {
+      "id": "N02",
+      "categoria": "numerica",
+      "esperado": "respondivel",
+      "estado": "suficiente",
+      "rodadas": 1,
+      "decisoes": [
+        "suficiente"
+      ],
+      "fallbacks_do_critico": [],
+      "perguntas_extras": 0,
+      "erros_de_infra": [],
+      "excecao": null,
+      "evidencias": 7,
+      "ms": {
+        "atualizar": 1807,
+        "rotear": 1746,
+        "executar": 547.7,
+        "criticar": 1211,
+        "total": 5312.1
+      },
+      "recall": {
+        "1": 1,
+        "3": 1,
+        "6": 1
+      },
+      "recall_antes_da_rodada_extra": null
+    },
+    {
+      "id": "N03",
+      "categoria": "numerica",
+      "esperado": "respondivel",
+      "estado": "suficiente",
+      "rodadas": 1,
+      "decisoes": [
+        "suficiente"
+      ],
+      "fallbacks_do_critico": [],
+      "perguntas_extras": 0,
+      "erros_de_infra": [],
+      "excecao": null,
+      "evidencias": 6,
+      "ms": {
+        "atualizar": 2076,
+        "rotear": 1859,
+        "executar": 709.7,
+        "criticar": 1236,
+        "total": 5880.7
+      },
+      "recall": {
+        "1": 0,
+        "3": 1,
+        "6": 1
+      },
+      "recall_antes_da_rodada_extra": null
+    },
+    {
+      "id": "N04",
+      "categoria": "numerica",
+      "esperado": "respondivel",
+      "estado": "suficiente",
+      "rodadas": 1,
+      "decisoes": [
+        "suficiente"
+      ],
+      "fallbacks_do_critico": [],
+      "perguntas_extras": 0,
+      "erros_de_infra": [],
+      "excecao": null,
+      "evidencias": 6,
+      "ms": {
+        "atualizar": 1927,
+        "rotear": 1881,
+        "executar": 522.7,
+        "criticar": 1318,
+        "total": 5648.7
+      },
+      "recall": {
+        "1": 0,
+        "3": 0,
+        "6": 0
+      },
+      "recall_antes_da_rodada_extra": null
+    },
+    {
+      "id": "N05",
+      "categoria": "numerica",
+      "esperado": "respondivel",
+      "estado": "suficiente",
+      "rodadas": 1,
+      "decisoes": [
+        "suficiente"
+      ],
+      "fallbacks_do_critico": [],
+      "perguntas_extras": 0,
+      "erros_de_infra": [],
+      "excecao": null,
+      "evidencias": 7,
+      "ms": {
+        "atualizar": 2091,
+        "rotear": 1911,
+        "executar": 569.1,
+        "criticar": 1469,
+        "total": 6040
+      },
+      "recall": {
+        "1": 1,
+        "3": 1,
+        "6": 1
+      },
+      "recall_antes_da_rodada_extra": null
+    },
+    {
+      "id": "N06",
+      "categoria": "numerica",
+      "esperado": "respondivel",
+      "estado": "incompleta",
+      "rodadas": 2,
+      "decisoes": [
+        "buscar_mais",
+        "incompleta"
+      ],
+      "fallbacks_do_critico": [
+        "sem_rodada_extra"
+      ],
+      "perguntas_extras": 3,
+      "erros_de_infra": [],
+      "excecao": null,
+      "evidencias": 17,
+      "ms": {
+        "atualizar": 2223,
+        "rotear": 9011,
+        "executar": 2467.6,
+        "criticar": 9775,
+        "total": 19881.9
+      },
+      "recall": {
+        "1": 0,
+        "3": 0,
+        "6": 1
+      },
+      "recall_antes_da_rodada_extra": {
+        "1": 0,
+        "3": 0,
+        "6": 1
+      }
+    },
+    {
+      "id": "N07",
+      "categoria": "numerica",
+      "esperado": "respondivel",
+      "estado": "incompleta",
+      "rodadas": 2,
+      "decisoes": [
+        "buscar_mais",
+        "incompleta"
+      ],
+      "fallbacks_do_critico": [
+        "sem_rodada_extra"
+      ],
+      "perguntas_extras": 3,
+      "erros_de_infra": [],
+      "excecao": null,
+      "evidencias": 8,
+      "ms": {
+        "atualizar": 2722,
+        "rotear": 8212,
+        "executar": 2185.6,
+        "criticar": 8073,
+        "total": 18173.6
+      },
+      "recall": {
+        "1": 0,
+        "3": 0,
+        "6": 0
+      },
+      "recall_antes_da_rodada_extra": {
+        "1": 0,
+        "3": 0,
+        "6": 0
+      }
+    },
+    {
+      "id": "N08",
+      "categoria": "numerica",
+      "esperado": "respondivel",
+      "estado": "incompleta",
+      "rodadas": 2,
+      "decisoes": [
+        "buscar_mais",
+        "incompleta"
+      ],
+      "fallbacks_do_critico": [
+        "sem_rodada_extra"
+      ],
+      "perguntas_extras": 3,
+      "erros_de_infra": [],
+      "excecao": null,
+      "evidencias": 14,
+      "ms": {
+        "atualizar": 1925,
+        "rotear": 7861,
+        "executar": 2202,
+        "criticar": 7119,
+        "total": 16052.4
+      },
+      "recall": {
+        "1": 0,
+        "3": 0,
+        "6": 0
+      },
+      "recall_antes_da_rodada_extra": {
+        "1": 0,
+        "3": 0,
+        "6": 0
+      }
+    },
+    {
+      "id": "N09",
+      "categoria": "numerica",
+      "esperado": "respondivel",
+      "estado": "incompleta",
+      "rodadas": 2,
+      "decisoes": [
+        "buscar_mais",
+        "incompleta"
+      ],
+      "fallbacks_do_critico": [
+        "sem_rodada_extra"
+      ],
+      "perguntas_extras": 3,
+      "erros_de_infra": [],
+      "excecao": null,
+      "evidencias": 17,
+      "ms": {
+        "atualizar": 2635,
+        "rotear": 7996,
+        "executar": 3349.7,
+        "criticar": 8154,
+        "total": 18632.7
+      },
+      "recall": {
+        "1": 0,
+        "3": 0,
+        "6": 1
+      },
+      "recall_antes_da_rodada_extra": {
+        "1": 0,
+        "3": 0,
+        "6": 1
+      }
+    },
+    {
+      "id": "N10",
+      "categoria": "numerica",
+      "esperado": "respondivel",
+      "estado": "incompleta",
+      "rodadas": 2,
+      "decisoes": [
+        "buscar_mais",
+        "incompleta"
+      ],
+      "fallbacks_do_critico": [
+        "sem_rodada_extra"
+      ],
+      "perguntas_extras": 3,
+      "erros_de_infra": [],
+      "excecao": null,
+      "evidencias": 12,
+      "ms": {
+        "atualizar": 2548,
+        "rotear": 9029,
+        "executar": 10318.2,
+        "criticar": 8616,
+        "total": 22784.2
+      },
+      "recall": {
+        "1": 0,
+        "3": 0,
+        "6": 0
+      },
+      "recall_antes_da_rodada_extra": {
+        "1": 0,
+        "3": 0,
+        "6": 0
+      }
+    },
+    {
+      "id": "N11",
+      "categoria": "numerica",
+      "esperado": "respondivel",
+      "estado": "incompleta",
+      "rodadas": 2,
+      "decisoes": [
+        "buscar_mais",
+        "incompleta"
+      ],
+      "fallbacks_do_critico": [
+        "sem_rodada_extra"
+      ],
+      "perguntas_extras": 3,
+      "erros_de_infra": [],
+      "excecao": null,
+      "evidencias": 19,
+      "ms": {
+        "atualizar": 2195,
+        "rotear": 8049,
+        "executar": 3049.4,
+        "criticar": 9448,
+        "total": 19237.3
+      },
+      "recall": {
+        "1": 0,
+        "3": 1,
+        "6": 1
+      },
+      "recall_antes_da_rodada_extra": {
+        "1": 0,
+        "3": 1,
+        "6": 1
+      }
+    },
+    {
+      "id": "N12",
+      "categoria": "numerica",
+      "esperado": "respondivel",
+      "estado": "incompleta",
+      "rodadas": 2,
+      "decisoes": [
+        "buscar_mais",
+        "incompleta"
+      ],
+      "fallbacks_do_critico": [
+        "sem_rodada_extra"
+      ],
+      "perguntas_extras": 3,
+      "erros_de_infra": [],
+      "excecao": null,
+      "evidencias": 19,
+      "ms": {
+        "atualizar": 1877,
+        "rotear": 6939,
+        "executar": 3621.8,
+        "criticar": 6931,
+        "total": 16299.3
+      },
+      "recall": {
+        "1": 0,
+        "3": 0,
+        "6": 0
+      },
+      "recall_antes_da_rodada_extra": {
+        "1": 0,
+        "3": 0,
+        "6": 0
+      }
+    },
+    {
+      "id": "N13",
+      "categoria": "numerica",
+      "esperado": "respondivel",
+      "estado": "suficiente",
+      "rodadas": 1,
+      "decisoes": [
+        "suficiente"
+      ],
+      "fallbacks_do_critico": [],
+      "perguntas_extras": 0,
+      "erros_de_infra": [],
+      "excecao": null,
+      "evidencias": 6,
+      "ms": {
+        "atualizar": 2146,
+        "rotear": 1845,
+        "executar": 574.7,
+        "criticar": 1194,
+        "total": 5760.2
+      },
+      "recall": {
+        "1": 1,
+        "3": 1,
+        "6": 1
+      },
+      "recall_antes_da_rodada_extra": null
+    },
+    {
+      "id": "N14",
+      "categoria": "numerica",
+      "esperado": "respondivel",
+      "estado": "incompleta",
+      "rodadas": 2,
+      "decisoes": [
+        "buscar_mais",
+        "incompleta"
+      ],
+      "fallbacks_do_critico": [
+        "sem_rodada_extra"
+      ],
+      "perguntas_extras": 3,
+      "erros_de_infra": [],
+      "excecao": null,
+      "evidencias": 21,
+      "ms": {
+        "atualizar": 1794,
+        "rotear": 8824,
+        "executar": 3632.1,
+        "criticar": 9608,
+        "total": 19839
+      },
+      "recall": {
+        "1": 0,
+        "3": 1,
+        "6": 1
+      },
+      "recall_antes_da_rodada_extra": {
+        "1": 0,
+        "3": 1,
+        "6": 1
+      }
+    },
+    {
+      "id": "N15",
+      "categoria": "numerica",
+      "esperado": "respondivel",
+      "estado": "suficiente",
+      "rodadas": 1,
+      "decisoes": [
+        "suficiente"
+      ],
+      "fallbacks_do_critico": [],
+      "perguntas_extras": 0,
+      "erros_de_infra": [],
+      "excecao": null,
+      "evidencias": 7,
+      "ms": {
+        "atualizar": 3747,
+        "rotear": 5963,
+        "executar": 1826.9,
+        "criticar": 1755,
+        "total": 9666.9
+      },
+      "recall": {
+        "1": 1,
+        "3": 1,
+        "6": 1
+      },
+      "recall_antes_da_rodada_extra": null
+    },
+    {
+      "id": "G01",
+      "categoria": "agregacao_filtro",
+      "esperado": "respondivel",
+      "estado": "incompleta",
+      "rodadas": 2,
+      "decisoes": [
+        "buscar_mais",
+        "incompleta"
+      ],
+      "fallbacks_do_critico": [
+        "sem_rodada_extra"
+      ],
+      "perguntas_extras": 3,
+      "erros_de_infra": [],
+      "excecao": null,
+      "evidencias": 15,
+      "ms": {
+        "atualizar": 2990,
+        "rotear": 10193,
+        "executar": 9149,
+        "criticar": 9785,
+        "total": 26022.6
+      },
+      "recall": {
+        "1": 0,
+        "3": 0,
+        "6": 0
+      },
+      "recall_antes_da_rodada_extra": {
+        "1": 0,
+        "3": 0,
+        "6": 0
+      }
+    },
+    {
+      "id": "G02",
+      "categoria": "agregacao_filtro",
+      "esperado": "respondivel",
+      "estado": "incompleta",
+      "rodadas": 2,
+      "decisoes": [
+        "buscar_mais",
+        "incompleta"
+      ],
+      "fallbacks_do_critico": [
+        "sem_rodada_extra"
+      ],
+      "perguntas_extras": 3,
+      "erros_de_infra": [],
+      "excecao": null,
+      "evidencias": 14,
+      "ms": {
+        "atualizar": 2495,
+        "rotear": 9898,
+        "executar": 31273.8,
+        "criticar": 8177,
+        "total": 43067.9
+      },
+      "recall": {
+        "1": 0,
+        "3": 0,
+        "6": 0
+      },
+      "recall_antes_da_rodada_extra": {
+        "1": 0,
+        "3": 0,
+        "6": 0
+      }
+    },
+    {
+      "id": "G03",
+      "categoria": "agregacao_filtro",
+      "esperado": "respondivel",
+      "estado": "incompleta",
+      "rodadas": 2,
+      "decisoes": [
+        "buscar_mais",
+        "incompleta"
+      ],
+      "fallbacks_do_critico": [
+        "sem_rodada_extra"
+      ],
+      "perguntas_extras": 3,
+      "erros_de_infra": [],
+      "excecao": null,
+      "evidencias": 17,
+      "ms": {
+        "atualizar": 2245,
+        "rotear": 9352,
+        "executar": 13181.8,
+        "criticar": 9012,
+        "total": 26383.4
+      },
+      "recall": {
+        "1": 1,
+        "3": 1,
+        "6": 1
+      },
+      "recall_antes_da_rodada_extra": {
+        "1": 1,
+        "3": 1,
+        "6": 1
+      }
+    },
+    {
+      "id": "G04",
+      "categoria": "agregacao_filtro",
+      "esperado": "respondivel",
+      "estado": "incompleta",
+      "rodadas": 2,
+      "decisoes": [
+        "buscar_mais",
+        "incompleta"
+      ],
+      "fallbacks_do_critico": [
+        "sem_rodada_extra"
+      ],
+      "perguntas_extras": 3,
+      "erros_de_infra": [],
+      "excecao": null,
+      "evidencias": 20,
+      "ms": {
+        "atualizar": 1889,
+        "rotear": 9055,
+        "executar": 14637.5,
+        "criticar": 8932,
+        "total": 28163.6
+      },
+      "recall": {
+        "1": 0,
+        "3": 0,
+        "6": 0
+      },
+      "recall_antes_da_rodada_extra": {
+        "1": 0,
+        "3": 0,
+        "6": 0
+      }
+    },
+    {
+      "id": "G05",
+      "categoria": "agregacao_filtro",
+      "esperado": "respondivel",
+      "estado": "incompleta",
+      "rodadas": 2,
+      "decisoes": [
+        "buscar_mais",
+        "incompleta"
+      ],
+      "fallbacks_do_critico": [
+        "sem_rodada_extra"
+      ],
+      "perguntas_extras": 2,
+      "erros_de_infra": [],
+      "excecao": null,
+      "evidencias": 14,
+      "ms": {
+        "atualizar": 2071,
+        "rotear": 6448,
+        "executar": 4038.3,
+        "criticar": 6984,
+        "total": 16584.9
+      },
+      "recall": {
+        "1": 0,
+        "3": 0,
+        "6": 0
+      },
+      "recall_antes_da_rodada_extra": {
+        "1": 0,
+        "3": 0,
+        "6": 0
+      }
+    },
+    {
+      "id": "G06",
+      "categoria": "agregacao_filtro",
+      "esperado": "respondivel",
+      "estado": "incompleta",
+      "rodadas": 2,
+      "decisoes": [
+        "buscar_mais",
+        "incompleta"
+      ],
+      "fallbacks_do_critico": [
+        "sem_rodada_extra"
+      ],
+      "perguntas_extras": 2,
+      "erros_de_infra": [],
+      "excecao": null,
+      "evidencias": 16,
+      "ms": {
+        "atualizar": 2448,
+        "rotear": 6085,
+        "executar": 2511.4,
+        "criticar": 7543,
+        "total": 15537.4
+      },
+      "recall": {
+        "1": 0,
+        "3": 0,
+        "6": 0
+      },
+      "recall_antes_da_rodada_extra": {
+        "1": 0,
+        "3": 0,
+        "6": 0
+      }
+    },
+    {
+      "id": "G07",
+      "categoria": "agregacao_filtro",
+      "esperado": "respondivel",
+      "estado": "incompleta",
+      "rodadas": 2,
+      "decisoes": [
+        "buscar_mais",
+        "incompleta"
+      ],
+      "fallbacks_do_critico": [
+        "sem_rodada_extra"
+      ],
+      "perguntas_extras": 2,
+      "erros_de_infra": [],
+      "excecao": null,
+      "evidencias": 17,
+      "ms": {
+        "atualizar": 2451,
+        "rotear": 7387,
+        "executar": 2563.5,
+        "criticar": 8055,
+        "total": 17381
+      },
+      "recall": {
+        "1": 0,
+        "3": 0,
+        "6": 0
+      },
+      "recall_antes_da_rodada_extra": {
+        "1": 0,
+        "3": 0,
+        "6": 0
+      }
+    },
+    {
+      "id": "G08",
+      "categoria": "agregacao_filtro",
+      "esperado": "respondivel",
+      "estado": "incompleta",
+      "rodadas": 2,
+      "decisoes": [
+        "buscar_mais",
+        "incompleta"
+      ],
+      "fallbacks_do_critico": [
+        "sem_rodada_extra"
+      ],
+      "perguntas_extras": 3,
+      "erros_de_infra": [],
+      "excecao": null,
+      "evidencias": 28,
+      "ms": {
+        "atualizar": 2080,
+        "rotear": 22619,
+        "executar": 35248.2,
+        "criticar": 9036,
+        "total": 49331.1
+      },
+      "recall": {
+        "1": 0,
+        "3": 0,
+        "6": 0
+      },
+      "recall_antes_da_rodada_extra": {
+        "1": 0,
+        "3": 0,
+        "6": 0
+      }
+    },
+    {
+      "id": "G09",
+      "categoria": "agregacao_filtro",
+      "esperado": "respondivel",
+      "estado": "incompleta",
+      "rodadas": 2,
+      "decisoes": [
+        "buscar_mais",
+        "incompleta"
+      ],
+      "fallbacks_do_critico": [
+        "sem_rodada_extra"
+      ],
+      "perguntas_extras": 3,
+      "erros_de_infra": [],
+      "excecao": null,
+      "evidencias": 13,
+      "ms": {
+        "atualizar": 3081,
+        "rotear": 9020,
+        "executar": 4338.2,
+        "criticar": 7881,
+        "total": 19796.2
+      },
+      "recall": {
+        "1": 1,
+        "3": 1,
+        "6": 1
+      },
+      "recall_antes_da_rodada_extra": {
+        "1": 1,
+        "3": 1,
+        "6": 1
+      }
+    },
+    {
+      "id": "G10",
+      "categoria": "agregacao_filtro",
+      "esperado": "respondivel",
+      "estado": "incompleta",
+      "rodadas": 2,
+      "decisoes": [
+        "buscar_mais",
+        "incompleta"
+      ],
+      "fallbacks_do_critico": [
+        "sem_rodada_extra"
+      ],
+      "perguntas_extras": 3,
+      "erros_de_infra": [],
+      "excecao": null,
+      "evidencias": 20,
+      "ms": {
+        "atualizar": 2044,
+        "rotear": 7887,
+        "executar": 2282.4,
+        "criticar": 8786,
+        "total": 18099.5
+      },
+      "recall": {
+        "1": 0,
+        "3": 1,
+        "6": 1
+      },
+      "recall_antes_da_rodada_extra": {
+        "1": 0,
+        "3": 1,
+        "6": 1
+      }
+    },
+    {
+      "id": "P01",
+      "categoria": "tematica_global",
+      "esperado": "respondivel",
+      "estado": "suficiente",
+      "rodadas": 2,
+      "decisoes": [
+        "buscar_mais",
+        "suficiente"
+      ],
+      "fallbacks_do_critico": [],
+      "perguntas_extras": 3,
+      "erros_de_infra": [],
+      "excecao": null,
+      "evidencias": 52,
+      "ms": {
+        "atualizar": 1749,
+        "rotear": 6560,
+        "executar": 5825.1,
+        "criticar": 7309,
+        "total": 17205
+      },
+      "recall": {
+        "1": 0,
+        "3": 0,
+        "6": 0
+      },
+      "recall_antes_da_rodada_extra": {
+        "1": 0,
+        "3": 0,
+        "6": 0
+      }
+    },
+    {
+      "id": "P02",
+      "categoria": "tematica_global",
+      "esperado": "respondivel",
+      "estado": "suficiente",
+      "rodadas": 1,
+      "decisoes": [
+        "suficiente"
+      ],
+      "fallbacks_do_critico": [],
+      "perguntas_extras": 0,
+      "erros_de_infra": [],
+      "excecao": null,
+      "evidencias": 16,
+      "ms": {
+        "atualizar": 2122,
+        "rotear": 1135,
+        "executar": 1021.6,
+        "criticar": 1430,
+        "total": 5709.4
+      },
+      "recall": {
+        "1": 1,
+        "3": 1,
+        "6": 1
+      },
+      "recall_antes_da_rodada_extra": null
+    },
+    {
+      "id": "P03",
+      "categoria": "tematica_global",
+      "esperado": "respondivel",
+      "estado": "incompleta",
+      "rodadas": 2,
+      "decisoes": [
+        "buscar_mais",
+        "incompleta"
+      ],
+      "fallbacks_do_critico": [
+        "sem_rodada_extra"
+      ],
+      "perguntas_extras": 3,
+      "erros_de_infra": [],
+      "excecao": null,
+      "evidencias": 36,
+      "ms": {
+        "atualizar": 2672,
+        "rotear": 32426,
+        "executar": 205911,
+        "criticar": 10518,
+        "total": 159636.8
+      },
+      "recall": {
+        "1": 0,
+        "3": 0.3333333333333333,
+        "6": 1
+      },
+      "recall_antes_da_rodada_extra": {
+        "1": 0,
+        "3": 0.3333333333333333,
+        "6": 1
+      }
+    },
+    {
+      "id": "P04",
+      "categoria": "tematica_global",
+      "esperado": "respondivel",
+      "estado": "suficiente",
+      "rodadas": 2,
+      "decisoes": [
+        "buscar_mais",
+        "suficiente"
+      ],
+      "fallbacks_do_critico": [],
+      "perguntas_extras": 2,
+      "erros_de_infra": [],
+      "excecao": null,
+      "evidencias": 7,
+      "ms": {
+        "atualizar": 3862,
+        "rotear": 8889,
+        "executar": 3553.2,
+        "criticar": 7581,
+        "total": 18192.7
+      },
+      "recall": {
+        "1": 1,
+        "3": 1,
+        "6": 1
+      },
+      "recall_antes_da_rodada_extra": {
+        "1": 1,
+        "3": 1,
+        "6": 1
+      }
+    },
+    {
+      "id": "P05",
+      "categoria": "tematica_global",
+      "esperado": "respondivel",
+      "estado": "suficiente",
+      "rodadas": 2,
+      "decisoes": [
+        "buscar_mais",
+        "suficiente"
+      ],
+      "fallbacks_do_critico": [],
+      "perguntas_extras": 3,
+      "erros_de_infra": [],
+      "excecao": null,
+      "evidencias": 37,
+      "ms": {
+        "atualizar": 2518,
+        "rotear": 11800,
+        "executar": 166232.1,
+        "criticar": 7732,
+        "total": 141405.7
+      },
+      "recall": {
+        "1": 1,
+        "3": 1,
+        "6": 1
+      },
+      "recall_antes_da_rodada_extra": {
+        "1": 1,
+        "3": 1,
+        "6": 1
+      }
+    },
+    {
+      "id": "P06",
+      "categoria": "tematica_global",
+      "esperado": "respondivel",
+      "estado": "suficiente",
+      "rodadas": 2,
+      "decisoes": [
+        "buscar_mais",
+        "suficiente"
+      ],
+      "fallbacks_do_critico": [],
+      "perguntas_extras": 3,
+      "erros_de_infra": [],
+      "excecao": null,
+      "evidencias": 56,
+      "ms": {
+        "atualizar": 2482,
+        "rotear": 12030,
+        "executar": 245992.4,
+        "criticar": 7681,
+        "total": 185277.6
+      },
+      "recall": {
+        "1": 0,
+        "3": 1,
+        "6": 1
+      },
+      "recall_antes_da_rodada_extra": {
+        "1": 0,
+        "3": 1,
+        "6": 1
+      }
+    },
+    {
+      "id": "P07",
+      "categoria": "tematica_global",
+      "esperado": "respondivel",
+      "estado": "suficiente",
+      "rodadas": 1,
+      "decisoes": [
+        "suficiente"
+      ],
+      "fallbacks_do_critico": [],
+      "perguntas_extras": 0,
+      "erros_de_infra": [],
+      "excecao": null,
+      "evidencias": 11,
+      "ms": {
+        "atualizar": 2657,
+        "rotear": 1742,
+        "executar": 24164.1,
+        "criticar": 1219,
+        "total": 29782.3
+      },
+      "recall": {
+        "1": 1,
+        "3": 1,
+        "6": 1
+      },
+      "recall_antes_da_rodada_extra": null
+    },
+    {
+      "id": "P08",
+      "categoria": "tematica_global",
+      "esperado": "respondivel",
+      "estado": "suficiente",
+      "rodadas": 2,
+      "decisoes": [
+        "buscar_mais",
+        "suficiente"
+      ],
+      "fallbacks_do_critico": [],
+      "perguntas_extras": 3,
+      "erros_de_infra": [],
+      "excecao": null,
+      "evidencias": 24,
+      "ms": {
+        "atualizar": 2091,
+        "rotear": 29056,
+        "executar": 92632.5,
+        "criticar": 8222,
+        "total": 72863.1
+      },
+      "recall": {
+        "1": 1,
+        "3": 1,
+        "6": 1
+      },
+      "recall_antes_da_rodada_extra": {
+        "1": 1,
+        "3": 1,
+        "6": 1
+      }
+    },
+    {
+      "id": "P09",
+      "categoria": "tematica_global",
+      "esperado": "respondivel",
+      "estado": "suficiente",
+      "rodadas": 1,
+      "decisoes": [
+        "suficiente"
+      ],
+      "fallbacks_do_critico": [],
+      "perguntas_extras": 0,
+      "erros_de_infra": [],
+      "excecao": null,
+      "evidencias": 6,
+      "ms": {
+        "atualizar": 2277,
+        "rotear": 1452,
+        "executar": 761.5,
+        "criticar": 1475,
+        "total": 5965.5
+      },
+      "recall": {
+        "1": 0,
+        "3": 0,
+        "6": 0
+      },
+      "recall_antes_da_rodada_extra": null
+    },
+    {
+      "id": "P10",
+      "categoria": "tematica_global",
+      "esperado": "respondivel",
+      "estado": "suficiente",
+      "rodadas": 1,
+      "decisoes": [
+        "suficiente"
+      ],
+      "fallbacks_do_critico": [],
+      "perguntas_extras": 0,
+      "erros_de_infra": [],
+      "excecao": null,
+      "evidencias": 6,
+      "ms": {
+        "atualizar": 2208,
+        "rotear": 1518,
+        "executar": 2226.7,
+        "criticar": 1394,
+        "total": 7346.3
+      },
+      "recall": {
+        "1": 1,
+        "3": 1,
+        "6": 1
+      },
+      "recall_antes_da_rodada_extra": null
+    },
+    {
+      "id": "M01",
+      "categoria": "multi_hop",
+      "esperado": "respondivel",
+      "estado": "incompleta",
+      "rodadas": 2,
+      "decisoes": [
+        "buscar_mais",
+        "incompleta"
+      ],
+      "fallbacks_do_critico": [
+        "sem_rodada_extra"
+      ],
+      "perguntas_extras": 3,
+      "erros_de_infra": [],
+      "excecao": null,
+      "evidencias": 21,
+      "ms": {
+        "atualizar": 3852,
+        "rotear": 26749,
+        "executar": 20877.5,
+        "criticar": 9887,
+        "total": 38821.9
+      },
+      "recall": {
+        "1": 0,
+        "3": 0,
+        "6": 0
+      },
+      "recall_antes_da_rodada_extra": {
+        "1": 0,
+        "3": 0,
+        "6": 0
+      }
+    },
+    {
+      "id": "M02",
+      "categoria": "multi_hop",
+      "esperado": "respondivel",
+      "estado": "suficiente",
+      "rodadas": 1,
+      "decisoes": [
+        "suficiente"
+      ],
+      "fallbacks_do_critico": [],
+      "perguntas_extras": 0,
+      "erros_de_infra": [],
+      "excecao": null,
+      "evidencias": 11,
+      "ms": {
+        "atualizar": 3311,
+        "rotear": 4126,
+        "executar": 5205.7,
+        "criticar": 1810,
+        "total": 10732.9
+      },
+      "recall": {
+        "1": 0,
+        "3": 0,
+        "6": 0
+      },
+      "recall_antes_da_rodada_extra": null
+    },
+    {
+      "id": "M03",
+      "categoria": "multi_hop",
+      "esperado": "respondivel",
+      "estado": "suficiente",
+      "rodadas": 1,
+      "decisoes": [
+        "suficiente"
+      ],
+      "fallbacks_do_critico": [],
+      "perguntas_extras": 0,
+      "erros_de_infra": [],
+      "excecao": null,
+      "evidencias": 14,
+      "ms": {
+        "atualizar": 3649,
+        "rotear": 4450,
+        "executar": 1997.7,
+        "criticar": 2127,
+        "total": 9232.9
+      },
+      "recall": {
+        "1": 0,
+        "3": 0,
+        "6": 0.5
+      },
+      "recall_antes_da_rodada_extra": null
+    },
+    {
+      "id": "M04",
+      "categoria": "multi_hop",
+      "esperado": "respondivel",
+      "estado": "suficiente",
+      "rodadas": 1,
+      "decisoes": [
+        "suficiente"
+      ],
+      "fallbacks_do_critico": [],
+      "perguntas_extras": 0,
+      "erros_de_infra": [],
+      "excecao": null,
+      "evidencias": 9,
+      "ms": {
+        "atualizar": 3536,
+        "rotear": 3007,
+        "executar": 3050.2,
+        "criticar": 2011,
+        "total": 11604.3
+      },
+      "recall": {
+        "1": 0,
+        "3": 0,
+        "6": 0
+      },
+      "recall_antes_da_rodada_extra": null
+    },
+    {
+      "id": "M05",
+      "categoria": "multi_hop",
+      "esperado": "respondivel",
+      "estado": "incompleta",
+      "rodadas": 2,
+      "decisoes": [
+        "buscar_mais",
+        "incompleta"
+      ],
+      "fallbacks_do_critico": [
+        "sem_rodada_extra"
+      ],
+      "perguntas_extras": 2,
+      "erros_de_infra": [],
+      "excecao": null,
+      "evidencias": 18,
+      "ms": {
+        "atualizar": 3561,
+        "rotear": 8241,
+        "executar": 4968.3,
+        "criticar": 10649,
+        "total": 21314.9
+      },
+      "recall": {
+        "1": 0,
+        "3": 0,
+        "6": 0
+      },
+      "recall_antes_da_rodada_extra": {
+        "1": 0,
+        "3": 0,
+        "6": 0
+      }
+    },
+    {
+      "id": "F01",
+      "categoria": "fora_do_escopo",
+      "esperado": "ausente",
+      "estado": "sem_consulta",
+      "rodadas": 1,
+      "decisoes": [
+        "sem_critica"
+      ],
+      "fallbacks_do_critico": [],
+      "perguntas_extras": 0,
+      "erros_de_infra": [],
+      "excecao": null,
+      "evidencias": 0,
+      "ms": {
+        "atualizar": 1717,
+        "rotear": 737,
+        "executar": 0,
+        "criticar": 0,
+        "total": 2453.7
+      },
+      "recall": null,
+      "recall_antes_da_rodada_extra": null
+    },
+    {
+      "id": "F02",
+      "categoria": "fora_do_escopo",
+      "esperado": "ausente",
+      "estado": "sem_consulta",
+      "rodadas": 1,
+      "decisoes": [
+        "sem_critica"
+      ],
+      "fallbacks_do_critico": [],
+      "perguntas_extras": 0,
+      "erros_de_infra": [],
+      "excecao": null,
+      "evidencias": 0,
+      "ms": {
+        "atualizar": 1961,
+        "rotear": 812,
+        "executar": 0,
+        "criticar": 0,
+        "total": 2773.6
+      },
+      "recall": null,
+      "recall_antes_da_rodada_extra": null
+    },
+    {
+      "id": "F03",
+      "categoria": "fora_do_escopo",
+      "esperado": "ausente",
+      "estado": "sem_consulta",
+      "rodadas": 1,
+      "decisoes": [
+        "sem_critica"
+      ],
+      "fallbacks_do_critico": [],
+      "perguntas_extras": 0,
+      "erros_de_infra": [],
+      "excecao": null,
+      "evidencias": 0,
+      "ms": {
+        "atualizar": 2206,
+        "rotear": 782,
+        "executar": 0,
+        "criticar": 0,
+        "total": 2988.3
+      },
+      "recall": null,
+      "recall_antes_da_rodada_extra": null
+    },
+    {
+      "id": "F04",
+      "categoria": "fora_do_escopo",
+      "esperado": "ausente",
+      "estado": "sem_consulta",
+      "rodadas": 1,
+      "decisoes": [
+        "sem_critica"
+      ],
+      "fallbacks_do_critico": [],
+      "perguntas_extras": 0,
+      "erros_de_infra": [],
+      "excecao": null,
+      "evidencias": 0,
+      "ms": {
+        "atualizar": 1764,
+        "rotear": 523,
+        "executar": 0,
+        "criticar": 0,
+        "total": 2287.7
+      },
+      "recall": null,
+      "recall_antes_da_rodada_extra": null
+    },
+    {
+      "id": "F05",
+      "categoria": "fora_do_escopo",
+      "esperado": "ausente",
+      "estado": "sem_consulta",
+      "rodadas": 1,
+      "decisoes": [
+        "sem_critica"
+      ],
+      "fallbacks_do_critico": [],
+      "perguntas_extras": 0,
+      "erros_de_infra": [],
+      "excecao": null,
+      "evidencias": 0,
+      "ms": {
+        "atualizar": 1966,
+        "rotear": 792,
+        "executar": 0,
+        "criticar": 0,
+        "total": 2757.7
+      },
+      "recall": null,
+      "recall_antes_da_rodada_extra": null
+    }
+  ]
+}

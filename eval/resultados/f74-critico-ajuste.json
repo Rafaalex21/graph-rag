@@ -1,0 +1,349 @@
+{
+  "nome": "f74-critico-ajuste",
+  "data": "2026-11-07",
+  "comando": "npm run avaliar:ciclo -- --ajuste",
+  "conjunto": "ajuste",
+  "perguntas": 12,
+  "rodadas": {
+    "maximo": 2,
+    "ate_duas": true,
+    "por_numero": {
+      "1": 9,
+      "2": 3
+    }
+  },
+  "ausente": {
+    "recusas": 6,
+    "respondidas_como_ausentes": 6,
+    "estados": {
+      "sem_consulta": 6
+    },
+    "pediram_rodada_extra": []
+  },
+  "respondiveis": {
+    "n": 6,
+    "estados": {
+      "incompleta": 3,
+      "suficiente": 3
+    },
+    "ausente_por_engano": [],
+    "com_rodada_extra": 3
+  },
+  "execucao": {
+    "sem_excecao": 12,
+    "sem_erro_de_infra": 12,
+    "fallbacks_do_critico": {
+      "sem_rodada_extra": 3
+    }
+  },
+  "tempo_s": {
+    "total": {
+      "p50": 5.375349999999999,
+      "max": 21.7781
+    },
+    "critico": {
+      "p50": 4.5760000000000005,
+      "max": 8.921
+    }
+  },
+  "page_recall": null,
+  "itens": [
+    {
+      "id": "A01",
+      "categoria": "ajuste",
+      "esperado": "ausente",
+      "estado": "sem_consulta",
+      "rodadas": 1,
+      "decisoes": [
+        "sem_critica"
+      ],
+      "fallbacks_do_critico": [],
+      "perguntas_extras": 0,
+      "erros_de_infra": [],
+      "excecao": null,
+      "evidencias": 0,
+      "ms": {
+        "atualizar": 15739,
+        "rotear": 3801,
+        "executar": 0,
+        "criticar": 0,
+        "total": 19541.2
+      },
+      "recall": null,
+      "recall_antes_da_rodada_extra": null
+    },
+    {
+      "id": "A02",
+      "categoria": "ajuste",
+      "esperado": "ausente",
+      "estado": "sem_consulta",
+      "rodadas": 1,
+      "decisoes": [
+        "sem_critica"
+      ],
+      "fallbacks_do_critico": [],
+      "perguntas_extras": 0,
+      "erros_de_infra": [],
+      "excecao": null,
+      "evidencias": 0,
+      "ms": {
+        "atualizar": 1912,
+        "rotear": 1053,
+        "executar": 0,
+        "criticar": 0,
+        "total": 2965.2
+      },
+      "recall": null,
+      "recall_antes_da_rodada_extra": null
+    },
+    {
+      "id": "A03",
+      "categoria": "ajuste",
+      "esperado": "ausente",
+      "estado": "sem_consulta",
+      "rodadas": 1,
+      "decisoes": [
+        "sem_critica"
+      ],
+      "fallbacks_do_critico": [],
+      "perguntas_extras": 0,
+      "erros_de_infra": [],
+      "excecao": null,
+      "evidencias": 0,
+      "ms": {
+        "atualizar": 1476,
+        "rotear": 820,
+        "executar": 0,
+        "criticar": 0,
+        "total": 2295.8
+      },
+      "recall": null,
+      "recall_antes_da_rodada_extra": null
+    },
+    {
+      "id": "A04",
+      "categoria": "ajuste",
+      "esperado": "ausente",
+      "estado": "sem_consulta",
+      "rodadas": 1,
+      "decisoes": [
+        "sem_critica"
+      ],
+      "fallbacks_do_critico": [],
+      "perguntas_extras": 0,
+      "erros_de_infra": [],
+      "excecao": null,
+      "evidencias": 0,
+      "ms": {
+        "atualizar": 1905,
+        "rotear": 2164,
+        "executar": 0,
+        "criticar": 0,
+        "total": 4069.4
+      },
+      "recall": null,
+      "recall_antes_da_rodada_extra": null
+    },
+    {
+      "id": "A05",
+      "categoria": "ajuste",
+      "esperado": "ausente",
+      "estado": "sem_consulta",
+      "rodadas": 1,
+      "decisoes": [
+        "sem_critica"
+      ],
+      "fallbacks_do_critico": [],
+      "perguntas_extras": 0,
+      "erros_de_infra": [],
+      "excecao": null,
+      "evidencias": 0,
+      "ms": {
+        "atualizar": 2487,
+        "rotear": 838,
+        "executar": 0,
+        "criticar": 0,
+        "total": 3325
+      },
+      "recall": null,
+      "recall_antes_da_rodada_extra": null
+    },
+    {
+      "id": "A06",
+      "categoria": "ajuste",
+      "esperado": "ausente",
+      "estado": "sem_consulta",
+      "rodadas": 1,
+      "decisoes": [
+        "sem_critica"
+      ],
+      "fallbacks_do_critico": [],
+      "perguntas_extras": 0,
+      "erros_de_infra": [],
+      "excecao": null,
+      "evidencias": 0,
+      "ms": {
+        "atualizar": 1474,
+        "rotear": 785,
+        "executar": 0,
+        "criticar": 0,
+        "total": 2258.8
+      },
+      "recall": null,
+      "recall_antes_da_rodada_extra": null
+    },
+    {
+      "id": "R01",
+      "categoria": "ajuste",
+      "esperado": "respondivel",
+      "estado": "incompleta",
+      "rodadas": 2,
+      "decisoes": [
+        "buscar_mais",
+        "incompleta"
+      ],
+      "fallbacks_do_critico": [
+        "sem_rodada_extra"
+      ],
+      "perguntas_extras": 3,
+      "erros_de_infra": [],
+      "excecao": null,
+      "evidencias": 17,
+      "ms": {
+        "atualizar": 1607,
+        "rotear": 7235,
+        "executar": 7410.3,
+        "criticar": 8921,
+        "total": 21778.1
+      },
+      "recall": null,
+      "recall_antes_da_rodada_extra": null
+    },
+    {
+      "id": "R02",
+      "categoria": "ajuste",
+      "esperado": "respondivel",
+      "estado": "incompleta",
+      "rodadas": 2,
+      "decisoes": [
+        "buscar_mais",
+        "incompleta"
+      ],
+      "fallbacks_do_critico": [
+        "sem_rodada_extra"
+      ],
+      "perguntas_extras": 3,
+      "erros_de_infra": [],
+      "excecao": null,
+      "evidencias": 14,
+      "ms": {
+        "atualizar": 1563,
+        "rotear": 6697,
+        "executar": 3542.2,
+        "criticar": 7986,
+        "total": 16534.6
+      },
+      "recall": null,
+      "recall_antes_da_rodada_extra": null
+    },
+    {
+      "id": "R03",
+      "categoria": "ajuste",
+      "esperado": "respondivel",
+      "estado": "suficiente",
+      "rodadas": 1,
+      "decisoes": [
+        "suficiente"
+      ],
+      "fallbacks_do_critico": [],
+      "perguntas_extras": 0,
+      "erros_de_infra": [],
+      "excecao": null,
+      "evidencias": 7,
+      "ms": {
+        "atualizar": 1726,
+        "rotear": 1433,
+        "executar": 696,
+        "criticar": 1165,
+        "total": 5019.2
+      },
+      "recall": null,
+      "recall_antes_da_rodada_extra": null
+    },
+    {
+      "id": "R04",
+      "categoria": "ajuste",
+      "esperado": "respondivel",
+      "estado": "suficiente",
+      "rodadas": 1,
+      "decisoes": [
+        "suficiente"
+      ],
+      "fallbacks_do_critico": [],
+      "perguntas_extras": 0,
+      "erros_de_infra": [],
+      "excecao": null,
+      "evidencias": 6,
+      "ms": {
+        "atualizar": 2232,
+        "rotear": 1465,
+        "executar": 1014.3,
+        "criticar": 1481,
+        "total": 6191.8
+      },
+      "recall": null,
+      "recall_antes_da_rodada_extra": null
+    },
+    {
+      "id": "R05",
+      "categoria": "ajuste",
+      "esperado": "respondivel",
+      "estado": "incompleta",
+      "rodadas": 2,
+      "decisoes": [
+        "buscar_mais",
+        "incompleta"
+      ],
+      "fallbacks_do_critico": [
+        "sem_rodada_extra"
+      ],
+      "perguntas_extras": 3,
+      "erros_de_infra": [],
+      "excecao": null,
+      "evidencias": 15,
+      "ms": {
+        "atualizar": 1945,
+        "rotear": 8043,
+        "executar": 3422.3,
+        "criticar": 7671,
+        "total": 17425.5
+      },
+      "recall": null,
+      "recall_antes_da_rodada_extra": null
+    },
+    {
+      "id": "R06",
+      "categoria": "ajuste",
+      "esperado": "respondivel",
+      "estado": "suficiente",
+      "rodadas": 1,
+      "decisoes": [
+        "suficiente"
+      ],
+      "fallbacks_do_critico": [],
+      "perguntas_extras": 0,
+      "erros_de_infra": [],
+      "excecao": null,
+      "evidencias": 6,
+      "ms": {
+        "atualizar": 2204,
+        "rotear": 1485,
+        "executar": 821.6,
+        "criticar": 1220,
+        "total": 5731.5
+      },
+      "recall": null,
+      "recall_antes_da_rodada_extra": null
+    }
+  ]
+}
