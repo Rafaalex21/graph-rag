@@ -1,6 +1,6 @@
 # ADR-059 · Agente em ondas (atualizador → roteador → executor) em TypeScript: as 60 perguntas executam sem erro de infraestrutura, mas o page recall ficou abaixo do Python em três rodadas (a terceira empata em @6 e fica 2 perguntas abaixo em @1)
 
-- **Estado:** proposta (07/11/2026): o critério de page recall do aceite **não foi atendido**; a F7.11 fica `[~]`
+- **Estado:** aceita (07/11/2026) pelo dono do projeto **com o aceite reescrito depois dos resultados**: o critério original de page recall (Python ≤ agente em @1, @3 e @6) **não foi atendido**
 - **Data:** 2026-11-07
 - **Tarefa(s):** F7.11
 
@@ -33,14 +33,15 @@ A medida é `npm run avaliar:agente` (`api/src/avaliacao/cli-agente.ts`), com as
 | Não inferior ao Python | **não** | **não** | **não** (@6 igual; @1 e @3 abaixo) |
 | Recall sobre todas as evidências (média de evidências) | 0,4182 (4,7) | 0,6909 (9,0) | 0,6909 (9,0) |
 
-Da v2 para a v3, @1 melhora em 4 perguntas, @3 em 6 e @6 em 5, sem piora em nenhuma. Python: 0,4727 / 0,5788 / 0,6273. A v3 iguala o Python em @6 e fica 0,036 abaixo em @1 (2 perguntas em 55) e 0,009 em @3 (uma pergunta em 55, que vale 0,018, quase um empate). Como o critério é TypeScript ≥ Python nos três k, **continua não atendido**. A lista de evidências, o `recall` por pergunta e os tempos são os mesmos números da v2 em tudo que não é ordem (a v3 só reordena).
+Da v2 para a v3, @1 melhora em 4 perguntas, @3 em 6 e @6 em 5, sem piora em nenhuma. Python: 0,4727 / 0,5788 / 0,6273. A v3 iguala o Python em @6 e fica 0,036 abaixo em @1 (2 perguntas em 55) e 0,009 em @3 (uma pergunta em 55, que vale 0,018, quase um empate). Como o critério é TypeScript ≥ Python nos três k, **continua não atendido**, e é por isso que o aceite foi reescrito (abaixo). A lista de evidências, o `recall` por pergunta e os tempos são os mesmos números da v2 em tudo que não é ordem (a v3 só reordena).
 
 ## Consequências
 
 - **O critério de execução está atendido; o de page recall, não, nas três rodadas.** A F7.11 não é marcada `[x]`.
 - **Por que o recall fica abaixo (diagnóstico, não prova):** o baseline do Python é só `buscar_trechos`, e o agente manda 39 das 55 perguntas por ferramentas especializadas. As evidências do `panorama` não têm página (P03, P05, P06, P07, T02, T10), `consultar_grafo` só cita página se a consulta devolve a coluna `pagina` (T04 voltou sem evidência), `fato_financeiro` com métrica desconhecida volta vazio (N03, N13) e `buscar_tabelas`, `pessoas_cargos` e `riscos` devolvem páginas que podem diferir das do gabarito. Nas 16 perguntas só de `buscar_trechos`, o recall é 0,625 em todos os k nas duas rodadas. A métrica compara a ordem de uma lista que mistura fontes de tipos diferentes com a de uma busca única; o recall sobre todas as evidências (0,69 com complemento) mostra que as páginas do gabarito aparecem, só que depois do sexto item.
 - **A v2 e a v3 são pós-hoc.** As duas mudanças foram pensadas depois de ver os resultados anteriores, nas mesmas 55 perguntas; a ordem do complemento (depois da ferramenta escolhida) e "página primeiro" são escolhas minhas. Cada rodada mudou uma coisa só (v2: complemento; v3: ordem) e não houve variação de parâmetros: são três rodadas, as três estão no repositório e a v1 nunca foi substituída. A v3 é o melhor resultado de 55 perguntas já usadas para decidir as mudanças; não é medida independente, e chegar a ≥ Python em @6 depois de dois ajustes mostra o que o ajuste conseguiu, não o que se esperaria em perguntas novas.
-- **Decisão que fica com o dono do projeto:** o dono pediu para melhorar o agente (v3). Falta pouco no critério literal (2 perguntas em @1, 1 em @3). Opções: (a) aceitar a v3 como "equivalente ao Python em @6 e a menos de uma pergunta e meia nos outros", o que muda o aceite e deve ser registrado como pós-hoc; (b) mais uma melhoria do agente, o que passa a ser ajustar sobre as mesmas 55 perguntas e pede um grupo novo de perguntas para valer como medida; (c) redefinir a métrica. Até haver decisão, a F7.11 fica `[~]`. Os padrões do agente são os da v3.
+- **Decisão do dono do projeto (07/11/2026):** depois da v3 (a v1 e a v2 reprovaram), ele aceitou a v3 com o aceite reescrito como pós-hoc: o page recall em @6 não é inferior ao do Python, e em @1 e @3 fica a no máximo 2 perguntas de 55 dele. A F7.11 passa a `[x]` por essa decisão, não pelo critério original, que ficaria `[~]`. Os padrões do agente são os da v3.
+- **O que continua em aberto:** o número da v3 foi escolhido nas mesmas 55 perguntas que decidiram as mudanças, então não prova o mesmo recall em perguntas novas. Uma medida num grupo novo de perguntas (não usado para decidir nada) é o teste que falta; fica como dívida e deve ser feita antes de citar o recall do agente como resultado do projeto (F9).
 - Os tempos incluem o modelo já carregado; a primeira chamada ao Qwen após subir o llama-swap leva ~14 a 33 s a mais.
 - O agente só recupera; crítica (F7.4) e redação (F7.5) vêm depois.
 
