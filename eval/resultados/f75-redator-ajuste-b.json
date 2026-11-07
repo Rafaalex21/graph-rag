@@ -1,0 +1,163 @@
+{
+  "nome": "f75-redator-ajuste-b",
+  "data": "2026-11-07",
+  "comando": "npm run avaliar:redator -- --ajuste",
+  "conjunto": "ajuste",
+  "perguntas": 3,
+  "execucao": {
+    "sem_excecao": 3,
+    "sem_erro_de_infra": 3,
+    "modos": {
+      "llm": 3
+    },
+    "estados": {
+      "incompleta": 3
+    },
+    "fallbacks": {},
+    "cortadas": 0
+  },
+  "citacao": {
+    "afirmacoes_numericas": 1,
+    "citadas": 1,
+    "sem_citacao": 0,
+    "percentual": 100,
+    "respostas_com_frase_sem_citacao": [],
+    "respostas_com_numero": 1,
+    "precisaram_de_reparo": 0,
+    "antes_do_reparo": {
+      "sem_citacao": 0,
+      "citacoes_invalidas": 0,
+      "formato_nao_ptbr": 0
+    },
+    "citacoes_invalidas_que_sobraram": 0,
+    "formato_nao_ptbr_que_sobrou": 0
+  },
+  "informativo": {
+    "pagina_citada": {
+      "n": 0,
+      "acertos": 0
+    },
+    "acerto_numerico": {
+      "n": 0,
+      "acertos": 0,
+      "erros": []
+    },
+    "numeros_sem_lastro": {
+      "total": 0,
+      "respostas": []
+    },
+    "recusas": {
+      "n": 0,
+      "dizem_que_nao_consta": 0,
+      "ids_que_nao_dizem": [],
+      "sem_numero": 0
+    },
+    "respondiveis_que_dizem_que_nao_consta": [
+      "R01",
+      "R02",
+      "R05"
+    ]
+  },
+  "tempo_s": {
+    "primeiro_token_do_redator": {
+      "p50": 1.821,
+      "max": 3.12
+    },
+    "redator": {
+      "p50": 4.766,
+      "p95": 5.094,
+      "max": 5.094
+    },
+    "pergunta_inteira": {
+      "p50": 21.317,
+      "p95": 22.384,
+      "max": 22.384
+    }
+  },
+  "itens": [
+    {
+      "id": "R01",
+      "esperado": "respondivel",
+      "estado": "incompleta",
+      "modo": "llm",
+      "excecao": null,
+      "erros_de_infra": [],
+      "afirmacoes_numericas": 1,
+      "sem_citacao": 0,
+      "citacoes_invalidas": 0,
+      "formato_nao_ptbr": 0,
+      "numeros_sem_lastro": 0,
+      "reparos": 0,
+      "antes_do_reparo": null,
+      "cortada": false,
+      "fallback": null,
+      "citacoes": 2,
+      "pagina_citada": null,
+      "acerto_numerico": null,
+      "diz_que_nao_consta": true,
+      "caracteres": 464,
+      "ms": {
+        "ciclo": 16223,
+        "redator": 5094,
+        "primeiro_token_do_redator": 1821,
+        "total": 21317
+      }
+    },
+    {
+      "id": "R02",
+      "esperado": "respondivel",
+      "estado": "incompleta",
+      "modo": "llm",
+      "excecao": null,
+      "erros_de_infra": [],
+      "afirmacoes_numericas": 0,
+      "sem_citacao": 0,
+      "citacoes_invalidas": 0,
+      "formato_nao_ptbr": 0,
+      "numeros_sem_lastro": 0,
+      "reparos": 0,
+      "antes_do_reparo": null,
+      "cortada": false,
+      "fallback": null,
+      "citacoes": 1,
+      "pagina_citada": null,
+      "acerto_numerico": null,
+      "diz_que_nao_consta": true,
+      "caracteres": 287,
+      "ms": {
+        "ciclo": 16477,
+        "redator": 2847,
+        "primeiro_token_do_redator": 979,
+        "total": 19324
+      }
+    },
+    {
+      "id": "R05",
+      "esperado": "respondivel",
+      "estado": "incompleta",
+      "modo": "llm",
+      "excecao": null,
+      "erros_de_infra": [],
+      "afirmacoes_numericas": 0,
+      "sem_citacao": 0,
+      "citacoes_invalidas": 0,
+      "formato_nao_ptbr": 0,
+      "numeros_sem_lastro": 0,
+      "reparos": 0,
+      "antes_do_reparo": null,
+      "cortada": false,
+      "fallback": null,
+      "citacoes": 2,
+      "pagina_citada": null,
+      "acerto_numerico": null,
+      "diz_que_nao_consta": true,
+      "caracteres": 231,
+      "ms": {
+        "ciclo": 17618,
+        "redator": 4766,
+        "primeiro_token_do_redator": 3120,
+        "total": 22384
+      }
+    }
+  ]
+}

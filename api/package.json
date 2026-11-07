@@ -20,6 +20,7 @@
     "avaliar:consultar": "node src/avaliacao/cli-consultar.ts",
     "avaliar:agente": "node src/avaliacao/cli-agente.ts",
     "avaliar:ciclo": "node src/avaliacao/cli-ciclo.ts",
+    "avaliar:redator": "node src/avaliacao/cli-redator.ts",
     "test": "vitest run"
   },
   "dependencies": {

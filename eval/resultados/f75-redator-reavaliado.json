@@ -1,0 +1,22 @@
+{
+  "nome": "f75-redator-reavaliado",
+  "data": "2026-11-07",
+  "comando": "npm run avaliar:redator -- --reavaliar f75-redator",
+  "observacao": "pós-hoc: os mesmos textos finais da medida original, verificados com a régua corrigida (sigla 'Val.' e frase de ausência que repete número conhecido); a pergunta usada é a do golden, não a reescrita pelo atualizador",
+  "conjunto": "golden",
+  "respostas": 60,
+  "afirmacoes_numericas": 46,
+  "sem_citacao": 0,
+  "declaracoes_de_ausencia": 2,
+  "percentual": 100,
+  "achados": {
+    "N09": {
+      "sem_citacao": 0,
+      "declaracoes_de_ausencia": 1
+    },
+    "G01": {
+      "sem_citacao": 0,
+      "declaracoes_de_ausencia": 1
+    }
+  }
+}
