@@ -2,7 +2,7 @@
 
 > Plano executável derivado de [`ARQUITETURA.md`](./ARQUITETURA.md). Este arquivo alimenta o painel de acompanhamento: altere-o, e o painel muda junto.
 >
-> **Versão:** 0.1 · 27/10/2026
+> **Versão:** 0.1 · 27/10/2026 · atualizado em 07/11/2026 (F7.12 a F7.14 acrescentadas para as dívidas abertas da F7)
 
 ## Como ler e editar
 
@@ -288,7 +288,7 @@
 > objetivo: Orquestrar reescrita, rota, ferramentas, crítica e redação — e transmitir cada passo à interface.
 > capítulos: 5
 > modelos: Qwen3.6-35B-A3B · gpt-oss-20b (perfil rápido)
-> entrega: API TypeScript com SSE, oito ferramentas e telemetria
+> entrega: API TypeScript com SSE, 12 ferramentas e telemetria
 > esforço: G
 
 - [x] **F7.1** Cliente LLM em TypeScript (SDK OpenAI → llama-swap) com perfis, tempos-limite e `chat_template_kwargs`
@@ -301,7 +301,7 @@
   - depende: F7.1
   - resultado: ADR-053; `api/src/agente/atualizador.ts` (`atualizarPergunta`: autônoma + subperguntas com `dependeDe`, JSON forçado por esquema Zod, histórico de 4 turnos delimitado, normalização, fallback para a pergunta inteira) e `eval/golden_decomposicao.json` (38 casos) com avaliador próprio (`npm run avaliar:decomposicao`). **Teste: 10/10 compostas com número e conteúdo certos, 9/10 com as dependências exatas**; simples 6/6, seguimentos 4/4 no prompt v2 (v1: 17/20); `teste2`, escrito depois da correção, **9/9**; mediana de 3,1 s, 0 fallbacks. 104 testes na API (48 novos de decomposição, escritos antes do código)
   - nota: o v1 quebrava demais: "em quais anos o lucro caiu" virou uma subpergunta por ano; o v2 acrescentou duas regras (série e atributos da mesma entidade são uma pergunta). D17 (riscos e ações para mitigá-los) ficou como 9/10: o modelo declarou as subperguntas independentes e o gabarito dizia dependentes; os dois entendimentos são defensáveis e o gabarito não foi alterado. n = 10 compostas, casos escritos por mim
-- [x] **F7.3** Roteador com *tool calling* nativo e as oito ferramentas da §7.2
+- [x] **F7.3** Roteador com *tool calling* nativo e as ferramentas da §7.2 (oito na especificação, 12 no código, ADR-054)
   - aceite: acurácia de rota ≥ 85% no golden set
   - depende: F7.2, F6.1, F6.2, F6.3, F6.5
   - resultado: ADR-054; `api/src/agente/roteador.ts` (`rotear`, `rotearSubperguntas`, `CATALOGO`): as **12** ferramentas da tabela §7.2 com esquema Zod e descrição de quando usar, `tool_choice: auto`, argumentos normalizados e validados (chamada ruim é descartada e anotada, máximo de 3), caminho seguro `buscar_trechos` se o LLM falha ou nada serve, subperguntas por ondas (independentes até 2 juntas, dependentes com `<respostas_anteriores>`). `eval/golden_rotas.json` (100 casos: 60 do golden + 40 novas, com a rota literal e o conjunto de rotas aceitas fixado antes de medir) e `npm run avaliar:rotas`. **Aceite: 17/20 = 85,0% no `teste3`** (limpo, escrito depois da última correção; estrito 75%), ajuste 20/20; a primeira medição num grupo novo (`teste`, prompt v2) deu **82,5%, abaixo do aceite**. 170 testes na API (61 unitários novos de roteador e avaliador, escritos antes do código, e 5 de integração), mediana de ~4 s no caminho atualizador + roteador, 0 caminhos seguros acionados
@@ -350,6 +350,19 @@
   - nota: as independentes andam juntas (até 2, `-np 2`), as dependentes recebem o resumo da anterior; falhas de ferramenta viram evidência vazia anotada, não erro do agente
   - resultado: ADR-059; `api/src/agente/agente.ts` (`executarAgente`) e `api/src/avaliacao/cli-agente.ts` (`npm run avaliar:agente`). **Execução: 60/60 perguntas sem exceção e sem erro de infraestrutura**, com a rota e o tempo de cada etapa (atualizar, rotear, executar, total) e de cada ferramenta registrados (mediana de 4,9 s por pergunta, máximo de 51,7 s em P03, `panorama`); 3 erros de domínio (`fato_financeiro:metrica_desconhecida` em N03, N04 e N13) viram evidência vazia anotada. Rota aceita em 54/60 (estrita 33/60), informativa. **Page recall nas 55 perguntas (@1/@3/@6), Python 0,4727 / 0,5788 / 0,6273: v1 (pré-registrada) 0,3273 / 0,4000 / 0,4091; v2, pós-hoc, com `complementar` (uma `buscar_trechos` junto de toda rota especializada, depois dela) 0,3636 / 0,4727 / 0,5364; v3, pós-hoc, v2 mais "evidências com página primeiro" na lista plana (padrão atual) 0,4364 / 0,5697 / 0,6273.** A v3 empata com o Python em @6 e fica 2 perguntas abaixo em @1 e 1 em @3: critério (≥ em todos os k) NÃO atendido. As três rodadas estão em `eval/resultados/f711-agente-v1.json`, `-v2.json` e `-v3.json`. 30 testes do agente (escritos antes do código)
   - nota: marcada `[x]` por decisão do dono do projeto com o aceite reescrito acima, depois de ver os resultados; pelo aceite original ela ficaria `[~]` (a v3 fica 2 perguntas abaixo do Python em @1 e 1 em @3). O baseline do Python é só `buscar_trechos` e o agente manda 39 das 55 perguntas por ferramentas especializadas, cujas evidências muitas vezes não têm página (`panorama`, `consultar_grafo` sem a coluna `pagina`) ou têm páginas diferentes do gabarito; o recall sobre todas as evidências devolvidas é 0,42 (v1) e 0,69 (v2, com 9 evidências por pergunta, então não é comparável). As rodadas v2 e v3 foram pensadas depois de ver as anteriores, nas mesmas 55 perguntas, cada uma mudando uma coisa só; não substituem a v1, e a v3 não é medida independente (as 55 já serviram para decidir as mudanças). O dono do projeto aceitou a v3 com o aceite reescrito (pós-hoc); uma medida independente num grupo novo de perguntas continua em aberto; ver ADR-059
+
+- [ ] **F7.12** Medir o redator e o agente em perguntas novas, fora do golden e de tudo o que já foi visto
+  - aceite: pelo menos 20 perguntas novas, nas categorias do golden, com gabarito e páginas fechados **antes** de rodar; mede-se o page recall @1, @3 e @6 do agente (F7.11) e a parcela de afirmações numéricas citadas do redator (F7.5) com a régua final, sem ajustar prompt, régua nem limiar depois de ver o resultado; ADR compara com os valores do golden (agente v3 0,44/0,57/0,63; redator 100% pós-hoc) e diz se o aceite pós-hoc das duas tarefas se sustenta
+  - depende: F7.5, F7.11
+  - nota: dívida registrada nos ADR-059 e ADR-061: os dois aceites foram reescritos depois de ver o golden, então esse conjunto já não mede generalização. Os números do aceite são propostos; o dono do projeto pode mudá-los antes da execução
+- [ ] **F7.13** Modo rápido do agente (`profile: consultar-rapido`)
+  - aceite: `POST /api/chat` com `profile: "consultar-rapido"` deixa de responder 400 e usa só a rodada 1 do ciclo, com o crítico apenas dizendo o que faltou (`podeBuscarMais: false`, ADR-060); mede-se, nas perguntas simples do golden, a parcela com resposta completa em ≤ 20 s (RNF-2) e a queda do page recall @3 frente ao perfil `consultar`, e o ADR registra os dois números
+  - depende: F7.4, F7.6, F7.11
+  - nota: dívida registrada nos ADR-060 e ADR-062: o RNF-2 segue estourado nas perguntas em que o crítico manda buscar mais (1º token de 2,8 s a 21 s); o modo rápido nunca foi implementado nem medido. O contrato (`api.openapi.yaml`) já aceita o valor `consultar-rapido` e a API o recusa
+- [ ] **F7.14** Telemetria: relatório agendado, rotação dos logs, notas ligadas às perguntas e custo do registrador medido
+  - aceite: `infra/relatorio-diario.ps1` gera o relatório do dia anterior e remove os logs com mais de N dias (padrão 30), testado com logs de datas diferentes; o relatório mostra a nota de cada pergunta ligando o `/api/feedback` ao registro pelo `mensagemId`; a diferença de latência do `/api/chat` e de uma rota simples com e sem telemetria é medida e registrada em ADR
+  - depende: F7.7
+  - nota: dívida registrada no ADR-063: nada agenda o relatório, os logs crescem sem limite, as notas só são contadas e o custo do registrador não foi medido. O script é entregue pronto; registrar a tarefa no Agendador do Windows é uma mudança no sistema e só se faz com o seu aval
 
 ## F8 · Interface Angular
 > objetivo: Um assistente que mostra o caminho: rota, Cypher, evidências e páginas a um clique.
