@@ -309,7 +309,8 @@ describe("registro", () => {
     const r = await executarAgente(f.llm, executor, "x");
     const { atualizar, rotear, executar, total } = r.etapas_ms;
     for (const n of [atualizar, rotear, executar, total]) expect(Number.isFinite(n) && n >= 0).toBe(true);
-    expect(total).toBeGreaterThanOrEqual(rotear);
+    // o roteador arredonda o tempo dele para o milissegundo inteiro, o agente para 0,1 ms: a conta tem 1 ms de folga
+    expect(total + 1).toBeGreaterThanOrEqual(rotear);
     expect(r.subperguntas[0]?.ms.rotear).toBeGreaterThan(0);
     expect(r.subperguntas[0]?.execucoes[0]?.ms).toBeGreaterThanOrEqual(0);
     expect(r.subperguntas[0]?.chamadas).toEqual([{ nome: "buscar_trechos", argumentos: { pergunta: P1 } }]);
