@@ -105,10 +105,16 @@ export interface OpcoesAgente {
    * Acrescenta uma busca de trechos (`buscar_trechos`) à subpergunta roteada só para ferramentas especializadas, em
    * paralelo, com as evidências dela **depois** das da ferramenta escolhida. Serve para a resposta ter sempre passagens
    * com página para citar (o `panorama` e vários caminhos de grafo devolvem evidência sem página). Não se aplica à rota
-   * `nenhuma`, a quem já chama `buscar_trechos` e a `resposta_ja_dada` (a resposta está na conversa). Padrão: desligado.
-   * Introduzida DEPOIS da primeira medida da F7.11 (ADR-059); a medida sem ela fica no relatório.
+   * `nenhuma`, a quem já chama `buscar_trechos` e a `resposta_ja_dada` (a resposta está na conversa). Padrão: ligado
+   * (desde a v3 do ADR-059; foi introduzida, desligada, DEPOIS da primeira medida da F7.11, que fica no relatório).
    */
   complementar?: boolean;
+  /**
+   * Na lista plana `evidencias`, as evidências com página vêm antes das sem página (ordem estável dentro de cada grupo),
+   * porque o redator só cita página e o `panorama` e alguns caminhos de grafo devolvem evidência sem ela. Não reordena
+   * as evidências de cada subpergunta. Padrão: ligado (v3 do ADR-059, decidida depois de ver as rodadas 1 e 2).
+   */
+  paginasPrimeiro?: boolean;
 }
 
 const SEM_COMPLEMENTO = new Set(["buscar_trechos", "resposta_ja_dada"]);
@@ -217,7 +223,7 @@ export async function executarAgente(llm: LlmDoAgente, executor: ExecutorDoAgent
       avisa({ fase: "roteamento", indice: sub.indice, onda: sub.onda, rota: rot.rota, ferramentas: rot.chamadas.map((c) => c.nome), fallback: rot.fallback, ms: rot.ms });
       const inicio = performance.now();
       const complemento =
-        opcoes.complementar && rot.chamadas.length > 0 && !rot.chamadas.some((c) => SEM_COMPLEMENTO.has(c.nome))
+        (opcoes.complementar ?? true) && rot.chamadas.length > 0 && !rot.chamadas.some((c) => SEM_COMPLEMENTO.has(c.nome))
           ? [{ nome: "buscar_trechos", argumentos: { pergunta: sub.pergunta } } satisfies ChamadaRoteada]
           : [];
       const feitas = await Promise.all([...rot.chamadas.map((c) => executarChamada(executor, c)), ...complemento.map((c) => executarChamada(executor, c, true))]);
@@ -285,6 +291,12 @@ export async function executarAgente(llm: LlmDoAgente, executor: ExecutorDoAgent
       ms: { rotear: rot.ms, executar: p.msExecutar },
     };
   });
+
+  if (opcoes.paginasPrimeiro ?? true) {
+    const com = planas.filter((e) => e.paginas !== "");
+    const sem = planas.filter((e) => e.paginas === "");
+    planas.splice(0, planas.length, ...com, ...sem);
+  }
 
   const nenhuma = resultados.length > 0 && resultados.every((r) => r.rota === "nenhuma");
   const uso = { entrada: atualizada.uso.entrada, saida: atualizada.uso.saida };

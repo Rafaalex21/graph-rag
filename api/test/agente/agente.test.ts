@@ -177,7 +177,7 @@ describe("caminho seguro", () => {
   it("roteador que falha: busca_trechos com a pergunta, anotada; chamada descartada também é anotada", async () => {
     const f = llmFalso({ subs: [{ pergunta: P1 }, { pergunta: P2 }], rotas: { [P1]: new LlmIndisponivelError("fora", "chamarFerramentas"), [P2]: [{ nome: "pesquisar_web", argumentos: {} }, { nome: "buscar_tabelas", argumentos: { pergunta: P2 } }] } });
     const { executor, chamadas } = executorFalso({ buscar_trechos: () => env("buscar_trechos", [ev("t1", "p. 6")]), buscar_tabelas: () => env("buscar_tabelas", [ev("b1", "p. 80")]) });
-    const r = await executarAgente(f.llm, executor, "x");
+    const r = await executarAgente(f.llm, executor, "x", { complementar: false });
     expect(chamadas.map((c) => c.nome).sort()).toEqual(["buscar_tabelas", "buscar_trechos"]);
     expect(r.anotacoes).toContainEqual(expect.objectContaining({ subpergunta: 0, tipo: "fallback_do_roteador", detalhe: "llm_falhou" }));
     expect(r.anotacoes).toContainEqual(expect.objectContaining({ subpergunta: 1, ferramenta: "pesquisar_web", tipo: "chamada_descartada" }));
@@ -338,18 +338,18 @@ describe("complementar", () => {
   const panorama = (a: Record<string, unknown>) => env("panorama", [{ ...ev("pn1", ""), tipo: "pagina" }], { parametros: a });
   const rotaPanorama = { [P1]: [{ nome: "panorama", argumentos: { pergunta: P1 } }] };
 
-  it("desligada (padrão): só roda o que o roteador escolheu", async () => {
+  it("complementar: false: só roda o que o roteador escolheu", async () => {
     const f = llmFalso({ subs: [{ pergunta: P1 }], rotas: rotaPanorama });
     const { executor, chamadas } = executorFalso({ panorama, buscar_trechos: () => env("buscar_trechos", [ev("t1", "p. 6")]) });
-    const r = await executarAgente(f.llm, executor, "x");
+    const r = await executarAgente(f.llm, executor, "x", { complementar: false });
     expect(chamadas.map((c) => c.nome)).toEqual(["panorama"]);
     expect(r.evidencias.map((e) => e.id)).toEqual(["pn1"]);
   });
 
-  it("ligada: acrescenta buscar_trechos à rota especializada, com as evidências dele depois, marcado e sem mexer nas chamadas do roteador", async () => {
+  it("ligada (e na ordem de origem): acrescenta buscar_trechos à rota especializada, com as evidências dele depois, marcado e sem mexer nas chamadas do roteador", async () => {
     const f = llmFalso({ subs: [{ pergunta: P1 }], rotas: rotaPanorama });
     const { executor, chamadas } = executorFalso({ panorama, buscar_trechos: () => env("buscar_trechos", [ev("t1", "p. 6")]) });
-    const r = await executarAgente(f.llm, executor, "x", { complementar: true });
+    const r = await executarAgente(f.llm, executor, "x", { complementar: true, paginasPrimeiro: false });
     expect(chamadas).toContainEqual({ nome: "buscar_trechos", argumentos: { pergunta: P1 } });
     expect(r.evidencias.map((e) => [e.id, e.ferramenta])).toEqual([["pn1", "panorama"], ["t1", "buscar_trechos"]]);
     expect(r.subperguntas[0]?.chamadas.map((c) => c.nome)).toEqual(["panorama"]);
@@ -382,5 +382,51 @@ describe("complementar", () => {
     });
     const r = await executarAgente(f.llm, executor, "x", { complementar: true });
     expect(r.subperguntas[0]?.resumo?.split("\n")[0]).toContain("Fulano preside");
+  });
+});
+
+// ---------- 11: padrões e ordem da lista plana (pós-hoc, v3 do ADR-059) ----------
+
+describe("padrões e páginas primeiro", () => {
+  const semPagina = { ...ev("pn1", ""), tipo: "pagina" as const };
+  const rota = { [P1]: [{ nome: "panorama", argumentos: { pergunta: P1 } }] };
+  const feitos = () => ({ panorama: () => env("panorama", [semPagina]), buscar_trechos: () => env("buscar_trechos", [ev("t1", "p. 6")]) });
+
+  it("sem opções, o complemento está ligado e as evidências com página vêm antes das sem página", async () => {
+    const f = llmFalso({ subs: [{ pergunta: P1 }], rotas: rota });
+    const { executor, chamadas } = executorFalso(feitos());
+    const r = await executarAgente(f.llm, executor, "x");
+    expect(chamadas.map((c) => c.nome).sort()).toEqual(["buscar_trechos", "panorama"]);
+    expect(r.evidencias.map((e) => e.id)).toEqual(["t1", "pn1"]);
+  });
+
+  it("a ordem é estável: dentro de cada grupo, subpergunta e chamada como antes", async () => {
+    const f = llmFalso({ subs: [{ pergunta: P1 }, { pergunta: P2 }], rotas: { ...rota, [P2]: [{ nome: "panorama", argumentos: { pergunta: P2 } }] } });
+    let n = 0;
+    const { executor } = executorFalso({
+      panorama: () => env("panorama", [{ ...ev(`pn${++n}`, ""), tipo: "pagina" as const }]),
+      buscar_trechos: (a) => env("buscar_trechos", [ev(`t-${String(a["pergunta"]).slice(0, 8)}`, "p. 6")]),
+    });
+    const r = await executarAgente(f.llm, executor, "x");
+    expect(r.evidencias.map((e) => e.id)).toEqual(["t-Qual foi", "t-Quantas ", "pn1", "pn2"]);
+  });
+
+  it("paginasPrimeiro: false mantém a ordem de origem e complementar: false desliga o complemento", async () => {
+    const f = llmFalso({ subs: [{ pergunta: P1 }], rotas: rota });
+    const { executor, chamadas } = executorFalso(feitos());
+    const r = await executarAgente(f.llm, executor, "x", { complementar: false, paginasPrimeiro: false });
+    expect(chamadas.map((c) => c.nome)).toEqual(["panorama"]);
+    const g = llmFalso({ subs: [{ pergunta: P1 }], rotas: rota });
+    const outro = executorFalso(feitos());
+    const r2 = await executarAgente(g.llm, outro.executor, "x", { paginasPrimeiro: false });
+    expect(r.evidencias.map((e) => e.id)).toEqual(["pn1"]);
+    expect(r2.evidencias.map((e) => e.id)).toEqual(["pn1", "t1"]);
+  });
+
+  it("a evidência por subpergunta não é reordenada (só a lista plana)", async () => {
+    const f = llmFalso({ subs: [{ pergunta: P1 }], rotas: rota });
+    const { executor } = executorFalso(feitos());
+    const r = await executarAgente(f.llm, executor, "x");
+    expect(r.subperguntas[0]?.evidencias.map((e) => e.id)).toEqual(["pn1", "t1"]);
   });
 });

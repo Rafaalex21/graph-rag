@@ -21,9 +21,10 @@
  *    para mais de uma ferramenta.
  *  - **Rota**: a de cada pergunta contra `eval/golden_rotas.json` (estrito e aceito, como na F7.3), só informativa aqui.
  *
- * **Rodadas.** A 1ª rodada (`f711-agente-v1`, sem `--complementar`) foi a medida pré-registrada acima e reprovou o page recall.
- * `--complementar` liga a opção pós-hoc do agente (uma busca de trechos junto de toda rota especializada), decidida DEPOIS
- * de ver os resultados da 1ª; as duas ficam no relatório, a 1ª nunca é substituída (ADR-059).
+ * **Rodadas.** A v1 (`--v1`: sem complemento, ordem de origem) foi a medida pré-registrada acima e reprovou o page recall.
+ * A v2 (`--complementar`) liga o complemento (uma busca de trechos junto de toda rota especializada) e a v3 (sem flags, o
+ * padrão do agente) soma "evidências com página primeiro"; as duas foram decididas DEPOIS de ver os resultados anteriores,
+ * nas mesmas perguntas. Todas ficam no relatório, a v1 nunca é substituída (ADR-059).
  *
  * Grava `eval/resultados/<nome>.json` (ids, números, ferramentas e códigos de erro, sem texto do documento — ADR-009) e
  * as saídas completas em `data/avaliacao/<nome>-detalhes.json`, fora do repositório.
@@ -46,10 +47,14 @@ const { values } = parseArgs({
     swap: { type: "string", default: process.env["LLAMA_SWAP_URL"] ?? "http://127.0.0.1:8080" },
     limite: { type: "string", description: "só as N primeiras perguntas (teste rápido)" },
     somente: { type: "string", description: "ids separados por vírgula" },
-    complementar: { type: "boolean", default: false, description: "acrescenta buscar_trechos às rotas especializadas (opção pós-hoc, ADR-059)" },
+    complementar: { type: "boolean", default: false, description: "v2 do ADR-059: complemento ligado, ordem de origem (o padrão do agente é a v3)" },
+    v1: { type: "boolean", default: false, description: "v1 do ADR-059: sem complemento e em ordem de origem (a medida pré-registrada)" },
   },
 });
 
+// v3 (padrão do agente): complemento ligado e páginas primeiro. v2: só o complemento. v1: nenhum dos dois.
+const opcoesDoAgente = values.v1 ? { complementar: false, paginasPrimeiro: false } : values.complementar ? { complementar: true, paginasPrimeiro: false } : {};
+const versao = values.v1 ? "v1" : values.complementar ? "v2" : "v3";
 const grafo = GrafoNeo4j.conectar();
 const llm = new ClienteLlm({ baseUrl: values.swap as string });
 const executor = criarExecutor({ grafo, llm });
@@ -100,7 +105,7 @@ for (const c of golden) {
   let r: ResultadoAgente | null = null;
   let excecao: string | null = null;
   try {
-    r = await executarAgente(llm, executor, c["pergunta"] as string, { complementar: values.complementar === true });
+    r = await executarAgente(llm, executor, c["pergunta"] as string, opcoesDoAgente);
   } catch (e) {
     excecao = e instanceof Error ? `${e.constructor.name}: ${e.message}` : String(e);
   }
@@ -155,8 +160,9 @@ const tempos = (f: (l: Linha) => number) => ({ p50: mediana(linhas.map(f)), max:
 const resumo = {
   nome: values.nome,
   data: new Date().toISOString().slice(0, 10),
-  comando: ["npm run avaliar:agente", ...(values.complementar || values.nome !== "f711-agente" ? ["--"] : []), ...(values.complementar ? ["--complementar"] : []), ...(values.nome !== "f711-agente" ? ["--nome", values.nome as string] : [])].join(" "),
-  complementar: values.complementar === true,
+  comando: ["npm run avaliar:agente", ...(values.v1 || values.complementar || values.nome !== "f711-agente" ? ["--"] : []), ...(values.v1 ? ["--v1"] : []), ...(values.complementar ? ["--complementar"] : []), ...(values.nome !== "f711-agente" ? ["--nome", values.nome as string] : [])].join(" "),
+  versao,
+  opcoes: { complementar: opcoesDoAgente.complementar ?? true, paginas_primeiro: opcoesDoAgente.paginasPrimeiro ?? true },
   perguntas: linhas.length,
   execucao: {
     sem_excecao: linhas.filter((l) => l.excecao === null).length,
