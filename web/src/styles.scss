@@ -1,1 +1,77 @@
-/* You can add global styles to this file, and also import other style files */
+/*
+ * Tokens de tema (F8.1). Claro é o padrão; o escuro vale (a) quando o sistema pede e o usuário não escolheu "claro" e
+ * (b) quando o usuário escolheu "escuro" (`data-theme="dark"` no <html>, posto pelo TemaService). Contrastes conferidos
+ * (texto e texto suave sobre a superfície, destaque sobre a superfície): todos acima de 4,5:1 nos dois temas.
+ */
+:root {
+  color-scheme: light;
+  --fundo: #f4f6f9;
+  --superficie: #ffffff;
+  --texto: #1a1d23;
+  --texto-suave: #4f5968;
+  --borda: #cfd5de;
+  --realce: #e8eef7;
+  --destaque: #0b5cad;
+  --foco: #0b5cad;
+  --raio: 0.5rem;
+}
+
+@mixin tema-escuro {
+  color-scheme: dark;
+  --fundo: #0f1217;
+  --superficie: #171b22;
+  --texto: #e6e9ef;
+  --texto-suave: #a3acba;
+  --borda: #343c49;
+  --realce: #222a36;
+  --destaque: #7db4f2;
+  --foco: #7db4f2;
+}
+
+@media (prefers-color-scheme: dark) {
+  :root:not([data-theme='light']) {
+    @include tema-escuro;
+  }
+}
+
+:root[data-theme='dark'] {
+  @include tema-escuro;
+}
+
+*,
+*::before,
+*::after {
+  box-sizing: border-box;
+}
+
+html {
+  font-family: system-ui, -apple-system, 'Segoe UI', Roboto, sans-serif;
+  line-height: 1.5;
+}
+
+body {
+  margin: 0;
+  color: var(--texto);
+  background: var(--fundo);
+}
+
+h1,
+h2 {
+  line-height: 1.2;
+}
+
+a {
+  color: var(--destaque);
+}
+
+:focus-visible {
+  outline: 2px solid var(--foco);
+  outline-offset: 2px;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  * {
+    transition: none !important;
+    animation: none !important;
+  }
+}

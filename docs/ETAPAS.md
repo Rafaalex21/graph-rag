@@ -358,9 +358,11 @@
 > entrega: chat com streaming, painel de rastro, visualizador de fontes e explorador de grafo
 > esforço: G
 
-- [ ] **F8.1** Shell em Angular 22 (standalone, signals, rotas), tema claro e escuro
+- [x] **F8.1** Shell em Angular 22 (standalone, signals, rotas), tema claro e escuro
   - aceite: build de produção sem avisos
   - depende: F0.8
+  - resultado: ADR-064; rotas sob demanda (`/chat` com o painel Rastro/Fontes/Grafo como rotas filhas, `/configuracoes`, `**`), cabeçalho com navegação e link de pular, tema `sistema`/`claro`/`escuro` por tokens CSS (`TemaService`, `localStorage`). **29 testes (escritos antes do código), `ng lint` limpo e `ng build` de produção sem avisos (225,9 kB iniciais).** Conferido no navegador: sem erros de console, tema que sobrevive ao recarregamento, página 404; contraste mínimo 5,72:1 (calculado).
+  - nota: o shell é só estrutura; chat, rastro, fontes, grafo e configurações não fazem nada ainda (F8.2 a F8.7) e não há lista de conversas nem selo de saúde. A verificação em navegador foi manual, em um navegador e duas larguras (achou e corrigiu um estouro de 11 px em 375 px); layout só terá teste automatizado na F8.8. O `ng serve` precisará de proxy para `/api` na F8.2 (a API não tem CORS).
 - [ ] **F8.2** Chat com streaming SSE (`fetch` + `ReadableStream`), markdown sanitizado e chips de citação
   - aceite: tokens aparecem em ≤ 5 s numa pergunta simples
   - depende: F7.6, F8.1
