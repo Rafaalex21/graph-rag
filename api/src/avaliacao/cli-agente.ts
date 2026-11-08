@@ -153,10 +153,10 @@ for (const c of golden) {
 }
 await grafo.fechar();
 
+const goldenPadrao = values.golden === "eval/golden.csv";
 const medidas = linhas.filter((l) => l.recall);
 const recallDoAgente = Object.fromEntries(KS.map((k) => [`@${k}`, media(medidas.map((l) => (l.recall as Record<number, number>)[k] as number))]));
 const recallPython = Object.fromEntries(KS.map((k) => [`@${k}`, goldenPadrao ? (python[`@${k}`]?.python ?? null) : null]));
-const goldenPadrao = values.golden === "eval/golden.csv";
 const naoInferior = !goldenPadrao || KS.every((k) => ((recallDoAgente[`@${k}`] as number | null) ?? 0) >= ((recallPython[`@${k}`] as number | null) ?? Infinity));
 const tempos = (f: (l: Linha) => number) => ({ p50: mediana(linhas.map(f)), max: Math.max(0, ...linhas.map(f)) });
 const resumo = {
