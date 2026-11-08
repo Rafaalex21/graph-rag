@@ -1,0 +1,1211 @@
+{
+  "nome": "f713-modo-rapido",
+  "data": "2026-11-08",
+  "comando": "npm run avaliar:rapido",
+  "conjunto": "perguntas simples do golden (factual_textual e numerica)",
+  "perguntas": 30,
+  "limite_s": 20,
+  "consultar": {
+    "perguntas": 30,
+    "completa_em_ate_20s": {
+      "n": 14,
+      "de": 30,
+      "parcela": 0.4667
+    },
+    "so_tempo_ate_20s": {
+      "n": 15,
+      "de": 30,
+      "parcela": 0.5
+    },
+    "estados": {
+      "suficiente": 15,
+      "incompleta": 15
+    },
+    "rodadas": {
+      "1": 13,
+      "2": 17
+    },
+    "page_recall": {
+      "@1": 0.5333,
+      "@3": 0.6667,
+      "@6": 0.7333
+    },
+    "pagina_citada": {
+      "n": 30,
+      "acertos": 18
+    },
+    "respostas_que_dizem_que_nao_consta": 16,
+    "tempo_s": {
+      "p50": 19.819000000000003,
+      "p95": 62.951,
+      "max": 115.059,
+      "ciclo_p50": 16.761
+    },
+    "sem_erro_de_infra": 30
+  },
+  "consultar_rapido": {
+    "perguntas": 30,
+    "completa_em_ate_20s": {
+      "n": 13,
+      "de": 30,
+      "parcela": 0.4333
+    },
+    "so_tempo_ate_20s": {
+      "n": 29,
+      "de": 30,
+      "parcela": 0.9667
+    },
+    "estados": {
+      "suficiente": 13,
+      "incompleta": 17
+    },
+    "rodadas": {
+      "1": 30
+    },
+    "page_recall": {
+      "@1": 0.5333,
+      "@3": 0.6667,
+      "@6": 0.7333
+    },
+    "pagina_citada": {
+      "n": 30,
+      "acertos": 17
+    },
+    "respostas_que_dizem_que_nao_consta": 15,
+    "tempo_s": {
+      "p50": 11.641,
+      "p95": 17.495,
+      "max": 46.674,
+      "ciclo_p50": 6.875500000000001
+    },
+    "sem_erro_de_infra": 30
+  },
+  "queda_do_page_recall": {
+    "@1": 0,
+    "@3": 0,
+    "@6": 0
+  },
+  "por_pergunta_no_recall_3": {
+    "rapido_perdeu": [],
+    "rapido_ganhou": [],
+    "iguais": 30
+  },
+  "ganho_de_tempo_s": {
+    "p50_consultar": 19.819000000000003,
+    "p50_rapido": 11.641,
+    "max_consultar": 115.059,
+    "max_rapido": 46.674
+  },
+  "itens": [
+    {
+      "id": "T01",
+      "ordem": [
+        "consultar",
+        "consultar-rapido"
+      ],
+      "consultar": {
+        "estado": "suficiente",
+        "rodadas": 1,
+        "ms": 9059,
+        "ms_ciclo": 6314,
+        "recall": {
+          "1": 1,
+          "3": 1,
+          "6": 1
+        },
+        "pagina_citada": true,
+        "diz_que_nao_consta": false,
+        "erros_de_infra": [],
+        "excecao": null
+      },
+      "rapido": {
+        "estado": "suficiente",
+        "rodadas": 1,
+        "ms": 9227,
+        "ms_ciclo": 6564,
+        "recall": {
+          "1": 1,
+          "3": 1,
+          "6": 1
+        },
+        "pagina_citada": true,
+        "diz_que_nao_consta": false,
+        "erros_de_infra": [],
+        "excecao": null
+      }
+    },
+    {
+      "id": "T02",
+      "ordem": [
+        "consultar-rapido",
+        "consultar"
+      ],
+      "consultar": {
+        "estado": "incompleta",
+        "rodadas": 2,
+        "ms": 62951,
+        "ms_ciclo": 58114,
+        "recall": {
+          "1": 1,
+          "3": 1,
+          "6": 1
+        },
+        "pagina_citada": false,
+        "diz_que_nao_consta": true,
+        "erros_de_infra": [],
+        "excecao": null
+      },
+      "rapido": {
+        "estado": "incompleta",
+        "rodadas": 1,
+        "ms": 46674,
+        "ms_ciclo": 43187,
+        "recall": {
+          "1": 1,
+          "3": 1,
+          "6": 1
+        },
+        "pagina_citada": true,
+        "diz_que_nao_consta": false,
+        "erros_de_infra": [],
+        "excecao": null
+      }
+    },
+    {
+      "id": "T03",
+      "ordem": [
+        "consultar",
+        "consultar-rapido"
+      ],
+      "consultar": {
+        "estado": "incompleta",
+        "rodadas": 2,
+        "ms": 115059,
+        "ms_ciclo": 100986,
+        "recall": {
+          "1": 1,
+          "3": 1,
+          "6": 1
+        },
+        "pagina_citada": false,
+        "diz_que_nao_consta": true,
+        "erros_de_infra": [],
+        "excecao": null
+      },
+      "rapido": {
+        "estado": "incompleta",
+        "rodadas": 1,
+        "ms": 12593,
+        "ms_ciclo": 7398,
+        "recall": {
+          "1": 1,
+          "3": 1,
+          "6": 1
+        },
+        "pagina_citada": true,
+        "diz_que_nao_consta": true,
+        "erros_de_infra": [],
+        "excecao": null
+      }
+    },
+    {
+      "id": "T04",
+      "ordem": [
+        "consultar-rapido",
+        "consultar"
+      ],
+      "consultar": {
+        "estado": "incompleta",
+        "rodadas": 2,
+        "ms": 50915,
+        "ms_ciclo": 38346,
+        "recall": {
+          "1": 0,
+          "3": 0,
+          "6": 0
+        },
+        "pagina_citada": false,
+        "diz_que_nao_consta": true,
+        "erros_de_infra": [],
+        "excecao": null
+      },
+      "rapido": {
+        "estado": "incompleta",
+        "rodadas": 1,
+        "ms": 13120,
+        "ms_ciclo": 8833,
+        "recall": {
+          "1": 0,
+          "3": 0,
+          "6": 0
+        },
+        "pagina_citada": false,
+        "diz_que_nao_consta": false,
+        "erros_de_infra": [],
+        "excecao": null
+      }
+    },
+    {
+      "id": "T05",
+      "ordem": [
+        "consultar",
+        "consultar-rapido"
+      ],
+      "consultar": {
+        "estado": "incompleta",
+        "rodadas": 2,
+        "ms": 24649,
+        "ms_ciclo": 18483,
+        "recall": {
+          "1": 1,
+          "3": 1,
+          "6": 1
+        },
+        "pagina_citada": true,
+        "diz_que_nao_consta": true,
+        "erros_de_infra": [],
+        "excecao": null
+      },
+      "rapido": {
+        "estado": "incompleta",
+        "rodadas": 1,
+        "ms": 16965,
+        "ms_ciclo": 6248,
+        "recall": {
+          "1": 1,
+          "3": 1,
+          "6": 1
+        },
+        "pagina_citada": true,
+        "diz_que_nao_consta": false,
+        "erros_de_infra": [],
+        "excecao": null
+      }
+    },
+    {
+      "id": "T06",
+      "ordem": [
+        "consultar-rapido",
+        "consultar"
+      ],
+      "consultar": {
+        "estado": "suficiente",
+        "rodadas": 1,
+        "ms": 8707,
+        "ms_ciclo": 6516,
+        "recall": {
+          "1": 1,
+          "3": 1,
+          "6": 1
+        },
+        "pagina_citada": true,
+        "diz_que_nao_consta": false,
+        "erros_de_infra": [],
+        "excecao": null
+      },
+      "rapido": {
+        "estado": "suficiente",
+        "rodadas": 1,
+        "ms": 12786,
+        "ms_ciclo": 8077,
+        "recall": {
+          "1": 1,
+          "3": 1,
+          "6": 1
+        },
+        "pagina_citada": true,
+        "diz_que_nao_consta": false,
+        "erros_de_infra": [],
+        "excecao": null
+      }
+    },
+    {
+      "id": "T07",
+      "ordem": [
+        "consultar",
+        "consultar-rapido"
+      ],
+      "consultar": {
+        "estado": "suficiente",
+        "rodadas": 1,
+        "ms": 8790,
+        "ms_ciclo": 5920,
+        "recall": {
+          "1": 1,
+          "3": 1,
+          "6": 1
+        },
+        "pagina_citada": true,
+        "diz_que_nao_consta": false,
+        "erros_de_infra": [],
+        "excecao": null
+      },
+      "rapido": {
+        "estado": "suficiente",
+        "rodadas": 1,
+        "ms": 7806,
+        "ms_ciclo": 5421,
+        "recall": {
+          "1": 1,
+          "3": 1,
+          "6": 1
+        },
+        "pagina_citada": true,
+        "diz_que_nao_consta": false,
+        "erros_de_infra": [],
+        "excecao": null
+      }
+    },
+    {
+      "id": "T08",
+      "ordem": [
+        "consultar-rapido",
+        "consultar"
+      ],
+      "consultar": {
+        "estado": "incompleta",
+        "rodadas": 2,
+        "ms": 28648,
+        "ms_ciclo": 22741,
+        "recall": {
+          "1": 1,
+          "3": 1,
+          "6": 1
+        },
+        "pagina_citada": true,
+        "diz_que_nao_consta": true,
+        "erros_de_infra": [],
+        "excecao": null
+      },
+      "rapido": {
+        "estado": "incompleta",
+        "rodadas": 1,
+        "ms": 17495,
+        "ms_ciclo": 9530,
+        "recall": {
+          "1": 1,
+          "3": 1,
+          "6": 1
+        },
+        "pagina_citada": true,
+        "diz_que_nao_consta": true,
+        "erros_de_infra": [],
+        "excecao": null
+      }
+    },
+    {
+      "id": "T09",
+      "ordem": [
+        "consultar",
+        "consultar-rapido"
+      ],
+      "consultar": {
+        "estado": "suficiente",
+        "rodadas": 1,
+        "ms": 9632,
+        "ms_ciclo": 6623,
+        "recall": {
+          "1": 0,
+          "3": 1,
+          "6": 1
+        },
+        "pagina_citada": true,
+        "diz_que_nao_consta": true,
+        "erros_de_infra": [],
+        "excecao": null
+      },
+      "rapido": {
+        "estado": "suficiente",
+        "rodadas": 1,
+        "ms": 7073,
+        "ms_ciclo": 6134,
+        "recall": {
+          "1": 0,
+          "3": 1,
+          "6": 1
+        },
+        "pagina_citada": true,
+        "diz_que_nao_consta": true,
+        "erros_de_infra": [],
+        "excecao": null
+      }
+    },
+    {
+      "id": "T10",
+      "ordem": [
+        "consultar-rapido",
+        "consultar"
+      ],
+      "consultar": {
+        "estado": "suficiente",
+        "rodadas": 1,
+        "ms": 8022,
+        "ms_ciclo": 5982,
+        "recall": {
+          "1": 1,
+          "3": 1,
+          "6": 1
+        },
+        "pagina_citada": true,
+        "diz_que_nao_consta": false,
+        "erros_de_infra": [],
+        "excecao": null
+      },
+      "rapido": {
+        "estado": "suficiente",
+        "rodadas": 1,
+        "ms": 10996,
+        "ms_ciclo": 6878,
+        "recall": {
+          "1": 1,
+          "3": 1,
+          "6": 1
+        },
+        "pagina_citada": true,
+        "diz_que_nao_consta": false,
+        "erros_de_infra": [],
+        "excecao": null
+      }
+    },
+    {
+      "id": "T11",
+      "ordem": [
+        "consultar",
+        "consultar-rapido"
+      ],
+      "consultar": {
+        "estado": "suficiente",
+        "rodadas": 1,
+        "ms": 7682,
+        "ms_ciclo": 5398,
+        "recall": {
+          "1": 1,
+          "3": 1,
+          "6": 1
+        },
+        "pagina_citada": true,
+        "diz_que_nao_consta": false,
+        "erros_de_infra": [],
+        "excecao": null
+      },
+      "rapido": {
+        "estado": "suficiente",
+        "rodadas": 1,
+        "ms": 5889,
+        "ms_ciclo": 4938,
+        "recall": {
+          "1": 1,
+          "3": 1,
+          "6": 1
+        },
+        "pagina_citada": true,
+        "diz_que_nao_consta": false,
+        "erros_de_infra": [],
+        "excecao": null
+      }
+    },
+    {
+      "id": "T12",
+      "ordem": [
+        "consultar-rapido",
+        "consultar"
+      ],
+      "consultar": {
+        "estado": "incompleta",
+        "rodadas": 2,
+        "ms": 26190,
+        "ms_ciclo": 20811,
+        "recall": {
+          "1": 0,
+          "3": 0,
+          "6": 0
+        },
+        "pagina_citada": false,
+        "diz_que_nao_consta": true,
+        "erros_de_infra": [],
+        "excecao": null
+      },
+      "rapido": {
+        "estado": "incompleta",
+        "rodadas": 1,
+        "ms": 14545,
+        "ms_ciclo": 8707,
+        "recall": {
+          "1": 0,
+          "3": 0,
+          "6": 0
+        },
+        "pagina_citada": false,
+        "diz_que_nao_consta": true,
+        "erros_de_infra": [],
+        "excecao": null
+      }
+    },
+    {
+      "id": "T13",
+      "ordem": [
+        "consultar",
+        "consultar-rapido"
+      ],
+      "consultar": {
+        "estado": "incompleta",
+        "rodadas": 2,
+        "ms": 26183,
+        "ms_ciclo": 20628,
+        "recall": {
+          "1": 1,
+          "3": 1,
+          "6": 1
+        },
+        "pagina_citada": true,
+        "diz_que_nao_consta": true,
+        "erros_de_infra": [],
+        "excecao": null
+      },
+      "rapido": {
+        "estado": "incompleta",
+        "rodadas": 1,
+        "ms": 13178,
+        "ms_ciclo": 9777,
+        "recall": {
+          "1": 1,
+          "3": 1,
+          "6": 1
+        },
+        "pagina_citada": false,
+        "diz_que_nao_consta": true,
+        "erros_de_infra": [],
+        "excecao": null
+      }
+    },
+    {
+      "id": "T14",
+      "ordem": [
+        "consultar-rapido",
+        "consultar"
+      ],
+      "consultar": {
+        "estado": "suficiente",
+        "rodadas": 2,
+        "ms": 18390,
+        "ms_ciclo": 17418,
+        "recall": {
+          "1": 0,
+          "3": 0,
+          "6": 0
+        },
+        "pagina_citada": false,
+        "diz_que_nao_consta": true,
+        "erros_de_infra": [],
+        "excecao": null
+      },
+      "rapido": {
+        "estado": "incompleta",
+        "rodadas": 1,
+        "ms": 12278,
+        "ms_ciclo": 7211,
+        "recall": {
+          "1": 0,
+          "3": 0,
+          "6": 0
+        },
+        "pagina_citada": false,
+        "diz_que_nao_consta": true,
+        "erros_de_infra": [],
+        "excecao": null
+      }
+    },
+    {
+      "id": "T15",
+      "ordem": [
+        "consultar",
+        "consultar-rapido"
+      ],
+      "consultar": {
+        "estado": "suficiente",
+        "rodadas": 1,
+        "ms": 7315,
+        "ms_ciclo": 5182,
+        "recall": {
+          "1": 1,
+          "3": 1,
+          "6": 1
+        },
+        "pagina_citada": true,
+        "diz_que_nao_consta": false,
+        "erros_de_infra": [],
+        "excecao": null
+      },
+      "rapido": {
+        "estado": "suficiente",
+        "rodadas": 1,
+        "ms": 5724,
+        "ms_ciclo": 4845,
+        "recall": {
+          "1": 1,
+          "3": 1,
+          "6": 1
+        },
+        "pagina_citada": true,
+        "diz_que_nao_consta": false,
+        "erros_de_infra": [],
+        "excecao": null
+      }
+    },
+    {
+      "id": "N01",
+      "ordem": [
+        "consultar-rapido",
+        "consultar"
+      ],
+      "consultar": {
+        "estado": "suficiente",
+        "rodadas": 1,
+        "ms": 5893,
+        "ms_ciclo": 4977,
+        "recall": {
+          "1": 1,
+          "3": 1,
+          "6": 1
+        },
+        "pagina_citada": true,
+        "diz_que_nao_consta": false,
+        "erros_de_infra": [],
+        "excecao": null
+      },
+      "rapido": {
+        "estado": "suficiente",
+        "rodadas": 1,
+        "ms": 7942,
+        "ms_ciclo": 5505,
+        "recall": {
+          "1": 1,
+          "3": 1,
+          "6": 1
+        },
+        "pagina_citada": true,
+        "diz_que_nao_consta": false,
+        "erros_de_infra": [],
+        "excecao": null
+      }
+    },
+    {
+      "id": "N02",
+      "ordem": [
+        "consultar",
+        "consultar-rapido"
+      ],
+      "consultar": {
+        "estado": "suficiente",
+        "rodadas": 1,
+        "ms": 7457,
+        "ms_ciclo": 5467,
+        "recall": {
+          "1": 1,
+          "3": 1,
+          "6": 1
+        },
+        "pagina_citada": true,
+        "diz_que_nao_consta": false,
+        "erros_de_infra": [],
+        "excecao": null
+      },
+      "rapido": {
+        "estado": "suficiente",
+        "rodadas": 1,
+        "ms": 5937,
+        "ms_ciclo": 4953,
+        "recall": {
+          "1": 1,
+          "3": 1,
+          "6": 1
+        },
+        "pagina_citada": true,
+        "diz_que_nao_consta": false,
+        "erros_de_infra": [],
+        "excecao": null
+      }
+    },
+    {
+      "id": "N03",
+      "ordem": [
+        "consultar-rapido",
+        "consultar"
+      ],
+      "consultar": {
+        "estado": "suficiente",
+        "rodadas": 1,
+        "ms": 8316,
+        "ms_ciclo": 5597,
+        "recall": {
+          "1": 0,
+          "3": 1,
+          "6": 1
+        },
+        "pagina_citada": true,
+        "diz_que_nao_consta": false,
+        "erros_de_infra": [],
+        "excecao": null
+      },
+      "rapido": {
+        "estado": "suficiente",
+        "rodadas": 1,
+        "ms": 10714,
+        "ms_ciclo": 6406,
+        "recall": {
+          "1": 0,
+          "3": 1,
+          "6": 1
+        },
+        "pagina_citada": false,
+        "diz_que_nao_consta": false,
+        "erros_de_infra": [],
+        "excecao": null
+      }
+    },
+    {
+      "id": "N04",
+      "ordem": [
+        "consultar",
+        "consultar-rapido"
+      ],
+      "consultar": {
+        "estado": "suficiente",
+        "rodadas": 1,
+        "ms": 7818,
+        "ms_ciclo": 5657,
+        "recall": {
+          "1": 0,
+          "3": 0,
+          "6": 0
+        },
+        "pagina_citada": false,
+        "diz_que_nao_consta": false,
+        "erros_de_infra": [],
+        "excecao": null
+      },
+      "rapido": {
+        "estado": "suficiente",
+        "rodadas": 1,
+        "ms": 6718,
+        "ms_ciclo": 5357,
+        "recall": {
+          "1": 0,
+          "3": 0,
+          "6": 0
+        },
+        "pagina_citada": false,
+        "diz_que_nao_consta": false,
+        "erros_de_infra": [],
+        "excecao": null
+      }
+    },
+    {
+      "id": "N05",
+      "ordem": [
+        "consultar-rapido",
+        "consultar"
+      ],
+      "consultar": {
+        "estado": "incompleta",
+        "rodadas": 2,
+        "ms": 21281,
+        "ms_ciclo": 15518,
+        "recall": {
+          "1": 1,
+          "3": 1,
+          "6": 1
+        },
+        "pagina_citada": false,
+        "diz_que_nao_consta": true,
+        "erros_de_infra": [],
+        "excecao": null
+      },
+      "rapido": {
+        "estado": "incompleta",
+        "rodadas": 1,
+        "ms": 11952,
+        "ms_ciclo": 6873,
+        "recall": {
+          "1": 1,
+          "3": 1,
+          "6": 1
+        },
+        "pagina_citada": false,
+        "diz_que_nao_consta": true,
+        "erros_de_infra": [],
+        "excecao": null
+      }
+    },
+    {
+      "id": "N06",
+      "ordem": [
+        "consultar",
+        "consultar-rapido"
+      ],
+      "consultar": {
+        "estado": "suficiente",
+        "rodadas": 2,
+        "ms": 22024,
+        "ms_ciclo": 17722,
+        "recall": {
+          "1": 0,
+          "3": 0,
+          "6": 1
+        },
+        "pagina_citada": true,
+        "diz_que_nao_consta": false,
+        "erros_de_infra": [],
+        "excecao": null
+      },
+      "rapido": {
+        "estado": "incompleta",
+        "rodadas": 1,
+        "ms": 11469,
+        "ms_ciclo": 7404,
+        "recall": {
+          "1": 0,
+          "3": 0,
+          "6": 1
+        },
+        "pagina_citada": false,
+        "diz_que_nao_consta": true,
+        "erros_de_infra": [],
+        "excecao": null
+      }
+    },
+    {
+      "id": "N07",
+      "ordem": [
+        "consultar-rapido",
+        "consultar"
+      ],
+      "consultar": {
+        "estado": "incompleta",
+        "rodadas": 2,
+        "ms": 21609,
+        "ms_ciclo": 17281,
+        "recall": {
+          "1": 0,
+          "3": 0,
+          "6": 0
+        },
+        "pagina_citada": false,
+        "diz_que_nao_consta": true,
+        "erros_de_infra": [],
+        "excecao": null
+      },
+      "rapido": {
+        "estado": "incompleta",
+        "rodadas": 1,
+        "ms": 11813,
+        "ms_ciclo": 7402,
+        "recall": {
+          "1": 0,
+          "3": 0,
+          "6": 0
+        },
+        "pagina_citada": false,
+        "diz_que_nao_consta": true,
+        "erros_de_infra": [],
+        "excecao": null
+      }
+    },
+    {
+      "id": "N08",
+      "ordem": [
+        "consultar",
+        "consultar-rapido"
+      ],
+      "consultar": {
+        "estado": "incompleta",
+        "rodadas": 2,
+        "ms": 23933,
+        "ms_ciclo": 17037,
+        "recall": {
+          "1": 0,
+          "3": 0,
+          "6": 0
+        },
+        "pagina_citada": false,
+        "diz_que_nao_consta": true,
+        "erros_de_infra": [],
+        "excecao": null
+      },
+      "rapido": {
+        "estado": "incompleta",
+        "rodadas": 1,
+        "ms": 7891,
+        "ms_ciclo": 5810,
+        "recall": {
+          "1": 0,
+          "3": 0,
+          "6": 0
+        },
+        "pagina_citada": false,
+        "diz_que_nao_consta": true,
+        "erros_de_infra": [],
+        "excecao": null
+      }
+    },
+    {
+      "id": "N09",
+      "ordem": [
+        "consultar-rapido",
+        "consultar"
+      ],
+      "consultar": {
+        "estado": "incompleta",
+        "rodadas": 2,
+        "ms": 19283,
+        "ms_ciclo": 17157,
+        "recall": {
+          "1": 0,
+          "3": 0,
+          "6": 1
+        },
+        "pagina_citada": true,
+        "diz_que_nao_consta": false,
+        "erros_de_infra": [],
+        "excecao": null
+      },
+      "rapido": {
+        "estado": "incompleta",
+        "rodadas": 1,
+        "ms": 14845,
+        "ms_ciclo": 7608,
+        "recall": {
+          "1": 0,
+          "3": 0,
+          "6": 1
+        },
+        "pagina_citada": true,
+        "diz_que_nao_consta": true,
+        "erros_de_infra": [],
+        "excecao": null
+      }
+    },
+    {
+      "id": "N10",
+      "ordem": [
+        "consultar",
+        "consultar-rapido"
+      ],
+      "consultar": {
+        "estado": "incompleta",
+        "rodadas": 2,
+        "ms": 45651,
+        "ms_ciclo": 40300,
+        "recall": {
+          "1": 0,
+          "3": 0,
+          "6": 0
+        },
+        "pagina_citada": false,
+        "diz_que_nao_consta": true,
+        "erros_de_infra": [],
+        "excecao": null
+      },
+      "rapido": {
+        "estado": "incompleta",
+        "rodadas": 1,
+        "ms": 12452,
+        "ms_ciclo": 9261,
+        "recall": {
+          "1": 0,
+          "3": 0,
+          "6": 0
+        },
+        "pagina_citada": false,
+        "diz_que_nao_consta": true,
+        "erros_de_infra": [],
+        "excecao": null
+      }
+    },
+    {
+      "id": "N11",
+      "ordem": [
+        "consultar-rapido",
+        "consultar"
+      ],
+      "consultar": {
+        "estado": "incompleta",
+        "rodadas": 2,
+        "ms": 33187,
+        "ms_ciclo": 17829,
+        "recall": {
+          "1": 0,
+          "3": 1,
+          "6": 1
+        },
+        "pagina_citada": true,
+        "diz_que_nao_consta": true,
+        "erros_de_infra": [],
+        "excecao": null
+      },
+      "rapido": {
+        "estado": "incompleta",
+        "rodadas": 1,
+        "ms": 16322,
+        "ms_ciclo": 7241,
+        "recall": {
+          "1": 0,
+          "3": 1,
+          "6": 1
+        },
+        "pagina_citada": true,
+        "diz_que_nao_consta": true,
+        "erros_de_infra": [],
+        "excecao": null
+      }
+    },
+    {
+      "id": "N12",
+      "ordem": [
+        "consultar",
+        "consultar-rapido"
+      ],
+      "consultar": {
+        "estado": "incompleta",
+        "rodadas": 2,
+        "ms": 20355,
+        "ms_ciclo": 16485,
+        "recall": {
+          "1": 0,
+          "3": 0,
+          "6": 0
+        },
+        "pagina_citada": false,
+        "diz_que_nao_consta": true,
+        "erros_de_infra": [],
+        "excecao": null
+      },
+      "rapido": {
+        "estado": "incompleta",
+        "rodadas": 1,
+        "ms": 7221,
+        "ms_ciclo": 5891,
+        "recall": {
+          "1": 0,
+          "3": 0,
+          "6": 0
+        },
+        "pagina_citada": false,
+        "diz_que_nao_consta": true,
+        "erros_de_infra": [],
+        "excecao": null
+      }
+    },
+    {
+      "id": "N13",
+      "ordem": [
+        "consultar-rapido",
+        "consultar"
+      ],
+      "consultar": {
+        "estado": "suficiente",
+        "rodadas": 1,
+        "ms": 6984,
+        "ms_ciclo": 5143,
+        "recall": {
+          "1": 1,
+          "3": 1,
+          "6": 1
+        },
+        "pagina_citada": true,
+        "diz_que_nao_consta": false,
+        "erros_de_infra": [],
+        "excecao": null
+      },
+      "rapido": {
+        "estado": "suficiente",
+        "rodadas": 1,
+        "ms": 7861,
+        "ms_ciclo": 5628,
+        "recall": {
+          "1": 1,
+          "3": 1,
+          "6": 1
+        },
+        "pagina_citada": true,
+        "diz_que_nao_consta": false,
+        "erros_de_infra": [],
+        "excecao": null
+      }
+    },
+    {
+      "id": "N14",
+      "ordem": [
+        "consultar",
+        "consultar-rapido"
+      ],
+      "consultar": {
+        "estado": "incompleta",
+        "rodadas": 2,
+        "ms": 22496,
+        "ms_ciclo": 18299,
+        "recall": {
+          "1": 0,
+          "3": 1,
+          "6": 1
+        },
+        "pagina_citada": false,
+        "diz_que_nao_consta": true,
+        "erros_de_infra": [],
+        "excecao": null
+      },
+      "rapido": {
+        "estado": "incompleta",
+        "rodadas": 1,
+        "ms": 8732,
+        "ms_ciclo": 6195,
+        "recall": {
+          "1": 0,
+          "3": 1,
+          "6": 1
+        },
+        "pagina_citada": false,
+        "diz_que_nao_consta": true,
+        "erros_de_infra": [],
+        "excecao": null
+      }
+    },
+    {
+      "id": "N15",
+      "ordem": [
+        "consultar-rapido",
+        "consultar"
+      ],
+      "consultar": {
+        "estado": "suficiente",
+        "rodadas": 1,
+        "ms": 12037,
+        "ms_ciclo": 8929,
+        "recall": {
+          "1": 1,
+          "3": 1,
+          "6": 1
+        },
+        "pagina_citada": true,
+        "diz_que_nao_consta": false,
+        "erros_de_infra": [],
+        "excecao": null
+      },
+      "rapido": {
+        "estado": "suficiente",
+        "rodadas": 1,
+        "ms": 13161,
+        "ms_ciclo": 9476,
+        "recall": {
+          "1": 1,
+          "3": 1,
+          "6": 1
+        },
+        "pagina_citada": true,
+        "diz_que_nao_consta": false,
+        "erros_de_infra": [],
+        "excecao": null
+      }
+    }
+  ]
+}
