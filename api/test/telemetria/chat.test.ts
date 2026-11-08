@@ -168,7 +168,7 @@ describe("/api/chat registra", () => {
   it.each([
     [{ conversationId: "c", message: "" }, 400, "requisicao_invalida"],
     [{ conversationId: "c", message: "oi", mode: "global" }, 400, "modo_nao_implementado"],
-    [{ conversationId: "c", message: "oi", profile: "consultar-rapido" }, 400, "perfil_nao_implementado"],
+    [{ conversationId: "c", message: "oi", profile: "turbo" }, 400, "requisicao_invalida"],
   ])("recusa %j: um registro `recusada` com o código", async (corpo, status, codigo) => {
     const { url, reg } = await servir();
     const r = await pedir(url, corpo);

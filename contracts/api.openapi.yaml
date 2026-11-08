@@ -220,7 +220,10 @@ components:
           enum: [auto, trechos, tabelas, local, global, cypher]
           default: auto
         profile:
-          description: Só `consultar` está implementado; `consultar-rapido` volta 400 `perfil_nao_implementado`.
+          description: >-
+            `consultar` roda o ciclo completo (até duas rodadas). `consultar-rapido` roda só a rodada 1: o crítico
+            apenas diz o que faltou, sem buscar de novo, e uma resposta que ainda falta algo sai com estado `incompleta`.
+            Os dois usam o mesmo modelo.
           enum: [consultar, consultar-rapido]
           default: consultar
         historico:

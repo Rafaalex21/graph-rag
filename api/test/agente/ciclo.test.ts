@@ -10,6 +10,14 @@
  *  6. as evidências das duas rodadas se juntam sem repetição, com a rodada de origem, e as com página vêm primeiro;
  *  7. o cancelamento do chamador sobe; o progresso ganha o evento `critica` e a rodada em todos os eventos;
  *  8. o tempo do crítico entra em `etapas_ms`, e o `uso` soma as duas rodadas e os dois críticos.
+ *
+ * Modo rápido (F7.13, opção `rapido`). Modos de falha:
+ *  9. um crítico que pede `buscar_mais` NUNCA dispara a rodada 2 no modo rápido (1 rodada, 1 crítico, 1 roteador), e o
+ *     crítico recebe o aviso de que não há nova busca (senão ele escreve perguntas que ninguém vai usar);
+ * 10. o `buscar_mais` vira `incompleta` com o `faltando` do crítico (é o que o redator usa para dizer o que não achou), e
+ *     `suficiente` e `ausente` continuam iguais; rota `nenhuma` continua sem crítico;
+ * 11. falha do crítico no modo rápido continua virando `suficiente` anotada (não vira laço nem erro);
+ * 12. `rapido: false` ou ausente mantém o ciclo completo, e a opção não vaza para o agente.
  */
 import { describe, expect, it } from "vitest";
 import { MAX_RODADAS, executarCiclo, type EventoCiclo } from "../../src/agente/ciclo.ts";
@@ -264,5 +272,69 @@ describe("cancelamento, progresso e registro", () => {
     const { executor } = executorFalso((p) => (p === EXTRA ? env([], { erro: "metrica_desconhecida" }) : env([ev("t1", "p. 6")])));
     const r = await executarCiclo(f.llm, executor, Q1);
     expect(r.anotacoes).toContainEqual(expect.objectContaining({ rodada: 2, tipo: "erro_da_ferramenta", detalhe: "metrica_desconhecida" }));
+  });
+});
+
+// ---------- 9 a 12: modo rápido (F7.13) ----------
+
+describe("modo rápido", () => {
+  it("crítico que pede buscar_mais: 1 rodada, 1 crítico, sem rodada extra, estado incompleta com o que faltou", async () => {
+    const f = llmFalso({ subs: [{ pergunta: Q1 }], rotas: {}, criticos: [mais] });
+    const { executor, chamadas } = executorFalso((p) => env([ev(`t-${p.slice(0, 12)}`, "p. 6")]));
+    const r = await executarCiclo(f.llm, executor, P, { rapido: true });
+    expect(r.rodadas).toHaveLength(1);
+    expect(f.contagem).toEqual({ atualizador: 1, critico: 1 });
+    expect(chamadas).toEqual([Q1]);
+    expect(r.estado).toBe("incompleta");
+    expect(r.faltando).toBe("agências");
+    expect(r.rodadas[0]?.critica).toMatchObject({ decisao: "incompleta", perguntas: [], fallback: "sem_rodada_extra" });
+    expect(String((f.mensagensDoCritico[0] as Mensagem[])[1]?.content)).toContain("Não é possível pedir nova busca");
+  });
+
+  it("suficiente e ausente ficam como no ciclo completo", async () => {
+    for (const [decisao, estado] of [["suficiente", "suficiente"], ["ausente", "ausente"]] as const) {
+      const f = llmFalso({ subs: [{ pergunta: Q1 }], rotas: {}, criticos: [{ decisao, perguntas: [], faltando: decisao === "ausente" ? "não consta" : "" }] });
+      const { executor } = executorFalso(() => env([ev("t1", "p. 6")]));
+      const r = await executarCiclo(f.llm, executor, Q1, { rapido: true });
+      expect(r.estado).toBe(estado);
+      expect(r.rodadas).toHaveLength(1);
+      expect(f.contagem.critico).toBe(1);
+    }
+  });
+
+  it("rota nenhuma: sem crítico, sem_consulta", async () => {
+    const f = llmFalso({ subs: [{ pergunta: "Olá" }], rotas: { Olá: { texto: "Olá!" } }, criticos: [mais] });
+    const { executor, chamadas } = executorFalso(() => env([]));
+    const r = await executarCiclo(f.llm, executor, "Olá", { rapido: true });
+    expect(r.estado).toBe("sem_consulta");
+    expect(f.contagem.critico).toBe(0);
+    expect(chamadas).toEqual([]);
+  });
+
+  it("LLM do crítico fora do ar: suficiente anotada, uma rodada, sem exceção", async () => {
+    const f = llmFalso({ subs: [{ pergunta: Q1 }], rotas: {}, criticos: [new LlmIndisponivelError("http://x", "chatJson")] });
+    const { executor } = executorFalso(() => env([ev("t1", "p. 6")]));
+    const r = await executarCiclo(f.llm, executor, Q1, { rapido: true });
+    expect(r.estado).toBe("suficiente");
+    expect(r.rodadas).toHaveLength(1);
+    expect(r.anotacoes).toContainEqual(expect.objectContaining({ tipo: "fallback_do_critico", rodada: 1 }));
+  });
+
+  it("rapido false ou ausente mantém o ciclo completo", async () => {
+    for (const opcoes of [{ rapido: false }, {}]) {
+      const f = llmFalso({ subs: [{ pergunta: Q1 }], rotas: {}, criticos: [mais] });
+      const { executor } = executorFalso((p) => env([ev(`t-${p.slice(0, 12)}`, "p. 6")]));
+      const r = await executarCiclo(f.llm, executor, P, opcoes);
+      expect(r.rodadas).toHaveLength(2);
+      expect(f.contagem.critico).toBe(2);
+    }
+  });
+
+  it("o tempo do modo rápido não inclui a segunda rodada: executar e criticar vêm de uma só", async () => {
+    const f = llmFalso({ subs: [{ pergunta: Q1 }], rotas: {}, criticos: [mais] });
+    const { executor } = executorFalso(() => env([ev("t1", "p. 6")]));
+    const r = await executarCiclo(f.llm, executor, Q1, { rapido: true });
+    // atualizador (100/10) + 1 roteador (300/20) + 1 crítico (100/10)
+    expect(r.uso).toEqual({ entrada: 500, saida: 40 });
   });
 });

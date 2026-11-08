@@ -178,12 +178,29 @@ describe("POST /api/chat: corpo inválido", () => {
   it.each([
     [{ mode: "trechos" }, "modo_nao_implementado"],
     [{ mode: "cypher" }, "modo_nao_implementado"],
-    [{ profile: "consultar-rapido" }, "perfil_nao_implementado"],
   ])("%j ainda não é implementado: 400 %s", async (extra, codigo) => {
     const { url, registro } = await servir();
     const r = await pedir(url, { conversationId: "c", message: "oi", ...extra });
     expect(r.status).toBe(400);
     expect(((await r.json()) as { codigo: string }).codigo).toBe(codigo);
+    expect(registro.perguntas).toEqual([]);
+  });
+
+  it("profile consultar-rapido é aceito e o ciclo roda em modo rápido; consultar e o padrão, não", async () => {
+    const { url, registro } = await servir();
+    for (const extra of [{ profile: "consultar-rapido" }, { profile: "consultar" }, {}]) {
+      const r = await pedir(url, { conversationId: "c", message: "oi", ...extra });
+      expect(r.status).toBe(200);
+      await r.text();
+    }
+    expect(registro.opcoesDoCiclo.map((o) => o.rapido)).toEqual([true, false, false]);
+  });
+
+  it("profile que não existe: 400 requisicao_invalida e o ciclo nem roda", async () => {
+    const { url, registro } = await servir();
+    const r = await pedir(url, { conversationId: "c", message: "oi", profile: "turbo" });
+    expect(r.status).toBe(400);
+    expect(((await r.json()) as { codigo: string }).codigo).toBe("requisicao_invalida");
     expect(registro.perguntas).toEqual([]);
   });
 

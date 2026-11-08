@@ -10,6 +10,10 @@
  *  - `sem_consulta`: nenhuma ferramenta foi chamada (saudação, fora do escopo, pergunta vazia); o crítico nem roda.
  *
  * Falha do crítico não derruba nem repete a pergunta (vira `suficiente`, anotada). Só o cancelamento do chamador sobe.
+ *
+ * Modo rápido (F7.13, opção `rapido`, perfil `consultar-rapido` da API): só a rodada 1. O crítico roda uma vez com
+ * `podeBuscarMais: false` e serve apenas para dizer o que faltou: um `buscar_mais` vira `incompleta` com o `faltando` dele.
+ * Poupa a rodada extra (a segunda passada do roteador e das ferramentas e a segunda crítica), que é o que estoura o RNF-2.
  */
 import {
   executarAgente,
@@ -62,7 +66,11 @@ export type EventoCiclo =
   | { fase: "critica"; rodada: number; decisao: Critica["decisao"]; perguntas: number; faltando: string; ms: number };
 
 /** As opções do agente, menos as subperguntas prontas (a rodada extra é do ciclo) e com o progresso do ciclo. */
-export type OpcoesCiclo = Omit<OpcoesAgente, "progresso" | "subperguntas"> & { progresso?: (evento: EventoCiclo) => void };
+export type OpcoesCiclo = Omit<OpcoesAgente, "progresso" | "subperguntas"> & {
+  progresso?: (evento: EventoCiclo) => void;
+  /** Modo rápido (F7.13): só a rodada 1; o crítico apenas diz o que faltou. */
+  rapido?: boolean;
+};
 
 const arredonda = (ms: number) => Math.round(ms * 10) / 10;
 const chaveDe = (e: { tipo: string; id: string }) => `${e.tipo}\u0000${e.id}`;
@@ -88,9 +96,10 @@ export async function executarCiclo(llm: LlmDoAgente, executor: ExecutorDoAgente
       // um cliente que caiu não pode derrubar a pergunta
     }
   };
+  const { rapido = false, ...opcoesDoAgente } = opcoes;
   const rodar = async (rodada: number, extra: OpcoesAgente): Promise<ResultadoAgente> =>
     executarAgente(llm, executor, pergunta, {
-      ...opcoes,
+      ...opcoesDoAgente,
       ...extra,
       progresso: (e: EventoAgente) => emite({ ...e, rodada }),
     });
@@ -111,7 +120,7 @@ export async function executarCiclo(llm: LlmDoAgente, executor: ExecutorDoAgente
   let faltando = "";
 
   if (!r1.erro && r1.rota === "ferramentas") {
-    const c1 = await criticarAgora(1, true);
+    const c1 = await criticarAgora(1, !rapido);
     (rodadas[0] as RodadaDoCiclo).critica = c1;
     let final = c1;
     if (c1.decisao === "buscar_mais") {
