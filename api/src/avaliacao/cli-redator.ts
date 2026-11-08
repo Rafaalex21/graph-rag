@@ -43,6 +43,7 @@ const { values } = parseArgs({
     nome: { type: "string" },
     swap: { type: "string", default: process.env["LLAMA_SWAP_URL"] ?? "http://127.0.0.1:8080" },
     ajuste: { type: "boolean", default: false },
+    golden: { type: "string", default: "eval/golden.csv", description: "CSV de perguntas (F7.12: eval/golden_novas.csv, o grupo novo)" },
     limite: { type: "string" },
     somente: { type: "string", description: "ids separados por vírgula" },
     reavaliar: { type: "string", description: "nome de uma medida anterior: refaz só a verificação sobre os textos gravados" },
@@ -61,7 +62,7 @@ interface Caso {
 }
 const casos: Caso[] = values.ajuste
   ? (JSON.parse(readFileSync(new URL("eval/critico_ajuste.json", RAIZ), "utf-8")) as { casos: { id: string; pergunta: string; esperado: string }[] }).casos.map((c) => ({ ...c, paginas: "", tipo_gabarito: "", valor: "", unidade: "" }))
-  : lerCsv(readFileSync(new URL("eval/golden.csv", RAIZ), "utf-8")).map((c) => ({
+  : lerCsv(readFileSync(new URL(values.golden as string, RAIZ), "utf-8")).map((c) => ({
       id: c["id"] as string,
       pergunta: c["pergunta"] as string,
       esperado: c["tipo_gabarito"] === "recusa" ? "ausente" : "respondivel",
@@ -232,8 +233,8 @@ const respondiveis = linhas.filter((l) => l.esperado === "respondivel");
 const resumo = {
   nome,
   data: new Date().toISOString().slice(0, 10),
-  comando: `npm run avaliar:redator${values.ajuste ? " -- --ajuste" : ""}`,
-  conjunto: values.ajuste ? "ajuste" : "golden",
+  comando: `npm run avaliar:redator${values.ajuste ? " -- --ajuste" : ""}${values.golden !== "eval/golden.csv" ? ` -- --golden ${values.golden}${values.nome ? ` --nome ${values.nome}` : ""}` : ""}`,
+  conjunto: values.ajuste ? "ajuste" : values.golden === "eval/golden.csv" ? "golden" : (values.golden as string),
   perguntas: linhas.length,
   execucao: {
     sem_excecao: linhas.filter((l) => l.excecao === null).length,

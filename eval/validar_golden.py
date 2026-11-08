@@ -77,7 +77,7 @@ def paginas_da_linha(linha: dict) -> list[int]:
     return [int(p) for p in linha["paginas"].split("|") if p]
 
 
-def validar_estrutura(linhas: list[dict], paginas_recorte: set[int]) -> list[str]:
+def validar_estrutura(linhas: list[dict], paginas_recorte: set[int], conjunto_completo: bool = True) -> list[str]:
     erros: list[str] = []
     if linhas and list(linhas[0].keys()) != CAMPOS:
         erros.append(f"colunas diferentes do esperado: {list(linhas[0].keys())}")
@@ -85,10 +85,13 @@ def validar_estrutura(linhas: list[dict], paginas_recorte: set[int]) -> list[str
     if len(ids) != len(set(ids)):
         erros.append("ids repetidos")
     contagem = Counter(x["categoria"] for x in linhas)
-    if dict(contagem) != DISTRIBUICAO:
-        erros.append(f"distribuição {dict(contagem)} ≠ §13.1 {DISTRIBUICAO}")
-    if len(linhas) != 60:
-        erros.append(f"{len(linhas)} linhas, esperadas 60")
+    if conjunto_completo:  # o conjunto de 60 segue a §13.1; um conjunto novo (--novas) só confere o que for por linha
+        if dict(contagem) != DISTRIBUICAO:
+            erros.append(f"distribuição {dict(contagem)} ≠ §13.1 {DISTRIBUICAO}")
+        if len(linhas) != 60:
+            erros.append(f"{len(linhas)} linhas, esperadas 60")
+    elif not set(contagem) <= set(DISTRIBUICAO):
+        erros.append(f"categorias desconhecidas: {sorted(set(contagem) - set(DISTRIBUICAO))}")
     for x in linhas:
         i = x["id"]
         for c in ("pergunta", "gabarito", "tipo_gabarito", "rota_esperada", "no_recorte"):
@@ -161,11 +164,12 @@ def main() -> int:
     ap.add_argument("--csv", type=Path, default=CSV)
     ap.add_argument("--pdf", type=Path, default=PDF)
     ap.add_argument("--json", type=Path, help="grava o resultado por linha")
+    ap.add_argument("--novas", action="store_true", help="conjunto novo (F7.12): não exige as 60 linhas nem a distribuição da §13.1")
     a = ap.parse_args()
 
     linhas = ler_csv(a.csv)
     recorte = paginas_do_recorte()
-    erros = validar_estrutura(linhas, recorte)
+    erros = validar_estrutura(linhas, recorte, conjunto_completo=not a.novas)
     detalhe: list[dict] = []
     if a.pdf.exists():
         e2, detalhe = validar_contra_o_pdf(linhas, ler_pdf(a.pdf))

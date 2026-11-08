@@ -44,6 +44,7 @@ const INFRA = /^(falha na ferramenta|llm_nao_configurado|ferramenta_desconhecida
 const { values } = parseArgs({
   options: {
     nome: { type: "string", default: "f711-agente" },
+    golden: { type: "string", default: "eval/golden.csv", description: "CSV de perguntas (F7.12: eval/golden_novas.csv, o grupo novo); o baseline do Python só existe para o golden de 60" },
     swap: { type: "string", default: process.env["LLAMA_SWAP_URL"] ?? "http://127.0.0.1:8080" },
     limite: { type: "string", description: "só as N primeiras perguntas (teste rápido)" },
     somente: { type: "string", description: "ids separados por vírgula" },
@@ -58,7 +59,7 @@ const versao = values.v1 ? "v1" : values.complementar ? "v2" : "v3";
 const grafo = GrafoNeo4j.conectar();
 const llm = new ClienteLlm({ baseUrl: values.swap as string });
 const executor = criarExecutor({ grafo, llm });
-const golden = lerCsv(readFileSync(new URL("eval/golden.csv", RAIZ), "utf-8"))
+const golden = lerCsv(readFileSync(new URL(values.golden as string, RAIZ), "utf-8"))
   .filter((c) => !values.somente || values.somente.split(",").includes(c["id"] as string))
   .slice(0, values.limite ? Number(values.limite) : undefined);
 const rotas = new Map((JSON.parse(readFileSync(new URL("eval/golden_rotas.json", RAIZ), "utf-8")) as CasoRota[]).map((c) => [c.id, c]));
@@ -154,15 +155,17 @@ await grafo.fechar();
 
 const medidas = linhas.filter((l) => l.recall);
 const recallDoAgente = Object.fromEntries(KS.map((k) => [`@${k}`, media(medidas.map((l) => (l.recall as Record<number, number>)[k] as number))]));
-const recallPython = Object.fromEntries(KS.map((k) => [`@${k}`, python[`@${k}`]?.python ?? null]));
-const naoInferior = KS.every((k) => ((recallDoAgente[`@${k}`] as number | null) ?? 0) >= ((recallPython[`@${k}`] as number | null) ?? Infinity));
+const recallPython = Object.fromEntries(KS.map((k) => [`@${k}`, goldenPadrao ? (python[`@${k}`]?.python ?? null) : null]));
+const goldenPadrao = values.golden === "eval/golden.csv";
+const naoInferior = !goldenPadrao || KS.every((k) => ((recallDoAgente[`@${k}`] as number | null) ?? 0) >= ((recallPython[`@${k}`] as number | null) ?? Infinity));
 const tempos = (f: (l: Linha) => number) => ({ p50: mediana(linhas.map(f)), max: Math.max(0, ...linhas.map(f)) });
 const resumo = {
   nome: values.nome,
   data: new Date().toISOString().slice(0, 10),
-  comando: ["npm run avaliar:agente", ...(values.v1 || values.complementar || values.nome !== "f711-agente" ? ["--"] : []), ...(values.v1 ? ["--v1"] : []), ...(values.complementar ? ["--complementar"] : []), ...(values.nome !== "f711-agente" ? ["--nome", values.nome as string] : [])].join(" "),
+  comando: ["npm run avaliar:agente", ...(values.v1 || values.complementar || values.nome !== "f711-agente" || !goldenPadrao ? ["--"] : []), ...(values.v1 ? ["--v1"] : []), ...(values.complementar ? ["--complementar"] : []), ...(values.nome !== "f711-agente" ? ["--nome", values.nome as string] : []), ...(goldenPadrao ? [] : ["--golden", values.golden as string])].join(" "),
   versao,
   opcoes: { complementar: opcoesDoAgente.complementar ?? true, paginas_primeiro: opcoesDoAgente.paginasPrimeiro ?? true },
+  golden: values.golden,
   perguntas: linhas.length,
   execucao: {
     sem_excecao: linhas.filter((l) => l.excecao === null).length,
