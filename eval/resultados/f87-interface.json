@@ -1,0 +1,120 @@
+{
+  "perguntas": [
+    "T15",
+    "N01",
+    "G03",
+    "P01",
+    "F01"
+  ],
+  "seloAntes": "Sistema: no ar",
+  "seloDepois": "Sistema: no ar",
+  "itens": [
+    {
+      "pergunta": "T15",
+      "terminou": "pronta",
+      "ms": 14656,
+      "citacoes": 2,
+      "textoNaoVazio": true,
+      "dizNaoConsta": false,
+      "nota": 1,
+      "mensagemId": "05ee6117-1942-4260-936c-3ee53752d719",
+      "pedidos": 1,
+      "todos201": true,
+      "registrada": true
+    },
+    {
+      "pergunta": "N01",
+      "terminou": "pronta",
+      "ms": 8506,
+      "citacoes": 2,
+      "textoNaoVazio": true,
+      "dizNaoConsta": false,
+      "nota": 1,
+      "mensagemId": "1bc03158-6cf0-45cf-be97-dd4e98890a58",
+      "pedidos": 1,
+      "todos201": true,
+      "registrada": true
+    },
+    {
+      "pergunta": "G03",
+      "terminou": "pronta",
+      "ms": 48972,
+      "citacoes": 1,
+      "textoNaoVazio": true,
+      "dizNaoConsta": true,
+      "nota": 1,
+      "mensagemId": "ac098968-03a1-46d6-96aa-33810571c771",
+      "pedidos": 1,
+      "todos201": true,
+      "registrada": true
+    },
+    {
+      "pergunta": "P01",
+      "terminou": "pronta",
+      "ms": 27404,
+      "citacoes": 10,
+      "textoNaoVazio": true,
+      "dizNaoConsta": false,
+      "nota": 1,
+      "mensagemId": "064b8556-7173-44ac-a621-86ce74ffa29b",
+      "pedidos": 1,
+      "todos201": true,
+      "registrada": true
+    },
+    {
+      "pergunta": "F01",
+      "terminou": "pronta",
+      "ms": 3931,
+      "citacoes": 0,
+      "textoNaoVazio": true,
+      "dizNaoConsta": false,
+      "nota": -1,
+      "mensagemId": "8d1c8508-6623-45f4-a3f9-ba857a73ec7b",
+      "pedidos": 2,
+      "todos201": true,
+      "registrada": true
+    }
+  ],
+  "gravados": [
+    {
+      "pergunta": "T15",
+      "linhasNoArquivo": 1,
+      "notaOk": true,
+      "comentarioOk": true,
+      "ok": true
+    },
+    {
+      "pergunta": "N01",
+      "linhasNoArquivo": 1,
+      "notaOk": true,
+      "comentarioOk": true,
+      "ok": true
+    },
+    {
+      "pergunta": "G03",
+      "linhasNoArquivo": 1,
+      "notaOk": true,
+      "comentarioOk": true,
+      "ok": true
+    },
+    {
+      "pergunta": "P01",
+      "linhasNoArquivo": 1,
+      "notaOk": true,
+      "comentarioOk": true,
+      "ok": true
+    },
+    {
+      "pergunta": "F01",
+      "linhasNoArquivo": 2,
+      "notaOk": true,
+      "comentarioOk": true,
+      "ok": true
+    }
+  ],
+  "resumo": {
+    "cumpridas": "5 de 5",
+    "aceiteCumprido": true,
+    "linhasNoArquivo": 6
+  }
+}

@@ -1,6 +1,6 @@
 import { ChangeDetectionStrategy, Component, computed, ElementRef, afterRenderEffect, inject, signal, viewChild } from '@angular/core';
 import { Router, RouterLink, RouterLinkActive, RouterOutlet } from '@angular/router';
-import { ChatService, LIMITE_PERGUNTA } from '../../chat/chat.service';
+import { ChatService, LIMITE_COMENTARIO, LIMITE_PERGUNTA, type FeedbackMensagem } from '../../chat/chat.service';
 import type { Citacao } from '../../chat/chat-api';
 import { primeiraPagina } from '../../chat/rastro';
 import { ConfiguracoesService, rotuloDoModo, rotuloDoPerfil } from '../../configuracoes/configuracoes.service';
@@ -47,6 +47,26 @@ const milhar = (n: number) => String(n).replace(/\B(?=(\d{3})+(?!\d))/g, '.');
                 <app-resposta-markdown [texto]="m.texto" (abrirPagina)="abrirPagina($event, m.citacoes)" />
               } @else if (m.estado === 'transmitindo') {
                 <p class="espera">Gerando a resposta…</p>
+              }
+              @if (m.estado === 'pronta' && m.mensagemId) {
+                @let f = m.feedback;
+                <div class="feedback" role="group" aria-label="Avaliar a resposta">
+                  <div class="notas">
+                    <button type="button" class="nota" [attr.aria-pressed]="f?.nota === 1" [disabled]="f?.enviando ?? false" (click)="chat.avaliar(m.id, 1)">Resposta útil</button>
+                    <button type="button" class="nota" [attr.aria-pressed]="f?.nota === -1" [disabled]="f?.enviando ?? false" (click)="chat.avaliar(m.id, -1)">Resposta não útil</button>
+                    <span class="estado-nota" aria-live="polite">{{ textoDoFeedback(f) }}</span>
+                  </div>
+                  @if (f?.erro) {
+                    <p class="erro-nota" role="alert">{{ f?.erro }}</p>
+                  }
+                  @if (f && f.nota !== null) {
+                    <div class="comentario">
+                      <label [for]="'comentario-' + m.id">Comentário (opcional)</label>
+                      <textarea [id]="'comentario-' + m.id" rows="2" [maxLength]="limiteComentario" [value]="f.rascunho" (input)="aoEscreverComentario(m.id, $event)"></textarea>
+                      <button type="button" class="secundario" [disabled]="f.enviando || f.rascunho.trim() === ''" (click)="chat.comentar(m.id)">Enviar comentário</button>
+                    </div>
+                  }
+                </div>
               }
               @if (m.estado === 'erro' && m.erro) {
                 <div class="erro" role="alert">
@@ -221,6 +241,61 @@ const milhar = (n: number) => String(n).replace(/\B(?=(\d{3})+(?!\d))/g, '.');
       }
     }
 
+    .feedback {
+      display: grid;
+      gap: 0.4rem;
+      margin-top: 0.6rem;
+      padding-top: 0.5rem;
+      border-top: 1px solid var(--borda);
+      font-size: 0.9rem;
+    }
+
+    .notas {
+      display: flex;
+      flex-wrap: wrap;
+      align-items: center;
+      gap: 0.4rem;
+    }
+
+    .nota {
+      padding: 0.25rem 0.7rem;
+      color: var(--destaque);
+      background: transparent;
+
+      &[aria-pressed='true'] {
+        color: var(--superficie);
+        background: var(--destaque);
+      }
+    }
+
+    .estado-nota {
+      color: var(--texto-suave);
+      font-size: 0.85rem;
+    }
+
+    .erro-nota {
+      margin: 0;
+      color: #b3261e;
+    }
+
+    .comentario {
+      display: grid;
+      gap: 0.3rem;
+      justify-items: start;
+
+      textarea {
+        width: 100%;
+        box-sizing: border-box;
+        resize: vertical;
+        padding: 0.4rem 0.6rem;
+        font: inherit;
+        color: inherit;
+        background: var(--superficie);
+        border: 1px solid var(--borda);
+        border-radius: var(--raio);
+      }
+    }
+
     .envio {
       display: grid;
       gap: 0.5rem;
@@ -314,6 +389,19 @@ export class ChatPage {
   protected readonly rotuloPerfil = computed(() => rotuloDoPerfil(this.config.perfil()));
 
   protected readonly limite = LIMITE_PERGUNTA;
+  protected readonly limiteComentario = LIMITE_COMENTARIO;
+
+  protected aoEscreverComentario(id: number, e: Event): void {
+    this.chat.editarComentario(id, (e.target as HTMLTextAreaElement).value);
+  }
+
+  protected textoDoFeedback(f: FeedbackMensagem | undefined): string {
+    if (!f) return '';
+    if (f.enviando) return 'Enviando…';
+    if (f.erro) return '';
+    if (f.ultimo === 'comentario') return 'Comentário registrado.';
+    return f.ultimo === 'nota' ? 'Nota registrada.' : '';
+  }
   protected readonly rascunho = signal('');
   private readonly caixa = viewChild.required<ElementRef<HTMLTextAreaElement>>('caixa');
   private readonly lista = viewChild.required<ElementRef<HTMLElement>>('lista');

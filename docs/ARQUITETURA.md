@@ -750,7 +750,8 @@ Cada requisição vira **uma linha JSON** em `data/logs/telemetria/AAAA-MM-DD.js
 | `SourceViewerComponent` | pdf.js na página citada, com o trecho destacado |
 | `GraphViewComponent` | Subgrafo usado na resposta (NVL ou Cytoscape.js), clique para expandir vizinhança |
 | `SettingsComponent` | Perfil (padrão/rápido) e modo de recuperação (auto, trechos, tabelas, local, global, Cypher) |
-| `HealthBadgeComponent` | Modelos carregados, Neo4j no ar, índices online |
+| `HealthBadgeComponent` (`SeloSaude`) | Selo "Sistema: no ar / degradado / fora do ar" no topo de todas as páginas (consulta `GET /api/saude` ao abrir, a cada 30 s e sob demanda); o painel diz o estado do llama-swap, do Neo4j, dos índices e dos modelos na memória. Só informa: não bloqueia o chat (F8.7) |
+| Feedback por resposta | "Resposta útil" / "Resposta não útil" em cada resposta pronta (`POST /api/feedback` com o `mensagemId` do `fim`) e um comentário opcional (F8.7) |
 
 **Regras de UX:** mostrar a rota escolhida antes da resposta; números com `Intl.NumberFormat('pt-BR')`, moeda e escala explícitas; "não consta no documento" com destaque neutro, nunca como erro; cada afirmação numérica clicável até a página.
 

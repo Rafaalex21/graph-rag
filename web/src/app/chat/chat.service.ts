@@ -5,6 +5,7 @@
  */
 import { inject, Injectable, InjectionToken, signal } from '@angular/core';
 import { ConfiguracoesService, MODO_PADRAO, PERFIL_PADRAO } from '../configuracoes/configuracoes.service';
+import { enviarFeedback, MENSAGEM_FEEDBACK } from './feedback-api';
 import { conversar, ErroDaApi, type Citacao, type EventoChat, type MetricasDoFim, type Turno } from './chat-api';
 
 /** O `fetch` do chat; os testes trocam por um falso. */
@@ -26,6 +27,20 @@ export interface Tempos {
   fimMs: number | null;
 }
 
+/** A avaliação de uma resposta (F8.7): a nota já registrada, o envio em curso e o comentário opcional. */
+export interface FeedbackMensagem {
+  /** A nota que a API confirmou; `null` enquanto nenhuma foi registrada. */
+  nota: 1 | -1 | null;
+  enviando: boolean;
+  erro: string | null;
+  /** O que foi confirmado por último, para dizer "Nota registrada." ou "Comentário registrado.". */
+  ultimo: 'nota' | 'comentario' | null;
+  rascunho: string;
+}
+
+export const LIMITE_COMENTARIO = 1000;
+const SEM_FEEDBACK: FeedbackMensagem = { nota: null, enviando: false, erro: null, ultimo: null, rascunho: '' };
+
 export interface Mensagem {
   id: number;
   papel: 'usuario' | 'assistente';
@@ -38,6 +53,7 @@ export interface Mensagem {
   /** Etapas, Cypher, evidências e o `fim`, na ordem em que chegaram (para o Rastro da F8.3). */
   eventos: EventoChat[];
   tempos: Tempos;
+  feedback?: FeedbackMensagem;
 }
 
 const SEM_TEMPOS: Tempos = { primeiroEventoMs: null, primeiroTokenMs: null, fimMs: null };
@@ -86,6 +102,48 @@ export class ChatService {
     const resposta = this.respostaVazia();
     this.mensagens.set([...l.slice(0, -1), resposta]);
     await this.executar(pergunta.texto, historico, resposta.id);
+  }
+
+  /** Registra a nota (1 ou -1) de uma resposta pronta. Não faz nada se a nota já está registrada ou se há um envio em curso. */
+  async avaliar(idMensagem: number, nota: 1 | -1): Promise<void> {
+    const m = this.mensagens().find((x) => x.id === idMensagem);
+    if (m?.papel !== 'assistente' || m.estado !== 'pronta' || !m.mensagemId) return;
+    const atual = m.feedback ?? SEM_FEEDBACK;
+    if (atual.enviando || atual.nota === nota) return;
+    const mensagemId = m.mensagemId;
+    this.alterarFeedback(idMensagem, (f) => ({ ...f, enviando: true, erro: null }));
+    try {
+      await enviarFeedback({ mensagemId, nota }, { fetch: this.buscar });
+      // uma nota nova começa um registro novo: o comentário e o rascunho de antes não valem para ela
+      this.alterarFeedback(idMensagem, () => ({ nota, enviando: false, erro: null, ultimo: 'nota', rascunho: '' }));
+    } catch (e) {
+      this.alterarFeedback(idMensagem, (f) => ({ ...f, enviando: false, erro: e instanceof Error ? e.message : MENSAGEM_FEEDBACK }));
+    }
+  }
+
+  /** O que o usuário está digitando no comentário opcional de uma resposta. */
+  editarComentario(idMensagem: number, texto: string): void {
+    this.alterarFeedback(idMensagem, (f) => ({ ...f, rascunho: texto.slice(0, LIMITE_COMENTARIO) }));
+  }
+
+  /** Manda o comentário junto com a nota já registrada (o registro é um arquivo de linhas: a última linha vale). */
+  async comentar(idMensagem: number): Promise<void> {
+    const m = this.mensagens().find((x) => x.id === idMensagem);
+    const f = m?.feedback;
+    if (!m?.mensagemId || !f || f.nota === null || f.enviando || f.rascunho.trim() === '') return;
+    const mensagemId = m.mensagemId;
+    const { nota, rascunho } = f;
+    this.alterarFeedback(idMensagem, (x) => ({ ...x, enviando: true, erro: null }));
+    try {
+      await enviarFeedback({ mensagemId, nota, comentario: rascunho.trim() }, { fetch: this.buscar });
+      this.alterarFeedback(idMensagem, (x) => ({ ...x, enviando: false, ultimo: 'comentario' }));
+    } catch (e) {
+      this.alterarFeedback(idMensagem, (x) => ({ ...x, enviando: false, erro: e instanceof Error ? e.message : MENSAGEM_FEEDBACK }));
+    }
+  }
+
+  private alterarFeedback(id: number, f: (atual: FeedbackMensagem) => FeedbackMensagem): void {
+    this.mensagens.update((l) => l.map((m) => (m.id === id ? { ...m, feedback: f(m.feedback ?? SEM_FEEDBACK) } : m)));
   }
 
   /** Para a resposta em andamento; o texto que já chegou fica na tela. */

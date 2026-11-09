@@ -41,6 +41,25 @@ const FIM = (resposta: string, extra: Record<string, unknown> = {}) => ({
 const quadro = (evento: string, dados: unknown) => `event: ${evento}\ndata: ${JSON.stringify(dados)}\n\n`;
 const dormir = (ms: number) => new Promise<void>((r) => setTimeout(r, ms));
 
+/** O `GET /api/saude` com tudo no ar (o mesmo formato do contrato); os testes trocam por `page.route` para simular falhas. */
+const SAUDE_OK = {
+  status: "ok",
+  servico: "graphrag-api",
+  versao: "0.1.0",
+  llm: { estado: "ok", ms: 16 },
+  modelos: [
+    { nome: "qwen36-35b-a3b", carregado: true },
+    { nome: "qwen3-embed-0.6b", carregado: false },
+    { nome: "qwen3-rerank-0.6b", carregado: false },
+  ],
+  neo4j: { estado: "ok", ms: 120 },
+  indices: [
+    { nome: "child_ft", estado: "ONLINE" },
+    { nome: "entity_vec", estado: "ONLINE" },
+    { nome: "fact_id", estado: "ONLINE" },
+  ],
+};
+
 function json(res: ServerResponse, status: number, corpo: unknown): void {
   res.writeHead(status, { "content-type": "application/json" });
   res.end(JSON.stringify(corpo));
@@ -284,7 +303,23 @@ const servidor = createServer((req, res) => {
     const f = FONTES[decodeURIComponent(fonte[1] as string)];
     return f ? json(res, 200, f) : json(res, 404, { codigo: "nao_encontrado", mensagem: "Nenhum item do grafo com esse id." });
   }
-  if (url.pathname === "/api/saude") return json(res, 200, { estado: "ok" });
+  if (url.pathname === "/api/saude") return json(res, 200, SAUDE_OK);
+  if (url.pathname === "/api/feedback" && req.method === "POST") {
+    lerCorpo(req)
+      .then((bruto) => {
+        let c: Record<string, unknown> = {};
+        try {
+          c = JSON.parse(bruto) as Record<string, unknown>;
+        } catch {
+          /* corpo inválido: cai no 400 */
+        }
+        const valido = typeof c["mensagemId"] === "string" && c["mensagemId"] !== "" && (c["nota"] === 1 || c["nota"] === -1) && (c["comentario"] === undefined || (typeof c["comentario"] === "string" && c["comentario"].length <= 1000));
+        if (!valido) return json(res, 400, { codigo: "requisicao_invalida", mensagem: "Mande mensagemId, nota (1 ou -1) e, se quiser, comentario (até 1.000 caracteres)." });
+        json(res, 201, { registrado: true });
+      })
+      .catch(() => res.destroy());
+    return;
+  }
   json(res, 404, { codigo: "nao_encontrado", mensagem: "Rota inexistente." });
 });
 

@@ -39,6 +39,20 @@ export class PaginaChat {
     await expect(this.estado).toHaveText(/Resposta pronta\./, { timeout: 20_000 });
   }
 
+  /** O grupo de botões "Resposta útil" / "Resposta não útil" da resposta de posição `indice` (0 = a primeira). */
+  avaliacao(indice = 0): Locator {
+    return this.respostas.nth(indice).getByRole("group", { name: "Avaliar a resposta" });
+  }
+
+  /** Anota o corpo de cada pedido ao /api/feedback que o navegador fizer daqui em diante. */
+  gravarFeedbacks(): Record<string, unknown>[] {
+    const corpos: Record<string, unknown>[] = [];
+    this.page.on("request", (r) => {
+      if (r.url().endsWith("/api/feedback") && r.method() === "POST") corpos.push(r.postDataJSON() as Record<string, unknown>);
+    });
+    return corpos;
+  }
+
   /** Anota o corpo de cada pedido ao /api/chat que o navegador fizer daqui em diante. */
   gravarPedidos(): Record<string, unknown>[] {
     const corpos: Record<string, unknown>[] = [];
