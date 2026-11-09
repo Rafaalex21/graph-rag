@@ -23,7 +23,9 @@
     "avaliar:redator": "node src/avaliacao/cli-redator.ts",
     "avaliar:rapido": "node src/avaliacao/cli-rapido.ts",
     "avaliar:api": "node test/http/medir-api.ts",
+    "avaliar:telemetria": "node test/http/medir-telemetria.ts",
     "relatorio:telemetria": "node src/telemetria/cli-relatorio.ts",
+    "telemetria:diaria": "node src/telemetria/cli-diaria.ts",
     "test": "vitest run"
   },
   "dependencies": {

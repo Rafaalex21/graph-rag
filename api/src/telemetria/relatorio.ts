@@ -27,8 +27,30 @@ export interface RelatorioDoDia {
     redator: { com_reparo: number; cortadas: number; modelo_fixo: number; fallbacks: Record<string, number> };
   };
   http: { rota: string; total: number; status: Record<string, number>; ms: Resumo }[];
-  feedback: { positivas: number; negativas: number; invalidas: number } | null;
+  feedback: { positivas: number; negativas: number; invalidas: number; notas: NotaLigada[] } | null;
 }
+
+/** Uma nota do dia ligada ao registro da pergunta (pelo `mensagemId`, igual ao `id` do registro `chat`). */
+export interface NotaLigada {
+  ts: string;
+  mensagemId: string;
+  nota: 1 | -1;
+  /** Texto livre do usuário, numa linha só e cortado em 200 caracteres. */
+  comentario?: string;
+  /** `null` quando nenhum registro `chat` dos logs lidos tem esse id. */
+  registro: {
+    ts: string;
+    resultado: RegistroChat["resultado"];
+    codigo: string | null;
+    estado: RegistroChat["estado"];
+    rodadas: number;
+    ferramentas: string[];
+    total_ms: number;
+    pergunta: RegistroChat["pergunta"];
+  } | null;
+}
+
+const MAX_COMENTARIO = 200;
 
 /** Nearest-rank: o menor valor tal que `p` dos valores são menores ou iguais a ele. Lista vazia: `null`. */
 export function percentil(valores: readonly number[], p: number): number | null {
@@ -62,14 +84,15 @@ export function lerRegistros(texto: string): { registros: Registro[]; invalidas:
   return { registros, invalidas };
 }
 
-function resumoDoFeedback(texto: string, dia: string): { positivas: number; negativas: number; invalidas: number } {
+function resumoDoFeedback(texto: string, dia: string, perguntas: ReadonlyMap<string, RegistroChat>): NonNullable<RelatorioDoDia["feedback"]> {
   let positivas = 0;
   let negativas = 0;
   let invalidas = 0;
+  const notas: NotaLigada[] = [];
   for (const linha of texto.split(/\r?\n/)) {
     if (linha.trim() === "") continue;
     try {
-      const f = JSON.parse(linha) as { ts?: unknown; mensagemId?: unknown; nota?: unknown };
+      const f = JSON.parse(linha) as { ts?: unknown; mensagemId?: unknown; nota?: unknown; comentario?: unknown };
       if (typeof f.ts !== "string" || typeof f.mensagemId !== "string" || (f.nota !== 1 && f.nota !== -1) || Number.isNaN(new Date(f.ts).getTime())) {
         invalidas++;
         continue;
@@ -77,11 +100,27 @@ function resumoDoFeedback(texto: string, dia: string): { positivas: number; nega
       if (diaLocal(f.ts) !== dia) continue;
       if (f.nota === 1) positivas++;
       else negativas++;
+      const c = perguntas.get(f.mensagemId);
+      const comentario = typeof f.comentario === "string" && f.comentario.trim() !== "" ? f.comentario.replace(/\s+/g, " ").trim().slice(0, MAX_COMENTARIO) : undefined;
+      notas.push({
+        ts: f.ts,
+        mensagemId: f.mensagemId,
+        nota: f.nota,
+        ...(comentario === undefined ? {} : { comentario }),
+        registro: c
+          ? { ts: c.ts, resultado: c.resultado, codigo: c.codigo, estado: c.estado, rodadas: c.rodadas, ferramentas: c.ferramentas.map((x) => x.nome), total_ms: c.latencia_ms.total, pergunta: c.pergunta }
+          : null,
+      });
     } catch {
       invalidas++;
     }
   }
-  return { positivas, negativas, invalidas };
+  return { positivas, negativas, invalidas, notas };
+}
+
+/** Os registros `chat` por id (o `mensagemId` do `fim`); um registro `http` nunca liga. */
+function perguntasPorId(registros: readonly Registro[]): Map<string, RegistroChat> {
+  return new Map(registros.flatMap((r) => (r.tipo === "chat" ? [[r.id, r] as const] : [])));
 }
 
 export interface OpcoesRelatorio {
@@ -89,6 +128,8 @@ export interface OpcoesRelatorio {
   linhasInvalidas?: number;
   /** O texto de `feedback.jsonl`, se houver. */
   feedback?: string;
+  /** Registros de outro dia, só para ligar as notas (pergunta de ontem, nota de hoje); não entram nas contagens. */
+  registrosAnteriores?: readonly Registro[];
 }
 
 export function gerarRelatorio(registros: readonly Registro[], opcoes: OpcoesRelatorio): RelatorioDoDia {
@@ -137,7 +178,7 @@ export function gerarRelatorio(registros: readonly Registro[], opcoes: OpcoesRel
     http: [...porRota.entries()]
       .map(([rota, itens]) => ({ rota, total: itens.length, status: contar(itens.map((i) => String(i.status))), ms: resumo(itens.map((i) => i.ms)) }))
       .sort((a, b) => b.total - a.total || a.rota.localeCompare(b.rota)),
-    feedback: opcoes.feedback === undefined ? null : resumoDoFeedback(opcoes.feedback, opcoes.dia),
+    feedback: opcoes.feedback === undefined ? null : resumoDoFeedback(opcoes.feedback, opcoes.dia, perguntasPorId([...(opcoes.registrosAnteriores ?? []), ...registros])),
   };
 }
 
@@ -148,6 +189,9 @@ const val = (n: number | null) => (n === null ? "—" : num(n));
 const pct = (x: number) => `${(x * 100).toLocaleString("pt-BR", { maximumFractionDigits: 1 })}%`;
 const linhaResumo = (nome: string, r: Resumo) => `| ${nome} | ${num(r.n)} | ${val(r.p50)} | ${val(r.p95)} | ${val(r.max)} |`;
 const lista = (c: Record<string, number>) => Object.entries(c).sort((a, b) => b[1] - a[1] || a[0].localeCompare(b[0])).map(([k, v]) => `${k} ${num(v)}`).join(", ") || "—";
+
+/** Texto livre numa célula de tabela: uma linha só e a barra vertical escapada. */
+const celula = (t: string) => t.replace(/\s+/g, " ").trim().replace(/\|/g, "\\|");
 
 export function paraMarkdown(r: RelatorioDoDia): string {
   const s: string[] = [`# Telemetria de ${r.dia}`, ""];
@@ -190,7 +234,20 @@ export function paraMarkdown(r: RelatorioDoDia): string {
       s.push("");
     }
   }
-  if (r.feedback) s.push("## Notas", "", `- Positivas: ${num(r.feedback.positivas)}; negativas: ${num(r.feedback.negativas)}${r.feedback.invalidas > 0 ? `; linhas de feedback inválidas: ${num(r.feedback.invalidas)}` : ""}`, "");
+  if (r.feedback) {
+    const f = r.feedback;
+    s.push("## Notas", "", `- Positivas: ${num(f.positivas)}; negativas: ${num(f.negativas)}${f.invalidas > 0 ? `; linhas de feedback inválidas: ${num(f.invalidas)}` : ""}`, "");
+    if (f.notas.length > 0) {
+      s.push("| Nota | Hora (UTC) | Mensagem | Pergunta | Estado | Ferramentas | Tempo (s) | Comentário |", "|---|---|---|---|---|---|---|---|");
+      for (const n of f.notas) {
+        const g = n.registro;
+        const pergunta = g ? (g.pergunta.texto !== undefined ? celula(g.pergunta.texto) : `#${g.pergunta.hash} (${num(g.pergunta.caracteres)} caracteres)`) : "sem registro";
+        const estado = g ? (g.resultado === "fim" ? (g.estado ?? "—") : `${g.resultado}${g.codigo ? ` (${g.codigo})` : ""}`) : "—";
+        s.push(`| ${n.nota === 1 ? "+1" : "−1"} | ${n.ts.slice(11, 16)} | \`${n.mensagemId}\` | ${pergunta} | ${estado} | ${g ? celula(g.ferramentas.join(", ") || "—") : "—"} | ${g ? num(g.total_ms / 1000) : "—"} | ${n.comentario === undefined ? "—" : celula(n.comentario)} |`);
+      }
+      s.push("");
+    }
+  }
   if (r.linhas_invalidas > 0) s.push(`> ${num(r.linhas_invalidas)} linha(s) do log ignorada(s) por não conferirem com o esquema.`, "");
   return `${s.join("\n").trimEnd()}\n`;
 }

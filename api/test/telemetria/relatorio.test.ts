@@ -12,6 +12,15 @@
  *  6. rotas `http` agrupadas pelo padrão (`/api/fonte/:id`), nunca pelo id, e códigos de status contados;
  *  7. as notas do feedback (+1/-1) entram na contagem do dia, e linha de feedback ruim é ignorada;
  *  8. o Markdown tem os números do JSON (não é um segundo cálculo) e sai igual para a mesma entrada.
+ *
+ * Notas ligadas às perguntas (F7.14). Modos de falha:
+ *  9. a nota é ligada ao registro de `chat` de mesmo `id` (= `mensagemId`), com estado, ferramentas, tempo e a impressão
+ *     digital da pergunta; nota sem registro aparece como tal, não some nem derruba o relatório;
+ * 10. a pergunta é do dia anterior e a nota do dia seguinte: o registro do dia anterior (`registrosAnteriores`) também liga;
+ * 11. duas notas para a mesma mensagem aparecem as duas; uma nota para uma pergunta recusada/com erro aparece com o resultado;
+ * 12. o comentário (texto livre, com `|`, quebra de linha e aspas) não quebra a tabela do Markdown e vem cortado;
+ * 13. o texto da pergunta só aparece se estava no registro (`TELEMETRIA_TEXTO=1`); o relatório não o inventa;
+ * 14. um `id` de registro `http` igual ao `mensagemId` não liga (só `chat` tem pergunta).
  */
 import { describe, expect, it } from "vitest";
 import { gerarRelatorio, lerRegistros, paraMarkdown, percentil } from "../../src/telemetria/relatorio.ts";
@@ -159,7 +168,8 @@ describe("gerarRelatorio", () => {
 
   it("feedback: conta positivas e negativas e ignora linha ruim", () => {
     const r = gerarRelatorio([], { dia: "2026-11-07", feedback: jsonl({ ts: "2026-11-07T10:00:00.000Z", mensagemId: "a", nota: 1 }, { ts: "2026-11-07T11:00:00.000Z", mensagemId: "b", nota: -1 }, { ts: "2026-11-07T12:00:00.000Z", mensagemId: "c", nota: -1 }, "quebrada", { mensagemId: "d", nota: 7 }, { ts: "2026-11-06T12:00:00.000Z", mensagemId: "e", nota: 1 }) });
-    expect(r.feedback).toEqual({ positivas: 1, negativas: 2, invalidas: 2 });
+    expect(r.feedback).toMatchObject({ positivas: 1, negativas: 2, invalidas: 2 });
+    expect(r.feedback?.notas.map((n) => n.mensagemId)).toEqual(["a", "b", "c"]);
   });
 
   it("repassa as linhas inválidas do log para o relatório", () => {
@@ -179,5 +189,88 @@ describe("paraMarkdown", () => {
     expect(md).toContain("llm_indisponivel");
     expect(md).toContain("10.000"); // latência total (p50) em ms, com separador de milhar
     expect(md).not.toMatch(/NaN|undefined|null/);
+  });
+});
+
+// ---------- 9 a 14: notas ligadas às perguntas (F7.14) ----------
+
+describe("notas ligadas às perguntas", () => {
+  const nota = (mensagemId: string, n: 1 | -1, extra: Record<string, unknown> = {}, ts = "2026-11-07T16:00:00.000Z") => ({ ts, mensagemId, nota: n, ...extra });
+  const pergunta = chat({
+    id: "m1",
+    estado: "incompleta",
+    rodadas: 2,
+    ferramentas: [
+      { nome: "fato_financeiro", chamadas: 1, erros: 0, evidencias: 1, ms: 300 },
+      { nome: "buscar_trechos", chamadas: 2, erros: 0, evidencias: 8, ms: 900 },
+    ],
+    pergunta: { caracteres: 42, hash: "abcdef0123456789" },
+    latencia_ms: { total: 21_500, primeiro_evento: 3, primeiro_token: 9_000, atualizar: 1, rotear: 1, executar: 1, criticar: 1, redator: 1 },
+  });
+
+  it("liga a nota ao registro de mesmo id, com estado, ferramentas, tempo e impressão digital", () => {
+    const r = gerarRelatorio([pergunta], { dia: "2026-11-07", feedback: jsonl(nota("m1", -1, { comentario: "faltou o número" })) });
+    expect(r.feedback?.notas).toHaveLength(1);
+    expect(r.feedback?.notas[0]).toMatchObject({
+      mensagemId: "m1",
+      nota: -1,
+      comentario: "faltou o número",
+      registro: { resultado: "fim", estado: "incompleta", rodadas: 2, ferramentas: ["fato_financeiro", "buscar_trechos"], total_ms: 21_500, pergunta: { caracteres: 42, hash: "abcdef0123456789" } },
+    });
+  });
+
+  it("nota sem registro: aparece com registro nulo, sem derrubar nada", () => {
+    const r = gerarRelatorio([pergunta], { dia: "2026-11-07", feedback: jsonl(nota("fantasma", 1)) });
+    expect(r.feedback?.notas[0]).toMatchObject({ mensagemId: "fantasma", registro: null });
+    const md = paraMarkdown(r);
+    expect(md).toContain("fantasma");
+    expect(md).toContain("sem registro");
+    expect(md).not.toMatch(/NaN|undefined|null/);
+  });
+
+  it("a pergunta de ontem recebe a nota de hoje, pelos registros anteriores", () => {
+    const ontem = chat({ id: "velha", ts: "2026-11-06T22:00:00.000Z" });
+    const r = gerarRelatorio([], { dia: "2026-11-07", registrosAnteriores: [ontem], feedback: jsonl(nota("velha", 1)) });
+    expect(r.feedback?.notas[0]?.registro).toMatchObject({ resultado: "fim" });
+    // os registros anteriores só servem para ligar: não entram nas contagens do dia
+    expect(r.chat.total).toBe(0);
+  });
+
+  it("duas notas para a mesma mensagem aparecem as duas, na ordem do arquivo", () => {
+    const r = gerarRelatorio([pergunta], { dia: "2026-11-07", feedback: jsonl(nota("m1", 1), nota("m1", -1, {}, "2026-11-07T17:00:00.000Z")) });
+    expect(r.feedback?.notas.map((n) => n.nota)).toEqual([1, -1]);
+    expect(r.feedback).toMatchObject({ positivas: 1, negativas: 1 });
+  });
+
+  it("nota de pergunta recusada ou com erro mostra o resultado", () => {
+    const r = gerarRelatorio([chat({ id: "e1", resultado: "erro", codigo: "llm_timeout", estado: null, ferramentas: [] })], { dia: "2026-11-07", feedback: jsonl(nota("e1", -1)) });
+    expect(r.feedback?.notas[0]?.registro).toMatchObject({ resultado: "erro", codigo: "llm_timeout", estado: null, ferramentas: [] });
+  });
+
+  it("comentário com |, quebra de linha e aspas não quebra a tabela e vem cortado em 200 caracteres", () => {
+    const longo = `a | b\nlinha "dois" ${"x".repeat(400)}`;
+    const r = gerarRelatorio([pergunta], { dia: "2026-11-07", feedback: jsonl(nota("m1", -1, { comentario: longo })) });
+    const md = paraMarkdown(r);
+    const linhas = md.split("\n").filter((l) => l.includes("abcdef0123456789"));
+    expect(linhas).toHaveLength(1); // uma só linha de tabela: a quebra de linha do comentário não a parte
+    expect(linhas[0]).toContain("a \\| b linha");
+    expect((r.feedback?.notas[0]?.comentario ?? "").length).toBeLessThanOrEqual(200);
+  });
+
+  it("o texto da pergunta só aparece quando o registro o guardou", () => {
+    const comTexto = chat({ id: "t1", pergunta: { caracteres: 20, hash: "1111111111111111", texto: "Qual o lucro de 2025?" } });
+    const r = gerarRelatorio([comTexto, pergunta], { dia: "2026-11-07", feedback: jsonl(nota("t1", 1), nota("m1", 1)) });
+    const md = paraMarkdown(r);
+    expect(md).toContain("Qual o lucro de 2025?");
+    expect(r.feedback?.notas[1]?.registro?.pergunta).not.toHaveProperty("texto");
+  });
+
+  it("registro http com o mesmo id não liga", () => {
+    const r = gerarRelatorio([http({ id: "m9" })], { dia: "2026-11-07", feedback: jsonl(nota("m9", 1)) });
+    expect(r.feedback?.notas[0]?.registro).toBeNull();
+  });
+
+  it("sem feedback.jsonl o relatório segue sem a seção de notas", () => {
+    expect(gerarRelatorio([pergunta], { dia: "2026-11-07" }).feedback).toBeNull();
   });
 });
