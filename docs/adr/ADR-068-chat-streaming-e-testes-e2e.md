@@ -1,6 +1,6 @@
-# ADR-068 · Chat com streaming SSE na tela, e a troca dos testes unitários por testes E2E (o primeiro token leva 8,5 a 82,5 s, não 5 s)
+# ADR-068 · Chat com streaming SSE na tela, e a troca dos testes unitários por testes E2E (o primeiro token leva 8,5 a 82,5 s, não 5 s; aceite reescrito pós-hoc)
 
-- **Estado:** aceita (09/11/2026), com o aceite da F8.2 **não cumprido** (a tarefa fica `[~]`)
+- **Estado:** aceita (09/11/2026). O aceite original da F8.2 (≤ 5 s até o primeiro token) **não foi cumprido**; o dono do projeto o reescreveu pós-hoc e a tarefa ficou `[x]`
 - **Data:** 2026-11-09
 - **Tarefa(s):** F8.2
 
@@ -57,3 +57,5 @@ No meio da tarefa o dono do projeto decidiu abandonar os testes unitários ("só
 **0 de 5 dentro de 5 s** (mediana 53,4 s, máximo 82,5 s). A tela mostra sinal de vida em até 4 ms e, depois do primeiro token, a resposta termina em 0,9 a 4,6 s, em 30 a 152 estados intermediários (o streaming funciona de ponta a ponta pelo proxy). O atraso está antes do primeiro token: o redator só escreve depois do ciclo de busca, e o ciclo fez duas rodadas em 4 das 5 perguntas (telemetria). Esses tempos são bem piores que os 19,8 s de mediana da F7.13; não investiguei a diferença (a pilha acabara de subir, a máquina estava com o navegador e o `ng serve` rodando junto). A primeira execução do teste estourou só o tempo total do teste (240 s, erro meu na configuração), foi descartada e refeita com o limite corrigido; a regra de aceite e o limite de 5 s não mudaram.
 
 Reproduzir: subir Neo4j (`infra\neo4j.ps1 iniciar`), llama-swap (`infra\swap.ps1`) e a API (`cd api; npm run build; npm start`), e `cd e2e; npm run test:ao-vivo`.
+
+**Aceite reescrito (pós-hoc, decisão do dono em 09/11/2026).** Novo texto: "a tela mostra sinal de vida em ≤ 1 s e o texto aparece em pedaços, com a resposta terminando em ≤ 5 s depois do primeiro token, em 5 perguntas simples do golden". Sobre as mesmas medidas acima: sinal de vida 5 de 5 (máx. 4 ms), pedaços 5 de 5 (30 a 152 estados distintos), fim em ≤ 5 s depois do primeiro token 5 de 5 (0,9 a 4,6 s). Os limites novos foram escolhidos depois de ver esses números, nas mesmas perguntas: o resultado original (0 de 5) fica como medido, e o RNF-2 (1º token ≤ 5 s) segue não cumprido, agora como dívida do pipeline (redator que escreva antes de a busca acabar, ou menos rodadas do crítico). O teste `tests/ao-vivo/primeiro-token.spec.ts` passou a checar o critério novo e continua gravando o resultado original (`dentroDoLimite`) no JSON; não foi rodado de novo depois dessa troca (o JSON versionado é o da medida original).

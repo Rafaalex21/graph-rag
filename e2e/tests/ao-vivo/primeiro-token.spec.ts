@@ -2,7 +2,7 @@
  * F8.2, aceite: "tokens aparecem em ≤ 5 s numa pergunta simples". A medida segue `eval/f82-medida-primeiro-token.md`, fixada
  * ANTES de rodar: T15 só esquenta os modelos; T01 a T05 contam, uma vez cada, numa conversa nova; o primeiro token na tela é
  * o primeiro instante em que a bolha da resposta tem texto visível, visto por um MutationObserver, a partir do Enter.
- * O aceite só vale se as 5 de 5 ficarem em ≤ 5 s. Os tempos saem em `eval/resultados/f82-primeiro-token.json` (só ids e números).
+ * O aceite original (5 de 5 com o primeiro token em ≤ 5 s) não foi cumprido; o aceite vigente é o reescrito abaixo. Os tempos saem em `eval/resultados/f82-primeiro-token.json` (só ids e números).
  */
 import { mkdirSync, writeFileSync } from "node:fs";
 import { expect, test } from "@playwright/test";
@@ -62,7 +62,7 @@ async function medir(chat: PaginaChat, id: string): Promise<Medida> {
   return { id, primeiroSinalMs: m.sinal, primeiroTokenMs: m.token, fimMs: m.fim, textosDistintosAntesDoFim: Math.max(0, m.textos.length - 1), estadoFinal: m.estado };
 }
 
-test("T01 a T05: o primeiro token aparece na tela em até 5 s (aceite da F8.2)", async ({ page }) => {
+test("T01 a T05: sinal de vida na hora, texto em pedaços e fim em até 5 s do primeiro token (aceite reescrito da F8.2)", async ({ page }) => {
   test.setTimeout(1_200_000); // 6 perguntas em sequência, cada uma até ~2 min no pior caso
   const chat = new PaginaChat(page);
   await medir(chat, "T15"); // esquenta os modelos; não conta
@@ -83,8 +83,14 @@ test("T01 a T05: o primeiro token aparece na tela em até 5 s (aceite da F8.2)",
   writeFileSync(ALVO, `${JSON.stringify(resumo, null, 2)}\n`);
   console.log(JSON.stringify(resumo));
 
-  // a tela mostra sinal de vida na hora (o aviso da API chega em ~33 ms); o que está em jogo é o token
-  for (const m of medidas) expect(m.primeiroSinalMs, `${m.id}: sinal de vida`).toBeLessThanOrEqual(1000);
-  for (const m of medidas) expect(m.primeiroTokenMs, `${m.id}: primeiro token na tela (ms)`).not.toBeNull();
-  for (const m of medidas) expect(m.primeiroTokenMs as number, `${m.id}: primeiro token na tela (ms)`).toBeLessThanOrEqual(LIMITE_MS);
+  // Aceite REESCRITO pós-hoc pelo dono (09/11/2026): sinal de vida em ≤ 1 s, texto em pedaços e resposta terminando em ≤ 5 s
+  // depois do primeiro token. O critério original (primeiro token ≤ 5 s) não é cumprido (0 de 5 na primeira medida): fica
+  // registrado em `dentroDoLimite` no JSON, sem ser afirmado aqui.
+  for (const m of medidas) {
+    expect(m.primeiroSinalMs, `${m.id}: sinal de vida (ms)`).toBeLessThanOrEqual(1000);
+    expect(m.primeiroTokenMs, `${m.id}: houve primeiro token`).not.toBeNull();
+    expect(m.textosDistintosAntesDoFim, `${m.id}: estados intermediários do texto`).toBeGreaterThanOrEqual(2);
+    expect((m.fimMs as number) - (m.primeiroTokenMs as number), `${m.id}: do primeiro token ao fim (ms)`).toBeLessThanOrEqual(5000);
+    expect(m.estadoFinal, `${m.id}: estado final`).toBe("Resposta pronta.");
+  }
 });
