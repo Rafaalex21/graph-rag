@@ -14,7 +14,12 @@ import { expect, test, type Page } from "@playwright/test";
 import { problemas } from "../../../api/test/http/contrato.ts";
 import { PaginaAssistente } from "../../paginas/assistente.ts";
 
-const ALVO = new URL("../../../eval/resultados/f810-geracao.json", import.meta.url);
+/**
+ * Conjunto de pedidos: "A" (padrão, `eval/f810-medida-geracao.md`, página fixa 93) ou "B" (`eval/f810b-medida-geracao.md`, páginas
+ * aceitas = as das tabelas do PDF com a linha completa, calculadas antes de rodar). Escolhido por `F810_CONJUNTO=B`.
+ */
+const CONJUNTO = process.env["F810_CONJUNTO"] === "B" ? "B" : "A";
+const ALVO = new URL(CONJUNTO === "B" ? "../../../eval/resultados/f810b-geracao.json" : "../../../eval/resultados/f810-geracao.json", import.meta.url);
 const TABELAS = new URL("../../../data/parsed/banco_do_brasil_formulario_referencia_2026.tabelas.json", import.meta.url);
 
 /**
@@ -33,26 +38,49 @@ function valorNaPaginaCitada(rotuloDePagina: string, escrito: string): boolean |
 }
 
 /** O gabarito do golden (pág. 93, R$ milhões, 2023 / 2024 / 2025): N01 e G09 para o lucro, N02 para a receita de juros. */
-const LUCRO = { rotulos: ["2023", "2024", "2025"], valores: [33166, 29172, 16782], pagina: "p. 93" };
-const JUROS = { rotulos: ["2023", "2024", "2025"], valores: [88749, 104514, 101011], pagina: "p. 93" };
+interface Gabarito {
+  rotulos: string[];
+  valores: number[];
+  /** Como o documento escreve cada valor (para achar no `.docx` e no `.pptx`). */
+  escritos: string[];
+  /** Páginas aceitas: toda página citada por toda célula tem de estar aqui. */
+  paginas: number[];
+}
+const ANOS = ["2023", "2024", "2025"];
+const LUCRO: Gabarito = { rotulos: ANOS, valores: [33166, 29172, 16782], escritos: ["33.166", "29.172", "16.782"], paginas: [93] };
+const JUROS: Gabarito = { rotulos: ANOS, valores: [88749, 104514, 101011], escritos: ["88.749", "104.514", "101.011"], paginas: [93] };
+// conjunto B (eval/f810b-medida-geracao.md): páginas das tabelas do PDF com a linha completa em células seguidas
+const DEPOSITOS: Gabarito = { rotulos: ANOS, valores: [811944, 873711, 897937], escritos: ["811.944", "873.711", "897.937"], paginas: [83] };
+const ATIVO: Gabarito = { rotulos: ANOS, valores: [2153878, 2398719, 2455143], escritos: ["2.153.878", "2.398.719", "2.455.143"], paginas: [80] };
+const NAO_JUROS: Gabarito = { rotulos: ANOS, valores: [50740, 54152, 53788], escritos: ["50.740", "54.152", "53.788"], paginas: [93] };
+const LPA: Gabarito = { rotulos: ANOS, valores: [5.23, 4.62, 2.4], escritos: ["5,23", "4,62", "2,40"], paginas: [80] };
 
 interface Pedido {
   id: string;
   texto: string;
-  gabarito: typeof LUCRO | null;
+  gabarito: Gabarito | null;
   /** O formato do arquivo pedido (o gráfico em SVG também conta no A1). */
   arquivo: "svg" | "xlsx" | "docx" | "pptx" | null;
   rotuloDoLink: RegExp | null;
   grafico: boolean;
 }
 
-const PEDIDOS: Pedido[] = [
+const PEDIDOS_B: Pedido[] = [
+  { id: "B1", texto: "Faça um gráfico dos depósitos totais de 2023 a 2025.", gabarito: DEPOSITOS, arquivo: "svg", rotuloDoLink: /Baixar gráfico \(\.svg\)/, grafico: true },
+  { id: "B2", texto: "Monte uma tabela e uma planilha com o ativo total de 2023 a 2025.", gabarito: ATIVO, arquivo: "xlsx", rotuloDoLink: /Baixar planilha \(\.xlsx\)/, grafico: false },
+  { id: "B3", texto: "Gere um documento Word com as receitas não de juros de 2023 a 2025.", gabarito: NAO_JUROS, arquivo: "docx", rotuloDoLink: /Baixar documento \(\.docx\)/, grafico: false },
+  { id: "B4", texto: "Faça uma apresentação com o lucro por ação de 2023 a 2025.", gabarito: LPA, arquivo: "pptx", rotuloDoLink: /Baixar apresentação \(\.pptx\)/, grafico: true },
+  { id: "B5", texto: "Faça um gráfico do lucro líquido do Magazine Luiza de 2023 a 2025.", gabarito: null, arquivo: null, rotuloDoLink: null, grafico: false },
+];
+
+const PEDIDOS_A: Pedido[] = [
   { id: "A1", texto: "Faça um gráfico do lucro líquido do exercício de 2023 a 2025.", gabarito: LUCRO, arquivo: "svg", rotuloDoLink: /Baixar gráfico \(\.svg\)/, grafico: true },
   { id: "A2", texto: "Monte uma tabela e uma planilha com a receita líquida de juros de 2023 a 2025.", gabarito: JUROS, arquivo: "xlsx", rotuloDoLink: /Baixar planilha \(\.xlsx\)/, grafico: false },
   { id: "A3", texto: "Gere um documento Word com o lucro líquido do exercício de 2023 a 2025.", gabarito: LUCRO, arquivo: "docx", rotuloDoLink: /Baixar documento \(\.docx\)/, grafico: false },
   { id: "A4", texto: "Faça uma apresentação com o lucro líquido do exercício de 2023 a 2025.", gabarito: LUCRO, arquivo: "pptx", rotuloDoLink: /Baixar apresentação \(\.pptx\)/, grafico: true },
   { id: "A5", texto: "Faça um gráfico do lucro líquido do Santander Brasil de 2023 a 2025.", gabarito: null, arquivo: null, rotuloDoLink: null, grafico: false },
 ];
+const PEDIDOS = CONJUNTO === "B" ? PEDIDOS_B : PEDIDOS_A;
 
 interface Quadro {
   evento: string;
@@ -73,7 +101,9 @@ function lerQuadros(corpo: string): Quadro[] {
 /** "33.166" → 33166 (número do documento: ponto nos milhares, vírgula nos decimais). */
 const numeroDoTexto = (t: string) => Number(t.replace(/\./g, "").replace(",", "."));
 const perto = (a: number, b: number) => Math.abs(a - b) <= 0.005 * Math.max(Math.abs(a), Math.abs(b));
-const contem = (texto: string, valores: number[]) => valores.every((v) => texto.includes(String(v)) || texto.includes(new Intl.NumberFormat("pt-BR").format(v)));
+/** O valor está no texto como número, em pt-BR ou escrito como no documento (por exemplo "2,40"). */
+const contem = (texto: string, valores: number[], escritos: string[]) =>
+  valores.every((v, i) => texto.includes(String(v)) || texto.includes(new Intl.NumberFormat("pt-BR").format(v)) || (escritos[i] !== undefined && texto.includes(escritos[i]!)));
 
 /** O XML tem de ser bem formado: quem decide é o DOMParser do navegador (o Node não traz um). */
 async function xmlBemFormado(page: Page, xml: string): Promise<boolean> {
@@ -81,12 +111,12 @@ async function xmlBemFormado(page: Page, xml: string): Promise<boolean> {
 }
 
 /** Relê o arquivo baixado: devolve se abriu, se tem os valores do gabarito e o que mais foi conferido. */
-async function reler(page: Page, formato: "svg" | "xlsx" | "docx" | "pptx", caminho: string, valores: number[]): Promise<{ abriu: boolean; valoresNoArquivo: boolean; partes: number | null; detalhe: string }> {
+async function reler(page: Page, formato: "svg" | "xlsx" | "docx" | "pptx", caminho: string, valores: number[], escritos: string[]): Promise<{ abriu: boolean; valoresNoArquivo: boolean; partes: number | null; detalhe: string }> {
   const bytes = readFileSync(caminho);
   if (formato === "svg") {
     const texto = bytes.toString("utf8");
     const ok = texto.startsWith("<svg") && (await xmlBemFormado(page, texto));
-    return { abriu: ok, valoresNoArquivo: contem(texto, valores), partes: null, detalhe: "svg lido como XML" };
+    return { abriu: ok, valoresNoArquivo: contem(texto, valores, escritos), partes: null, detalhe: "svg lido como XML" };
   }
   if (formato === "xlsx") {
     const wb = new ExcelJS.Workbook();
@@ -107,10 +137,10 @@ async function reler(page: Page, formato: "svg" | "xlsx" | "docx" | "pptx", cami
   }
   const temTipos = nomes.includes("[Content_Types].xml");
   const abriu = temTipos && xmls.length > 0 && bemFormados === xmls.length;
-  return { abriu, valoresNoArquivo: contem(todoTexto, valores), partes: nomes.length, detalhe: `${bemFormados} de ${xmls.length} partes XML bem formadas` };
+  return { abriu, valoresNoArquivo: contem(todoTexto, valores, escritos), partes: nomes.length, detalhe: `${bemFormados} de ${xmls.length} partes XML bem formadas` };
 }
 
-test("5 pedidos pela tela do assistente: material com valores do gabarito e página, arquivo relido e 'não consta' sem dado", async ({ page }) => {
+test(`${CONJUNTO}: 5 pedidos pela tela do assistente: material com valores do gabarito e página, arquivo relido e 'não consta' sem dado`, async ({ page }) => {
   test.setTimeout(1_800_000);
   const a = new PaginaAssistente(page);
 
@@ -187,7 +217,9 @@ test("5 pedidos pela tela do assistente: material com valores do gabarito e pág
     for (let i = 1; i <= n; i++) celulas.push(await linhas.nth(i).getByRole("cell").allInnerTexts());
     const rotulosOk = celulas.length === p.gabarito.rotulos.length && celulas.every((c, i) => c[0]?.trim() === p.gabarito!.rotulos[i]);
     const valoresOk = celulas.length === p.gabarito.valores.length && celulas.every((c, i) => perto(numeroDoTexto(c[1] ?? ""), p.gabarito!.valores[i]!));
-    const paginasOk = celulas.length > 0 && celulas.every((c) => c[2]?.trim() === p.gabarito!.pagina);
+    // toda célula cita pelo menos uma página e TODAS as páginas citadas estão entre as aceitas do pedido
+    const paginasDaCelula = (c: string[]) => [...(c[2] ?? "").matchAll(/\d+/g)].map((m) => Number(m[0]));
+    const paginasOk = celulas.length > 0 && celulas.every((c) => paginasDaCelula(c).length > 0 && paginasDaCelula(c).every((n) => p.gabarito!.paginas.includes(n)));
     const paginasCitadas = celulas.map((c) => c[2]?.trim() ?? "");
     const paginasNoPdf = celulas.map((c) => valorNaPaginaCitada(c[2] ?? "", (c[1] ?? "").trim()));
 
@@ -196,9 +228,9 @@ test("5 pedidos pela tela do assistente: material com valores do gabarito e pág
     if (p.grafico) {
       const img = m.getByRole("img");
       graficoOk = (await img.count()) === 1 && (await img.evaluate((i: HTMLImageElement) => i.complete && i.naturalWidth > 0).catch(() => false));
-      if (p.id === "A1") {
+      if (p.id === "A1" || p.id === "B1") {
         mkdirSync(new URL("../../../data/avaliacao/", import.meta.url), { recursive: true });
-        await m.screenshot({ path: fileURLToPath(new URL("../../../data/avaliacao/f810-material-a1.png", import.meta.url)) });
+        await m.screenshot({ path: fileURLToPath(new URL(`../../../data/avaliacao/f810-material-${p.id.toLowerCase()}.png`, import.meta.url)) });
       }
     }
 
@@ -213,7 +245,7 @@ test("5 pedidos pela tela do assistente: material com valores do gabarito e pág
       }, href);
       const [baixado] = await Promise.all([page.waitForEvent("download"), link.click()]);
       const caminho = (await baixado.path()) as string;
-      const lido = await reler(page, p.arquivo, caminho, p.gabarito.valores);
+      const lido = await reler(page, p.arquivo, caminho, p.gabarito.valores, p.gabarito.escritos);
       arquivo = { formato: p.arquivo, nome: baixado.suggestedFilename(), ...cabecalhos, ...lido };
     }
     const arquivoOk = arquivo === null ? true : arquivo["status"] === 200 && (arquivo["bytes"] as number) > 0 && (arquivo["bytes"] as number) <= 5 * 1024 * 1024 && arquivo["abriu"] === true && arquivo["valoresNoArquivo"] === true;
