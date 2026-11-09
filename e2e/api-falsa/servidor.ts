@@ -22,6 +22,7 @@
  *             "buscar_mais" e depois "suficiente", reparo e `fim` com métricas), com 120 ms entre os eventos para a tela mostrar o
  *             Rastro ao vivo
  *   ausente   o documento não tem o dado: crítica "ausente", nenhuma evidência, resposta "Não consta"
+ *   marcar    evidências com e sem página, mas `citacoes` vazio (o assistente mostra as 3 primeiras com página)
  *   (outra)   resposta curta de uma frase com [E1] nos tokens e [p. 6] no fim
  */
 import { createServer, type IncomingMessage, type ServerResponse } from "node:http";
@@ -256,6 +257,32 @@ async function responderChat(req: IncomingMessage, res: ServerResponse): Promise
     if (todas) for (let i = 1; i <= 6; i++) res.write(quadro("evidencia", { id: `ent:x:${i}`, tipo: "entidade", pagina: null, trecho: `Entidade ${i}`, score: 0.5 }));
     res.write(quadro("evidencia", { id: "p1", tipo: "pai", pagina: "p. 6", trecho: "trecho", score: 0.9 }));
     res.write(quadro("fim", FIM("O Banco do Brasil é uma sociedade de economia mista [p. 6].", { metricas: { latenciaMs: 900, tokensEntrada: 80, tokensSaida: 12, rota: ["entidade"], estado: "suficiente" } })));
+  } else if (minuscula.includes("olá")) {
+    // uma saudação: o ciclo termina `suficiente`, mas sem nenhuma evidência nem citação (a tela não põe selo de estado)
+    // a API real emite a reescrita mesmo numa saudação (estado `sem_consulta`: nenhuma ferramenta, nenhuma evidência)
+    res.write(etapa("reescrita", { rodada: 1, subperguntas: 0, fallback: null, ms: 300 }));
+    await tokens(["Olá! ", "Sou o assistente do Formulário de Referência. ", "O que você quer saber?"]);
+    res.write(quadro("fim", FIM("Olá! Sou o assistente do Formulário de Referência. O que você quer saber?", { citacoes: [], metricas: { latenciaMs: 800, tokensEntrada: 40, tokensSaida: 14, rota: [], estado: "sem_consulta" } })));
+  } else if (minuscula.includes("parcial")) {
+    // o ciclo acabou `incompleta`: achou uma parte e a crítica ainda pedia mais
+    await tokens(["Achei só ", "uma parte [E1]", "."]);
+    res.write(quadro("evidencia", { id: "p1", tipo: "pai", pagina: "p. 6", trecho: "Lucro líquido ajustado de R$ 20,7 bilhões em 2025.", score: 0.7 }));
+    res.write(quadro("fim", FIM("Achei só uma parte [p. 6].", { metricas: { latenciaMs: 15000, tokensEntrada: 900, tokensSaida: 30, rota: ["buscar_trechos"], estado: "incompleta" } })));
+  } else if (minuscula.includes("marcar")) {
+    // a resposta se apoiou em evidências mas não citou nenhuma (citacoes vazio): a tela mostra as primeiras com página
+    await tokens(["Resposta ", "sem marcas."]);
+    for (const [id, tipo, pagina] of [["p1", "pai", "p. 6"], ["t1", "tabela", "p. 9-10"], ["e1", "entidade", null], ["p2", "pai", "p. 3"], ["p3", "pai", "p. 4"]] as const)
+      res.write(quadro("evidencia", { id, tipo, pagina, trecho: `trecho de ${id}`, score: 0.5 }));
+    res.write(quadro("fim", FIM("Resposta sem marcas.", { citacoes: [] })));
+  } else if (minuscula.includes("fontes")) {
+    // várias fontes de tipos diferentes (uma repetida, uma sem página, uma entidade) para os cartões de fonte do assistente
+    await tokens(["O lucro foi ", "R$ 20 bi [E1]", "."]);
+    res.write(quadro("evidencia", { id: "p1", tipo: "pai", pagina: "p. 6", trecho: "Lucro líquido ajustado de R$ 20,7 bilhões em 2025.", score: 0.91 }));
+    res.write(quadro("evidencia", { id: "t1", tipo: "tabela", pagina: "p. 9-10", trecho: "| Ano | Lucro |", score: 0.8 }));
+    res.write(quadro("evidencia", { id: "p1", tipo: "pai", pagina: "p. 6", trecho: "Lucro líquido ajustado de R$ 20,7 bilhões em 2025.", score: 0.6 }));
+    res.write(quadro("evidencia", { id: "e1", tipo: "entidade", pagina: null, trecho: "Uma entidade resumida.", score: 0.5 }));
+    res.write(quadro("evidencia", { id: "f1", tipo: "fato", pagina: null, trecho: '<img src=x onerror="window.__xss=1"> valor sem página', score: 0.4 }));
+    res.write(quadro("fim", FIM("O lucro foi R$ 20 bi [p. 6]. Veja também [p. 9-10].", { citacoes: [{ id: "p1", pagina: "p. 6" }, { id: "t1", pagina: "p. 9-10" }] })));
   } else if (mensagem.includes("rastro")) {
     await roteiroRastro(res);
   } else if (mensagem.includes("ausente")) {

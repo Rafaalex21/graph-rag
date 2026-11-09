@@ -1,0 +1,147 @@
+{
+  "perguntas": [
+    "T15",
+    "N01",
+    "G03",
+    "P01",
+    "F01"
+  ],
+  "itens": [
+    {
+      "pergunta": "T15",
+      "terminou": "pronta",
+      "ms": 8536,
+      "estadoDoFim": "suficiente",
+      "evidencias": 7,
+      "buscou": true,
+      "seloEsperado": "Encontrado no documento",
+      "seloMostrado": [
+        "Encontrado no documento"
+      ],
+      "seloOk": true,
+      "cartoes": 2,
+      "paginaEsperada": 315,
+      "fonteOk": true,
+      "msAteDesenho": 555,
+      "botaoPassos": true,
+      "passos": 6,
+      "passosOk": true,
+      "nota": 1,
+      "statusDaNota": [
+        201
+      ],
+      "notaOk": true,
+      "ok": true
+    },
+    {
+      "pergunta": "N01",
+      "terminou": "pronta",
+      "ms": 8517,
+      "estadoDoFim": "suficiente",
+      "evidencias": 7,
+      "buscou": true,
+      "seloEsperado": "Encontrado no documento",
+      "seloMostrado": [
+        "Encontrado no documento"
+      ],
+      "seloOk": true,
+      "cartoes": 2,
+      "paginaEsperada": 80,
+      "fonteOk": true,
+      "msAteDesenho": 40,
+      "botaoPassos": true,
+      "passos": 6,
+      "passosOk": true,
+      "nota": 1,
+      "statusDaNota": [
+        201
+      ],
+      "notaOk": true,
+      "ok": true
+    },
+    {
+      "pergunta": "G03",
+      "terminou": "pronta",
+      "ms": 27970,
+      "estadoDoFim": "incompleta",
+      "evidencias": 15,
+      "buscou": true,
+      "seloEsperado": "Encontrei só em parte",
+      "seloMostrado": [
+        "Encontrei só em parte"
+      ],
+      "seloOk": true,
+      "cartoes": 2,
+      "paginaEsperada": 368,
+      "fonteOk": true,
+      "msAteDesenho": 33,
+      "botaoPassos": true,
+      "passos": 11,
+      "passosOk": true,
+      "nota": 1,
+      "statusDaNota": [
+        201
+      ],
+      "notaOk": true,
+      "ok": true
+    },
+    {
+      "pergunta": "P01",
+      "terminou": "pronta",
+      "ms": 18751,
+      "estadoDoFim": "suficiente",
+      "evidencias": 52,
+      "buscou": true,
+      "seloEsperado": "Encontrado no documento",
+      "seloMostrado": [
+        "Encontrado no documento"
+      ],
+      "seloOk": true,
+      "cartoes": 10,
+      "paginaEsperada": 143,
+      "fonteOk": true,
+      "msAteDesenho": 41,
+      "botaoPassos": true,
+      "passos": 15,
+      "passosOk": true,
+      "nota": 1,
+      "statusDaNota": [
+        201
+      ],
+      "notaOk": true,
+      "ok": true
+    },
+    {
+      "pergunta": "F01",
+      "terminou": "pronta",
+      "ms": 3396,
+      "estadoDoFim": "sem_consulta",
+      "evidencias": 0,
+      "buscou": false,
+      "seloEsperado": null,
+      "seloMostrado": [],
+      "seloOk": true,
+      "cartoes": 0,
+      "paginaEsperada": null,
+      "fonteOk": null,
+      "msAteDesenho": null,
+      "botaoPassos": false,
+      "passos": null,
+      "passosOk": true,
+      "nota": -1,
+      "statusDaNota": [
+        201
+      ],
+      "notaOk": true,
+      "ok": true
+    }
+  ],
+  "modoTecnico": {
+    "link": true
+  },
+  "resumo": {
+    "cumpridas": "5 de 5",
+    "modoTecnicoOk": true,
+    "aceiteCumprido": true
+  }
+}

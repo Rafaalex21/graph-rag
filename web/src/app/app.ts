@@ -1,5 +1,6 @@
-import { Component, computed, inject } from '@angular/core';
-import { RouterLink, RouterLinkActive, RouterOutlet } from '@angular/router';
+import { Component, computed, inject, signal } from '@angular/core';
+import { NavigationEnd, Router, RouterLink, RouterLinkActive, RouterOutlet } from '@angular/router';
+import { HistoricoService } from './assistente/historico.service';
 import { SeloSaude } from './saude/selo-saude';
 import { TemaService } from './tema/tema.service';
 
@@ -11,7 +12,17 @@ import { TemaService } from './tema/tema.service';
 })
 export class App {
   private readonly tema = inject(TemaService);
+  private readonly roteador = inject(Router);
+  /** A tela do assistente tem a própria barra: sem o cabeçalho do modo técnico. */
+  protected readonly telaDoAssistente = signal(false);
   protected readonly rotuloDoTema = computed(() => this.tema.preferencia());
+
+  constructor() {
+    inject(HistoricoService); // guarda as conversas em qualquer tela, não só na do assistente
+    const ver = (url: string) => this.telaDoAssistente.set(url.split(/[?#]/)[0] === '/assistente');
+    ver(this.roteador.url);
+    this.roteador.events.subscribe((e) => e instanceof NavigationEnd && ver(e.urlAfterRedirects));
+  }
 
   protected alternarTema(): void {
     this.tema.alternar();

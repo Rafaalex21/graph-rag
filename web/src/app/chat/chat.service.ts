@@ -4,14 +4,28 @@
  * guardado em `eventos` de cada resposta, sem os tokens.
  */
 import { inject, Injectable, InjectionToken, signal } from '@angular/core';
-import { ConfiguracoesService, MODO_PADRAO, PERFIL_PADRAO } from '../configuracoes/configuracoes.service';
+import {
+  ConfiguracoesService,
+  MODO_PADRAO,
+  PERFIL_PADRAO,
+} from '../configuracoes/configuracoes.service';
 import { enviarFeedback, MENSAGEM_FEEDBACK } from './feedback-api';
-import { conversar, ErroDaApi, type Citacao, type EventoChat, type MetricasDoFim, type Turno } from './chat-api';
+import {
+  conversar,
+  ErroDaApi,
+  type Citacao,
+  type EventoChat,
+  type MetricasDoFim,
+  type Turno,
+} from './chat-api';
 
 /** O `fetch` do chat; os testes trocam por um falso. */
 export const FETCH_DO_CHAT = new InjectionToken<typeof fetch>('FETCH_DO_CHAT', {
   providedIn: 'root',
-  factory: () => (...a: Parameters<typeof fetch>) => globalThis.fetch(...a),
+  factory:
+    () =>
+    (...a: Parameters<typeof fetch>) =>
+      globalThis.fetch(...a),
 });
 
 export const LIMITE_PERGUNTA = 4000;
@@ -39,7 +53,13 @@ export interface FeedbackMensagem {
 }
 
 export const LIMITE_COMENTARIO = 1000;
-const SEM_FEEDBACK: FeedbackMensagem = { nota: null, enviando: false, erro: null, ultimo: null, rascunho: '' };
+const SEM_FEEDBACK: FeedbackMensagem = {
+  nota: null,
+  enviando: false,
+  erro: null,
+  ultimo: null,
+  rascunho: '',
+};
 
 export interface Mensagem {
   id: number;
@@ -60,7 +80,10 @@ const SEM_TEMPOS: Tempos = { primeiroEventoMs: null, primeiroTokenMs: null, fimM
 const ERRO_GENERICO = { codigo: 'falha_interna', mensagem: 'Não foi possível responder agora.' };
 
 function novoId(): string {
-  return globalThis.crypto?.randomUUID?.() ?? `c-${Date.now().toString(36)}-${Math.random().toString(36).slice(2, 10)}`;
+  return (
+    globalThis.crypto?.randomUUID?.() ??
+    `c-${Date.now().toString(36)}-${Math.random().toString(36).slice(2, 10)}`
+  );
 }
 
 @Injectable({ providedIn: 'root' })
@@ -83,7 +106,14 @@ export class ChatService {
     if (this.ocupado() || pergunta === '' || pergunta.length > LIMITE_PERGUNTA) return;
     this.ocupado.set(true); // síncrono: a trava não espera o primeiro evento
     const historico = this.historicoAte(this.mensagens().length);
-    const usuario: Mensagem = { id: this.proximoId++, papel: 'usuario', texto: pergunta, estado: 'pronta', eventos: [], tempos: SEM_TEMPOS };
+    const usuario: Mensagem = {
+      id: this.proximoId++,
+      papel: 'usuario',
+      texto: pergunta,
+      estado: 'pronta',
+      eventos: [],
+      tempos: SEM_TEMPOS,
+    };
     const resposta = this.respostaVazia();
     this.mensagens.update((l) => [...l, usuario, resposta]);
     await this.executar(pergunta, historico, resposta.id);
@@ -95,7 +125,8 @@ export class ChatService {
     const l = this.mensagens();
     const ultima = l.at(-1);
     const pergunta = l.at(-2);
-    if (!ultima || !pergunta || ultima.papel !== 'assistente' || pergunta.papel !== 'usuario') return;
+    if (!ultima || !pergunta || ultima.papel !== 'assistente' || pergunta.papel !== 'usuario')
+      return;
     if (ultima.estado !== 'erro' && ultima.estado !== 'cancelada') return;
     this.ocupado.set(true);
     const historico = this.historicoAte(l.length - 2);
@@ -115,15 +146,28 @@ export class ChatService {
     try {
       await enviarFeedback({ mensagemId, nota }, { fetch: this.buscar });
       // uma nota nova começa um registro novo: o comentário e o rascunho de antes não valem para ela
-      this.alterarFeedback(idMensagem, () => ({ nota, enviando: false, erro: null, ultimo: 'nota', rascunho: '' }));
+      this.alterarFeedback(idMensagem, () => ({
+        nota,
+        enviando: false,
+        erro: null,
+        ultimo: 'nota',
+        rascunho: '',
+      }));
     } catch (e) {
-      this.alterarFeedback(idMensagem, (f) => ({ ...f, enviando: false, erro: e instanceof Error ? e.message : MENSAGEM_FEEDBACK }));
+      this.alterarFeedback(idMensagem, (f) => ({
+        ...f,
+        enviando: false,
+        erro: e instanceof Error ? e.message : MENSAGEM_FEEDBACK,
+      }));
     }
   }
 
   /** O que o usuário está digitando no comentário opcional de uma resposta. */
   editarComentario(idMensagem: number, texto: string): void {
-    this.alterarFeedback(idMensagem, (f) => ({ ...f, rascunho: texto.slice(0, LIMITE_COMENTARIO) }));
+    this.alterarFeedback(idMensagem, (f) => ({
+      ...f,
+      rascunho: texto.slice(0, LIMITE_COMENTARIO),
+    }));
   }
 
   /** Manda o comentário junto com a nota já registrada (o registro é um arquivo de linhas: a última linha vale). */
@@ -135,15 +179,24 @@ export class ChatService {
     const { nota, rascunho } = f;
     this.alterarFeedback(idMensagem, (x) => ({ ...x, enviando: true, erro: null }));
     try {
-      await enviarFeedback({ mensagemId, nota, comentario: rascunho.trim() }, { fetch: this.buscar });
+      await enviarFeedback(
+        { mensagemId, nota, comentario: rascunho.trim() },
+        { fetch: this.buscar },
+      );
       this.alterarFeedback(idMensagem, (x) => ({ ...x, enviando: false, ultimo: 'comentario' }));
     } catch (e) {
-      this.alterarFeedback(idMensagem, (x) => ({ ...x, enviando: false, erro: e instanceof Error ? e.message : MENSAGEM_FEEDBACK }));
+      this.alterarFeedback(idMensagem, (x) => ({
+        ...x,
+        enviando: false,
+        erro: e instanceof Error ? e.message : MENSAGEM_FEEDBACK,
+      }));
     }
   }
 
   private alterarFeedback(id: number, f: (atual: FeedbackMensagem) => FeedbackMensagem): void {
-    this.mensagens.update((l) => l.map((m) => (m.id === id ? { ...m, feedback: f(m.feedback ?? SEM_FEEDBACK) } : m)));
+    this.mensagens.update((l) =>
+      l.map((m) => (m.id === id ? { ...m, feedback: f(m.feedback ?? SEM_FEEDBACK) } : m)),
+    );
   }
 
   /** Para a resposta em andamento; o texto que já chegou fica na tela. */
@@ -161,8 +214,29 @@ export class ChatService {
     this.conversationId.set(novoId());
   }
 
+  /**
+   * Põe na tela uma conversa guardada (F8.9): as mensagens e o `conversationId`, para a próxima pergunta continuar a mesma. Cancela
+   * o que estiver em andamento. Quem chama garante que as mensagens estão em estado final (nada `transmitindo`).
+   */
+  restaurar(conversationId: string, mensagens: Mensagem[]): void {
+    this.execucao++;
+    this.controlador?.abort();
+    this.controlador = null;
+    this.ocupado.set(false);
+    this.conversationId.set(conversationId);
+    this.proximoId = mensagens.reduce((maior, m) => Math.max(maior, m.id), 0) + 1;
+    this.mensagens.set(mensagens);
+  }
+
   private respostaVazia(): Mensagem {
-    return { id: this.proximoId++, papel: 'assistente', texto: '', estado: 'transmitindo', eventos: [], tempos: SEM_TEMPOS };
+    return {
+      id: this.proximoId++,
+      papel: 'assistente',
+      texto: '',
+      estado: 'transmitindo',
+      eventos: [],
+      tempos: SEM_TEMPOS,
+    };
   }
 
   /** Só os turnos completos (pergunta e resposta prontas), os últimos quatro, cada texto cortado no limite do contrato. */
@@ -172,8 +246,16 @@ export class ChatService {
     for (let i = 0; i + 1 < l.length; i += 2) {
       const p = l[i];
       const r = l[i + 1];
-      if (p?.papel === 'usuario' && r?.papel === 'assistente' && r.estado === 'pronta' && r.texto !== '') {
-        turnos.push({ papel: 'usuario', texto: p.texto.slice(0, LIMITE_TURNO) }, { papel: 'assistente', texto: r.texto.slice(0, LIMITE_TURNO) });
+      if (
+        p?.papel === 'usuario' &&
+        r?.papel === 'assistente' &&
+        r.estado === 'pronta' &&
+        r.texto !== ''
+      ) {
+        turnos.push(
+          { papel: 'usuario', texto: p.texto.slice(0, LIMITE_TURNO) },
+          { papel: 'assistente', texto: r.texto.slice(0, LIMITE_TURNO) },
+        );
       }
     }
     return turnos.slice(-TURNOS_NO_HISTORICO);
@@ -188,7 +270,10 @@ export class ChatService {
     const atualizar = (f: (m: Mensagem) => Mensagem) => {
       if (vigente()) this.mensagens.update((l) => l.map((m) => (m.id === idResposta ? f(m) : m)));
     };
-    const marca = (m: Mensagem, campo: keyof Tempos): Mensagem => (m.tempos[campo] === null ? { ...m, tempos: { ...m.tempos, [campo]: performance.now() - t0 } } : m);
+    const marca = (m: Mensagem, campo: keyof Tempos): Mensagem =>
+      m.tempos[campo] === null
+        ? { ...m, tempos: { ...m.tempos, [campo]: performance.now() - t0 } }
+        : m;
 
     try {
       const modo = this.config.modo();
@@ -207,19 +292,34 @@ export class ChatService {
         if (e.evento === 'token') {
           atualizar((m) => marca({ ...m, texto: m.texto + e.dados.t }, 'primeiroTokenMs'));
         } else if (e.evento === 'fim') {
-          atualizar((m) => marca({ ...m, texto: e.dados.resposta, estado: 'pronta', mensagemId: e.dados.mensagemId, citacoes: e.dados.citacoes, metricas: e.dados.metricas, eventos: [...m.eventos, e] }, 'fimMs'));
+          atualizar((m) =>
+            marca(
+              {
+                ...m,
+                texto: e.dados.resposta,
+                estado: 'pronta',
+                mensagemId: e.dados.mensagemId,
+                citacoes: e.dados.citacoes,
+                metricas: e.dados.metricas,
+                eventos: [...m.eventos, e],
+              },
+              'fimMs',
+            ),
+          );
         } else if (e.evento === 'erro') {
           atualizar((m) => ({ ...m, estado: 'erro', erro: e.dados, eventos: [...m.eventos, e] }));
         } else {
           atualizar((m) => ({ ...m, eventos: [...m.eventos, e] }));
         }
       }
-      if (ac.signal.aborted) atualizar((m) => (m.estado === 'transmitindo' ? { ...m, estado: 'cancelada' } : m));
+      if (ac.signal.aborted)
+        atualizar((m) => (m.estado === 'transmitindo' ? { ...m, estado: 'cancelada' } : m));
     } catch (e) {
       if (ac.signal.aborted || (e instanceof Error && e.name === 'AbortError')) {
         atualizar((m) => ({ ...m, estado: 'cancelada' }));
       } else {
-        const erro = e instanceof ErroDaApi ? { codigo: e.codigo, mensagem: e.message } : ERRO_GENERICO;
+        const erro =
+          e instanceof ErroDaApi ? { codigo: e.codigo, mensagem: e.message } : ERRO_GENERICO;
         atualizar((m) => ({ ...m, estado: 'erro', erro }));
       }
     } finally {

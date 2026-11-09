@@ -741,7 +741,9 @@ Cada requisição vira **uma linha JSON** em `data/logs/telemetria/AAAA-MM-DD.js
 
 ## 12. Interface Angular
 
-**Disposição** (desktop): coluna de conversas · chat ao centro · painel lateral com abas **Rastro**, **Fontes** e **Grafo**.
+**Duas telas, o mesmo chat** (F8.9). `/assistente` é a tela do usuário final e a inicial (`/` leva a ela): barra lateral (conversas recentes guardadas só no navegador, estado do sistema, tema, link **Modo técnico**) · conversa ao centro · painel da fonte à direita, que só existe com uma fonte aberta (no celular, a barra vira um menu e o painel uma folha). `/chat` e `/configuracoes` seguem como **modo técnico para desenvolvedores**, com um link de volta ao assistente. As duas usam o mesmo `ChatService` (e as mesmas escolhas de modo e perfil); o assistente só apresenta de outro jeito os mesmos eventos SSE, e o passo a passo em português simples sai da mesma função que monta o Rastro.
+
+**Disposição do modo técnico** (desktop): conversa ao centro · painel lateral com abas **Rastro**, **Fontes** e **Grafo**.
 
 | Componente | Função |
 |---|---|
@@ -751,6 +753,9 @@ Cada requisição vira **uma linha JSON** em `data/logs/telemetria/AAAA-MM-DD.js
 | `GraphViewComponent` | Subgrafo usado na resposta (NVL ou Cytoscape.js), clique para expandir vizinhança |
 | `SettingsComponent` | Perfil (padrão/rápido) e modo de recuperação (auto, trechos, tabelas, local, global, Cypher) |
 | `HealthBadgeComponent` (`SeloSaude`) | Selo "Sistema: no ar / degradado / fora do ar" no topo de todas as páginas (consulta `GET /api/saude` ao abrir, a cada 30 s e sob demanda); o painel diz o estado do llama-swap, do Neo4j, dos índices e dos modelos na memória. Só informa: não bloqueia o chat (F8.7) |
+| `AssistentePage` (`/assistente`) | A tela do usuário final (F8.9): `BarraLateral` (recentes, estado, tema, Modo técnico), `CartaoResposta` (selo de estado a partir de `metricas.estado`, texto com citações, cartões de fonte, nota e "Como cheguei a esta resposta"), `Compositor` (caixa, "Como buscar") e o painel da fonte. Fontes `Inter` e `Space Grotesk` servidas pelo próprio app (`@fontsource-variable`), nada de CDN |
+| `VisualizadorFonte` | O pdf.js do `SourceViewerComponent`, agora componente de entrada `pagina`/`fonteId`: a aba Fontes o alimenta pela URL, o assistente pelo clique no cartão de fonte (F8.9) |
+| `HistoricoService` | Conversas recentes: até 20 no `localStorage` (`graphrag.historico`), com mensagens, eventos e `conversationId`; restaurar uma conversa continua a mesma (F8.9) |
 | Feedback por resposta | "Resposta útil" / "Resposta não útil" em cada resposta pronta (`POST /api/feedback` com o `mensagemId` do `fim`) e um comentário opcional (F8.7) |
 
 **Regras de UX:** mostrar a rota escolhida antes da resposta; números com `Intl.NumberFormat('pt-BR')`, moeda e escala explícitas; "não consta no documento" com destaque neutro, nunca como erro; cada afirmação numérica clicável até a página.

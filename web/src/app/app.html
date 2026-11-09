@@ -1,14 +1,23 @@
-<a class="pular" href="#conteudo" (click)="irParaOConteudo($event, principal)">Ir para o conteúdo</a>
+<a class="pular" href="#conteudo" (click)="irParaOConteudo($event, principal)"
+  >Ir para o conteúdo</a
+>
 
-<header>
-  <a class="marca" routerLink="/chat">GraphRAG local</a>
-  <nav aria-label="Principal">
-    <a routerLink="/chat" routerLinkActive="ativo" ariaCurrentWhenActive="page">Chat</a>
-    <a routerLink="/configuracoes" routerLinkActive="ativo" ariaCurrentWhenActive="page">Configurações</a>
-  </nav>
-  <app-selo-saude />
-  <button type="button" class="tema" (click)="alternarTema()">Tema: {{ rotuloDoTema() }}</button>
-</header>
+@if (!telaDoAssistente()) {
+  <header>
+    <a class="marca" routerLink="/chat">GraphRAG local</a>
+    <nav aria-label="Principal">
+      <a routerLink="/assistente" routerLinkActive="ativo" ariaCurrentWhenActive="page"
+        >Assistente</a
+      >
+      <a routerLink="/chat" routerLinkActive="ativo" ariaCurrentWhenActive="page">Chat</a>
+      <a routerLink="/configuracoes" routerLinkActive="ativo" ariaCurrentWhenActive="page"
+        >Configurações</a
+      >
+    </nav>
+    <app-selo-saude />
+    <button type="button" class="tema" (click)="alternarTema()">Tema: {{ rotuloDoTema() }}</button>
+  </header>
+}
 
 <main id="conteudo" tabindex="-1" #principal>
   <router-outlet />

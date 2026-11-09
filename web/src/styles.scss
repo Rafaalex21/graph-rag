@@ -45,7 +45,12 @@
 }
 
 html {
-  font-family: system-ui, -apple-system, 'Segoe UI', Roboto, sans-serif;
+  font-family:
+    system-ui,
+    -apple-system,
+    'Segoe UI',
+    Roboto,
+    sans-serif;
   line-height: 1.5;
 }
 
@@ -74,6 +79,158 @@ a {
     transition: none !important;
     animation: none !important;
   }
+}
+
+/*
+ * As fontes da tela do assistente (F8.9), servidas pelo próprio app (nada de CDN: o produto é local e privado). Só os subconjuntos
+ * latin e latin-ext, que cobrem o português; as fontes variáveis trazem todos os pesos num arquivo só.
+ */
+@font-face {
+  font-family: 'Inter Variable';
+  font-style: normal;
+  font-display: swap;
+  font-weight: 100 900;
+  src: url('@fontsource-variable/inter/files/inter-latin-wght-normal.woff2')
+    format('woff2-variations');
+  unicode-range:
+    U+0000-00FF, U+0131, U+0152-0153, U+02BB-02BC, U+02C6, U+02DA, U+02DC, U+0304, U+0308, U+0329,
+    U+2000-206F, U+20AC, U+2122, U+2191, U+2193, U+2212, U+2215, U+FEFF, U+FFFD;
+}
+
+@font-face {
+  font-family: 'Inter Variable';
+  font-style: normal;
+  font-display: swap;
+  font-weight: 100 900;
+  src: url('@fontsource-variable/inter/files/inter-latin-ext-wght-normal.woff2')
+    format('woff2-variations');
+  unicode-range:
+    U+0100-02BA, U+02BD-02C5, U+02C7-02CC, U+02CE-02D7, U+02DD-02FF, U+0304, U+0308, U+0329,
+    U+1D00-1DBF, U+1E00-1E9F, U+1EF2-1EFF, U+2020, U+20A0-20AB, U+20AD-20C0, U+2113, U+2C60-2C7F,
+    U+A720-A7FF;
+}
+
+@font-face {
+  font-family: 'Space Grotesk Variable';
+  font-style: normal;
+  font-display: swap;
+  font-weight: 300 700;
+  src: url('@fontsource-variable/space-grotesk/files/space-grotesk-latin-wght-normal.woff2')
+    format('woff2-variations');
+  unicode-range:
+    U+0000-00FF, U+0131, U+0152-0153, U+02BB-02BC, U+02C6, U+02DA, U+02DC, U+0304, U+0308, U+0329,
+    U+2000-206F, U+20AC, U+2122, U+2191, U+2193, U+2212, U+2215, U+FEFF, U+FFFD;
+}
+
+/*
+ * Os tokens da tela do assistente (F8.9). Valem só dentro de `.assistente` e trocam os tokens do tema técnico por uma paleta
+ * própria (verde-petróleo), para que o visualizador de PDF e o markdown da resposta, reaproveitados, herdem o mesmo visual.
+ * Texto sobre fundo, nos dois temas: acima de 4,5:1 (conferido no ADR-074).
+ */
+.assistente {
+  --fundo: #f3f5f7;
+  --superficie: #ffffff;
+  --texto: #0e1726;
+  --texto-suave: #5b6675;
+  --borda: #e1e5ea;
+  --realce: #e6eaee;
+  --destaque: #0b6b5c;
+  --foco: #0b6b5c;
+  --raio: 0.75rem;
+  --a-marca: #0b6b5c;
+  --a-marca-forte: #0a5a4d;
+  --a-marca-fundo: #e2f3ee;
+  --a-leve: #f7f9fa;
+  --a-linha: #edf0f3;
+  --a-bolha: #0e1726;
+  --a-bolha-texto: #ffffff;
+  --a-ok: #1a7f4b;
+  --a-ok-halo: #d4eddf;
+  --a-alerta: #b26a00;
+  --a-alerta-halo: #fbe7bd;
+  --a-queda: #b3261e;
+  --a-queda-halo: #f9d9d6;
+  --a-pagina-fundo: #fff1cc;
+  --a-pagina-texto: #6b4400;
+  --a-pagina-borda: #e8c873;
+  --a-selo-encontrado: #e2f3ee;
+  --a-selo-encontrado-texto: #0a5a4d;
+  --a-selo-parcial: #fff1cc;
+  --a-selo-parcial-texto: #6b4400;
+  --a-selo-ausente: #e8edf2;
+  --a-selo-ausente-texto: #3b4656;
+  --a-selo-erro: #fde8e6;
+  --a-selo-erro-texto: #8a1c13;
+  --a-sombra: 0 1px 2px rgb(16 24 40 / 0.04);
+  font-family:
+    'Inter Variable',
+    system-ui,
+    -apple-system,
+    'Segoe UI',
+    Roboto,
+    sans-serif;
+  color: var(--texto);
+  background: var(--fundo);
+}
+
+@mixin assistente-escuro {
+  color-scheme: dark;
+  --fundo: #0c1117;
+  --superficie: #151b23;
+  --texto: #e8edf3;
+  --texto-suave: #a6b1bf;
+  --borda: #2a3441;
+  --realce: #1e2733;
+  --destaque: #4fc3ac;
+  --foco: #4fc3ac;
+  --a-marca: #0b6b5c;
+  --a-marca-forte: #7fdac8;
+  --a-marca-fundo: #123a33;
+  --a-leve: #10161d;
+  --a-linha: #232c37;
+  --a-bolha: #2b3a4f;
+  --a-ok: #4cc38a;
+  --a-ok-halo: #153b2a;
+  --a-alerta: #f0b44c;
+  --a-alerta-halo: #4a3710;
+  --a-queda: #ff8a80;
+  --a-queda-halo: #4a1b17;
+  --a-pagina-fundo: #3d2f0a;
+  --a-pagina-texto: #f3d27a;
+  --a-pagina-borda: #6b5415;
+  --a-selo-encontrado: #123a33;
+  --a-selo-encontrado-texto: #8fe0cd;
+  --a-selo-parcial: #3d2f0a;
+  --a-selo-parcial-texto: #f3d27a;
+  --a-selo-ausente: #232d3a;
+  --a-selo-ausente-texto: #c3cdd9;
+  --a-selo-erro: #4a1b17;
+  --a-selo-erro-texto: #ffb4ab;
+  --a-sombra: none;
+}
+
+@media (prefers-color-scheme: dark) {
+  :root:not([data-theme='light']) .assistente {
+    @include assistente-escuro;
+  }
+}
+
+:root[data-theme='dark'] .assistente {
+  @include assistente-escuro;
+}
+
+/* a citação de página no texto da resposta: o mesmo amarelo do cartão de página do design */
+.assistente app-resposta-markdown button.citacao {
+  color: var(--a-pagina-texto);
+  background: var(--a-pagina-fundo);
+  border-color: var(--a-pagina-borda);
+  font-weight: 600;
+}
+
+.assistente app-resposta-markdown button.citacao:hover,
+.assistente app-resposta-markdown button.citacao:focus-visible {
+  color: var(--a-pagina-fundo);
+  background: var(--a-pagina-texto);
 }
 
 /*

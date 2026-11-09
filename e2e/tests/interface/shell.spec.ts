@@ -2,8 +2,10 @@
 import { expect, test } from "@playwright/test";
 
 test.describe("rotas", () => {
-  test("a raiz leva a /chat/rastro e o título da aba acompanha a rota", async ({ page }) => {
+  test("a raiz leva a /assistente (F8.9) e /chat leva a /chat/rastro; o título da aba acompanha a rota", async ({ page }) => {
     await page.goto("/");
+    await expect(page).toHaveURL(/\/assistente$/);
+    await page.goto("/chat");
     await expect(page).toHaveURL(/\/chat\/rastro$/);
     await expect(page.getByRole("navigation", { name: "Painel" }).getByRole("link", { name: "Rastro" })).toHaveAttribute("aria-current", "page");
     await page.getByRole("link", { name: "Configurações" }).click();
