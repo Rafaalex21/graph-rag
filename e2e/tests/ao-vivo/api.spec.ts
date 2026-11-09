@@ -94,6 +94,6 @@ test.describe("uma pergunta de verdade, em SSE", () => {
     expect(status).toEqual([200, 200, 429]);
     const barrada = respostas.find((r) => r.status === 429) as Response;
     expect(await barrada.json()).toMatchObject({ codigo: "ocupado" });
-    await Promise.all(respostas.map((r) => r.body?.cancel()));
+    await Promise.all(respostas.filter((r) => r.status === 200).map((r) => r.body?.cancel().catch(() => undefined)));
   });
 });

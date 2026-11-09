@@ -1,0 +1,50 @@
+{
+  "medida": "eval/f82-medida-primeiro-token.md",
+  "limiteMs": 5000,
+  "perguntas": [
+    {
+      "id": "T01",
+      "primeiroSinalMs": 3,
+      "primeiroTokenMs": 8498,
+      "fimMs": 9440,
+      "textosDistintosAntesDoFim": 30,
+      "estadoFinal": "Resposta pronta."
+    },
+    {
+      "id": "T02",
+      "primeiroSinalMs": 4,
+      "primeiroTokenMs": 53405,
+      "fimMs": 54798,
+      "textosDistintosAntesDoFim": 46,
+      "estadoFinal": "Resposta pronta."
+    },
+    {
+      "id": "T03",
+      "primeiroSinalMs": 2,
+      "primeiroTokenMs": 82516,
+      "fimMs": 87131,
+      "textosDistintosAntesDoFim": 152,
+      "estadoFinal": "Resposta pronta."
+    },
+    {
+      "id": "T04",
+      "primeiroSinalMs": 4,
+      "primeiroTokenMs": 57311,
+      "fimMs": 61630,
+      "textosDistintosAntesDoFim": 139,
+      "estadoFinal": "Resposta pronta."
+    },
+    {
+      "id": "T05",
+      "primeiroSinalMs": 4,
+      "primeiroTokenMs": 43988,
+      "fimMs": 47845,
+      "textosDistintosAntesDoFim": 126,
+      "estadoFinal": "Resposta pronta."
+    }
+  ],
+  "dentroDoLimite": 0,
+  "de": 5,
+  "medianaMs": 53405,
+  "maximoMs": 82516
+}

@@ -63,6 +63,7 @@ async function medir(chat: PaginaChat, id: string): Promise<Medida> {
 }
 
 test("T01 a T05: o primeiro token aparece na tela em até 5 s (aceite da F8.2)", async ({ page }) => {
+  test.setTimeout(1_200_000); // 6 perguntas em sequência, cada uma até ~2 min no pior caso
   const chat = new PaginaChat(page);
   await medir(chat, "T15"); // esquenta os modelos; não conta
   const medidas: Medida[] = [];
