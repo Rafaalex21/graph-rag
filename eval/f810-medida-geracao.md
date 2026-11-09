@@ -61,4 +61,4 @@ Tempos (s, ponta a ponta pela tela): rodada 1: 31,6 / 37,2 / 29,5 / 29,0 / 5,0; 
 
 Limites vistos: o selo de estado vem do crítico do ciclo, que não conhece o pedido de arquivo, e disse `incompleta` ("Encontrei só em parte") em A1 a A4 mesmo com o material completo e conferido; n = 5 pedidos, 3 anos, uma série; o "abrir" foi por biblioteca, não pelo Word, Excel ou PowerPoint; a verificação prova que o número existe na evidência citada, não que está no ano certo (isso é o que o gabarito conferiu nesta medida); valor negativo não tem o sinal conferido.
 
-**Decisão do dono (09/11):** aceitou a leitura pós-hoc "a página citada contém o valor" (5 de 5) e fechou a F8.10 com ela. O resultado pela regra original (2 de 5) continua registrado acima.
+**Aceite retirado (09/11):** o dono chegou a aceitar a leitura pós-hoc "a página citada contém o valor", mas disse que foi sem querer e que não quer aceitar algo que falhou. O resultado oficial é **2 de 5 pela regra fixada** e a F8.10 fica `[~]`. A leitura pós-hoc segue só como informação.
