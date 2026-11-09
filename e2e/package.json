@@ -1,0 +1,17 @@
+{
+  "name": "graphrag-e2e",
+  "version": "0.1.0",
+  "private": true,
+  "description": "Testes E2E (Playwright) do GraphRAG local: a interface Angular contra uma API falsa que fala o contrato SSE e, com E2E_AO_VIVO=1, a pilha real",
+  "type": "module",
+  "scripts": {
+    "test": "playwright test --project=interface",
+    "test:ao-vivo": "playwright test --project=ao-vivo",
+    "relatorio": "playwright show-report"
+  },
+  "devDependencies": {
+    "@playwright/test": "1.64.1",
+    "@types/node": "24.19.2",
+    "typescript": "6.0.3"
+  }
+}
