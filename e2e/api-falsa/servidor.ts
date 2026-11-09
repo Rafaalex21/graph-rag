@@ -7,6 +7,8 @@
  * Também serve o PDF de teste em GET /api/documento/pdf (com `Range`, como a API real) e as fontes em GET /api/fonte/:id:
  *   p1 pai p. 6 · t1 tabela p. 9-10 · f1 fato sem página (texto com HTML) · e1 entidade (resumo que não está no PDF) · tudo mais, 404.
  *
+ * Também o grafo de teste do explorador em GET /api/grafo/vizinhanca (ver `ENTIDADES`) e o roteiro "quem é" (evidências com id de entidade).
+ *
  * Roteiros (a pergunta contém a palavra):
  *   lento/a   tokens com 150 ms entre eles, para provar que a tela mostra a resposta AOS POUCOS pelo proxy do ng serve
  *   xss       a resposta traz HTML hostil
@@ -132,6 +134,50 @@ function servirPdf(req: IncomingMessage, res: ServerResponse): void {
   res.end(PDF.subarray(ini, fim + 1));
 }
 
+/**
+ * O grafo de teste do explorador (F8.5). Entidades: bb (Banco do Brasil), uniao, marco, bbseg, tesouro, bndes e `hostil` (rótulo e
+ * tipo com HTML). Ligações: uniao→bb, marco→bb, bb→bbseg, uniao→tesouro, uniao→bndes, hostil→tesouro. `ent:erro` responde 503 e
+ * `ent:grande` devolve 100 nós com `truncado`. Tudo o mais é 404, como a API real.
+ */
+const ENTIDADES: Record<string, { rotulo: string; tipo: string }> = {
+  "ent:org:bb": { rotulo: "Banco do Brasil", tipo: "organizacao" },
+  "ent:org:uniao": { rotulo: "União Federal", tipo: "organizacao" },
+  "ent:pessoa:marco": { rotulo: "Marco Geovanne Tobias da Silva", tipo: "pessoa" },
+  "ent:org:bbseg": { rotulo: "BB Seguridade", tipo: "organizacao" },
+  "ent:org:tesouro": { rotulo: "Tesouro Nacional", tipo: "organizacao" },
+  "ent:org:bndes": { rotulo: "BNDES", tipo: "organizacao" },
+  "ent:org:hostil": { rotulo: '<img src=x onerror="window.__xss=1">', tipo: "<script>window.__xss=1</script>" },
+};
+const LIGACOES: [string, string, string][] = [
+  ["ent:org:uniao", "ent:org:bb", "CONTROLA"],
+  ["ent:pessoa:marco", "ent:org:bb", "DIRIGE"],
+  ["ent:org:bb", "ent:org:bbseg", "CONTROLA"],
+  ["ent:org:uniao", "ent:org:tesouro", "VINCULADA"],
+  ["ent:org:uniao", "ent:org:bndes", "CONTROLA"],
+  ["ent:org:hostil", "ent:org:tesouro", "CITA"],
+];
+
+function vizinhanca(url: URL, res: ServerResponse): void {
+  const q = url.searchParams.get("entidade") ?? "";
+  if (q === "") return json(res, 400, { codigo: "requisicao_invalida", mensagem: "Informe entidade." });
+  if (q === "ent:erro") return json(res, 503, { codigo: "neo4j_indisponivel", mensagem: "O banco de grafos não está disponível." });
+  if (q === "ent:grande") {
+    const nos = [{ id: "ent:grande", rotulo: "Entidade grande", tipo: "organizacao" }, ...Array.from({ length: 99 }, (_, i) => ({ id: `ent:g:${i}`, rotulo: `Vizinha ${i + 1}`, tipo: "organizacao" }))];
+    const arestas = nos.slice(1).map((n) => ({ origem: "ent:grande", destino: n.id, tipo: "LIGADA" }));
+    return json(res, 200, { entidade: nos[0], nos, arestas, truncado: true });
+  }
+  const id = Object.keys(ENTIDADES).find((k) => k === q || ENTIDADES[k]?.rotulo.toLowerCase() === q.toLowerCase());
+  if (!id) return json(res, 404, { codigo: "entidade_nao_encontrada", mensagem: "Nenhuma entidade com esse nome ou id." });
+  const no = (k: string) => ({ id: k, rotulo: ENTIDADES[k]?.rotulo ?? k, tipo: ENTIDADES[k]?.tipo ?? "" });
+  const ids = new Set([id]);
+  for (const [a, b] of LIGACOES) {
+    if (a === id) ids.add(b);
+    if (b === id) ids.add(a);
+  }
+  const arestas = LIGACOES.filter(([a, b]) => ids.has(a) && ids.has(b)).map(([origem, destino, tipo]) => ({ origem, destino, tipo }));
+  json(res, 200, { entidade: no(id), nos: [...ids].map(no), arestas, truncado: false });
+}
+
 async function responderChat(req: IncomingMessage, res: ServerResponse): Promise<void> {
   const bruto = await lerCorpo(req);
   let corpo: Record<string, unknown>;
@@ -161,12 +207,25 @@ async function responderChat(req: IncomingMessage, res: ServerResponse): Promise
     }
   };
 
-  if (mensagem.includes("rastro")) {
+  const minuscula = mensagem.toLowerCase();
+  if (minuscula.includes("quem é") || minuscula.includes("quem e ")) {
+    // roteiro "quem é": a ferramenta `entidade` acha entidades (evidências com id de entidade) e um trecho de texto
+    const todas = minuscula.includes("todas as entidades");
+    res.write(etapa("rota", { rodada: 1, indice: 0, onda: 0, rota: "entidade", ferramentas: ["entidade"], fallback: null, ms: 40 }));
+    await tokens(["O Banco do Brasil ", "é uma sociedade ", "de economia mista [E1]", "."]);
+    res.write(quadro("evidencia", { id: "ent:org:bb", tipo: "entidade", pagina: "p. 6", trecho: "Banco do Brasil S.A.", score: 0.95 }));
+    res.write(quadro("evidencia", { id: "ent:pessoa:marco", tipo: "entidade", pagina: null, trecho: "Diretor de Relações com Investidores", score: 0.7 }));
+    if (todas) for (let i = 1; i <= 6; i++) res.write(quadro("evidencia", { id: `ent:x:${i}`, tipo: "entidade", pagina: null, trecho: `Entidade ${i}`, score: 0.5 }));
+    res.write(quadro("evidencia", { id: "p1", tipo: "pai", pagina: "p. 6", trecho: "trecho", score: 0.9 }));
+    res.write(quadro("fim", FIM("O Banco do Brasil é uma sociedade de economia mista [p. 6].", { metricas: { latenciaMs: 900, tokensEntrada: 80, tokensSaida: 12, rota: ["entidade"], estado: "suficiente" } })));
+  } else if (mensagem.includes("rastro")) {
     await roteiroRastro(res);
   } else if (mensagem.includes("ausente")) {
     roteiroAusente(res);
   } else if (/lent[oa]/.test(mensagem)) {
-    await tokens(["O ", "lucro ", "líquido ", "foi ", "de ", "R$ 20 ", "bilhões ", "[E1]", "."], 150);
+    await tokens(["O ", "lucro ", "líquido ", "foi ", "de ", "R$ 20 ", "bilhões "], 150);
+    await tokens(["[E1]"], 1500); // a marca "fonte" fica na tela tempo de sobra para o teste vê-la mesmo com a máquina carregada
+    await tokens(["."], 150);
     res.write(quadro("fim", FIM("O lucro líquido foi de R$ 20 bilhões [p. 6].")));
   } else if (mensagem.includes("xss")) {
     await tokens(['<img src=x onerror="window.__xss=1">', "<script>window.__xss=1</script>", " texto **seguro** ", "[link](javascript:window.__xss=1)"]);
@@ -200,6 +259,7 @@ const servidor = createServer((req, res) => {
     return;
   }
   if (url.pathname === "/api/documento/pdf" && req.method === "GET") return servirPdf(req, res);
+  if (url.pathname === "/api/grafo/vizinhanca" && req.method === "GET") return vizinhanca(url, res);
   const fonte = /^\/api\/fonte\/([^/]+)$/.exec(url.pathname);
   if (fonte && req.method === "GET") {
     const f = FONTES[decodeURIComponent(fonte[1] as string)];

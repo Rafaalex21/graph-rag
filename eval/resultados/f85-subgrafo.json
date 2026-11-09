@@ -1,0 +1,91 @@
+{
+  "perguntas": [
+    "T01",
+    "E04",
+    "E07"
+  ],
+  "resultados": [
+    {
+      "pergunta": "T01",
+      "evidencias": 6,
+      "entidadesNaResposta": [],
+      "tiposDeEvidencia": [
+        "pai"
+      ],
+      "medida": false,
+      "motivo": "sem entidade na resposta"
+    },
+    {
+      "pergunta": "E04",
+      "evidencias": 7,
+      "entidadesNaResposta": [
+        "ent:person:a3aa955110f67a94"
+      ],
+      "tiposDeEvidencia": [
+        "pessoa",
+        "pai"
+      ],
+      "medida": true,
+      "entidades": 3,
+      "ligacoes": 5,
+      "sementes": 1,
+      "msA": 86,
+      "temposB": [
+        66,
+        68,
+        66,
+        58,
+        64
+      ],
+      "msBMaximo": 68,
+      "expansao": {
+        "ms": 156,
+        "entidadesAntes": 3,
+        "entidadesDepois": 102
+      }
+    },
+    {
+      "pergunta": "E07",
+      "evidencias": 27,
+      "entidadesNaResposta": [
+        "ent:organization:a8c688c34238ecce",
+        "ent:event:70908fc95fedaa74",
+        "ent:event:9069d6201e40f700",
+        "ent:organization:a4700a1ad21abb8f",
+        "ent:product:b4724f478dc819a6",
+        "ent:organization:c0953f338eba05d1"
+      ],
+      "tiposDeEvidencia": [
+        "entidade",
+        "pai",
+        "relacao",
+        "comunidade"
+      ],
+      "medida": true,
+      "entidades": 17,
+      "ligacoes": 51,
+      "sementes": 6,
+      "msA": 85,
+      "temposB": [
+        69,
+        59,
+        59,
+        63,
+        60
+      ],
+      "msBMaximo": 69,
+      "expansao": {
+        "ms": 139,
+        "entidadesAntes": 17,
+        "entidadesDepois": 18
+      }
+    }
+  ],
+  "resumo": {
+    "medidas": 2,
+    "semEntidade": 1,
+    "limiteMs": 1000,
+    "msMaximoGeral": 86,
+    "todasDentroDoLimite": true
+  }
+}

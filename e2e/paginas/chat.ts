@@ -21,7 +21,8 @@ export class PaginaChat {
     this.perguntas = page.locator('[data-papel="usuario"]');
     this.respostas = page.locator('[data-papel="assistente"]');
     this.alerta = page.getByRole("alert");
-    this.estado = page.getByRole("status");
+    // só o status da conversa: as abas Fontes e Grafo têm o seu próprio `role="status"`
+    this.estado = page.getByRole("region", { name: "Conversa" }).getByRole("status");
   }
 
   async abrir(): Promise<void> {

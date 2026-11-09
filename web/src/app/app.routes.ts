@@ -24,8 +24,7 @@ export const routes: Routes = [
       },
       {
         path: 'grafo',
-        loadComponent: () => import('./paginas/painel/painel-vazio').then((m) => m.PainelVazio),
-        data: { titulo: 'Grafo', texto: 'Aqui aparece o subgrafo usado na resposta, com a vizinhança de cada entidade a um clique.' },
+        loadComponent: () => import('./paginas/grafo/grafo.page').then((m) => m.GrafoPage),
       },
     ],
   },

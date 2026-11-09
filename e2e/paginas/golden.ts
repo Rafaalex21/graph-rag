@@ -1,6 +1,6 @@
 import { readFileSync } from "node:fs";
 
-/** Lê o `eval/golden.csv` (campos entre aspas, com vírgulas e quebras de linha dentro). */
+/** Lê o `eval/golden.csv` e o `eval/golden_entidades.csv` (campos entre aspas, com vírgulas e quebras de linha dentro). */
 function lerCsv(texto: string): Record<string, string>[] {
   const linhas: string[][] = [];
   let campo = "";
@@ -35,11 +35,11 @@ function lerCsv(texto: string): Record<string, string>[] {
   return resto.map((l) => Object.fromEntries(cabecalho.map((h, i) => [h, l[i] ?? ""])));
 }
 
-const CAMINHO = new URL("../../eval/golden.csv", import.meta.url);
+const CAMINHOS = ["golden.csv", "golden_entidades.csv"].map((n) => new URL(`../../eval/${n}`, import.meta.url));
 
 /** A pergunta do golden pelo id (T01, N06...). */
 export function perguntaDoGolden(id: string): string {
-  const linha = lerCsv(readFileSync(CAMINHO, "utf-8")).find((l) => l["id"] === id);
+  const linha = CAMINHOS.flatMap((c) => lerCsv(readFileSync(c, "utf-8"))).find((l) => l["id"] === id);
   if (!linha?.["pergunta"]) throw new Error(`Não achei a pergunta ${id} no golden.`);
   return linha["pergunta"];
 }

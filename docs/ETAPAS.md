@@ -394,9 +394,11 @@
   - depende: F8.2
   - resultado: ADR-070; aba Fontes em `/chat/fontes?pagina=N&fonte=<id>` (chip da resposta e botão do Rastro levam a página e fonte), pdf.js 6.4.299 em chunk à parte lendo `/api/documento/pdf` por `Range`, canvas + camada de texto, destaque por sequências de 4 palavras, navegação e avisos para página inválida, fonte 404/503 e PDF fora do ar. **Medida pré-registrada (`eval/f84-medida-citacoes.md`, com emenda feita antes de rodar): 10 de 10 abriram na página certa** (universo de 109 pares, semente 84, repetível); 9 de texto literal também tiveram o início do trecho na página e as 9 foram destacadas; 1 era entidade (só a página). Página e texto em mediana 0,58 s, máx. 0,91 s. E2E: 81 testes da interface (30 novos), 162 de 162 em duas repetições.
   - nota: n = 10 num universo de 107, quase tudo `pai`; "página certa" é a do rótulo citado, não prova que a citação sustenta a afirmação. O painel é estreito e o texto da página fica pequeno (sem zoom ainda). O destaque marca itens inteiros da camada de texto.
-- [ ] **F8.5** Explorador do subgrafo usado na resposta, com expansão por clique
+- [x] **F8.5** Explorador do subgrafo usado na resposta, com expansão por clique
   - aceite: subgrafo de uma pergunta "quem é…" renderizado em ≤ 1 s
   - depende: F8.2
+  - resultado: ADR-071; aba Grafo em SVG próprio (cada entidade é um botão que se expande com clique, Enter ou Espaço; layout de forças sem sorteio; os nós que já estavam não se mexem), subgrafo = entidades da resposta (evidências `entidade`/`ent:`, até 6 sementes) com a vizinhança de profundidade 1 de `GET /api/grafo/vizinhanca`, campo "Explorar uma entidade", zoom e legenda de tipos. **Medida pré-registrada (`eval/f85-medida-subgrafo.md`): das 3 perguntas "Quem é" do golden, 2 tinham entidade na resposta e foram medidas (E04, E07): 86 e 85 ms da abertura da aba até desenhado, e 58 a 69 ms nas 5 repetições de cada; máximo 86 ms contra 1.000 ms.** E2E: 104 testes da interface (23 novos), 208 de 208 em duas repetições.
+  - nota: n = 2 perguntas medidas; T01 foi respondida só com trechos e não tem subgrafo (registrado, fora do tempo). O 1º teste ao vivo achou um defeito de layout (componentes soltos espalhados por milhares de unidades), corrigido com gravidade antes da medida. Com mais de 8 tipos a cor repete (o tipo também está em texto); sem arrastar nós nem filtro por tipo.
 - [ ] **F8.6** Configurações de perfil e modo de recuperação
   - aceite: trocar o modo muda a rota observada no Rastro
   - depende: F8.3
