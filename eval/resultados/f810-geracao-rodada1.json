@@ -1,0 +1,112 @@
+{
+  "pedidos": [
+    "A1",
+    "A2",
+    "A3",
+    "A4",
+    "A5"
+  ],
+  "itens": [
+    {
+      "pedido": "A1",
+      "terminou": "pronta",
+      "ms": 31571,
+      "latenciaDaApiMs": 31356,
+      "estadoDoFim": "incompleta",
+      "eventoArtefato": true,
+      "problemasDoContrato": [],
+      "celulas": 1,
+      "rotulosOk": false,
+      "valoresOk": false,
+      "paginasOk": false,
+      "graficoNaTela": true,
+      "removidos": 0,
+      "arquivo": {
+        "formato": "svg",
+        "nome": "lucro-liquido-do-exercicio.svg",
+        "status": 200,
+        "tipo": "image/svg+xml",
+        "bytes": 1685,
+        "abriu": true,
+        "valoresNoArquivo": false,
+        "partes": null,
+        "detalhe": "svg lido como XML"
+      },
+      "arquivoOk": false,
+      "ok": false
+    },
+    {
+      "pedido": "A2",
+      "terminou": "pronta",
+      "ms": 37163,
+      "latenciaDaApiMs": 37006,
+      "estadoDoFim": "incompleta",
+      "eventoArtefato": false,
+      "material": 0,
+      "problemasDoContrato": [
+        "a API não mandou o evento artefato"
+      ],
+      "ok": false,
+      "motivo": "nenhum material na tela"
+    },
+    {
+      "pedido": "A3",
+      "terminou": "pronta",
+      "ms": 29452,
+      "latenciaDaApiMs": 28991,
+      "estadoDoFim": "incompleta",
+      "eventoArtefato": true,
+      "problemasDoContrato": [],
+      "celulas": 1,
+      "rotulosOk": false,
+      "valoresOk": false,
+      "paginasOk": false,
+      "graficoNaTela": null,
+      "removidos": 0,
+      "arquivo": {
+        "formato": "docx",
+        "nome": "lucro-liquido-do-exercicio.docx",
+        "status": 200,
+        "tipo": "application/vnd.openxmlformats-officedocument.wordprocessingml.document",
+        "bytes": 9880,
+        "abriu": true,
+        "valoresNoArquivo": false,
+        "partes": 17,
+        "detalhe": "17 de 17 partes XML bem formadas"
+      },
+      "arquivoOk": false,
+      "ok": false
+    },
+    {
+      "pedido": "A4",
+      "terminou": "pronta",
+      "ms": 29004,
+      "latenciaDaApiMs": 28535,
+      "estadoDoFim": "incompleta",
+      "eventoArtefato": false,
+      "material": 0,
+      "problemasDoContrato": [
+        "a API não mandou o evento artefato"
+      ],
+      "ok": false,
+      "motivo": "nenhum material na tela"
+    },
+    {
+      "pedido": "A5",
+      "terminou": "pronta",
+      "ms": 4956,
+      "latenciaDaApiMs": 4901,
+      "estadoDoFim": "sem_consulta",
+      "eventoArtefato": false,
+      "material": 0,
+      "tabelas": 0,
+      "links": 0,
+      "dizNaoConsta": true,
+      "ok": true
+    }
+  ],
+  "resumo": {
+    "cumpridos": "1 de 5",
+    "aceiteCumprido": false
+  }
+}

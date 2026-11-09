@@ -39,3 +39,14 @@ Cumprido só se **5 de 5** pedidos passarem por todos os itens que se aplicam a 
 Limites já sabidos: n = 5 pedidos, 1 execução cada; só séries de 3 pontos de um mesmo valor; gráfico só de barras e de linhas; o `.xlsx` e o `.docx` levam a tabela (o `exceljs` e o `docx` não desenham gráfico nativo; o `.pptx` leva o gráfico nativo do `pptxgenjs`); sem fórmulas, macros nem dados de fora do documento.
 
 Reprodução: ver o ADR-075.
+
+## Rodadas ao vivo e o que mudou entre elas (registrado ANTES da rodada 3)
+
+Todas as execuções ao vivo, contadas:
+
+1. **Rodada 1** (`eval/resultados/f810-geracao-rodada1.json`): **1 de 5**. A recuperação trouxe só o ano-base (o grafo tem o lucro só de 2025): A1 e A3 saíram com 1 ponto, A2 e A4 sem material (nenhum ponto passou). Só A5 ("não consta") passou. Nada foi tirado do resultado.
+2. **Uma chamada de diagnóstico** (só A1, por `curl`, entre as rodadas 1 e 2) para ver as evidências: eram 10 trechos e um fato de 2025, nenhuma tabela. Causa: a série de vários anos está numa tabela do documento, que o roteador não buscou.
+3. **Mudança geral, não por pedido** (commit ao lado): o pedido de gráfico, tabela ou arquivo faz o agente buscar também `buscar_tabelas` (`complementarTabelas`), e as evidências de tabela vão primeiro ao modelo da especificação.
+4. **Rodada 2** (`f810-geracao-rodada2.json`): **2 de 5** pela regra fixada. Rótulos, valores (os três anos, na ordem), arquivos relidos e "não consta" corretos nos 5; A1, A3 e A4 falharam **só** no item de página: a tela citou **p. 80** e o meu gabarito dizia **p. 93**. Conferido no PDF (`data/parsed/…tabelas.json`): a linha "Lucro líquido 33.166 29.172 16.782" está em tabelas das pp. 80, 92 e 93 (e a conciliação gerencial na p. 13); o gabarito de página que escrevi foi estreito demais.
+
+**A regra de aceite não muda** (5 de 5 com `p. 93`). Para a **rodada 3** (a mesma pergunta, os mesmos cinco pedidos, depois de tirar a legenda repetida do gráfico, ajuste de tela sem relação com a regra) o teste passa a gravar, por pedido, as páginas citadas e um item **pós-hoc** `paginasNoPdf`: o valor mostrado está numa tabela do PDF extraído **na página que a célula cita**. É só informativo; se o aceite deve ou não ser lido assim é decisão do dono, registrada como pós-hoc (o resultado pela regra original continua no relatório).

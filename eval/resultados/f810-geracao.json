@@ -1,0 +1,140 @@
+{
+  "pedidos": [
+    "A1",
+    "A2",
+    "A3",
+    "A4",
+    "A5"
+  ],
+  "itens": [
+    {
+      "pedido": "A1",
+      "terminou": "pronta",
+      "ms": 31028,
+      "latenciaDaApiMs": 30587,
+      "estadoDoFim": "incompleta",
+      "eventoArtefato": true,
+      "problemasDoContrato": [],
+      "celulas": 3,
+      "rotulosOk": true,
+      "valoresOk": true,
+      "paginasOk": false,
+      "graficoNaTela": true,
+      "removidos": 0,
+      "arquivo": {
+        "formato": "svg",
+        "nome": "lucro-liquido-do-exercicio.svg",
+        "status": 200,
+        "tipo": "image/svg+xml",
+        "bytes": 2319,
+        "abriu": true,
+        "valoresNoArquivo": true,
+        "partes": null,
+        "detalhe": "svg lido como XML"
+      },
+      "arquivoOk": true,
+      "ok": false
+    },
+    {
+      "pedido": "A2",
+      "terminou": "pronta",
+      "ms": 47379,
+      "latenciaDaApiMs": 46844,
+      "estadoDoFim": "incompleta",
+      "eventoArtefato": true,
+      "problemasDoContrato": [],
+      "celulas": 3,
+      "rotulosOk": true,
+      "valoresOk": true,
+      "paginasOk": true,
+      "graficoNaTela": null,
+      "removidos": 0,
+      "arquivo": {
+        "formato": "xlsx",
+        "nome": "receita-liquida-de-juros-2023-2025.xlsx",
+        "status": 200,
+        "tipo": "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet",
+        "bytes": 6909,
+        "abriu": true,
+        "valoresNoArquivo": true,
+        "partes": 1,
+        "detalhe": "3 células numéricas"
+      },
+      "arquivoOk": true,
+      "ok": true
+    },
+    {
+      "pedido": "A3",
+      "terminou": "pronta",
+      "ms": 33586,
+      "latenciaDaApiMs": 33091,
+      "estadoDoFim": "incompleta",
+      "eventoArtefato": true,
+      "problemasDoContrato": [],
+      "celulas": 3,
+      "rotulosOk": true,
+      "valoresOk": true,
+      "paginasOk": false,
+      "graficoNaTela": null,
+      "removidos": 0,
+      "arquivo": {
+        "formato": "docx",
+        "nome": "lucro-liquido-do-exercicio.docx",
+        "status": 200,
+        "tipo": "application/vnd.openxmlformats-officedocument.wordprocessingml.document",
+        "bytes": 9910,
+        "abriu": true,
+        "valoresNoArquivo": true,
+        "partes": 17,
+        "detalhe": "17 de 17 partes XML bem formadas"
+      },
+      "arquivoOk": true,
+      "ok": false
+    },
+    {
+      "pedido": "A4",
+      "terminou": "pronta",
+      "ms": 34638,
+      "latenciaDaApiMs": 34565,
+      "estadoDoFim": "incompleta",
+      "eventoArtefato": true,
+      "problemasDoContrato": [],
+      "celulas": 3,
+      "rotulosOk": true,
+      "valoresOk": true,
+      "paginasOk": false,
+      "graficoNaTela": true,
+      "removidos": 0,
+      "arquivo": {
+        "formato": "pptx",
+        "nome": "lucro-liquido-do-exercicio.pptx",
+        "status": 200,
+        "tipo": "application/vnd.openxmlformats-officedocument.presentationml.presentation",
+        "bytes": 91469,
+        "abriu": true,
+        "valoresNoArquivo": true,
+        "partes": 27,
+        "detalhe": "26 de 26 partes XML bem formadas"
+      },
+      "arquivoOk": true,
+      "ok": false
+    },
+    {
+      "pedido": "A5",
+      "terminou": "pronta",
+      "ms": 4425,
+      "latenciaDaApiMs": 4078,
+      "estadoDoFim": "sem_consulta",
+      "eventoArtefato": false,
+      "material": 0,
+      "tabelas": 0,
+      "links": 0,
+      "dizNaoConsta": true,
+      "ok": true
+    }
+  ],
+  "resumo": {
+    "cumpridos": "2 de 5",
+    "aceiteCumprido": false
+  }
+}
