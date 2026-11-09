@@ -68,4 +68,24 @@ Grava `eval/resultados/f810c-geracao.json` (ids, valores, páginas citadas, pág
 
 ## Rodadas (preenchido depois de rodar; toda rodada é contada)
 
-_Nenhuma rodada ainda._
+### Rodada 1 (09/11, a única até agora): **3 de 5 pela regra fixada. O aceite NÃO foi cumprido.**
+
+`eval/resultados/f810c-geracao.json`. Commits antes da rodada: medida `aa00cdb`, teste `9f29556`; nenhum código de produção mudou. As páginas aceitas calculadas pelo teste bateram com as registradas nos 4 pedidos (84; 93 e 94; 81; 93).
+
+| Pedido | Resultado | Páginas citadas | Tempo | Selo |
+|---|---|---|---|---|
+| C1 gráfico, depósitos a prazo | passou | p. 84 nas 3 | 53,5 s | incompleta |
+| C2 tabela e planilha, receitas de juros | passou | **p. 94 nas 3** (a página com percentuais no meio, que a regra de B recusaria e a de C aceita) | 53,5 s | suficiente |
+| C3 Word, patrimônio líquido | **falhou: nenhum material** | — | 6,5 s | sem_consulta |
+| C4 apresentação, lucro antes dos impostos | **falhou: só 1 dos 3 anos** | p. 93 (só 2025) | 29,5 s | incompleta |
+| C5 "não consta", Nubank | passou | — | 4,9 s | sem_consulta |
+
+**Desta vez as duas falhas são do sistema, não do gabarito** (conferido depois, lendo as respostas gravadas no `trace.zip` do Playwright, sem nova chamada ao sistema):
+- **C3:** o roteador devolveu rota vazia (`sem_consulta`) e a resposta foi "Isso está fora do que o documento traz.", mais a frase "Não gerei o material pedido…". O patrimônio líquido **está** no documento (p. 81). Ou seja, o roteador tratou um pedido de "documento Word com o patrimônio líquido" como assunto de fora. Em A3 e B3 o mesmo formato de pedido funcionou; aqui a mudança foi a métrica.
+- **C4:** a busca trouxe só o fato de 2025 (R$ 5.614 milhões, p. 93); a resposta diz "não encontrei … 2023 e 2024" e o material saiu com **um** ponto. A linha completa com os três anos existe na tabela da p. 93. O código manteve o que tinha lastro e não inventou os outros dois anos, que é o comportamento desenhado, mas o pedido de três anos não foi atendido.
+- Em C1, o texto da resposta diz que não encontrou os valores de depósitos a prazo, enquanto o material ao lado traz os três valores certos com a p. 84. O texto do redator e o material gerado se contradizem; isso não entra no aceite, mas o usuário vê.
+
+Passaram por todos os itens: C1 (contrato, rótulos, valores, página, gráfico, `.svg`), C2 (`.xlsx` relido com os 3 valores) e C5 (sem evento, gráfico, tabela nem link, e diz que não consta). `removidos` = 0 em todos.
+
+**O que isso muda:** a F8.10 continua `[~]` e não há aceite pós-hoc. Acumulado de rodadas ao vivo desta etapa: medida antiga 3 rodadas + 1 diagnóstico (1, 2, 2 de 5), F8.10b 1 rodada (4 de 5), F8.10c 1 rodada (3 de 5). A regra de página mecânica funcionou como previsto (C2 citou a p. 94 e passou). O que falta é do produto, e de forma geral: (1) o roteador não pode tratar como "fora do documento" um pedido de material sobre uma métrica que existe; (2) a busca do pedido de material precisa trazer a série dos três anos (hoje depende de sorte do `serie_metrica`/`buscar_tabelas`). Qualquer conserto vira tarefa com teste E2E escrito antes e uma rodada nova, em pedidos novos, contada à parte (F8.10d), por decisão do dono.
+

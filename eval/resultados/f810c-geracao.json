@@ -1,0 +1,175 @@
+{
+  "pedidos": [
+    "C1",
+    "C2",
+    "C3",
+    "C4",
+    "C5"
+  ],
+  "itens": [
+    {
+      "pedido": "C1",
+      "terminou": "pronta",
+      "ms": 53511,
+      "latenciaDaApiMs": 53418,
+      "estadoDoFim": "incompleta",
+      "eventoArtefato": true,
+      "problemasDoContrato": [],
+      "celulas": 3,
+      "rotulosOk": true,
+      "valoresOk": true,
+      "paginasOk": true,
+      "paginasCitadas": [
+        "p. 84",
+        "p. 84",
+        "p. 84"
+      ],
+      "paginasAceitas": [
+        84
+      ],
+      "paginasCalculadas": [
+        84
+      ],
+      "conjuntoConfere": true,
+      "paginasNoPdf": [
+        true,
+        true,
+        true
+      ],
+      "graficoNaTela": true,
+      "removidos": 0,
+      "arquivo": {
+        "formato": "svg",
+        "nome": "depositos-a-prazo.svg",
+        "status": 200,
+        "tipo": "image/svg+xml",
+        "bytes": 2050,
+        "abriu": true,
+        "valoresNoArquivo": true,
+        "partes": null,
+        "detalhe": "svg lido como XML"
+      },
+      "arquivoOk": true,
+      "ok": true
+    },
+    {
+      "pedido": "C2",
+      "terminou": "pronta",
+      "ms": 53481,
+      "latenciaDaApiMs": 53137,
+      "estadoDoFim": "suficiente",
+      "eventoArtefato": true,
+      "problemasDoContrato": [],
+      "celulas": 3,
+      "rotulosOk": true,
+      "valoresOk": true,
+      "paginasOk": true,
+      "paginasCitadas": [
+        "p. 94",
+        "p. 94",
+        "p. 94"
+      ],
+      "paginasAceitas": [
+        93,
+        94
+      ],
+      "paginasCalculadas": [
+        93,
+        94
+      ],
+      "conjuntoConfere": true,
+      "paginasNoPdf": [
+        true,
+        true,
+        true
+      ],
+      "graficoNaTela": null,
+      "removidos": 0,
+      "arquivo": {
+        "formato": "xlsx",
+        "nome": "receitas-de-juros-2023-2025.xlsx",
+        "status": 200,
+        "tipo": "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet",
+        "bytes": 6899,
+        "abriu": true,
+        "valoresNoArquivo": true,
+        "partes": 1,
+        "detalhe": "3 células numéricas"
+      },
+      "arquivoOk": true,
+      "ok": true
+    },
+    {
+      "pedido": "C3",
+      "terminou": "pronta",
+      "ms": 6509,
+      "latenciaDaApiMs": 6425,
+      "estadoDoFim": "sem_consulta",
+      "eventoArtefato": false,
+      "material": 0,
+      "problemasDoContrato": [
+        "a API não mandou o evento artefato"
+      ],
+      "ok": false,
+      "motivo": "nenhum material na tela"
+    },
+    {
+      "pedido": "C4",
+      "terminou": "pronta",
+      "ms": 29511,
+      "latenciaDaApiMs": 28987,
+      "estadoDoFim": "incompleta",
+      "eventoArtefato": true,
+      "problemasDoContrato": [],
+      "celulas": 1,
+      "rotulosOk": false,
+      "valoresOk": false,
+      "paginasOk": true,
+      "paginasCitadas": [
+        "p. 93"
+      ],
+      "paginasAceitas": [
+        93
+      ],
+      "paginasCalculadas": [
+        93
+      ],
+      "conjuntoConfere": true,
+      "paginasNoPdf": [
+        true
+      ],
+      "graficoNaTela": true,
+      "removidos": 0,
+      "arquivo": {
+        "formato": "pptx",
+        "nome": "lucro-antes-dos-impostos-2023-2025.pptx",
+        "status": 200,
+        "tipo": "application/vnd.openxmlformats-officedocument.presentationml.presentation",
+        "bytes": 83438,
+        "abriu": true,
+        "valoresNoArquivo": false,
+        "partes": 27,
+        "detalhe": "26 de 26 partes XML bem formadas"
+      },
+      "arquivoOk": false,
+      "ok": false
+    },
+    {
+      "pedido": "C5",
+      "terminou": "pronta",
+      "ms": 4923,
+      "latenciaDaApiMs": 4465,
+      "estadoDoFim": "sem_consulta",
+      "eventoArtefato": false,
+      "material": 0,
+      "tabelas": 0,
+      "links": 0,
+      "dizNaoConsta": true,
+      "ok": true
+    }
+  ],
+  "resumo": {
+    "cumpridos": "3 de 5",
+    "aceiteCumprido": false
+  }
+}
