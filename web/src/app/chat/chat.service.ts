@@ -4,6 +4,7 @@
  * guardado em `eventos` de cada resposta, sem os tokens.
  */
 import { inject, Injectable, InjectionToken, signal } from '@angular/core';
+import { ConfiguracoesService, MODO_PADRAO, PERFIL_PADRAO } from '../configuracoes/configuracoes.service';
 import { conversar, ErroDaApi, type Citacao, type EventoChat, type MetricasDoFim, type Turno } from './chat-api';
 
 /** O `fetch` do chat; os testes trocam por um falso. */
@@ -49,6 +50,7 @@ function novoId(): string {
 @Injectable({ providedIn: 'root' })
 export class ChatService {
   private readonly buscar = inject(FETCH_DO_CHAT);
+  private readonly config = inject(ConfiguracoesService);
 
   readonly mensagens = signal<Mensagem[]>([]);
   readonly ocupado = signal(false);
@@ -131,7 +133,17 @@ export class ChatService {
     const marca = (m: Mensagem, campo: keyof Tempos): Mensagem => (m.tempos[campo] === null ? { ...m, tempos: { ...m.tempos, [campo]: performance.now() - t0 } } : m);
 
     try {
-      for await (const e of conversar({ conversationId: this.conversationId(), message: pergunta, ...(historico.length > 0 ? { historico } : {}) }, { signal: ac.signal, fetch: this.buscar })) {
+      const modo = this.config.modo();
+      const perfil = this.config.perfil();
+      const pedido = {
+        conversationId: this.conversationId(),
+        message: pergunta,
+        // só vão no corpo quando diferem do padrão
+        ...(modo !== MODO_PADRAO ? { mode: modo } : {}),
+        ...(perfil !== PERFIL_PADRAO ? { profile: perfil } : {}),
+        ...(historico.length > 0 ? { historico } : {}),
+      };
+      for await (const e of conversar(pedido, { signal: ac.signal, fetch: this.buscar })) {
         if (ac.signal.aborted || !vigente()) break;
         atualizar((m) => marca(m, 'primeiroEventoMs'));
         if (e.evento === 'token') {

@@ -13,7 +13,7 @@ export function traduzirEvento(e: EventoCiclo): Quadro[] {
       return [etapa("reescrita", { rodada: e.rodada, subperguntas: e.subperguntas, fallback: e.fallback, ms: e.ms })];
     case "roteamento":
       return [
-        etapa("rota", { rodada: e.rodada, indice: e.indice, onda: e.onda, rota: e.rota, ferramentas: e.ferramentas, fallback: e.fallback, ms: e.ms }),
+        etapa("rota", { rodada: e.rodada, indice: e.indice, onda: e.onda, rota: e.rota, ferramentas: e.ferramentas, fallback: e.fallback, ms: e.ms, ...(e.forcado ? { forcado: e.forcado } : {}) }),
         ...e.ferramentas.map((ferramenta) => etapa("ferramenta_inicio", { rodada: e.rodada, indice: e.indice, ferramenta })),
       ];
     case "execucao":

@@ -90,7 +90,6 @@ export function registrarChat(app: FastifyInstance, deps: DependenciasApp): void
     const lido = ChatRequestSchema.safeParse(req.body);
     if (!lido.success) return recusar(400, "requisicao_invalida", "Corpo inválido: mande conversationId e message (até 4.000 caracteres).");
     const { message, mode, profile, historico } = lido.data;
-    if (mode !== "auto") return recusar(400, "modo_nao_implementado", `O modo "${mode}" ainda não existe; use "auto".`);
     if (!deps.ciclo || !deps.redator) return recusar(503, "agente_nao_configurado", "O agente não está configurado nesta API.");
     if (ativas >= maximo) return recusar(429, "ocupado", "Há perguntas demais em andamento. Tente de novo em instantes.");
 
@@ -111,6 +110,7 @@ export function registrarChat(app: FastifyInstance, deps: DependenciasApp): void
       const turnos: Turno[] = historico ?? [];
       ciclo = await deps.ciclo(message, {
         rapido: profile === "consultar-rapido",
+        modo: mode,
         historico: turnos,
         signal: ac.signal,
         progresso: (e) => {

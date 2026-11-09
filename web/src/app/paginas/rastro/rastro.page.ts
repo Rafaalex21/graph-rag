@@ -1,6 +1,7 @@
 import { ChangeDetectionStrategy, Component, computed, inject } from '@angular/core';
 import { Router } from '@angular/router';
 import { ChatService } from '../../chat/chat.service';
+import { rotuloDoModo } from '../../configuracoes/configuracoes.service';
 import { montarRastro, type PassoRastro } from '../../chat/rastro';
 
 const numeroBr = new Intl.NumberFormat('pt-BR');
@@ -25,7 +26,7 @@ const DECISOES: Record<string, string> = { suficiente: 'suficiente', buscar_mais
     } @else {
       <ol aria-label="Linha do tempo da resposta" class="tempo">
         @for (p of passos(); track $index) {
-          <li [attr.data-tipo]="p.tipo" [class.erro]="p.tipo === 'erro' || (p.tipo === 'ferramenta_fim' && p.erro !== null)">
+          <li [attr.data-tipo]="p.tipo" [attr.data-ferramentas]="p.tipo === 'rota' ? p.ferramentas.join(',') : null" [class.erro]="p.tipo === 'erro' || (p.tipo === 'ferramenta_fim' && p.erro !== null)">
             @switch (p.tipo) {
               @case ('reescrita-inicio') {
                 <strong>Pergunta recebida</strong>
@@ -40,6 +41,9 @@ const DECISOES: Record<string, string> = { suficiente: 'suficiente', buscar_mais
               @case ('rota') {
                 <strong>Rota: {{ p.rota }}</strong>
                 <span class="meta">{{ meta(rodada(p.rodada), p.ferramentas.join(', '), tempo(p.ms)) }}</span>
+                @if (p.forcado) {
+                  <span class="meta">Modo forçado: {{ rotuloModo(p.forcado) }}</span>
+                }
                 @if (p.fallback) {
                   <span class="meta">Plano de reserva: {{ p.fallback }}</span>
                 }
@@ -193,6 +197,7 @@ export class RastroPage {
   });
 
   protected readonly plural = plural;
+  protected readonly rotuloModo = rotuloDoModo;
   protected readonly meta = (...partes: string[]) => partes.filter((x) => x !== '').join(' · ');
   protected readonly numero = (n: number) => numeroBr.format(n);
   protected readonly nota = (n: number) => escoreBr.format(n);

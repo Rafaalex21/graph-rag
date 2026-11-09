@@ -388,6 +388,8 @@ export interface OpcoesSubperguntas extends OpcoesRoteador {
   concorrencia?: number;
   /** Executa as ferramentas e devolve um resumo da resposta, que vai ao roteamento das dependentes. */
   executar?: (sub: SubRoteada) => Promise<string | undefined>;
+  /** Roteamento já decidido (modo forçado da F8.6): quando existe, o LLM do roteador não é chamado. */
+  rotearCom?: (pergunta: string) => Roteamento;
 }
 
 /**
@@ -399,7 +401,7 @@ export async function rotearSubperguntas(
   subperguntas: SubPergunta[],
   opcoes: OpcoesSubperguntas = {},
 ): Promise<SubRoteada[]> {
-  const { concorrencia = CONCORRENCIA_PADRAO, executar, ...roteador } = opcoes;
+  const { concorrencia = CONCORRENCIA_PADRAO, executar, rotearCom, ...roteador } = opcoes;
   const n = subperguntas.length;
   const deps = subperguntas.map((s, i) => [...new Set(s.dependeDe)].filter((d) => Number.isInteger(d) && d >= 0 && d < n && d !== i));
   const resultado: (SubRoteada | undefined)[] = new Array<SubRoteada | undefined>(n).fill(undefined);
@@ -418,10 +420,12 @@ export async function rotearSubperguntas(
         .map((d) => resultado[d])
         .filter((r): r is SubRoteada => r !== undefined && r.resposta !== undefined && r.resposta.trim() !== "")
         .map((r) => ({ pergunta: r.pergunta, resposta: r.resposta! }));
-      const roteamento = await rotear(llm, sub.pergunta, {
-        ...roteador,
-        ...(respostasAnteriores.length > 0 ? { respostasAnteriores } : {}),
-      });
+      const roteamento = rotearCom
+        ? rotearCom(sub.pergunta)
+        : await rotear(llm, sub.pergunta, {
+            ...roteador,
+            ...(respostasAnteriores.length > 0 ? { respostasAnteriores } : {}),
+          });
       const item: SubRoteada = { indice: i, pergunta: sub.pergunta, dependeDe: deps[i]!, onda, roteamento };
       if (executar) {
         try {

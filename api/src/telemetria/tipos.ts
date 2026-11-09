@@ -29,7 +29,7 @@ export const RegistroChatSchema = z.object({
   id: z.string().min(1),
   conversationId: z.string().nullable(),
   resultado: z.enum(["fim", "erro", "cancelada", "recusada"]),
-  /** Código do erro ou da recusa (`llm_indisponivel`, `ocupado`, `modo_nao_implementado`…). */
+  /** Código do erro ou da recusa (`llm_indisponivel`, `ocupado`, `requisicao_invalida`…). */
   codigo: z.string().nullable(),
   pergunta: z.object({ caracteres: z.number().int().nonnegative(), hash: z.string(), texto: z.string().optional() }),
   estado: z.enum(["suficiente", "incompleta", "ausente", "sem_consulta"]).nullable(),

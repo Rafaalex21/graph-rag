@@ -37,7 +37,7 @@ paths:
             text/event-stream:
               schema: { type: string }
         "400":
-          description: Corpo inválido, ou `mode`/`profile` ainda não implementado
+          description: Corpo inválido (campo ausente, fora do contrato ou valor de `mode`/`profile` que não existe)
           content:
             application/json:
               schema: { $ref: "#/components/schemas/Erro" }
@@ -216,7 +216,10 @@ components:
         conversationId: { type: string, minLength: 1, maxLength: 100 }
         message: { type: string, minLength: 1, maxLength: 4000 }
         mode:
-          description: Só `auto` está implementado; os outros valores da §11 voltam 400 `modo_nao_implementado`.
+          description: >-
+            `auto` deixa o roteador escolher a ferramenta. Os outros forçam a ferramenta da subpergunta, sem passar pelo
+            roteador (F8.6): `trechos` → `buscar_trechos`, `tabelas` → `buscar_tabelas`, `local` → `entidade`,
+            `global` → `panorama`, `cypher` → `consultar_grafo`. O passo `rota` do SSE leva `forcado` com o modo.
           enum: [auto, trechos, tabelas, local, global, cypher]
           default: auto
         profile:

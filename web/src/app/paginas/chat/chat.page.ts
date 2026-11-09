@@ -3,6 +3,7 @@ import { Router, RouterLink, RouterLinkActive, RouterOutlet } from '@angular/rou
 import { ChatService, LIMITE_PERGUNTA } from '../../chat/chat.service';
 import type { Citacao } from '../../chat/chat-api';
 import { primeiraPagina } from '../../chat/rastro';
+import { ConfiguracoesService, rotuloDoModo, rotuloDoPerfil } from '../../configuracoes/configuracoes.service';
 import { RespostaMarkdown } from '../../chat/resposta-markdown';
 
 const LIMIAR_CONTADOR = 3500;
@@ -19,6 +20,8 @@ const milhar = (n: number) => String(n).replace(/\B(?=(\d{3})+(?!\d))/g, '.');
         <h1 id="titulo-conversa">Conversa</h1>
         <button type="button" class="secundario" (click)="chat.novaConversa()" [disabled]="chat.mensagens().length === 0 && !chat.ocupado()">Nova conversa</button>
       </header>
+
+      <p class="config">Modo: {{ rotuloModo() }} · Perfil: {{ rotuloPerfil() }} · <a routerLink="/configuracoes">Alterar modo e perfil</a></p>
 
       <p role="status" class="so-leitor">{{ avisoDeEstado() }}</p>
 
@@ -132,6 +135,17 @@ const milhar = (n: number) => String(n).replace(/\B(?=(\d{3})+(?!\d))/g, '.');
       h1 {
         margin: 0;
         font-size: 1.25rem;
+      }
+    }
+
+    .config {
+      margin: 0;
+      color: var(--texto-suave);
+      font-size: 0.85rem;
+      overflow-wrap: anywhere;
+
+      a {
+        color: var(--destaque);
       }
     }
 
@@ -294,6 +308,10 @@ const milhar = (n: number) => String(n).replace(/\B(?=(\d{3})+(?!\d))/g, '.');
 export class ChatPage {
   protected readonly chat = inject(ChatService);
   private readonly roteador = inject(Router);
+
+  private readonly config = inject(ConfiguracoesService);
+  protected readonly rotuloModo = computed(() => rotuloDoModo(this.config.modo()));
+  protected readonly rotuloPerfil = computed(() => rotuloDoPerfil(this.config.perfil()));
 
   protected readonly limite = LIMITE_PERGUNTA;
   protected readonly rascunho = signal('');

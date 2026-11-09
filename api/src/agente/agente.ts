@@ -15,6 +15,7 @@
 import type { ChamadaFerramenta, Envelope, Evidencia } from "../ferramentas/contrato.ts";
 import { LlmAbortadoError } from "../llm/index.ts";
 import { atualizarPergunta, type LlmDeJson, type PerguntaAtualizada, type SubPergunta, type Turno } from "./atualizador.ts";
+import { roteamentoForcado, type Modo } from "./modos.ts";
 import { rotearSubperguntas, type ChamadaRoteada, type LlmDeFerramentas, type SubRoteada } from "./roteador.ts";
 
 export type LlmDoAgente = LlmDeJson & LlmDeFerramentas;
@@ -92,7 +93,7 @@ export interface ResultadoAgente {
 
 export type EventoAgente =
   | { fase: "atualizacao"; subperguntas: number; fallback: string | null; ms: number }
-  | { fase: "roteamento"; indice: number; onda: number; rota: "ferramentas" | "nenhuma"; ferramentas: string[]; fallback: string | null; ms: number }
+  | { fase: "roteamento"; indice: number; onda: number; rota: "ferramentas" | "nenhuma"; ferramentas: string[]; fallback: string | null; ms: number; forcado?: Modo }
   | { fase: "execucao"; indice: number; ferramentas: { ferramenta: string; erro: string | null; evidencias: number; ms: number; cypher: Execucao["cypher"] }[]; evidencias: number; ms: number }
   | { fase: "fim"; evidencias: number; ms: number };
 
@@ -122,6 +123,11 @@ export interface OpcoesAgente {
    * cujas perguntas já saem autônomas.
    */
   subperguntas?: SubPergunta[];
+  /**
+   * Modo de recuperação (F8.6). `auto` (padrão) deixa o roteador escolher; qualquer outro força a ferramenta do modo em toda
+   * subpergunta (ver `modos.ts`), sem chamar o LLM do roteador.
+   */
+  modo?: Modo;
 }
 
 const SEM_COMPLEMENTO = new Set(["buscar_trechos", "resposta_ja_dada"]);
@@ -229,14 +235,16 @@ export async function executarAgente(llm: LlmDoAgente, executor: ExecutorDoAgent
   avisa({ fase: "atualizacao", subperguntas: subperguntas.length, fallback: atualizada.fallback, ms: atualizada.ms });
 
   const parciais = new Map<number, Parcial>();
+  const modo = opcoes.modo ?? "auto";
   const roteadas = await rotearSubperguntas(llm, subperguntas, {
+    ...(modo !== "auto" ? { rotearCom: (p: string) => roteamentoForcado(modo, p) } : {}),
     ...(opcoes.concorrencia !== undefined ? { concorrencia: opcoes.concorrencia } : {}),
     ...(opcoes.historico ? { historico: opcoes.historico } : {}),
     ...(opcoes.companhia ? { companhia: opcoes.companhia } : {}),
     ...(opcoes.signal ? { signal: opcoes.signal } : {}),
     executar: async (sub: SubRoteada) => {
       const rot = sub.roteamento;
-      avisa({ fase: "roteamento", indice: sub.indice, onda: sub.onda, rota: rot.rota, ferramentas: rot.chamadas.map((c) => c.nome), fallback: rot.fallback, ms: rot.ms });
+      avisa({ fase: "roteamento", indice: sub.indice, onda: sub.onda, rota: rot.rota, ferramentas: rot.chamadas.map((c) => c.nome), fallback: rot.fallback, ms: rot.ms, ...(modo !== "auto" ? { forcado: modo } : {}) });
       const inicio = performance.now();
       const complemento =
         (opcoes.complementar ?? true) && rot.chamadas.length > 0 && !rot.chamadas.some((c) => SEM_COMPLEMENTO.has(c.nome))

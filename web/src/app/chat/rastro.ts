@@ -18,7 +18,7 @@ export interface EvidenciaRastro {
 export type PassoRastro =
   | { tipo: 'reescrita-inicio' }
   | { tipo: 'reescrita'; rodada: number | null; subperguntas: number | null; fallback: string | null; ms: number | null }
-  | { tipo: 'rota'; rodada: number | null; rota: string; ferramentas: string[]; fallback: string | null; ms: number | null }
+  | { tipo: 'rota'; rodada: number | null; rota: string; ferramentas: string[]; fallback: string | null; forcado: string | null; ms: number | null }
   | { tipo: 'ferramenta_inicio'; rodada: number | null; ferramenta: string }
   | { tipo: 'ferramenta_fim'; rodada: number | null; ferramenta: string; erro: string | null; evidencias: number | null; ms: number | null }
   | { tipo: 'cypher'; query: string; linhas: number; ms: number }
@@ -49,6 +49,7 @@ function etapa(tipo: string, d: Record<string, unknown>): PassoRastro | null {
         rota: texto(d['rota']) ?? 'desconhecida',
         ferramentas: Array.isArray(d['ferramentas']) ? d['ferramentas'].filter((f): f is string => typeof f === 'string') : [],
         fallback: texto(d['fallback']),
+        forcado: texto(d['forcado']),
         ms: numero(d['ms']),
       };
     case 'ferramenta_inicio':

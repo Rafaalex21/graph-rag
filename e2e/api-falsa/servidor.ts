@@ -108,6 +108,9 @@ function roteiroAusente(res: ServerResponse): void {
   );
 }
 
+/** A ferramenta de cada modo forçado (a mesma tabela de `api/src/agente/modos.ts`). */
+const FERRAMENTA_DO_MODO: Record<string, string> = { trechos: "buscar_trechos", tabelas: "buscar_tabelas", local: "entidade", global: "panorama", cypher: "consultar_grafo" };
+
 const PDF = montarPdf();
 
 const FONTES: Record<string, { tipo: string; pagina: string | null; texto: string; secao: string | null }> = {
@@ -208,7 +211,23 @@ async function responderChat(req: IncomingMessage, res: ServerResponse): Promise
   };
 
   const minuscula = mensagem.toLowerCase();
-  if (minuscula.includes("quem é") || minuscula.includes("quem e ")) {
+  if (minuscula.includes("modo teste")) {
+    // roteiro "modo teste": a rota depende do `mode` do pedido (forçado: a ferramenta do modo, com `forcado`) e o perfil rápido
+    // faz só a rodada 1, como a API real
+    const modo = typeof corpo["mode"] === "string" ? corpo["mode"] : "auto";
+    const rapido = corpo["profile"] === "consultar-rapido";
+    const ferramenta = FERRAMENTA_DO_MODO[modo] ?? "buscar_trechos";
+    const forcado = modo === "auto" ? {} : { forcado: modo };
+    for (const rodada of rapido ? [1] : [1, 2]) {
+      res.write(etapa("rota", { rodada, indice: 0, onda: 0, rota: "ferramentas", ferramentas: [ferramenta], fallback: null, ms: modo === "auto" ? 900 : 0, ...forcado }));
+      res.write(etapa("ferramenta_inicio", { rodada, indice: 0, ferramenta }));
+      res.write(etapa("ferramenta_fim", { rodada, indice: 0, ferramenta, erro: null, evidencias: 1, ms: 120 }));
+      res.write(etapa("critica", { rodada, decisao: rodada === 1 && !rapido ? "buscar_mais" : "suficiente", perguntas: rodada === 1 && !rapido ? 1 : 0, faltando: "", ms: 300 }));
+    }
+    await tokens(["Resposta ", "no modo ", modo, "."]);
+    res.write(quadro("evidencia", { id: "p1", tipo: "pai", pagina: "p. 6", trecho: "trecho", score: 0.9 }));
+    res.write(quadro("fim", FIM(`Resposta no modo ${modo}.`, { metricas: { latenciaMs: 800, tokensEntrada: 50, tokensSaida: 5, rota: [ferramenta], estado: "suficiente" } })));
+  } else if (minuscula.includes("quem é") || minuscula.includes("quem e ")) {
     // roteiro "quem é": a ferramenta `entidade` acha entidades (evidências com id de entidade) e um trecho de texto
     const todas = minuscula.includes("todas as entidades");
     res.write(etapa("rota", { rodada: 1, indice: 0, onda: 0, rota: "entidade", ferramentas: ["entidade"], fallback: null, ms: 40 }));

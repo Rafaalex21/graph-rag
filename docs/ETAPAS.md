@@ -399,9 +399,11 @@
   - depende: F8.2
   - resultado: ADR-071; aba Grafo em SVG próprio (cada entidade é um botão que se expande com clique, Enter ou Espaço; layout de forças sem sorteio; os nós que já estavam não se mexem), subgrafo = entidades da resposta (evidências `entidade`/`ent:`, até 6 sementes) com a vizinhança de profundidade 1 de `GET /api/grafo/vizinhanca`, campo "Explorar uma entidade", zoom e legenda de tipos. **Medida pré-registrada (`eval/f85-medida-subgrafo.md`): das 3 perguntas "Quem é" do golden, 2 tinham entidade na resposta e foram medidas (E04, E07): 86 e 85 ms da abertura da aba até desenhado, e 58 a 69 ms nas 5 repetições de cada; máximo 86 ms contra 1.000 ms.** E2E: 104 testes da interface (23 novos), 208 de 208 em duas repetições.
   - nota: n = 2 perguntas medidas; T01 foi respondida só com trechos e não tem subgrafo (registrado, fora do tempo). O 1º teste ao vivo achou um defeito de layout (componentes soltos espalhados por milhares de unidades), corrigido com gravidade antes da medida. Com mais de 8 tipos a cor repete (o tipo também está em texto); sem arrastar nós nem filtro por tipo.
-- [ ] **F8.6** Configurações de perfil e modo de recuperação
+- [x] **F8.6** Configurações de perfil e modo de recuperação
   - aceite: trocar o modo muda a rota observada no Rastro
   - depende: F8.3
+  - resultado: ADR-072; a API passa a aceitar os 5 modos forçados (`trechos`, `tabelas`, `local`, `global`, `cypher` fixam a ferramenta sem LLM no roteamento; `auto` mantém o roteador) e a tela Configurações escolhe modo e perfil (salvos no navegador, enviados só quando diferem do padrão); o Rastro mostra `Modo forçado: …`. **Medida pré-registrada (`eval/f86-medida-modo.md`): T15, N01 e G03 em `auto` e nos 5 modos pela interface: 15 de 15 execuções forçadas com a rota exata do modo, 5 rotas diferentes entre si em cada pergunta e todas diferentes da do `auto`; `mode` do corpo conferido nas 18; perfil rápido com 1 rodada.** E2E: 123 testes da interface (19 novos), 246 de 246 em duas repetições.
+  - nota: n = 3 perguntas, 1 execução por par. A qualidade da resposta num modo forçado não foi medida e é pior que no `auto` (6 de 15 `suficiente`); `panorama` forçado levou ~100 s em N01 e G03 (causa não investigada).
 - [ ] **F8.7** Selo de saúde e feedback por resposta
   - aceite: 5 perguntas do golden set feitas pela interface sem tocar no terminal
   - depende: F8.6

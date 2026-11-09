@@ -721,7 +721,7 @@ O Neo4j roda **nativo no Windows** (`infra/neo4j.ps1 instalar | iniciar | parar 
 | `fim` | `{mensagemId, resposta, citacoes: [{id, pagina}], metricas: {latenciaMs, tokensEntrada, tokensSaida, rota}}` | Fim |
 | `erro` | `{codigo, mensagem}` | Falha |
 
-O contrato executável está em `contracts/api.openapi.yaml` (ADR-062) e prevalece sobre estas tabelas: `etapa` ganhou o tipo `reparo`, o `evidencia` leva `pagina` como rótulo (`p. 6`) ou `null`, o `fim` leva `metricas.estado`, e a API recusa `mode` diferente de `auto` e `profile` diferente de `consultar` com 400.
+O contrato executável está em `contracts/api.openapi.yaml` (ADR-062) e prevalece sobre estas tabelas: `etapa` ganhou o tipo `reparo`, o `evidencia` leva `pagina` como rótulo (`p. 6`) ou `null`, o `fim` leva `metricas.estado`, `mode` diferente de `auto` força a ferramenta da subpergunta sem passar pelo roteador (F8.6: `trechos` → `buscar_trechos`, `tabelas` → `buscar_tabelas`, `local` → `entidade`, `global` → `panorama`, `cypher` → `consultar_grafo`; o passo `rota` leva `forcado`), e `profile` aceita `consultar` e `consultar-rapido`.
 
 ### 11.2 Demais rotas
 

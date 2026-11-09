@@ -1,0 +1,390 @@
+{
+  "perguntas": [
+    "T15",
+    "N01",
+    "G03"
+  ],
+  "execucoes": [
+    {
+      "pergunta": "T15",
+      "modo": "auto",
+      "perfil": "consultar",
+      "esperado": null,
+      "rotaObservada": [
+        "pessoas_cargos"
+      ],
+      "exata": null,
+      "modoNoCorpo": "auto",
+      "perfilNoCorpo": "consultar",
+      "terminou": "pronta",
+      "estadoDoCiclo": "suficiente",
+      "evidencias": 7,
+      "passosDeRota": 1,
+      "temRodada2": false,
+      "ms": 16226
+    },
+    {
+      "pergunta": "T15",
+      "modo": "trechos",
+      "perfil": "consultar",
+      "esperado": "buscar_trechos",
+      "rotaObservada": [
+        "buscar_trechos"
+      ],
+      "exata": true,
+      "modoNoCorpo": "trechos",
+      "perfilNoCorpo": "consultar",
+      "terminou": "pronta",
+      "estadoDoCiclo": "suficiente",
+      "evidencias": 6,
+      "passosDeRota": 1,
+      "temRodada2": false,
+      "ms": 5466
+    },
+    {
+      "pergunta": "T15",
+      "modo": "tabelas",
+      "perfil": "consultar",
+      "esperado": "buscar_tabelas",
+      "rotaObservada": [
+        "buscar_tabelas"
+      ],
+      "exata": true,
+      "modoNoCorpo": "tabelas",
+      "perfilNoCorpo": "consultar",
+      "terminou": "pronta",
+      "estadoDoCiclo": "suficiente",
+      "evidencias": 9,
+      "passosDeRota": 1,
+      "temRodada2": false,
+      "ms": 5978
+    },
+    {
+      "pergunta": "T15",
+      "modo": "local",
+      "perfil": "consultar",
+      "esperado": "entidade",
+      "rotaObservada": [
+        "entidade"
+      ],
+      "exata": true,
+      "modoNoCorpo": "local",
+      "perfilNoCorpo": "consultar",
+      "terminou": "pronta",
+      "estadoDoCiclo": "suficiente",
+      "evidencias": 24,
+      "passosDeRota": 1,
+      "temRodada2": false,
+      "ms": 6444
+    },
+    {
+      "pergunta": "T15",
+      "modo": "global",
+      "perfil": "consultar",
+      "esperado": "panorama",
+      "rotaObservada": [
+        "panorama"
+      ],
+      "exata": true,
+      "modoNoCorpo": "global",
+      "perfilNoCorpo": "consultar",
+      "terminou": "pronta",
+      "estadoDoCiclo": "suficiente",
+      "evidencias": 7,
+      "passosDeRota": 1,
+      "temRodada2": false,
+      "ms": 22851
+    },
+    {
+      "pergunta": "T15",
+      "modo": "cypher",
+      "perfil": "consultar",
+      "esperado": "consultar_grafo",
+      "rotaObservada": [
+        "consultar_grafo"
+      ],
+      "exata": true,
+      "modoNoCorpo": "cypher",
+      "perfilNoCorpo": "consultar",
+      "terminou": "pronta",
+      "estadoDoCiclo": "suficiente",
+      "evidencias": 6,
+      "passosDeRota": 1,
+      "temRodada2": false,
+      "ms": 22343
+    },
+    {
+      "pergunta": "N01",
+      "modo": "auto",
+      "perfil": "consultar",
+      "esperado": null,
+      "rotaObservada": [
+        "fato_financeiro"
+      ],
+      "exata": null,
+      "modoNoCorpo": "auto",
+      "perfilNoCorpo": "consultar",
+      "terminou": "pronta",
+      "estadoDoCiclo": "suficiente",
+      "evidencias": 7,
+      "passosDeRota": 1,
+      "temRodada2": false,
+      "ms": 8536
+    },
+    {
+      "pergunta": "N01",
+      "modo": "trechos",
+      "perfil": "consultar",
+      "esperado": "buscar_trechos",
+      "rotaObservada": [
+        "buscar_trechos"
+      ],
+      "exata": true,
+      "modoNoCorpo": "trechos",
+      "perfilNoCorpo": "consultar",
+      "terminou": "pronta",
+      "estadoDoCiclo": "incompleta",
+      "evidencias": 11,
+      "passosDeRota": 4,
+      "temRodada2": true,
+      "ms": 15178
+    },
+    {
+      "pergunta": "N01",
+      "modo": "tabelas",
+      "perfil": "consultar",
+      "esperado": "buscar_tabelas",
+      "rotaObservada": [
+        "buscar_tabelas"
+      ],
+      "exata": true,
+      "modoNoCorpo": "tabelas",
+      "perfilNoCorpo": "consultar",
+      "terminou": "pronta",
+      "estadoDoCiclo": "incompleta",
+      "evidencias": 16,
+      "passosDeRota": 4,
+      "temRodada2": true,
+      "ms": 18234
+    },
+    {
+      "pergunta": "N01",
+      "modo": "local",
+      "perfil": "consultar",
+      "esperado": "entidade",
+      "rotaObservada": [
+        "entidade"
+      ],
+      "exata": true,
+      "modoNoCorpo": "local",
+      "perfilNoCorpo": "consultar",
+      "terminou": "pronta",
+      "estadoDoCiclo": "incompleta",
+      "evidencias": 43,
+      "passosDeRota": 4,
+      "temRodada2": true,
+      "ms": 20782
+    },
+    {
+      "pergunta": "N01",
+      "modo": "global",
+      "perfil": "consultar",
+      "esperado": "panorama",
+      "rotaObservada": [
+        "panorama"
+      ],
+      "exata": true,
+      "modoNoCorpo": "global",
+      "perfilNoCorpo": "consultar",
+      "terminou": "pronta",
+      "estadoDoCiclo": "incompleta",
+      "evidencias": 20,
+      "passosDeRota": 4,
+      "temRodada2": true,
+      "ms": 100132
+    },
+    {
+      "pergunta": "N01",
+      "modo": "cypher",
+      "perfil": "consultar",
+      "esperado": "consultar_grafo",
+      "rotaObservada": [
+        "consultar_grafo"
+      ],
+      "exata": true,
+      "modoNoCorpo": "cypher",
+      "perfilNoCorpo": "consultar",
+      "terminou": "pronta",
+      "estadoDoCiclo": "suficiente",
+      "evidencias": 11,
+      "passosDeRota": 1,
+      "temRodada2": false,
+      "ms": 11106
+    },
+    {
+      "pergunta": "G03",
+      "modo": "auto",
+      "perfil": "consultar",
+      "esperado": null,
+      "rotaObservada": [
+        "consultar_grafo",
+        "buscar_tabelas",
+        "buscar_trechos"
+      ],
+      "exata": null,
+      "modoNoCorpo": "auto",
+      "perfilNoCorpo": "consultar",
+      "terminou": "pronta",
+      "estadoDoCiclo": "incompleta",
+      "evidencias": 14,
+      "passosDeRota": 4,
+      "temRodada2": true,
+      "ms": 32553
+    },
+    {
+      "pergunta": "G03",
+      "modo": "trechos",
+      "perfil": "consultar",
+      "esperado": "buscar_trechos",
+      "rotaObservada": [
+        "buscar_trechos"
+      ],
+      "exata": true,
+      "modoNoCorpo": "trechos",
+      "perfilNoCorpo": "consultar",
+      "terminou": "pronta",
+      "estadoDoCiclo": "incompleta",
+      "evidencias": 12,
+      "passosDeRota": 4,
+      "temRodada2": true,
+      "ms": 19261
+    },
+    {
+      "pergunta": "G03",
+      "modo": "tabelas",
+      "perfil": "consultar",
+      "esperado": "buscar_tabelas",
+      "rotaObservada": [
+        "buscar_tabelas"
+      ],
+      "exata": true,
+      "modoNoCorpo": "tabelas",
+      "perfilNoCorpo": "consultar",
+      "terminou": "pronta",
+      "estadoDoCiclo": "incompleta",
+      "evidencias": 20,
+      "passosDeRota": 3,
+      "temRodada2": true,
+      "ms": 18777
+    },
+    {
+      "pergunta": "G03",
+      "modo": "local",
+      "perfil": "consultar",
+      "esperado": "entidade",
+      "rotaObservada": [
+        "entidade"
+      ],
+      "exata": true,
+      "modoNoCorpo": "local",
+      "perfilNoCorpo": "consultar",
+      "terminou": "pronta",
+      "estadoDoCiclo": "incompleta",
+      "evidencias": 62,
+      "passosDeRota": 4,
+      "temRodada2": true,
+      "ms": 18731
+    },
+    {
+      "pergunta": "G03",
+      "modo": "global",
+      "perfil": "consultar",
+      "esperado": "panorama",
+      "rotaObservada": [
+        "panorama"
+      ],
+      "exata": true,
+      "modoNoCorpo": "global",
+      "perfilNoCorpo": "consultar",
+      "terminou": "pronta",
+      "estadoDoCiclo": "incompleta",
+      "evidencias": 18,
+      "passosDeRota": 4,
+      "temRodada2": true,
+      "ms": 100150
+    },
+    {
+      "pergunta": "G03",
+      "modo": "cypher",
+      "perfil": "consultar",
+      "esperado": "consultar_grafo",
+      "rotaObservada": [
+        "consultar_grafo"
+      ],
+      "exata": true,
+      "modoNoCorpo": "cypher",
+      "perfilNoCorpo": "consultar",
+      "terminou": "pronta",
+      "estadoDoCiclo": "incompleta",
+      "evidencias": 12,
+      "passosDeRota": 4,
+      "temRodada2": true,
+      "ms": 40741
+    }
+  ],
+  "rapido": {
+    "pergunta": "T15",
+    "modo": "auto",
+    "perfil": "consultar-rapido",
+    "esperado": null,
+    "rotaObservada": [
+      "pessoas_cargos"
+    ],
+    "exata": null,
+    "modoNoCorpo": "auto",
+    "perfilNoCorpo": "consultar-rapido",
+    "terminou": "pronta",
+    "estadoDoCiclo": "suficiente",
+    "evidencias": 7,
+    "passosDeRota": 1,
+    "temRodada2": false,
+    "ms": 10572
+  },
+  "resumo": {
+    "forcadasExatas": "15 de 15",
+    "modoNoCorpoOk": true,
+    "porPergunta": [
+      {
+        "pergunta": "T15",
+        "rotaAuto": [
+          "pessoas_cargos"
+        ],
+        "diferentesEntreSi": true,
+        "diferentesDoAuto": 5,
+        "ok": true
+      },
+      {
+        "pergunta": "N01",
+        "rotaAuto": [
+          "fato_financeiro"
+        ],
+        "diferentesEntreSi": true,
+        "diferentesDoAuto": 5,
+        "ok": true
+      },
+      {
+        "pergunta": "G03",
+        "rotaAuto": [
+          "consultar_grafo",
+          "buscar_tabelas",
+          "buscar_trechos"
+        ],
+        "diferentesEntreSi": true,
+        "diferentesDoAuto": 5,
+        "ok": true
+      }
+    ],
+    "perfilRapidoOk": true,
+    "aceiteCumprido": true
+  }
+}
