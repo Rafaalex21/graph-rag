@@ -4,6 +4,9 @@
  * qualquer máquina e no CI, sem Neo4j nem modelos. O que é da API de verdade (agente, grafo, guarda) é testado no projeto
  * `ao-vivo`, contra a pilha real.
  *
+ * Também serve o PDF de teste em GET /api/documento/pdf (com `Range`, como a API real) e as fontes em GET /api/fonte/:id:
+ *   p1 pai p. 6 · t1 tabela p. 9-10 · f1 fato sem página (texto com HTML) · e1 entidade (resumo que não está no PDF) · tudo mais, 404.
+ *
  * Roteiros (a pergunta contém a palavra):
  *   lento/a   tokens com 150 ms entre eles, para provar que a tela mostra a resposta AOS POUCOS pelo proxy do ng serve
  *   xss       a resposta traz HTML hostil
@@ -20,6 +23,7 @@
  *   (outra)   resposta curta de uma frase com [E1] nos tokens e [p. 6] no fim
  */
 import { createServer, type IncomingMessage, type ServerResponse } from "node:http";
+import { montarPdf } from "./pdf.ts";
 
 const porta = Number(process.env["API_FALSA_PORTA"] ?? 3100);
 let contador = 0;
@@ -102,6 +106,32 @@ function roteiroAusente(res: ServerResponse): void {
   );
 }
 
+const PDF = montarPdf();
+
+const FONTES: Record<string, { tipo: string; pagina: string | null; texto: string; secao: string | null }> = {
+  p1: { tipo: "pai", pagina: "p. 6", texto: "O lucro liquido ajustado foi de vinte bilhoes de reais em dois mil e vinte e cinco.", secao: "Resultados > Lucro" },
+  t1: { tipo: "tabela", pagina: "p. 9-10", texto: "| Ano | Lucro |\n|---|---|\n| 2024 | trinta e sete |\n| 2025 | vinte |", secao: "Resultados > Tabela de lucro" },
+  f1: { tipo: "fato", pagina: null, texto: '<img src=x onerror="window.__xss=1"> valor sem pagina', secao: null },
+  e1: { tipo: "entidade", pagina: null, texto: "Uma entidade resumida que nao esta escrita em nenhuma pagina do PDF.", secao: null },
+};
+
+function servirPdf(req: IncomingMessage, res: ServerResponse): void {
+  const total = PDF.length;
+  const m = /^bytes=(\d*)-(\d*)$/.exec(String(req.headers["range"] ?? ""));
+  if (!m) {
+    res.writeHead(200, { "content-type": "application/pdf", "content-length": total, "accept-ranges": "bytes" });
+    return void res.end(PDF);
+  }
+  const ini = m[1] === "" ? Math.max(0, total - Number(m[2])) : Number(m[1]);
+  const fim = m[1] === "" || m[2] === "" ? total - 1 : Math.min(Number(m[2]), total - 1);
+  if (ini > fim || ini >= total) {
+    res.writeHead(416, { "content-type": "application/json", "content-range": `bytes */${total}` });
+    return void res.end(JSON.stringify({ codigo: "faixa_invalida", mensagem: "Faixa fora do arquivo." }));
+  }
+  res.writeHead(206, { "content-type": "application/pdf", "content-length": fim - ini + 1, "content-range": `bytes ${ini}-${fim}/${total}`, "accept-ranges": "bytes" });
+  res.end(PDF.subarray(ini, fim + 1));
+}
+
 async function responderChat(req: IncomingMessage, res: ServerResponse): Promise<void> {
   const bruto = await lerCorpo(req);
   let corpo: Record<string, unknown>;
@@ -168,6 +198,12 @@ const servidor = createServer((req, res) => {
   if (url.pathname === "/api/chat" && req.method === "POST") {
     responderChat(req, res).catch(() => res.destroy());
     return;
+  }
+  if (url.pathname === "/api/documento/pdf" && req.method === "GET") return servirPdf(req, res);
+  const fonte = /^\/api\/fonte\/([^/]+)$/.exec(url.pathname);
+  if (fonte && req.method === "GET") {
+    const f = FONTES[decodeURIComponent(fonte[1] as string)];
+    return f ? json(res, 200, f) : json(res, 404, { codigo: "nao_encontrado", mensagem: "Nenhum item do grafo com esse id." });
   }
   if (url.pathname === "/api/saude") return json(res, 200, { estado: "ok" });
   json(res, 404, { codigo: "nao_encontrado", mensagem: "Rota inexistente." });

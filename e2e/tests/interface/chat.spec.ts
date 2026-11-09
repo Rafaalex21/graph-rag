@@ -126,7 +126,7 @@ test.describe("a resposta chega aos poucos", () => {
     const chip = chat.respostas.first().getByRole("button", { name: "Abrir a página 6 do documento" });
     await expect(chip).toHaveText("p. 6");
     await chip.click();
-    await expect(page).toHaveURL(/\/chat\/fontes\?pagina=6$/);
+    await expect(page).toHaveURL(/\/chat\/fontes\?pagina=6&fonte=p1$/);
   });
 
   test("markdown: tabela, lista, cabeçalho sem h1..h6, chips por tipo e código sem chip", async ({ page }) => {

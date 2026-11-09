@@ -20,8 +20,7 @@ export const routes: Routes = [
       },
       {
         path: 'fontes',
-        loadComponent: () => import('./paginas/painel/painel-vazio').then((m) => m.PainelVazio),
-        data: { titulo: 'Fontes', texto: 'Aqui abre a página do documento que sustenta cada afirmação, com o trecho destacado.' },
+        loadComponent: () => import('./paginas/fontes/fontes.page').then((m) => m.FontesPage),
       },
       {
         path: 'grafo',

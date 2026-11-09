@@ -87,7 +87,7 @@ const DECISOES: Record<string, string> = { suficiente: 'suficiente', buscar_mais
                       <li>
                         <span class="meta">{{ e.tipo }} · nota {{ nota(e.score) }} ·</span>
                         @if (e.primeiraPagina !== null) {
-                          <button type="button" class="pagina" [attr.aria-label]="'Abrir a página ' + e.primeiraPagina + ' do documento'" (click)="abrirPagina(e.primeiraPagina)">{{ e.pagina }}</button>
+                          <button type="button" class="pagina" [attr.aria-label]="'Abrir a página ' + e.primeiraPagina + ' do documento'" (click)="abrirPagina(e.primeiraPagina, e.id)">{{ e.pagina }}</button>
                         } @else {
                           <span class="meta">sem página</span>
                         }
@@ -200,7 +200,7 @@ export class RastroPage {
   protected readonly decisao = (d: string) => DECISOES[d] ?? d;
   protected readonly tempo = (ms: number | null) => (ms === null ? '' : ms < 1000 ? `${numeroBr.format(Math.round(ms))} ms` : `${segundoBr.format(ms / 1000)} s`);
 
-  protected abrirPagina(pagina: string): void {
-    void this.roteador.navigate(['/chat', 'fontes'], { queryParams: { pagina } });
+  protected abrirPagina(pagina: string, fonte: string): void {
+    void this.roteador.navigate(['/chat', 'fontes'], { queryParams: { pagina, fonte } });
   }
 }

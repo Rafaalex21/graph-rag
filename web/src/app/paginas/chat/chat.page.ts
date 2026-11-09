@@ -1,6 +1,8 @@
 import { ChangeDetectionStrategy, Component, computed, ElementRef, afterRenderEffect, inject, signal, viewChild } from '@angular/core';
 import { Router, RouterLink, RouterLinkActive, RouterOutlet } from '@angular/router';
 import { ChatService, LIMITE_PERGUNTA } from '../../chat/chat.service';
+import type { Citacao } from '../../chat/chat-api';
+import { primeiraPagina } from '../../chat/rastro';
 import { RespostaMarkdown } from '../../chat/resposta-markdown';
 
 const LIMIAR_CONTADOR = 3500;
@@ -39,7 +41,7 @@ const milhar = (n: number) => String(n).replace(/\B(?=(\d{3})+(?!\d))/g, '.');
           } @else {
             <article class="bolha assistente" data-papel="assistente" aria-label="Resposta">
               @if (m.texto !== '') {
-                <app-resposta-markdown [texto]="m.texto" (abrirPagina)="abrirPagina($event)" />
+                <app-resposta-markdown [texto]="m.texto" (abrirPagina)="abrirPagina($event, m.citacoes)" />
               } @else if (m.estado === 'transmitindo') {
                 <p class="espera">Gerando a resposta…</p>
               }
@@ -349,7 +351,9 @@ export class ChatPage {
     void this.chat.enviar(texto);
   }
 
-  protected abrirPagina(pagina: string): void {
-    void this.roteador.navigate(['/chat', 'fontes'], { queryParams: { pagina } });
+  /** O chip leva à aba Fontes na página citada e, se achar a citação daquela página, ao item do grafo (de onde vem o trecho). */
+  protected abrirPagina(pagina: string, citacoes: Citacao[] | undefined): void {
+    const fonte = citacoes?.find((c) => primeiraPagina(c.pagina) === pagina)?.id;
+    void this.roteador.navigate(['/chat', 'fontes'], { queryParams: fonte ? { pagina, fonte } : { pagina } });
   }
 }

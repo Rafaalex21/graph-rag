@@ -75,3 +75,47 @@ a {
     animation: none !important;
   }
 }
+
+/*
+ * A camada de texto do pdf.js (F8.4): os trechos transparentes por cima do canvas, na posição de cada palavra, para o destaque,
+ * a seleção e a busca. É global porque o pdf.js cria os elementos fora do Angular (sem o atributo de escopo do componente).
+ */
+.camada-texto {
+  position: absolute;
+  inset: 0;
+  overflow: clip;
+  line-height: 1;
+  text-align: initial;
+  forced-color-adjust: none;
+  transform-origin: 0 0;
+  --min-font-size: 1;
+  --text-scale-factor: calc(var(--total-scale-factor) * var(--min-font-size));
+  --min-font-size-inv: calc(1 / var(--min-font-size));
+
+  :is(span, br) {
+    position: absolute;
+    color: transparent;
+    white-space: pre;
+    cursor: text;
+    transform-origin: 0 0;
+    user-select: text;
+  }
+
+  > span {
+    --font-height: 0;
+    --scale-x: 1;
+    --rotate: 0deg;
+    font-size: calc(var(--text-scale-factor) * var(--font-height));
+    transform: rotate(var(--rotate)) scaleX(var(--scale-x)) scale(var(--min-font-size-inv));
+  }
+
+  .destaque {
+    background: rgb(255 204 0 / 0.45);
+    border-radius: 2px;
+    outline: 1px solid rgb(180 120 0 / 0.6);
+  }
+
+  ::selection {
+    background: rgb(0 90 200 / 0.35);
+  }
+}

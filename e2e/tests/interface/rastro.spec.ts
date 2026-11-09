@@ -139,7 +139,7 @@ test.describe("todos os eventos da §11.1 aparecem", () => {
     const chat = await perguntarRastro(page);
     await chat.esperarResposta();
     await item(page, "Evidências recuperadas").getByRole("button", { name: "Abrir a página 9 do documento" }).click();
-    await expect(page).toHaveURL(/\/chat\/fontes\?pagina=9$/);
+    await expect(page).toHaveURL(/\/chat\/fontes\?pagina=9&fonte=t1$/);
   });
 
   test("reparo: quantas frases com número sem citação foram reescritas", async ({ page }) => {

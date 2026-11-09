@@ -389,9 +389,11 @@
   - depende: F8.2
   - resultado: ADR-069; `chat/rastro.ts` (puro) e `paginas/rastro/rastro.page.ts`: linha do tempo ao vivo da resposta mais recente, um passo por evento (recebida, reescrita, rota, ferramenta, Cypher, crítica, reparo, evidências, fim, erro). **Todos os tipos de evento da §11.1 aparecem: 51 testes E2E da interface passam (102 de 102 em duas repetições) e, na pilha real, T15, N01 e G03 mostraram todos os passos de uma pergunta, inclusive o Cypher.** `ng lint` e `ng build` limpos (aba de 9,6 kB).
   - nota: o `reparo` e o `erro` só foram vistos contra a API falsa (que segue o contrato); a pilha real não os emitiu nas 3 perguntas. As evidências só chegam depois da última crítica (é como a API as envia) e aparecem como um passo único. O Rastro é o da resposta mais recente; não há como abrir o de uma resposta antiga. Visto a olho em uma captura a 1280 px; outras larguras só pelo teste de rolagem horizontal (375 e 320 px). n = 3 perguntas ao vivo.
-- [ ] **F8.4** Visualizador de fonte com pdf.js: abre a página citada e destaca o trecho
+- [x] **F8.4** Visualizador de fonte com pdf.js: abre a página citada e destaca o trecho
   - aceite: 10 citações sorteadas abrem na página certa
   - depende: F8.2
+  - resultado: ADR-070; aba Fontes em `/chat/fontes?pagina=N&fonte=<id>` (chip da resposta e botão do Rastro levam a página e fonte), pdf.js 6.4.299 em chunk à parte lendo `/api/documento/pdf` por `Range`, canvas + camada de texto, destaque por sequências de 4 palavras, navegação e avisos para página inválida, fonte 404/503 e PDF fora do ar. **Medida pré-registrada (`eval/f84-medida-citacoes.md`, com emenda feita antes de rodar): 10 de 10 abriram na página certa** (universo de 109 pares, semente 84, repetível); 9 de texto literal também tiveram o início do trecho na página e as 9 foram destacadas; 1 era entidade (só a página). Página e texto em mediana 0,58 s, máx. 0,91 s. E2E: 81 testes da interface (30 novos), 162 de 162 em duas repetições.
+  - nota: n = 10 num universo de 107, quase tudo `pai`; "página certa" é a do rótulo citado, não prova que a citação sustenta a afirmação. O painel é estreito e o texto da página fica pequeno (sem zoom ainda). O destaque marca itens inteiros da camada de texto.
 - [ ] **F8.5** Explorador do subgrafo usado na resposta, com expansão por clique
   - aceite: subgrafo de uma pergunta "quem é…" renderizado em ≤ 1 s
   - depende: F8.2
