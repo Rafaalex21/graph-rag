@@ -411,8 +411,12 @@
   - nota: n = 5 perguntas, 1 execução cada; os serviços foram iniciados antes pelos scripts `infra\` (a interface mostra se estão no ar, não os inicia); a nota da medida é mecânica (👍 se cita página): G03 respondeu "não consta" com uma citação e levou 👍, e F01 (saudação) levou 👎; não é avaliação de qualidade. "Pilha fora do ar" só foi exercitada com a API falsa.
 - [ ] **F8.8** Testes E2E com Playwright (skill de testes E2E-first) dos fluxos da interface, com relatório reproduzível
   - aceite: `npx playwright test` verde e gera `playwright-report/`, `test-results/results.json` e traces; cobre chat com citação que abre a página certa, troca de modo que muda a rota no Rastro, resposta "não consta" e erro da API; um teste `@smoke` roda contra a pilha local real
-  - depende: F8.7
+  - depende: F8.7, F8.9
   - nota: seguir a skill de testes: E2E como mecanismo principal, seletores por papel e rótulo, Page Objects, sem `waitForTimeout`; a API do chat fica simulada com `page.route` nos fluxos determinísticos, e só o `@smoke` usa o llama-swap e o Neo4j de verdade; nenhum teste unitário novo escrito depois do código. A suíte unitária do indexador (F0 a F5) segue como está; podá-la pelo critério da skill é decisão à parte, só com confirmação do Rafael
+- [ ] **F8.9** Tela do usuário final (assistente) e modo técnico para desenvolvedores
+  - aceite: as 5 perguntas do golden (T15, N01, G03, P01, F01) feitas só pela tela `/assistente` mostram em cada resposta o selo de estado certo, a fonte que abre a página certa do PDF, o passo a passo e a nota registrada; o modo técnico continua em `/chat`. Medida pré-registrada em `eval/f89-medida-assistente.md`
+  - depende: F8.7
+  - nota: pedido do dono depois de ver o protótipo do design (Artifact): a tela técnica atual (Rastro, Fontes, Grafo, Configurações) fica como modo para desenvolvedores e o novo design vira a tela inicial (`/` leva a `/assistente`). Inclui conversas recentes guardadas no navegador, "Como buscar" e Completa/Rápida na própria tela, e fontes `@fontsource` locais (nada de CDN, o produto é 100% local). Não inclui número em destaque nem gráfico por resposta. A F8.8 passa a depender desta para a suíte final cobrir a tela nova
 
 ## F9 · Avaliação final e bake-offs
 > objetivo: Fechar a escada A0–A6 e escolher os modelos com números, não com impressões.
