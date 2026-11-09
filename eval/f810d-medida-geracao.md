@@ -54,4 +54,21 @@ Grava `eval/resultados/f810d-geracao.json` (ids, valores, páginas citadas, acei
 
 ## Rodadas (preenchido depois de rodar; toda rodada é contada)
 
-_Nenhuma rodada ainda._
+### Rodada 1 (09/11, a única): **5 de 5 pela regra fixada. O aceite foi cumprido.**
+
+`eval/resultados/f810d-geracao.json`. Commits antes da rodada: conserto e testes de desenvolvimento `6960ef3`, medida `8d95dcd`, teste do conjunto D `ed91d42`. As páginas aceitas calculadas pelo teste bateram com as registradas nos 4 pedidos (84; 96 e 97; 84; 93).
+
+| Pedido | Resultado | Páginas citadas | Tempo | Selo | Arquivo |
+|---|---|---|---|---|---|
+| D1 gráfico, depósitos de poupança | passou | p. 84 nas 3 | 39,3 s | incompleta | svg 2,5 KB |
+| D2 tabela e planilha, tarifas e comissões | passou | p. 97 nas 3 | 57,1 s | incompleta | xlsx 6,9 KB |
+| D3 Word, depósitos à vista | passou | p. 84 nas 3 | 43,3 s | incompleta | docx 9,9 KB |
+| D4 apresentação, receita líquida de juros após provisão | passou | p. 93 nas 3 | 34,1 s | incompleta | pptx 91,7 KB |
+| D5 "não consta", Americanas | passou | — | 6,0 s | sem_consulta | nenhum |
+
+Em D1 a D4: evento dentro do contrato, rótulos e valores certos (D3 com série que cai), gráfico carregado (D1, D4), arquivo baixado com 200 e MIME certo e relido com os três valores, `removidos` = 0, e o item pós-hoc `paginasNoPdf` verdadeiro nas 12 células. D5: sem evento, gráfico, tabela nem link, e a resposta diz que não consta.
+
+**Contagem honesta das chamadas ao sistema nesta frente (F8.10c em diante):** C 1 rodada (3 de 5); 2 diagnósticos diretos (C3 e C4, por `curl`); 1 rodada vermelha e 1 verde dos testes de desenvolvimento (5 testes cada, sobre C3, C4 e três pedidos de outras empresas); D 1 rodada (5 de 5). Os pedidos D nunca tinham sido enviados ao sistema antes desta rodada.
+
+Limites vistos: n = 5, 1 execução cada, uma só rodada (não há variância medida); os testes de desenvolvimento e o aceite usam o mesmo modelo e a mesma temperatura 0; o selo de estado `incompleta` apareceu nos 4 pedidos com material completo (o crítico não conhece o pedido de arquivo); D2 citou a p. 97 e não a 96, as duas aceitas; o texto do redator não foi conferido contra o material nesta rodada e o limite do corte de 900 caracteres segue aberto; arquivos abertos por biblioteca. **A F8.10 fecha por esta medida, pela regra escrita antes de rodar e sem aceite pós-hoc.**
+

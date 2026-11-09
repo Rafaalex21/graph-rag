@@ -1,6 +1,6 @@
 # ADR-075 · Geração de gráficos, tabelas e arquivos do pacote Office pelo assistente
 
-- **Estado:** aceita (09/11/2026), com ressalva: a regra de aceite fixada antes (5 de 5, página 93) **não foi cumprida** (2 de 5); a leitura pós-hoc "a página citada contém o valor" (5 de 5) **não foi aceita pelo dono**: ele aceitou sem querer em 09/11 e retirou; a etapa segue `[~]` (ver Evidência)
+- **Estado:** aceita (09/11/2026). A regra de aceite da primeira medida (5 de 5, página 93) não foi cumprida (2 de 5), o dono recusou aceitar essa leitura, e a etapa só fechou depois da medida F8.10d (5 de 5, regra mecânica, pedidos novos) que veio do conserto do ADR-076 (ver Evidência)
 - **Data:** 2026-11-09
 - **Tarefa(s):** F8.10
 
@@ -42,7 +42,7 @@ O dono pediu que o assistente gere, a pedido, gráficos, tabelas e arquivos do p
 
 **Medida nova F8.10b** (`eval/f810b-medida-geracao.md`, 09/11): 5 pedidos novos (depósitos totais, ativo total, receitas não de juros, lucro por ação, e Magazine Luiza como "não consta") com as páginas aceitas calculadas nas tabelas do PDF e commitadas antes de rodar. **1ª rodada: 4 de 5, aceite não cumprido.** Só B3 falhou, no item de página (a tela citou a p. 96, que também tem a linha com os três valores; minha regra exigia células seguidas e só aceitava a p. 93). Valores, gráfico, arquivos relidos (inclusive os decimais "2,40") e o "não consta" passaram nos 5. A etapa continua `[~]`.
 
-**Medida nova F8.10c** (`eval/f810c-medida-geracao.md`, 09/11): 5 pedidos novos (depósitos a prazo, receitas de juros, patrimônio líquido, lucro antes dos impostos, Nubank como "não consta") e regra de página mecânica (linha com o mesmo rótulo e os três valores em ordem, calculada no teste e igual à registrada antes). **1ª rodada: 3 de 5, aceite não cumprido, por falhas do sistema:** o roteador tratou o pedido de Word sobre o patrimônio líquido como fora do documento (sem material) e o lucro antes dos impostos saiu só com 2025 (a busca trouxe um ano). Passaram C1, C2 (p. 94, aceita pela regra) e C5. A etapa continua `[~]`; o conserto (roteador e busca da série em pedido de material) fica para decisão do dono.
+**Medida nova F8.10c** (`eval/f810c-medida-geracao.md`, 09/11): 5 pedidos novos (depósitos a prazo, receitas de juros, patrimônio líquido, lucro antes dos impostos, Nubank como "não consta") e regra de página mecânica (linha com o mesmo rótulo e os três valores em ordem, calculada no teste e igual à registrada antes). **1ª rodada: 3 de 5, aceite não cumprido, por falhas do sistema:** o roteador tratou o pedido de Word sobre o patrimônio líquido como fora do documento (sem material) e o lucro antes dos impostos saiu só com 2025 (a busca trouxe um ano). Passaram C1, C2 (p. 94, aceita pela regra) e C5. O conserto (roteador e foco na linha da tabela) está no ADR-076, e a **F8.10d deu 5 de 5** em pedidos novos: a etapa fecha por ela.
 
 **Limites:** n = 5 pedidos, 3 anos, uma série; arquivos abertos por biblioteca, não pelo Word, Excel ou PowerPoint; o gráfico foi visto a olho em 1 captura (A1, linhas); o tempo da chamada do modelo não foi isolado.
 

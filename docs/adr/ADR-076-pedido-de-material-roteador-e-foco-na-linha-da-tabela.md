@@ -1,6 +1,6 @@
 # ADR-076 · Pedido de material: dica ao roteador e foco na linha da tabela
 
-- **Estado:** aceita (09/11/2026) como conserto de dois defeitos medidos; o aceite da F8.10 depende da medida F8.10d (ver Evidência), ainda não rodada quando este ADR foi escrito
+- **Estado:** aceita (09/11/2026); o aceite da F8.10 veio da medida F8.10d, 5 de 5 na 1ª rodada (ver Evidência)
 - **Data:** 2026-11-09
 - **Tarefa(s):** F8.10
 
@@ -33,6 +33,6 @@ A terceira medida da F8.10 (`eval/f810c-medida-geracao.md`) deu 3 de 5 e as duas
 
 **Testes E2E de desenvolvimento** (`e2e/tests/ao-vivo/material-dev.spec.ts`, escritos antes do conserto, contra a pilha real e a API por HTTP): antes do conserto **2 falharam** (patrimônio líquido sem material; lucro antes dos impostos só com 2025) e as 3 guardas passaram; depois, **5 de 5**. Esses pedidos já tinham sido vistos pela F8.10c: servem só ao desenvolvimento, não ao aceite. Contagem das chamadas de desenvolvimento: 2 diagnósticos diretos (C3 e C4), 1 rodada vermelha (5 testes) e 1 verde (5 testes).
 
-**Aceite:** medida F8.10d (`eval/f810d-medida-geracao.md`), pedidos novos, regra de página mecânica da F8.10c, 5 de 5; o resultado entra aqui quando existir.
+**Aceite:** medida F8.10d (`eval/f810d-medida-geracao.md`, `eval/resultados/f810d-geracao.json`), escrita e commitada antes de rodar, com 5 pedidos novos nunca enviados ao sistema e a regra de página mecânica da F8.10c: **5 de 5 na 1ª e única rodada** (D1 a D4 com os três valores certos, página aceita, arquivo relido, contrato 4 de 4, `removidos` 0; D5 Americanas "não consta" sem material). O D4 é a linha do fim da tabela longa da p. 93, sem o nome da companhia no pedido, justamente o caso que a F8.10c mostrou quebrado. Limites: n = 5, uma rodada; selo `incompleta` nos 4 com material; o texto do redator ainda usa o corte de 900 caracteres.
 
 Reproduzir o desenvolvimento: com Neo4j, llama-swap e a API (`npm run build` em `api/` antes) no ar, `cd e2e; npx playwright test --project=ao-vivo tests/ao-vivo/material-dev.spec.ts`.

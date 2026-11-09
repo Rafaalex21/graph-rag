@@ -1,0 +1,210 @@
+{
+  "pedidos": [
+    "D1",
+    "D2",
+    "D3",
+    "D4",
+    "D5"
+  ],
+  "itens": [
+    {
+      "pedido": "D1",
+      "terminou": "pronta",
+      "ms": 39260,
+      "latenciaDaApiMs": 39012,
+      "estadoDoFim": "incompleta",
+      "eventoArtefato": true,
+      "problemasDoContrato": [],
+      "celulas": 3,
+      "rotulosOk": true,
+      "valoresOk": true,
+      "paginasOk": true,
+      "paginasCitadas": [
+        "p. 84",
+        "p. 84",
+        "p. 84"
+      ],
+      "paginasAceitas": [
+        84
+      ],
+      "paginasCalculadas": [
+        84
+      ],
+      "conjuntoConfere": true,
+      "paginasNoPdf": [
+        true,
+        true,
+        true
+      ],
+      "graficoNaTela": true,
+      "removidos": 0,
+      "arquivo": {
+        "formato": "svg",
+        "nome": "depositos-de-poupanca.svg",
+        "status": 200,
+        "tipo": "image/svg+xml",
+        "bytes": 2472,
+        "abriu": true,
+        "valoresNoArquivo": true,
+        "partes": null,
+        "detalhe": "svg lido como XML"
+      },
+      "arquivoOk": true,
+      "ok": true
+    },
+    {
+      "pedido": "D2",
+      "terminou": "pronta",
+      "ms": 57084,
+      "latenciaDaApiMs": 56993,
+      "estadoDoFim": "incompleta",
+      "eventoArtefato": true,
+      "problemasDoContrato": [],
+      "celulas": 3,
+      "rotulosOk": true,
+      "valoresOk": true,
+      "paginasOk": true,
+      "paginasCitadas": [
+        "p. 97",
+        "p. 97",
+        "p. 97"
+      ],
+      "paginasAceitas": [
+        96,
+        97
+      ],
+      "paginasCalculadas": [
+        96,
+        97
+      ],
+      "conjuntoConfere": true,
+      "paginasNoPdf": [
+        true,
+        true,
+        true
+      ],
+      "graficoNaTela": null,
+      "removidos": 0,
+      "arquivo": {
+        "formato": "xlsx",
+        "nome": "receita-de-tarifas-e-comissoes-2023-2025.xlsx",
+        "status": 200,
+        "tipo": "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet",
+        "bytes": 6903,
+        "abriu": true,
+        "valoresNoArquivo": true,
+        "partes": 1,
+        "detalhe": "3 células numéricas"
+      },
+      "arquivoOk": true,
+      "ok": true
+    },
+    {
+      "pedido": "D3",
+      "terminou": "pronta",
+      "ms": 43317,
+      "latenciaDaApiMs": 42904,
+      "estadoDoFim": "incompleta",
+      "eventoArtefato": true,
+      "problemasDoContrato": [],
+      "celulas": 3,
+      "rotulosOk": true,
+      "valoresOk": true,
+      "paginasOk": true,
+      "paginasCitadas": [
+        "p. 84",
+        "p. 84",
+        "p. 84"
+      ],
+      "paginasAceitas": [
+        84
+      ],
+      "paginasCalculadas": [
+        84
+      ],
+      "conjuntoConfere": true,
+      "paginasNoPdf": [
+        true,
+        true,
+        true
+      ],
+      "graficoNaTela": null,
+      "removidos": 0,
+      "arquivo": {
+        "formato": "docx",
+        "nome": "depositos-a-vista-2023-2025.docx",
+        "status": 200,
+        "tipo": "application/vnd.openxmlformats-officedocument.wordprocessingml.document",
+        "bytes": 9920,
+        "abriu": true,
+        "valoresNoArquivo": true,
+        "partes": 17,
+        "detalhe": "17 de 17 partes XML bem formadas"
+      },
+      "arquivoOk": true,
+      "ok": true
+    },
+    {
+      "pedido": "D4",
+      "terminou": "pronta",
+      "ms": 34126,
+      "latenciaDaApiMs": 33766,
+      "estadoDoFim": "incompleta",
+      "eventoArtefato": true,
+      "problemasDoContrato": [],
+      "celulas": 3,
+      "rotulosOk": true,
+      "valoresOk": true,
+      "paginasOk": true,
+      "paginasCitadas": [
+        "p. 93",
+        "p. 93",
+        "p. 93"
+      ],
+      "paginasAceitas": [
+        93
+      ],
+      "paginasCalculadas": [
+        93
+      ],
+      "conjuntoConfere": true,
+      "paginasNoPdf": [
+        true,
+        true,
+        true
+      ],
+      "graficoNaTela": true,
+      "removidos": 0,
+      "arquivo": {
+        "formato": "pptx",
+        "nome": "receita-liquida-de-juros-apos-provisao-para-perdas-2023-2025.pptx",
+        "status": 200,
+        "tipo": "application/vnd.openxmlformats-officedocument.presentationml.presentation",
+        "bytes": 91691,
+        "abriu": true,
+        "valoresNoArquivo": true,
+        "partes": 27,
+        "detalhe": "26 de 26 partes XML bem formadas"
+      },
+      "arquivoOk": true,
+      "ok": true
+    },
+    {
+      "pedido": "D5",
+      "terminou": "pronta",
+      "ms": 5965,
+      "latenciaDaApiMs": 5706,
+      "estadoDoFim": "sem_consulta",
+      "eventoArtefato": false,
+      "material": 0,
+      "tabelas": 0,
+      "links": 0,
+      "dizNaoConsta": true,
+      "ok": true
+    }
+  ],
+  "resumo": {
+    "cumpridos": "5 de 5",
+    "aceiteCumprido": true
+  }
+}
