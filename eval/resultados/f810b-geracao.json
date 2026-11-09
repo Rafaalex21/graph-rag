@@ -1,0 +1,180 @@
+{
+  "pedidos": [
+    "B1",
+    "B2",
+    "B3",
+    "B4",
+    "B5"
+  ],
+  "itens": [
+    {
+      "pedido": "B1",
+      "terminou": "pronta",
+      "ms": 61755,
+      "latenciaDaApiMs": 61441,
+      "estadoDoFim": "incompleta",
+      "eventoArtefato": true,
+      "problemasDoContrato": [],
+      "celulas": 3,
+      "rotulosOk": true,
+      "valoresOk": true,
+      "paginasOk": true,
+      "paginasCitadas": [
+        "p. 83",
+        "p. 83",
+        "p. 83"
+      ],
+      "paginasNoPdf": [
+        true,
+        true,
+        true
+      ],
+      "graficoNaTela": true,
+      "removidos": 0,
+      "arquivo": {
+        "formato": "svg",
+        "nome": "depositos-totais.svg",
+        "status": 200,
+        "tipo": "image/svg+xml",
+        "bytes": 2457,
+        "abriu": true,
+        "valoresNoArquivo": true,
+        "partes": null,
+        "detalhe": "svg lido como XML"
+      },
+      "arquivoOk": true,
+      "ok": true
+    },
+    {
+      "pedido": "B2",
+      "terminou": "pronta",
+      "ms": 36208,
+      "latenciaDaApiMs": 36114,
+      "estadoDoFim": "incompleta",
+      "eventoArtefato": true,
+      "problemasDoContrato": [],
+      "celulas": 3,
+      "rotulosOk": true,
+      "valoresOk": true,
+      "paginasOk": true,
+      "paginasCitadas": [
+        "p. 80",
+        "p. 80",
+        "p. 80"
+      ],
+      "paginasNoPdf": [
+        true,
+        true,
+        true
+      ],
+      "graficoNaTela": null,
+      "removidos": 0,
+      "arquivo": {
+        "formato": "xlsx",
+        "nome": "ativo-total.xlsx",
+        "status": 200,
+        "tipo": "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet",
+        "bytes": 6891,
+        "abriu": true,
+        "valoresNoArquivo": true,
+        "partes": 1,
+        "detalhe": "3 células numéricas"
+      },
+      "arquivoOk": true,
+      "ok": true
+    },
+    {
+      "pedido": "B3",
+      "terminou": "pronta",
+      "ms": 21833,
+      "latenciaDaApiMs": 21619,
+      "estadoDoFim": "suficiente",
+      "eventoArtefato": true,
+      "problemasDoContrato": [],
+      "celulas": 3,
+      "rotulosOk": true,
+      "valoresOk": true,
+      "paginasOk": false,
+      "paginasCitadas": [
+        "p. 96",
+        "p. 96",
+        "p. 93, 96"
+      ],
+      "paginasNoPdf": [
+        true,
+        true,
+        true
+      ],
+      "graficoNaTela": null,
+      "removidos": 0,
+      "arquivo": {
+        "formato": "docx",
+        "nome": "receitas-nao-de-juros-2023-2025.docx",
+        "status": 200,
+        "tipo": "application/vnd.openxmlformats-officedocument.wordprocessingml.document",
+        "bytes": 9920,
+        "abriu": true,
+        "valoresNoArquivo": true,
+        "partes": 17,
+        "detalhe": "17 de 17 partes XML bem formadas"
+      },
+      "arquivoOk": true,
+      "ok": false
+    },
+    {
+      "pedido": "B4",
+      "terminou": "pronta",
+      "ms": 34664,
+      "latenciaDaApiMs": 34547,
+      "estadoDoFim": "incompleta",
+      "eventoArtefato": true,
+      "problemasDoContrato": [],
+      "celulas": 3,
+      "rotulosOk": true,
+      "valoresOk": true,
+      "paginasOk": true,
+      "paginasCitadas": [
+        "p. 80",
+        "p. 80",
+        "p. 80"
+      ],
+      "paginasNoPdf": [
+        true,
+        true,
+        true
+      ],
+      "graficoNaTela": true,
+      "removidos": 0,
+      "arquivo": {
+        "formato": "pptx",
+        "nome": "lucro-por-acao-2023-2025.pptx",
+        "status": 200,
+        "tipo": "application/vnd.openxmlformats-officedocument.presentationml.presentation",
+        "bytes": 91437,
+        "abriu": true,
+        "valoresNoArquivo": true,
+        "partes": 27,
+        "detalhe": "26 de 26 partes XML bem formadas"
+      },
+      "arquivoOk": true,
+      "ok": true
+    },
+    {
+      "pedido": "B5",
+      "terminou": "pronta",
+      "ms": 5435,
+      "latenciaDaApiMs": 4946,
+      "estadoDoFim": "sem_consulta",
+      "eventoArtefato": false,
+      "material": 0,
+      "tabelas": 0,
+      "links": 0,
+      "dizNaoConsta": true,
+      "ok": true
+    }
+  ],
+  "resumo": {
+    "cumpridos": "4 de 5",
+    "aceiteCumprido": false
+  }
+}

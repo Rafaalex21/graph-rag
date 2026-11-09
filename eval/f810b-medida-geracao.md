@@ -59,4 +59,23 @@ Grava `eval/resultados/f810b-geracao.json` (ids, valores, páginas citadas, cont
 
 ## Rodadas (preenchido depois de rodar; toda rodada é contada)
 
-_Nenhuma rodada ainda._
+### Rodada 1 (09/11, a única até agora): **4 de 5 pela regra fixada. O aceite NÃO foi cumprido.**
+
+`eval/resultados/f810b-geracao.json`. Commits antes da rodada: medida `03ac45b`, errata `db27131`, teste `9f5e40e`; nenhum código de produção mudou.
+
+| Pedido | Resultado | Páginas citadas | Tempo | Selo | Arquivo |
+|---|---|---|---|---|---|
+| B1 gráfico | passou | p. 83 nas 3 | 61,8 s | incompleta | svg 2,4 KB |
+| B2 tabela e planilha | passou | p. 80 nas 3 | 36,2 s | incompleta | xlsx 6,9 KB |
+| B3 Word | **falhou só na página** | p. 96, p. 96, pp. 93 e 96 | 21,8 s | suficiente | docx 9,9 KB |
+| B4 apresentação | passou | p. 80 nas 3 | 34,7 s | incompleta | pptx 91,4 KB |
+| B5 "não consta" | passou | — | 5,4 s | sem_consulta | nenhum |
+
+Em B1 a B4: evento dentro do contrato (4 de 4), rótulos 2023–2025 e valores certos (inclusive "5,23 / 4,62 / 2,40" em B4), gráfico carregado, arquivos baixados com 200 e MIME certo e relidos com os três valores, `removidos` = 0. B5 (Magazine Luiza): sem evento, gráfico, tabela nem link, e a resposta diz que não consta.
+
+**O erro do B3 é meu, de novo, e do mesmo tipo da medida antiga.** A tela citou a p. 96. Conferi depois (sem mudar a regra nem o resultado): a p. 96 tem uma tabela com a linha **"Receitas Não de Juros 50.740 | 100,0 | 54.152 | 100,0 | 53.788 | …"**, os três valores na ordem, com colunas de percentual no meio, e o item pós-hoc `paginasNoPdf` deu verdadeiro nas 9 células. Eu escrevi acima que "só uma tabela por série satisfaz" e calculei isso exigindo células **seguidas**; essa exigência excluiu a p. 96 e também a p. 81 (que eu vi e anotei na errata, mas só porque o rótulo era outro). Eu já tinha visto a linha da p. 96 na exploração e não a levei em conta. Na regra de células seguidas B3 aceitava só a p. 93; pela definição que eu achava que estava escrevendo ("a página tem a linha completa") seria {93, 96}. **Pela regra fixada, o resultado fica 4 de 5.**
+
+Limites vistos: o selo de estado vem do crítico e disse `incompleta` em B1, B2 e B4 mesmo com material completo e conferido (B3 deu `suficiente`; é o limite já conhecido); o tempo de B1 (61,8 s) inclui carga do modelo a frio; n = 5.
+
+**O que isso muda:** a F8.10 continua `[~]`. Não aceito a leitura pós-hoc (o dono já disse que não quer aceitar algo que falhou). Mexer na regra agora, depois de ver o resultado, seria ajustar o teste ao que vi pela segunda vez; qualquer nova medida (F8.10c) precisa de pedidos novos e de uma regra de página definida de forma **mecânica e sem exigir células seguidas** (página que tem uma linha com o mesmo rótulo e os três valores em ordem), calculada e commitada antes de rodar, e é decisão do dono.
+
