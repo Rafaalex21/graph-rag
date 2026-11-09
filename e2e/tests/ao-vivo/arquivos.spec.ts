@@ -18,10 +18,11 @@ import { PaginaAssistente } from "../../paginas/assistente.ts";
  * Conjunto de pedidos: "A" (padrão, `eval/f810-medida-geracao.md`, página fixa 93), "B" (`eval/f810b-medida-geracao.md`, páginas
  * aceitas = as das tabelas do PDF com a linha completa em células seguidas, calculadas antes de rodar) ou "C"
  * (`eval/f810c-medida-geracao.md`, páginas aceitas calculadas AQUI por regra mecânica sobre as tabelas do PDF: linha com o mesmo
- * rótulo e os três valores em ordem, com ou sem células no meio). Escolhido por `F810_CONJUNTO`.
+ * rótulo e os três valores em ordem, com ou sem células no meio) ou "D" (`eval/f810d-medida-geracao.md`, a mesma regra, pedidos novos
+ * depois do conserto do ADR-076). Escolhido por `F810_CONJUNTO`.
  */
-const CONJUNTO = process.env["F810_CONJUNTO"] === "C" ? "C" : process.env["F810_CONJUNTO"] === "B" ? "B" : "A";
-const ALVO = new URL(`../../../eval/resultados/${CONJUNTO === "C" ? "f810c" : CONJUNTO === "B" ? "f810b" : "f810"}-geracao.json`, import.meta.url);
+const CONJUNTO = (["A", "B", "C", "D"] as const).find((c) => c === process.env["F810_CONJUNTO"]) ?? "A";
+const ALVO = new URL(`../../../eval/resultados/${CONJUNTO === "A" ? "f810" : `f810${CONJUNTO.toLowerCase()}`}-geracao.json`, import.meta.url);
 const TABELAS = new URL("../../../data/parsed/banco_do_brasil_formulario_referencia_2026.tabelas.json", import.meta.url);
 
 /**
@@ -93,6 +94,11 @@ const PRAZO: Gabarito = { rotulos: ANOS, valores: [495670, 547447, 590567], escr
 const RECEITAS_DE_JUROS: Gabarito = { rotulos: ANOS, valores: [265439, 273505, 319462], escritos: ["265.439", "273.505", "319.462"], paginas: [93, 94], rotuloNaTabela: "Receitas de Juros" };
 const PATRIMONIO: Gabarito = { rotulos: ANOS, valores: [173570, 184236, 193567], escritos: ["173.570", "184.236", "193.567"], paginas: [81], rotuloNaTabela: "Patrimônio Líquido" };
 const LAIR: Gabarito = { rotulos: ANOS, valores: [41147, 27711, 5614], escritos: ["41.147", "27.711", "5.614"], paginas: [93], rotuloNaTabela: "Lucro Antes dos Impostos" };
+// conjunto D (eval/f810d-medida-geracao.md): mesma regra mecânica, pedidos novos
+const POUPANCA: Gabarito = { rotulos: ANOS, valores: [206915, 218363, 215189], escritos: ["206.915", "218.363", "215.189"], paginas: [84], rotuloNaTabela: "Depósitos de Poupança" };
+const TARIFAS: Gabarito = { rotulos: ANOS, valores: [30793, 33198, 34714], escritos: ["30.793", "33.198", "34.714"], paginas: [96, 97], rotuloNaTabela: "Receita de Tarifas e Comissões" };
+const A_VISTA: Gabarito = { rotulos: ANOS, valores: [109358, 107901, 92013], escritos: ["109.358", "107.901", "92.013"], paginas: [84], rotuloNaTabela: "Depósitos à Vista" };
+const RLJ_APOS_PROVISAO: Gabarito = { rotulos: ANOS, valores: [63396, 56808, 34377], escritos: ["63.396", "56.808", "34.377"], paginas: [93], rotuloNaTabela: "Receita Líquida de Juros após Provisão para Perdas" };
 const LPA: Gabarito = { rotulos: ANOS, valores: [5.23, 4.62, 2.4], escritos: ["5,23", "4,62", "2,40"], paginas: [80] };
 
 interface Pedido {
@@ -113,6 +119,14 @@ const PEDIDOS_B: Pedido[] = [
   { id: "B5", texto: "Faça um gráfico do lucro líquido do Magazine Luiza de 2023 a 2025.", gabarito: null, arquivo: null, rotuloDoLink: null, grafico: false },
 ];
 
+const PEDIDOS_D: Pedido[] = [
+  { id: "D1", texto: "Faça um gráfico dos depósitos de poupança de 2023 a 2025.", gabarito: POUPANCA, arquivo: "svg", rotuloDoLink: /Baixar gráfico \(\.svg\)/, grafico: true },
+  { id: "D2", texto: "Monte uma tabela e uma planilha com a receita de tarifas e comissões de 2023 a 2025.", gabarito: TARIFAS, arquivo: "xlsx", rotuloDoLink: /Baixar planilha \(\.xlsx\)/, grafico: false },
+  { id: "D3", texto: "Gere um documento Word com os depósitos à vista de 2023 a 2025.", gabarito: A_VISTA, arquivo: "docx", rotuloDoLink: /Baixar documento \(\.docx\)/, grafico: false },
+  { id: "D4", texto: "Faça uma apresentação com a receita líquida de juros após provisão para perdas de 2023 a 2025.", gabarito: RLJ_APOS_PROVISAO, arquivo: "pptx", rotuloDoLink: /Baixar apresentação \(\.pptx\)/, grafico: true },
+  { id: "D5", texto: "Faça um gráfico do lucro líquido da Americanas de 2023 a 2025.", gabarito: null, arquivo: null, rotuloDoLink: null, grafico: false },
+];
+
 const PEDIDOS_C: Pedido[] = [
   { id: "C1", texto: "Faça um gráfico dos depósitos a prazo de 2023 a 2025.", gabarito: PRAZO, arquivo: "svg", rotuloDoLink: /Baixar gráfico \(\.svg\)/, grafico: true },
   { id: "C2", texto: "Monte uma tabela e uma planilha com as receitas de juros de 2023 a 2025.", gabarito: RECEITAS_DE_JUROS, arquivo: "xlsx", rotuloDoLink: /Baixar planilha \(\.xlsx\)/, grafico: false },
@@ -128,7 +142,7 @@ const PEDIDOS_A: Pedido[] = [
   { id: "A4", texto: "Faça uma apresentação com o lucro líquido do exercício de 2023 a 2025.", gabarito: LUCRO, arquivo: "pptx", rotuloDoLink: /Baixar apresentação \(\.pptx\)/, grafico: true },
   { id: "A5", texto: "Faça um gráfico do lucro líquido do Santander Brasil de 2023 a 2025.", gabarito: null, arquivo: null, rotuloDoLink: null, grafico: false },
 ];
-const PEDIDOS = CONJUNTO === "C" ? PEDIDOS_C : CONJUNTO === "B" ? PEDIDOS_B : PEDIDOS_A;
+const PEDIDOS = { A: PEDIDOS_A, B: PEDIDOS_B, C: PEDIDOS_C, D: PEDIDOS_D }[CONJUNTO];
 
 interface Quadro {
   evento: string;
@@ -279,7 +293,7 @@ test(`${CONJUNTO}: 5 pedidos pela tela do assistente: material com valores do ga
     if (p.grafico) {
       const img = m.getByRole("img");
       graficoOk = (await img.count()) === 1 && (await img.evaluate((i: HTMLImageElement) => i.complete && i.naturalWidth > 0).catch(() => false));
-      if (p.id === "A1" || p.id === "B1" || p.id === "C1") {
+      if (p.id === "A1" || p.id === "B1" || p.id === "C1" || p.id === "D1") {
         mkdirSync(new URL("../../../data/avaliacao/", import.meta.url), { recursive: true });
         await m.screenshot({ path: fileURLToPath(new URL(`../../../data/avaliacao/f810-material-${p.id.toLowerCase()}.png`, import.meta.url)) });
       }
