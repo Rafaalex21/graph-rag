@@ -247,6 +247,7 @@ export async function executarAgente(llm: LlmDoAgente, executor: ExecutorDoAgent
     ...(opcoes.concorrencia !== undefined ? { concorrencia: opcoes.concorrencia } : {}),
     ...(opcoes.historico ? { historico: opcoes.historico } : {}),
     ...(opcoes.companhia ? { companhia: opcoes.companhia } : {}),
+    ...(opcoes.complementarTabelas === true ? { pedidoDeMaterial: true } : {}),
     ...(opcoes.signal ? { signal: opcoes.signal } : {}),
     executar: async (sub: SubRoteada) => {
       const rot = sub.roteamento;
