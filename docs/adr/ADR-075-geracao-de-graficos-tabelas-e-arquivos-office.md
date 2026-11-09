@@ -29,7 +29,7 @@ O dono pediu que o assistente gere, a pedido, gráficos, tabelas e arquivos do p
 ## Consequências
 
 - O custo de uma resposta com material é maior: busca extra de tabelas, resposta maior e uma chamada ao modelo (29 a 49 s ponta a ponta, contra 8 a 28 s das perguntas da F8.9; o custo da chamada não foi isolado). O RNF-2 segue em aberto.
-- O `exceljs` traz dependências antigas com aviso de descontinuação do npm (`rimraf`, `glob`, `fstream`); não há alternativa mantida com o mesmo escopo, e o arquivo só é escrito, nunca aberto de fora.
+- O `exceljs` traz dependências antigas com aviso de descontinuação do npm (`rimraf`, `glob`, `fstream`); não há alternativa mantida com o mesmo escopo, e o arquivo só é escrito, nunca aberto de fora. **O Dependabot abriu alertas por causa das novas dependências** (todas transitivas): `image-size` 1.2.1 (alto, laço infinito em JXL, HEIF e ICNS; vem do `pptxgenjs`, que só o usa para imagens, e nós não pomos imagem no `.pptx`) e `uuid` 8 (médio, falta de checagem de limite quando se passa `buf`; vem do `exceljs`, que só chama `v4()`). Nenhum dos dois é alcançável por este código. **Não foram sobrescritos** (`overrides` para `uuid` 11.1.1 e `image-size` 2.0.3) porque trocaria a versão que as bibliotecas testaram, e fica como dívida aberta.
 - O selo de estado ("Encontrei só em parte") vem do crítico do ciclo, que não conhece o pedido de arquivo; ele disse `incompleta` nos 4 pedidos com material.
 - A verificação prova que o número está na evidência citada, não que está ligado ao rótulo certo (o ano). Isso foi conferido contra o gabarito na medida, não pelo código. O sinal de um valor negativo não é conferido.
 - A telemetria não registra o pedido de material nem os pontos removidos.
