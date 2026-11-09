@@ -5,7 +5,7 @@ Aceite da etapa: "as 5 perguntas do golden feitas só pela tela do assistente (`
 ## O que a etapa entrega (para a medida fazer sentido)
 
 - **`/assistente` (a tela inicial):** barra lateral (marca, "Nova conversa", conversas recentes guardadas no navegador, estado do sistema, tema e o link "Modo técnico"), conversa ao centro e, ao lado, o painel da fonte.
-- **A resposta** vem num cartão com: o **selo de estado** (a partir de `metricas.estado` do evento `fim`), o texto com as citações de página, os **cartões de fonte** (um por evidência com página, sem repetir), a nota (Resposta útil / Não ajudou) e **"Como cheguei a esta resposta"** (os passos em português simples, montados dos eventos do Rastro).
+- **A resposta** vem num cartão com: o **selo de estado** (a partir de `metricas.estado` do evento `fim`), o texto com as citações de página, os **cartões de fonte** (um por fonte **citada** na resposta que tenha página, sem repetir; ver o ajuste abaixo), a nota (Resposta útil / Não ajudou) e **"Como cheguei a esta resposta"** (os passos em português simples, montados dos eventos do Rastro).
 - **O painel da fonte** é o mesmo visualizador da aba Fontes (pdf.js, trecho destacado), agora reaproveitado como componente.
 - **Como buscar** (os 6 modos) e **Completa / Rápida** (o perfil) ficam na própria tela e são os mesmos de Configurações (mesmo `localStorage`).
 - **O modo técnico** (`/chat` com Rastro, Fontes e Grafo, e `/configuracoes`) continua como estava, com um link de volta para o assistente.
@@ -16,9 +16,18 @@ Aceite da etapa: "as 5 perguntas do golden feitas só pela tela do assistente (`
 - **Só pela tela do assistente:** o teste começa em `/` (que tem de levar a `/assistente`), digita a pergunta na caixa e usa só os botões e cartões da tela. Os serviços (Neo4j, llama-swap, API) são iniciados antes, pelos scripts `infra\` (mesmo limite da F8.7).
 - **Selo esperado:** o `estado` do `fim` da resposta SSE (lida do corpo do `POST /api/chat`, como nas medidas anteriores): `suficiente` com pelo menos uma evidência → "Encontrado no documento"; `incompleta` → "Encontrei só em parte"; `ausente` → "Não consta no documento"; `suficiente` sem nenhuma evidência (a saudação) → **nenhum selo**; resposta com erro → "Não consegui responder".
 - **Fonte que abre a página certa:** nas respostas com pelo menos um cartão de fonte com página, clica-se no **primeiro** cartão com página; vale se o painel mostrar "Página N de 423" e o desenho (`canvas`) com o nome "Página N do documento", onde **N é a primeira página do rótulo do cartão**. Não se aplica à resposta sem cartão com página.
-- **Passo a passo:** "Como cheguei a esta resposta" abre com pelo menos 3 passos (itens da lista).
+- **Passo a passo:** "Como cheguei a esta resposta" abre com pelo menos 3 passos (itens da lista). Só se aplica à resposta que **buscou algo** (houve evidência ou uma etapa `ferramenta_fim` no corpo do `POST /api/chat`); numa resposta que não buscou nada (a saudação) a tela não oferece o botão, e vale que o botão **não** aparece (ver o ajuste abaixo).
 - **Nota:** um clique em "Resposta útil" ou "Não ajudou" (regra mecânica da F8.7: útil se há citação de página, senão não ajudou) é confirmado na tela ("Nota registrada.") e o navegador recebe `201`.
 - **Modo técnico:** no fim, o link "Modo técnico" leva a `/chat` (o título da página é "Chat · GraphRAG local").
+
+## Ajuste feito ainda antes de qualquer rodada ao vivo
+
+Ao construir a tela (e rodar só os testes contra a API falsa, nenhuma pergunta real) vi duas lacunas na definição acima, e as corrijo aqui, antes de rodar, em commit à parte:
+
+1. **Cartões de fonte.** Escrevi "um por evidência com página". Uma resposta real chega a ter mais de dez evidências, e mostrar todas poluiria a tela e misturaria o que a resposta citou com o que só foi consultado. A tela mostra **um cartão por fonte citada** (`citacoes` do evento `fim`) que tenha página, sem repetir; se nenhuma citada tem página, as até 3 primeiras evidências com página. O item da medida não muda: "o primeiro cartão com página abre a página N do rótulo".
+2. **Passo a passo na saudação.** A regra "pelo menos 3 passos" não faz sentido para uma resposta que não buscou nada (F01, "Olá, tudo bem?"), e a tela não inventa passos. Vale a condição acima: com busca, o botão existe e abre com 3 ou mais passos; sem busca, o botão não aparece.
+
+A regra de aceite abaixo não muda: 5 de 5 perguntas por todos os itens que se aplicam a elas, mais o link do modo técnico.
 
 ## Regra de aceite (fixada agora)
 
