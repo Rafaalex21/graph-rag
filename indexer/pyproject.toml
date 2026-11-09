@@ -16,7 +16,7 @@ dev = [
 # Parsing de PDF (F1.3): traz o torch e os modelos do Docling. Fica fora do grupo padrão para o CI não baixá-los.
 # Localmente: `uv sync --group parse` (um `uv sync` puro remove o Docling) e `uv run --group parse ...`.
 parse = [
-    "docling==2.144.0",
+    "docling==2.148.0",
 ]
 
 [tool.uv]
