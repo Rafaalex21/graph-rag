@@ -29,8 +29,10 @@ O `ao-vivo/primeiro-token.spec.ts` grava ainda `eval/resultados/f82-primeiro-tok
 ## O que cada arquivo prova
 
 - `tests/interface/chat.spec.ts`: enviar (teclado, botão, limites), a resposta aos poucos pelo proxy, chips de citação e navegação para a aba Fontes, markdown, HTML hostil que não vira elemento, erros (429, 502 com HTML, evento `erro`, fluxo sem `fim`), Parar, histórico e nova conversa.
+- `tests/interface/rastro.spec.ts`: o painel Rastro (F8.3): todos os eventos da §11.1 na linha do tempo, ao vivo, Cypher e evidências como texto, página que abre Fontes, "o documento não tem" sem alerta, erro, 429 e celular.
 - `tests/interface/shell.spec.ts`: rotas, 404, abas, título, marcos de acessibilidade, tema e largura de celular.
 - `tests/ao-vivo/api.spec.ts`: validação do pedido (400), ausência de CORS, `/api/saude`, uma pergunta real em SSE com o primeiro evento em ≤ 1 s, e o 429 da terceira pergunta simultânea.
+- `tests/ao-vivo/rastro.spec.ts`: o Rastro de T15, N01 e G03 contra a pilha real; grava `eval/resultados/f83-rastro.json` (ids e tipos de passo).
 - `tests/ao-vivo/primeiro-token.spec.ts`: o aceite da F8.2 (`eval/f82-medida-primeiro-token.md`).
 
 ## Limites

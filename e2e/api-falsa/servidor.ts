@@ -13,6 +13,10 @@
  *   cai       manda alguns tokens e encerra o fluxo sem `fim` (um corte seco com RST o proxy do ng serve não repassa: a tela fica em "Gerando" até o Parar)
  *   erro      manda alguns tokens e um evento `erro`
  *   trava     manda um token e fica parado até o cliente desistir (para o botão Parar)
+ *   rastro    o fluxo completo do contrato (2 rodadas, uma ferramenta que falha, Cypher, evidências com e sem página, crítica
+ *             "buscar_mais" e depois "suficiente", reparo e `fim` com métricas), com 120 ms entre os eventos para a tela mostrar o
+ *             Rastro ao vivo
+ *   ausente   o documento não tem o dado: crítica "ausente", nenhuma evidência, resposta "Não consta"
  *   (outra)   resposta curta de uma frase com [E1] nos tokens e [p. 6] no fim
  */
 import { createServer, type IncomingMessage, type ServerResponse } from "node:http";
@@ -40,6 +44,62 @@ async function lerCorpo(req: IncomingMessage): Promise<string> {
   const partes: Buffer[] = [];
   for await (const p of req) partes.push(p as Buffer);
   return Buffer.concat(partes).toString("utf-8");
+}
+
+
+const PAUSA_RASTRO = 120;
+const etapa = (tipo: string, detalhe: Record<string, unknown>) => quadro("etapa", { tipo, detalhe });
+
+async function roteiroRastro(res: ServerResponse): Promise<void> {
+  const aberta = () => !res.destroyed && !res.writableEnded;
+  const eventos = [
+    etapa("reescrita", { rodada: 1, subperguntas: 2, fallback: null, ms: 420 }),
+    etapa("rota", { rodada: 1, indice: 0, onda: 0, rota: "ferramentas", ferramentas: ["buscar_trechos"], fallback: null, ms: 900 }),
+    etapa("ferramenta_inicio", { rodada: 1, indice: 0, ferramenta: "buscar_trechos" }),
+    etapa("rota", { rodada: 1, indice: 1, onda: 0, rota: "ferramentas", ferramentas: ["consultar_grafo"], fallback: "chamada_invalida", ms: 700 }),
+    etapa("ferramenta_inicio", { rodada: 1, indice: 1, ferramenta: "consultar_grafo" }),
+    etapa("ferramenta_fim", { rodada: 1, indice: 0, ferramenta: "buscar_trechos", erro: null, evidencias: 5, ms: 340 }),
+    etapa("ferramenta_fim", { rodada: 1, indice: 1, ferramenta: "consultar_grafo", erro: "tempo esgotado na consulta", evidencias: 0, ms: 2100 }),
+    quadro("cypher", { query: "MATCH (f:FinancialFact) WHERE f.metric = 'Lucro'\nRETURN f.value AS v LIMIT 5 // <script>window.__xss=1</script>", linhas: 3, ms: 45 }),
+    etapa("critica", { rodada: 1, decisao: "buscar_mais", perguntas: 1, faltando: "o lucro de 2024", ms: 2500 }),
+    etapa("reescrita", { rodada: 2, subperguntas: 1, fallback: null, ms: 300 }),
+    etapa("rota", { rodada: 2, indice: 0, onda: 0, rota: "ferramentas", ferramentas: ["buscar_trechos"], fallback: null, ms: 800 }),
+    etapa("ferramenta_inicio", { rodada: 2, indice: 0, ferramenta: "buscar_trechos" }),
+    etapa("ferramenta_fim", { rodada: 2, indice: 0, ferramenta: "buscar_trechos", erro: null, evidencias: 4, ms: 310 }),
+    etapa("critica", { rodada: 2, decisao: "suficiente", perguntas: 0, faltando: "", ms: 2200 }),
+    quadro("evidencia", { id: "p1", tipo: "pai", pagina: "p. 6", trecho: "Lucro líquido ajustado de R$ 20,7 bilhões em 2025.", score: 0.91 }),
+    quadro("evidencia", { id: "t1", tipo: "tabela", pagina: "p. 9-10", trecho: "| Ano | Lucro |", score: 0.8 }),
+    quadro("evidencia", { id: "f1", tipo: "fato", pagina: null, trecho: '<img src=x onerror="window.__xss=1"> valor sem página', score: 0.5 }),
+  ];
+  for (const e of eventos) {
+    if (!aberta()) return;
+    res.write(e);
+    await dormir(PAUSA_RASTRO);
+  }
+  for (const t of ["O lucro foi ", "R$ 20 bi [E1]", "."]) {
+    if (!aberta()) return;
+    res.write(quadro("token", { t }));
+    await dormir(PAUSA_RASTRO);
+  }
+  res.write(etapa("reparo", { frases: ["O lucro foi R$ 20 bi"] }));
+  await dormir(PAUSA_RASTRO);
+  res.write(
+    quadro("fim", FIM("O lucro foi R$ 20 bi [p. 6].", { metricas: { latenciaMs: 12345, tokensEntrada: 1234, tokensSaida: 56, rota: ["buscar_trechos", "consultar_grafo"], estado: "suficiente" } })),
+  );
+}
+
+function roteiroAusente(res: ServerResponse): void {
+  for (const e of [
+    etapa("reescrita", { rodada: 1, subperguntas: 1, fallback: null, ms: 300 }),
+    etapa("rota", { rodada: 1, indice: 0, onda: 0, rota: "ferramentas", ferramentas: ["buscar_trechos"], fallback: null, ms: 700 }),
+    etapa("ferramenta_inicio", { rodada: 1, indice: 0, ferramenta: "buscar_trechos" }),
+    etapa("ferramenta_fim", { rodada: 1, indice: 0, ferramenta: "buscar_trechos", erro: null, evidencias: 0, ms: 280 }),
+    etapa("critica", { rodada: 1, decisao: "ausente", perguntas: 0, faltando: "o documento não traz esse dado", ms: 1900 }),
+  ])
+    res.write(e);
+  res.write(
+    quadro("fim", FIM("Não consta no documento.", { citacoes: [], metricas: { latenciaMs: 3000, tokensEntrada: 300, tokensSaida: 8, rota: ["buscar_trechos"], estado: "ausente" } })),
+  );
 }
 
 async function responderChat(req: IncomingMessage, res: ServerResponse): Promise<void> {
@@ -71,7 +131,11 @@ async function responderChat(req: IncomingMessage, res: ServerResponse): Promise
     }
   };
 
-  if (/lent[oa]/.test(mensagem)) {
+  if (mensagem.includes("rastro")) {
+    await roteiroRastro(res);
+  } else if (mensagem.includes("ausente")) {
+    roteiroAusente(res);
+  } else if (/lent[oa]/.test(mensagem)) {
     await tokens(["O ", "lucro ", "líquido ", "foi ", "de ", "R$ 20 ", "bilhões ", "[E1]", "."], 150);
     res.write(quadro("fim", FIM("O lucro líquido foi de R$ 20 bilhões [p. 6].")));
   } else if (mensagem.includes("xss")) {

@@ -1,0 +1,63 @@
+{
+  "porPergunta": [
+    {
+      "id": "T15",
+      "passos": 9,
+      "tipos": [
+        "reescrita-inicio",
+        "reescrita",
+        "rota",
+        "ferramenta_inicio",
+        "ferramenta_fim",
+        "critica",
+        "evidencias",
+        "fim"
+      ],
+      "estado": "suficiente"
+    },
+    {
+      "id": "N01",
+      "passos": 9,
+      "tipos": [
+        "reescrita-inicio",
+        "reescrita",
+        "rota",
+        "ferramenta_inicio",
+        "ferramenta_fim",
+        "critica",
+        "evidencias",
+        "fim"
+      ],
+      "estado": "suficiente"
+    },
+    {
+      "id": "G03",
+      "passos": 22,
+      "tipos": [
+        "reescrita-inicio",
+        "reescrita",
+        "rota",
+        "ferramenta_inicio",
+        "ferramenta_fim",
+        "cypher",
+        "critica",
+        "evidencias",
+        "fim"
+      ],
+      "estado": "incompleta"
+    }
+  ],
+  "uniao": [
+    "critica",
+    "cypher",
+    "evidencias",
+    "ferramenta_fim",
+    "ferramenta_inicio",
+    "fim",
+    "reescrita",
+    "reescrita-inicio",
+    "rota"
+  ],
+  "cypherVisto": true,
+  "reparoVisto": false
+}

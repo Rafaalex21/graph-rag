@@ -16,8 +16,7 @@ export const routes: Routes = [
       { path: '', pathMatch: 'full', redirectTo: 'rastro' },
       {
         path: 'rastro',
-        loadComponent: () => import('./paginas/painel/painel-vazio').then((m) => m.PainelVazio),
-        data: { titulo: 'Rastro', texto: 'Aqui aparece o caminho de cada resposta: a pergunta reescrita, a rota escolhida, o Cypher, as evidências e a crítica.' },
+        loadComponent: () => import('./paginas/rastro/rastro.page').then((m) => m.RastroPage),
       },
       {
         path: 'fontes',
