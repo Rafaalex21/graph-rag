@@ -1,0 +1,72 @@
+{
+  "nome": "f714-custo-telemetria",
+  "data": "2026-11-09",
+  "comando": "npm run avaliar:telemetria",
+  "medidas_por_condicao_e_rota": 1000,
+  "aquecimento": 200,
+  "chat": {
+    "sem": {
+      "n": 1000,
+      "p50_ms": 0.289,
+      "p95_ms": 0.437,
+      "media_ms": 0.32
+    },
+    "sem2": {
+      "n": 1000,
+      "p50_ms": 0.287,
+      "p95_ms": 0.422,
+      "media_ms": 0.315
+    },
+    "com": {
+      "n": 1000,
+      "p50_ms": 0.324,
+      "p95_ms": 0.468,
+      "media_ms": 0.358
+    },
+    "diferenca_com_menos_sem": {
+      "p50_ms": 0.035,
+      "p95_ms": 0.031,
+      "media_ms": 0.038
+    },
+    "ruido_sem2_menos_sem": {
+      "p50_ms": -0.002,
+      "p95_ms": -0.015,
+      "media_ms": -0.005
+    }
+  },
+  "saude": {
+    "sem": {
+      "n": 1000,
+      "p50_ms": 0.171,
+      "p95_ms": 0.226,
+      "media_ms": 0.179
+    },
+    "sem2": {
+      "n": 1000,
+      "p50_ms": 0.17,
+      "p95_ms": 0.226,
+      "media_ms": 0.181
+    },
+    "com": {
+      "n": 1000,
+      "p50_ms": 0.188,
+      "p95_ms": 0.249,
+      "media_ms": 0.199
+    },
+    "diferenca_com_menos_sem": {
+      "p50_ms": 0.017,
+      "p95_ms": 0.023,
+      "media_ms": 0.02
+    },
+    "ruido_sem2_menos_sem": {
+      "p50_ms": -0.001,
+      "p95_ms": 0,
+      "media_ms": 0.002
+    }
+  },
+  "fila": {
+    "drenar_depois_da_ultima_requisicao_ms": 21,
+    "linhas_gravadas": 2400,
+    "linhas_esperadas": 2400
+  }
+}
