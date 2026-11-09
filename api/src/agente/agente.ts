@@ -113,6 +113,12 @@ export interface OpcoesAgente {
    */
   complementar?: boolean;
   /**
+   * Acrescenta também uma busca de tabelas (`buscar_tabelas`) à subpergunta, em paralelo (F8.10). Serve ao pedido de gráfico,
+   * tabela ou arquivo: a série de vários anos costuma estar numa tabela do documento, e o grafo (e as ferramentas de fato) só
+   * traz o ano-base. Não se aplica a quem já chama `buscar_tabelas` nem a `resposta_ja_dada`. Padrão: desligado.
+   */
+  complementarTabelas?: boolean;
+  /**
    * Na lista plana `evidencias`, as evidências com página vêm antes das sem página (ordem estável dentro de cada grupo),
    * porque o redator só cita página e o `panorama` e alguns caminhos de grafo devolvem evidência sem ela. Não reordena
    * as evidências de cada subpergunta. Padrão: ligado (v3 do ADR-059, decidida depois de ver as rodadas 1 e 2).
@@ -250,7 +256,14 @@ export async function executarAgente(llm: LlmDoAgente, executor: ExecutorDoAgent
         (opcoes.complementar ?? true) && rot.chamadas.length > 0 && !rot.chamadas.some((c) => SEM_COMPLEMENTO.has(c.nome))
           ? [{ nome: "buscar_trechos", argumentos: { pergunta: sub.pergunta } } satisfies ChamadaRoteada]
           : [];
-      const feitas = await Promise.all([...rot.chamadas.map((c) => executarChamada(executor, c)), ...complemento.map((c) => executarChamada(executor, c, true))]);
+      const complementoDeTabelas =
+        opcoes.complementarTabelas === true && rot.chamadas.length > 0 && !rot.chamadas.some((c) => c.nome === "buscar_tabelas" || c.nome === "resposta_ja_dada")
+          ? [{ nome: "buscar_tabelas", argumentos: { pergunta: sub.pergunta } } satisfies ChamadaRoteada]
+          : [];
+      const feitas = await Promise.all([
+        ...rot.chamadas.map((c) => executarChamada(executor, c)),
+        ...[...complemento, ...complementoDeTabelas].map((c) => executarChamada(executor, c, true)),
+      ]);
       const msExecutar = arredonda(performance.now() - inicio);
       const parcial: Parcial = {
         execucoes: feitas.map((f) => f.execucao),

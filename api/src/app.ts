@@ -1,5 +1,6 @@
 import { randomUUID } from "node:crypto";
 import Fastify, { type FastifyInstance } from "fastify";
+import { registrarArquivos } from "./http/arquivos.ts";
 import { registrarChat, registradasNoChat } from "./http/chat.ts";
 import { responderErro } from "./http/erros.ts";
 import { registrarFeedback } from "./http/feedback.ts";
@@ -48,6 +49,7 @@ export function criarApp(deps: DependenciasApp = {}): FastifyInstance {
 
   registrarSaude(app, deps, VERSAO);
   registrarChat(app, deps);
+  registrarArquivos(app, deps);
   registrarFonte(app, deps);
   registrarPdf(app, deps);
   registrarGrafo(app, deps);

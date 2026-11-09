@@ -718,6 +718,7 @@ O Neo4j roda **nativo no Windows** (`infra/neo4j.ps1 instalar | iniciar | parar 
 | `cypher` | `{query, linhas, ms}` | Cada consulta executada |
 | `evidencia` | `{id, tipo: "pai" \| "tabela" \| "fato" \| "entidade" \| "comunidade", pagina, trecho, score}` | Contexto recuperado |
 | `token` | `{t}` | Streaming do redator |
+| `artefato` | `{id, titulo, unidade, grafico: {tipo, url, descricao} \| null, tabela: {colunas, linhas}, arquivos: [{id, formato, nome, bytes, url}], removidos}` | Só se a mensagem pediu gráfico, tabela, planilha, documento ou apresentação e há dado verificável (F8.10); antes do `fim` |
 | `fim` | `{mensagemId, resposta, citacoes: [{id, pagina}], metricas: {latenciaMs, tokensEntrada, tokensSaida, rota}}` | Fim |
 | `erro` | `{codigo, mensagem}` | Falha |
 
@@ -732,6 +733,7 @@ O contrato executável está em `contracts/api.openapi.yaml` (ADR-062) e prevale
 | `GET /api/grafo/vizinhanca?entidade=…&profundidade=1` | `{nos, arestas}` para o explorador |
 | `GET /api/saude` | Estado de cada modelo no `llama-swap`, do Neo4j e dos índices |
 | `POST /api/feedback` | `{mensagemId, nota: 1 \| -1, comentario?}` |
+| `GET /api/arquivos/:id` | Um arquivo que o assistente gerou (SVG, `.xlsx`, `.docx`, `.pptx`), só o que a API gravou em `data/artefatos/` na última hora (F8.10, ADR-075) |
 
 ### 11.3 Telemetria (F7.7, ADR-063)
 
@@ -755,6 +757,7 @@ Cada requisição vira **uma linha JSON** em `data/logs/telemetria/AAAA-MM-DD.js
 | `HealthBadgeComponent` (`SeloSaude`) | Selo "Sistema: no ar / degradado / fora do ar" no topo de todas as páginas (consulta `GET /api/saude` ao abrir, a cada 30 s e sob demanda); o painel diz o estado do llama-swap, do Neo4j, dos índices e dos modelos na memória. Só informa: não bloqueia o chat (F8.7) |
 | `AssistentePage` (`/assistente`) | A tela do usuário final (F8.9): `BarraLateral` (recentes, estado, tema, Modo técnico), `CartaoResposta` (selo de estado a partir de `metricas.estado`, texto com citações, cartões de fonte, nota e "Como cheguei a esta resposta"), `Compositor` (caixa, "Como buscar") e o painel da fonte. Fontes `Inter` e `Space Grotesk` servidas pelo próprio app (`@fontsource-variable`), nada de CDN |
 | `VisualizadorFonte` | O pdf.js do `SourceViewerComponent`, agora componente de entrada `pagina`/`fonteId`: a aba Fontes o alimenta pela URL, o assistente pelo clique no cartão de fonte (F8.9) |
+| `MaterialGeradoComponent` | O material que o assistente gerou a pedido (F8.10): o gráfico (imagem SVG do servidor, com texto alternativo), a tabela com a página de cada valor (clicar abre o visualizador) e os links de download; só endereços `/api/arquivos/<id>` viram imagem ou link |
 | `HistoricoService` | Conversas recentes: até 20 no `localStorage` (`graphrag.historico`), com mensagens, eventos e `conversationId`; restaurar uma conversa continua a mesma (F8.9) |
 | Feedback por resposta | "Resposta útil" / "Resposta não útil" em cada resposta pronta (`POST /api/feedback` com o `mensagemId` do `fim`) e um comentário opcional (F8.7) |
 

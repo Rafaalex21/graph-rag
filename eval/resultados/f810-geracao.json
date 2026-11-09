@@ -10,8 +10,8 @@
     {
       "pedido": "A1",
       "terminou": "pronta",
-      "ms": 31028,
-      "latenciaDaApiMs": 30587,
+      "ms": 44826,
+      "latenciaDaApiMs": 44738,
       "estadoDoFim": "incompleta",
       "eventoArtefato": true,
       "problemasDoContrato": [],
@@ -19,6 +19,16 @@
       "rotulosOk": true,
       "valoresOk": true,
       "paginasOk": false,
+      "paginasCitadas": [
+        "p. 80",
+        "p. 80",
+        "p. 80"
+      ],
+      "paginasNoPdf": [
+        true,
+        true,
+        true
+      ],
       "graficoNaTela": true,
       "removidos": 0,
       "arquivo": {
@@ -38,8 +48,8 @@
     {
       "pedido": "A2",
       "terminou": "pronta",
-      "ms": 47379,
-      "latenciaDaApiMs": 46844,
+      "ms": 48880,
+      "latenciaDaApiMs": 48555,
       "estadoDoFim": "incompleta",
       "eventoArtefato": true,
       "problemasDoContrato": [],
@@ -47,6 +57,16 @@
       "rotulosOk": true,
       "valoresOk": true,
       "paginasOk": true,
+      "paginasCitadas": [
+        "p. 93",
+        "p. 93",
+        "p. 93"
+      ],
+      "paginasNoPdf": [
+        true,
+        true,
+        true
+      ],
       "graficoNaTela": null,
       "removidos": 0,
       "arquivo": {
@@ -54,7 +74,7 @@
         "nome": "receita-liquida-de-juros-2023-2025.xlsx",
         "status": 200,
         "tipo": "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet",
-        "bytes": 6909,
+        "bytes": 6907,
         "abriu": true,
         "valoresNoArquivo": true,
         "partes": 1,
@@ -66,8 +86,8 @@
     {
       "pedido": "A3",
       "terminou": "pronta",
-      "ms": 33586,
-      "latenciaDaApiMs": 33091,
+      "ms": 35173,
+      "latenciaDaApiMs": 34876,
       "estadoDoFim": "incompleta",
       "eventoArtefato": true,
       "problemasDoContrato": [],
@@ -75,6 +95,16 @@
       "rotulosOk": true,
       "valoresOk": true,
       "paginasOk": false,
+      "paginasCitadas": [
+        "p. 80",
+        "p. 80",
+        "p. 80"
+      ],
+      "paginasNoPdf": [
+        true,
+        true,
+        true
+      ],
       "graficoNaTela": null,
       "removidos": 0,
       "arquivo": {
@@ -82,7 +112,7 @@
         "nome": "lucro-liquido-do-exercicio.docx",
         "status": 200,
         "tipo": "application/vnd.openxmlformats-officedocument.wordprocessingml.document",
-        "bytes": 9910,
+        "bytes": 9909,
         "abriu": true,
         "valoresNoArquivo": true,
         "partes": 17,
@@ -94,8 +124,8 @@
     {
       "pedido": "A4",
       "terminou": "pronta",
-      "ms": 34638,
-      "latenciaDaApiMs": 34565,
+      "ms": 29516,
+      "latenciaDaApiMs": 29108,
       "estadoDoFim": "incompleta",
       "eventoArtefato": true,
       "problemasDoContrato": [],
@@ -103,14 +133,24 @@
       "rotulosOk": true,
       "valoresOk": true,
       "paginasOk": false,
+      "paginasCitadas": [
+        "p. 80",
+        "p. 80",
+        "p. 80"
+      ],
+      "paginasNoPdf": [
+        true,
+        true,
+        true
+      ],
       "graficoNaTela": true,
       "removidos": 0,
       "arquivo": {
         "formato": "pptx",
-        "nome": "lucro-liquido-do-exercicio.pptx",
+        "nome": "lucro-liquido-do-exercicio-2023-2025.pptx",
         "status": 200,
         "tipo": "application/vnd.openxmlformats-officedocument.presentationml.presentation",
-        "bytes": 91469,
+        "bytes": 91541,
         "abriu": true,
         "valoresNoArquivo": true,
         "partes": 27,
@@ -122,8 +162,8 @@
     {
       "pedido": "A5",
       "terminou": "pronta",
-      "ms": 4425,
-      "latenciaDaApiMs": 4078,
+      "ms": 4950,
+      "latenciaDaApiMs": 4417,
       "estadoDoFim": "sem_consulta",
       "eventoArtefato": false,
       "material": 0,

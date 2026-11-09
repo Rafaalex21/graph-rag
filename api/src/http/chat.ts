@@ -9,6 +9,7 @@ import { z } from "zod";
 import type { ResultadoCiclo } from "../agente/ciclo.ts";
 import type { Turno } from "../agente/atualizador.ts";
 import type { RespostaRedator } from "../agente/redator.ts";
+import { detectarPedido } from "../artefatos/especificacao.ts";
 import { LlmAbortadoError, LlmIndisponivelError, LlmTimeoutError } from "../llm/index.ts";
 import { montarRegistroChat } from "../telemetria/chat.ts";
 import type { RegistroChat } from "../telemetria/tipos.ts";
@@ -108,7 +109,10 @@ export function registrarChat(app: FastifyInstance, deps: DependenciasApp): void
       primeiroEvento = Math.round(performance.now() - t0);
 
       const turnos: Turno[] = historico ?? [];
+      // F8.10: o pedido de gráfico, tabela ou arquivo também busca tabelas (a série de vários anos costuma estar numa tabela)
+      const pedido = detectarPedido(message);
       ciclo = await deps.ciclo(message, {
+        ...(pedido && deps.artefatos ? { complementarTabelas: true } : {}),
         rapido: profile === "consultar-rapido",
         modo: mode,
         historico: turnos,
@@ -137,12 +141,29 @@ export function registrarChat(app: FastifyInstance, deps: DependenciasApp): void
       );
       if (ac.signal.aborted) return;
 
+      // F8.10: gráfico, tabela, planilha, documento ou apresentação pedidos na mensagem; sai ANTES do `fim`. Nunca derruba a resposta.
+      let textoFinal = resposta.textoComPaginas;
+      if (pedido && deps.artefatos) {
+        const material = await deps.artefatos({ mensagem: message, pedido, evidencias: ciclo.evidencias }, { signal: ac.signal }).catch((e: unknown) => {
+          if (e instanceof LlmAbortadoError || ac.signal.aborted) throw e;
+          deps.registrarErro?.("artefato", e);
+          return null;
+        });
+        if (ac.signal.aborted) return;
+        if (material?.artefato) fluxo.enviar({ evento: "artefato", dados: material.artefato });
+        else {
+          const aviso = "\n\nNão gerei o material pedido: o documento não traz esses valores com número e página que eu consiga conferir.";
+          textoFinal += aviso;
+          fluxo.enviar({ evento: "token", dados: { t: aviso } });
+        }
+      }
+
       fluxo.enviar({
         evento: "fim",
         dados: {
           // o mesmo id do registro de telemetria: é o que o cliente manda em /api/feedback
           mensagemId: id,
-          resposta: resposta.textoComPaginas,
+          resposta: textoFinal,
           citacoes: resposta.citacoes.map((c) => ({ id: c.id, pagina: c.paginas === "" ? null : c.paginas })),
           metricas: {
             latenciaMs: Math.round(performance.now() - t0),

@@ -22,6 +22,9 @@
  *             "buscar_mais" e depois "suficiente", reparo e `fim` com métricas), com 120 ms entre os eventos para a tela mostrar o
  *             Rastro ao vivo
  *   ausente   o documento não tem o dado: crítica "ausente", nenhuma evidência, resposta "Não consta"
+ *   gráfico / planilha / word / apresentação   resposta com o evento `artefato` (F8.10): gráfico em SVG, tabela e o arquivo pedido
+ *   santander   o pedido de gráfico sobre o que o documento não tem: "Não consta", sem artefato
+ *   artefato hostil / removido / quebrado   o artefato com HTML e endereços hostis, com pontos removidos por falta de lastro, e com a imagem que dá 404
  *   marcar    evidências com e sem página, mas `citacoes` vazio (o assistente mostra as 3 primeiras com página)
  *   (outra)   resposta curta de uma frase com [E1] nos tokens e [p. 6] no fim
  */
@@ -201,6 +204,56 @@ function vizinhanca(url: URL, res: ServerResponse): void {
   json(res, 200, { entidade: no(id), nos: [...ids].map(no), arestas, truncado: false });
 }
 
+/** O material gerado (F8.10): o evento `artefato` do contrato e os arquivos de GET /api/arquivos/:id. */
+const TABELA_LUCRO = { colunas: ["Ano", "Lucro líquido (R$ milhões)", "Fonte"], linhas: [["2023", "33.166", "p. 6"], ["2024", "29.172", "p. 6"], ["2025", "16.782", "p. 9"]] };
+const TABELA_JUROS = { colunas: ["Ano", "Receita líquida de juros (R$ milhões)", "Fonte"], linhas: [["2023", "88.749", "p. 6"], ["2024", "104.514", "p. 6"], ["2025", "101.011", "p. 9"]] };
+const arq = (id: string, formato: string, nome: string, bytes: number) => ({ id, formato, nome, bytes, url: `/api/arquivos/${id}` });
+const GRAFICO_LUCRO = { tipo: "barras", url: "/api/arquivos/g1", descricao: "Gráfico de barras do lucro líquido do exercício: 2023, 33.166; 2024, 29.172; 2025, 16.782 (R$ milhões)." };
+const SVG_LUCRO =
+  '<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 320 180" width="320" height="180"><rect width="320" height="180" fill="#fff"/>' +
+  '<rect x="30" y="20" width="60" height="140" fill="#0b6b5c"/><rect x="130" y="40" width="60" height="120" fill="#0b6b5c"/><rect x="230" y="90" width="60" height="70" fill="#0b6b5c"/></svg>';
+const ARQUIVOS: Record<string, { tipo: string; nome: string; corpo: Buffer }> = {
+  g1: { tipo: "image/svg+xml", nome: "lucro-liquido.svg", corpo: Buffer.from(SVG_LUCRO) },
+  x1: { tipo: "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet", nome: "receita-liquida-de-juros.xlsx", corpo: Buffer.from("PKarquivo de teste xlsx") },
+  d1: { tipo: "application/vnd.openxmlformats-officedocument.wordprocessingml.document", nome: "lucro-liquido.docx", corpo: Buffer.from("PKarquivo de teste docx") },
+  s1: { tipo: "application/vnd.openxmlformats-officedocument.presentationml.presentation", nome: "lucro-liquido.pptx", corpo: Buffer.from("PKarquivo de teste pptx") },
+};
+const tamanho = (id: string) => (ARQUIVOS[id] as { corpo: Buffer }).corpo.length;
+
+/** O artefato de cada roteiro; `null` = a pergunta não pede material gerado. */
+function artefatoDaPergunta(m: string): Record<string, unknown> | null {
+  if (m.includes("artefato hostil"))
+    return {
+      id: "a-hostil",
+      titulo: '<img src=x onerror="window.__xss=1">Lucro',
+      unidade: "R$ milhões",
+      grafico: { tipo: "barras", url: "https://exemplo.invalid/g.svg", descricao: '<script>window.__xss=1</script> gráfico' },
+      tabela: { colunas: ["Ano", "Valor"], linhas: [['<b onclick="window.__xss=1">2025</b>', "1.000"]] },
+      arquivos: [{ id: "h1", formato: "xlsx", nome: "perigo.xlsx", bytes: 10, url: "javascript:window.__xss=1" }, { id: "h2", formato: "exe", nome: "x.exe", bytes: 10, url: "/api/arquivos/x1" }, arq("x1", "xlsx", "receita-liquida-de-juros.xlsx", tamanho("x1"))],
+      removidos: 0,
+    };
+  if (m.includes("artefato removido"))
+    return { id: "a-removido", titulo: "Lucro líquido do exercício", unidade: "R$ milhões", grafico: null, tabela: { ...TABELA_LUCRO, linhas: TABELA_LUCRO.linhas.slice(0, 1) }, arquivos: [], removidos: 2 };
+  if (m.includes("artefato quebrado"))
+    return { id: "a-quebrado", titulo: "Lucro líquido do exercício", unidade: "R$ milhões", grafico: { ...GRAFICO_LUCRO, url: "/api/arquivos/nao-existe" }, tabela: TABELA_LUCRO, arquivos: [], removidos: 0 };
+  if (m.includes("gráfico") && !m.includes("santander"))
+    return { id: "a1", titulo: "Lucro líquido do exercício", unidade: "R$ milhões", grafico: GRAFICO_LUCRO, tabela: TABELA_LUCRO, arquivos: [arq("g1", "svg", "lucro-liquido.svg", tamanho("g1"))], removidos: 0 };
+  if (m.includes("planilha"))
+    return { id: "a2", titulo: "Receita líquida de juros", unidade: "R$ milhões", grafico: null, tabela: TABELA_JUROS, arquivos: [arq("x1", "xlsx", "receita-liquida-de-juros.xlsx", tamanho("x1"))], removidos: 0 };
+  if (m.includes("word"))
+    return { id: "a3", titulo: "Lucro líquido do exercício", unidade: "R$ milhões", grafico: null, tabela: TABELA_LUCRO, arquivos: [arq("d1", "docx", "lucro-liquido.docx", tamanho("d1"))], removidos: 0 };
+  if (m.includes("apresentação"))
+    return { id: "a4", titulo: "Lucro líquido do exercício", unidade: "R$ milhões", grafico: GRAFICO_LUCRO, tabela: TABELA_LUCRO, arquivos: [arq("s1", "pptx", "lucro-liquido.pptx", tamanho("s1")), arq("g1", "svg", "lucro-liquido.svg", tamanho("g1"))], removidos: 0 };
+  return null;
+}
+
+function servirArquivo(id: string, res: ServerResponse): void {
+  const a = ARQUIVOS[id];
+  if (!a) return json(res, 404, { codigo: "nao_encontrado", mensagem: "Esse arquivo não existe ou já expirou." });
+  res.writeHead(200, { "content-type": a.tipo, "content-length": a.corpo.length, "content-disposition": `inline; filename="${a.nome}"`, "x-content-type-options": "nosniff" });
+  res.end(a.corpo);
+}
+
 async function responderChat(req: IncomingMessage, res: ServerResponse): Promise<void> {
   const bruto = await lerCorpo(req);
   let corpo: Record<string, unknown>;
@@ -247,6 +300,16 @@ async function responderChat(req: IncomingMessage, res: ServerResponse): Promise
     await tokens(["Resposta ", "no modo ", modo, "."]);
     res.write(quadro("evidencia", { id: "p1", tipo: "pai", pagina: "p. 6", trecho: "trecho", score: 0.9 }));
     res.write(quadro("fim", FIM(`Resposta no modo ${modo}.`, { metricas: { latenciaMs: 800, tokensEntrada: 50, tokensSaida: 5, rota: [ferramenta], estado: "suficiente" } })));
+  } else if (artefatoDaPergunta(minuscula) !== null) {
+    // roteiro de material gerado (F8.10): o texto da resposta, as evidências e, ANTES do `fim`, o evento `artefato`
+    await tokens(["Os valores ", "estão na tabela [E1]", "."]);
+    res.write(quadro("evidencia", { id: "p1", tipo: "pai", pagina: "p. 6", trecho: "Lucro Líquido do Exercício 33.166 29.172 16.782", score: 0.9 }));
+    res.write(quadro("artefato", artefatoDaPergunta(minuscula)));
+    res.write(quadro("fim", FIM("Os valores estão na tabela [p. 6].")));
+  } else if (minuscula.includes("santander")) {
+    // o pedido de gráfico sobre o que o documento não tem: "não consta" e nenhum artefato
+    await tokens(["Não consta ", "no documento."]);
+    res.write(quadro("fim", FIM("Não consta no documento: ele trata só do Banco do Brasil.", { citacoes: [], metricas: { latenciaMs: 900, tokensEntrada: 60, tokensSaida: 10, rota: ["buscar_trechos"], estado: "ausente" } })));
   } else if (minuscula.includes("quem é") || minuscula.includes("quem e ")) {
     // roteiro "quem é": a ferramenta `entidade` acha entidades (evidências com id de entidade) e um trecho de texto
     const todas = minuscula.includes("todas as entidades");
@@ -325,6 +388,8 @@ const servidor = createServer((req, res) => {
   }
   if (url.pathname === "/api/documento/pdf" && req.method === "GET") return servirPdf(req, res);
   if (url.pathname === "/api/grafo/vizinhanca" && req.method === "GET") return vizinhanca(url, res);
+  const arquivo = /^\/api\/arquivos\/([^/]+)$/.exec(url.pathname);
+  if (arquivo && req.method === "GET") return servirArquivo(decodeURIComponent(arquivo[1] as string), res);
   const fonte = /^\/api\/fonte\/([^/]+)$/.exec(url.pathname);
   if (fonte && req.method === "GET") {
     const f = FONTES[decodeURIComponent(fonte[1] as string)];

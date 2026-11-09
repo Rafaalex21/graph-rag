@@ -114,10 +114,10 @@ const cortar = (t: string, max: number) => {
   const c = compacta(t);
   return c.length > max ? `${c.slice(0, max).trimEnd()}…` : c;
 };
-const blindar = (t: string) => t.replace(/<\/?(?:evidencias|pergunta|historico)\s*>/gi, "[tag]");
+export const blindar = (t: string) => t.replace(/<\/?(?:evidencias|pergunta|historico|pedido)\s*>/gi, "[tag]");
 
 /** As evidências que vão ao modelo, na ordem recebida, com o identificador `E#` (1, 2, …). */
-function selecionar(evidencias: readonly EvidenciaParaRedator[]): { ref: string; ev: EvidenciaParaRedator; texto: string }[] {
+export function selecionar(evidencias: readonly EvidenciaParaRedator[]): { ref: string; ev: EvidenciaParaRedator; texto: string }[] {
   let limite = MAX_CARACTERES_EVIDENCIA;
   let lista: { ref: string; ev: EvidenciaParaRedator; texto: string }[] = [];
   for (let tentativa = 0; tentativa < 4; tentativa++) {

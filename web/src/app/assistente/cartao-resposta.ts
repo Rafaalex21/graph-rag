@@ -14,8 +14,10 @@ import {
   type Mensagem,
 } from '../chat/chat.service';
 import { RespostaMarkdown } from '../chat/resposta-markdown';
+import { MaterialGeradoComponent } from './material-gerado';
 import {
   cartoesDeFonte,
+  materialDaResposta,
   nomeDoTipoDeFonte,
   passosDaResposta,
   seloDaResposta,
@@ -32,7 +34,7 @@ const TRECHO_MAXIMO = 110;
 @Component({
   selector: 'app-cartao-resposta',
   changeDetection: ChangeDetectionStrategy.OnPush,
-  imports: [RespostaMarkdown],
+  imports: [RespostaMarkdown, MaterialGeradoComponent],
   host: { 'data-papel': 'assistente', 'aria-label': 'Resposta', role: 'article' },
   template: `
     @if (selo(); as s) {
@@ -86,6 +88,10 @@ const TRECHO_MAXIMO = 110;
       @if (ultima() && !ocupado()) {
         <button type="button" class="texto" (click)="tentarDeNovo.emit()">Tentar de novo</button>
       }
+    }
+
+    @if (material(); as g) {
+      <app-material-gerado [material]="g" (abrirPagina)="abrirPagina.emit($event)" />
     }
 
     @if (cartoes().length > 0) {
@@ -431,6 +437,7 @@ export class CartaoResposta {
 
   protected readonly selo = computed(() => seloDaResposta(this.m()));
   protected readonly cartoes = computed(() => cartoesDeFonte(this.m()));
+  protected readonly material = computed(() => materialDaResposta(this.m()));
   protected readonly passos = computed(() =>
     this.m().estado === 'pronta' ? passosDaResposta(this.m()) : [],
   );

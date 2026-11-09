@@ -34,9 +34,16 @@ export interface MetricasDoFim {
 export type EventoChat =
   | { evento: 'etapa'; dados: { tipo: string; detalhe: unknown } }
   | { evento: 'cypher'; dados: { query: string; linhas: number; ms: number } }
-  | { evento: 'evidencia'; dados: { id: string; tipo: string; pagina: string | null; trecho: string; score: number } }
+  | {
+      evento: 'evidencia';
+      dados: { id: string; tipo: string; pagina: string | null; trecho: string; score: number };
+    }
+  | { evento: 'artefato'; dados: Record<string, unknown> }
   | { evento: 'token'; dados: { t: string } }
-  | { evento: 'fim'; dados: { mensagemId: string; resposta: string; citacoes: Citacao[]; metricas: MetricasDoFim } }
+  | {
+      evento: 'fim';
+      dados: { mensagemId: string; resposta: string; citacoes: Citacao[]; metricas: MetricasDoFim };
+    }
   | { evento: 'erro'; dados: { codigo: string; mensagem: string } };
 
 export class ErroDaApi extends Error {
@@ -51,7 +58,8 @@ export class ErroDaApi extends Error {
 }
 
 const MENSAGENS = {
-  api_indisponivel: 'A API do chat não respondeu como esperado. Confira se ela está no ar e tente de novo.',
+  api_indisponivel:
+    'A API do chat não respondeu como esperado. Confira se ela está no ar e tente de novo.',
   sem_conexao: 'Não foi possível falar com a API. Confira se ela está no ar e tente de novo.',
   interrompido: 'A conexão com a API foi interrompida antes do fim da resposta.',
   resposta_invalida: 'A API mandou uma resposta que a interface não entende.',
@@ -59,14 +67,16 @@ const MENSAGENS = {
 
 const eAbort = (e: unknown) => e instanceof Error && e.name === 'AbortError';
 const abortado = () => new DOMException('A pergunta foi cancelada.', 'AbortError');
-const objeto = (x: unknown): x is Record<string, unknown> => typeof x === 'object' && x !== null && !Array.isArray(x);
+const objeto = (x: unknown): x is Record<string, unknown> =>
+  typeof x === 'object' && x !== null && !Array.isArray(x);
 const texto = (x: unknown): x is string => typeof x === 'string';
 
 /** O corpo `Erro` do contrato (`{codigo, mensagem}`); qualquer outra coisa (HTML do proxy, JSON de outra forma) vira `api_indisponivel`. */
 async function erroDaResposta(r: Response): Promise<ErroDaApi> {
   try {
     const j: unknown = JSON.parse(await r.text());
-    if (objeto(j) && texto(j['codigo']) && texto(j['mensagem']) && j['mensagem'] !== '') return new ErroDaApi(j['codigo'], j['mensagem'].slice(0, 300), r.status);
+    if (objeto(j) && texto(j['codigo']) && texto(j['mensagem']) && j['mensagem'] !== '')
+      return new ErroDaApi(j['codigo'], j['mensagem'].slice(0, 300), r.status);
   } catch {
     // não era JSON
   }
@@ -80,13 +90,29 @@ function paraEvento(nome: string, dados: unknown): EventoChat | null {
     case 'etapa':
     case 'cypher':
     case 'evidencia':
+    case 'artefato': // o conteúdo é validado por `artefatoDaResposta` (F8.10), que é quem o usa
       return { evento: nome, dados } as EventoChat;
     case 'token':
       return texto(dados['t']) ? { evento: 'token', dados: { t: dados['t'] } } : null;
     case 'erro':
-      return { evento: 'erro', dados: { codigo: texto(dados['codigo']) ? dados['codigo'] : 'falha_interna', mensagem: texto(dados['mensagem']) && dados['mensagem'] !== '' ? dados['mensagem'] : 'Não foi possível responder agora.' } };
+      return {
+        evento: 'erro',
+        dados: {
+          codigo: texto(dados['codigo']) ? dados['codigo'] : 'falha_interna',
+          mensagem:
+            texto(dados['mensagem']) && dados['mensagem'] !== ''
+              ? dados['mensagem']
+              : 'Não foi possível responder agora.',
+        },
+      };
     case 'fim':
-      if (!texto(dados['mensagemId']) || !texto(dados['resposta']) || !Array.isArray(dados['citacoes']) || !objeto(dados['metricas'])) throw new ErroDaApi('resposta_invalida', MENSAGENS.resposta_invalida);
+      if (
+        !texto(dados['mensagemId']) ||
+        !texto(dados['resposta']) ||
+        !Array.isArray(dados['citacoes']) ||
+        !objeto(dados['metricas'])
+      )
+        throw new ErroDaApi('resposta_invalida', MENSAGENS.resposta_invalida);
       return { evento: 'fim', dados } as EventoChat;
     default:
       return null;
@@ -100,7 +126,10 @@ export interface OpcoesConversar {
   url?: string;
 }
 
-export async function* conversar(pedido: PedidoChat, opcoes: OpcoesConversar = {}): AsyncGenerator<EventoChat> {
+export async function* conversar(
+  pedido: PedidoChat,
+  opcoes: OpcoesConversar = {},
+): AsyncGenerator<EventoChat> {
   const { signal } = opcoes;
   if (signal?.aborted) throw abortado();
   const corpo = {

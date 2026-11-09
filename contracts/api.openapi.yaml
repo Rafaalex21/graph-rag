@@ -20,7 +20,8 @@ paths:
       description: |
         Responde `text/event-stream`. Cada evento é `event: <nome>` e `data: <json>`. O primeiro evento sai em até 1 s
         (RNF-2), antes de qualquer chamada ao LLM. A sequência é: `etapa`* (reescrita, rota, ferramenta_inicio,
-        ferramenta_fim, critica), `cypher`* e `evidencia`* (depois das etapas), `token`* e, por último, `fim`; ou
+        ferramenta_fim, critica), `cypher`* e `evidencia`* (depois das etapas), `token`*, `artefato` (só se a mensagem
+        pediu gráfico, tabela, planilha, documento ou apresentação e o modelo achou dados verificáveis; F8.10) e, por último, `fim`; ou
         `erro`, que encerra o fluxo. O fluxo sempre termina em `fim` ou `erro`. Se o cliente desconecta, o trabalho
         é cancelado.
 
@@ -51,8 +52,44 @@ paths:
         cypher: { $ref: "#/components/schemas/EventoCypher" }
         evidencia: { $ref: "#/components/schemas/EventoEvidencia" }
         token: { $ref: "#/components/schemas/EventoToken" }
+        artefato: { $ref: "#/components/schemas/EventoArtefato" }
         fim: { $ref: "#/components/schemas/EventoFim" }
         erro: { $ref: "#/components/schemas/Erro" }
+
+  /api/arquivos/{id}:
+    get:
+      operationId: arquivo
+      summary: Um arquivo que o assistente gerou (gráfico em SVG, planilha, documento ou apresentação)
+      description: |
+        Só serve o que a própria API gravou em `data/artefatos/` (fora do git), por 1 hora. O SVG sai `inline`, com política
+        de segurança que o impede de rodar qualquer coisa; os arquivos do Office saem como anexo.
+      parameters:
+        - name: id
+          in: path
+          required: true
+          schema: { type: string, format: uuid }
+      responses:
+        "200":
+          description: O arquivo
+          content:
+            image/svg+xml:
+              schema: { type: string }
+            application/vnd.openxmlformats-officedocument.spreadsheetml.sheet:
+              schema: { type: string, format: binary }
+            application/vnd.openxmlformats-officedocument.wordprocessingml.document:
+              schema: { type: string, format: binary }
+            application/vnd.openxmlformats-officedocument.presentationml.presentation:
+              schema: { type: string, format: binary }
+        "400":
+          description: O id não é um UUID
+          content:
+            application/json:
+              schema: { $ref: "#/components/schemas/Erro" }
+        "404":
+          description: O arquivo não existe ou venceu
+          content:
+            application/json:
+              schema: { $ref: "#/components/schemas/Erro" }
 
   /api/fonte/{id}:
     get:
@@ -277,6 +314,50 @@ components:
       additionalProperties: false
       properties:
         t: { type: string }
+
+    EventoArtefato:
+      description: |
+        O material que o assistente gerou a pedido (F8.10): gráfico em SVG, tabela e arquivos para baixar. O modelo só escreve uma
+        especificação; o código confere cada número contra a evidência citada (os que não passam saem e são contados em
+        `removidos`), desenha o gráfico e grava os arquivos. Todo valor da tabela leva a página de onde veio.
+      type: object
+      required: [id, titulo, unidade, grafico, tabela, arquivos, removidos]
+      additionalProperties: false
+      properties:
+        id: { type: string, minLength: 1 }
+        titulo: { type: string, minLength: 1 }
+        unidade: { type: string }
+        grafico:
+          type: [object, "null"]
+          required: [tipo, url, descricao]
+          additionalProperties: false
+          properties:
+            tipo: { type: string, enum: [barras, linhas] }
+            url: { type: string, pattern: "^/api/arquivos/[0-9a-f-]{36}$" }
+            descricao: { type: string, description: "Texto alternativo da imagem, com os valores" }
+        tabela:
+          type: object
+          required: [colunas, linhas]
+          additionalProperties: false
+          properties:
+            colunas: { type: array, minItems: 3, maxItems: 3, items: { type: string } }
+            linhas:
+              type: array
+              minItems: 1
+              items: { type: array, minItems: 3, maxItems: 3, items: { type: string } }
+        arquivos:
+          type: array
+          items:
+            type: object
+            required: [id, formato, nome, bytes, url]
+            additionalProperties: false
+            properties:
+              id: { type: string }
+              formato: { type: string, enum: [svg, xlsx, docx, pptx] }
+              nome: { type: string }
+              bytes: { type: integer, minimum: 0 }
+              url: { type: string, pattern: "^/api/arquivos/[0-9a-f-]{36}$" }
+        removidos: { type: integer, minimum: 0, description: "Pontos que o código tirou por falta de lastro na evidência citada" }
 
     Citacao:
       type: object

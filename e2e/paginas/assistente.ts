@@ -68,6 +68,16 @@ export class PaginaAssistente {
     return this.respostas.nth(i).getByRole("button", { name: "Como cheguei a esta resposta" });
   }
 
+  /** O material gerado da resposta de posição `i` (F8.10): o gráfico, a tabela e os arquivos para baixar. */
+  artefato(i = 0): Locator {
+    return this.respostas.nth(i).getByRole("region", { name: /^Material gerado/ });
+  }
+
+  /** O link de download de um formato (nome visível: "Baixar planilha (.xlsx)"). */
+  baixar(rotulo: string | RegExp, i = 0): Locator {
+    return this.artefato(i).getByRole("link", { name: rotulo });
+  }
+
   /** A conversa da lista de recentes com esse título. */
   recente(titulo: string): Locator {
     return this.recentes.getByRole("button", { name: titulo, exact: true });

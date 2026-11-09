@@ -3,6 +3,8 @@ import { fileURLToPath } from "node:url";
 import { criarApp } from "./app.ts";
 import { executarCiclo } from "./agente/ciclo.ts";
 import { redigir } from "./agente/redator.ts";
+import { criarArmazem } from "./artefatos/armazem.ts";
+import { gerarArtefato } from "./artefatos/gerador.ts";
 import { GrafoNeo4j, criarExecutor } from "./ferramentas/index.ts";
 import { sondaLlamaSwap } from "./http/saude.ts";
 import { ClienteLlm } from "./llm/index.ts";
@@ -16,12 +18,16 @@ const grafo = GrafoNeo4j.conectar();
 const llm = new ClienteLlm({ baseUrl });
 const executor = criarExecutor({ grafo, llm });
 const registrarErro = (contexto: string, erro: unknown) => console.error(`[${contexto}] ${erro instanceof Error ? `${erro.name}: ${erro.message}` : String(erro)}`);
+// F8.10: os arquivos gerados (gráfico, planilha, documento, apresentação) ficam em data/artefatos/ (fora do git) por 1 hora
+const armazem = criarArmazem({ pasta: process.env["ARTEFATOS_DIR"] ?? join(RAIZ, "data", "artefatos") });
 // F7.7: um registro por requisição em data/logs/telemetria/AAAA-MM-DD.jsonl; sem o texto da pergunta, salvo TELEMETRIA_TEXTO=1
 const telemetria = criarRegistrador({ pasta: process.env["TELEMETRIA_DIR"] ?? join(RAIZ, "data", "logs", "telemetria"), registrarErro });
 
 const app = criarApp({
   ciclo: (pergunta, opcoes) => executarCiclo(llm, executor, pergunta, opcoes),
   redator: (entrada, opcoes) => redigir(llm, entrada, opcoes),
+  artefatos: (entrada, opcoes) => gerarArtefato(llm, armazem, entrada, opcoes),
+  arquivos: armazem,
   grafo,
   llm: sondaLlamaSwap(baseUrl),
   pdf: process.env["DOCUMENTO_PDF"] ?? join(RAIZ, "data", "raw", "banco_do_brasil_formulario_referencia_2026.pdf"),

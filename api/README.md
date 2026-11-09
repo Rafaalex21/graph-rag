@@ -27,6 +27,7 @@ npm run build
 | `GET /api/fonte/:id` | O Pai, Filho, tabela, fato, entidade ou comunidade que uma citação aponta, com página e seção |
 | `GET /api/documento/pdf` | O PDF original, com `Range` (`DOCUMENTO_PDF` troca o arquivo) |
 | `GET /api/grafo/vizinhanca?entidade=&profundidade=` | Nós e arestas de uma entidade (até 100 nós, profundidade 1 ou 2) |
+| `GET /api/arquivos/:id` | Um arquivo gerado a pedido (gráfico em SVG, `.xlsx`, `.docx`, `.pptx`) gravado em `data/artefatos/` (`ARTEFATOS_DIR` troca a pasta), válido por 1 hora; o evento SSE `artefato` do `POST /api/chat` o anuncia (F8.10, ADR-075) |
 | `GET /api/saude` | llama-swap (modelos e quais estão carregados), Neo4j e índices; sempre 200 |
 | `POST /api/feedback` | Grava a nota em `data/logs/feedback.jsonl` (`FEEDBACK_JSONL` troca o arquivo) |
 

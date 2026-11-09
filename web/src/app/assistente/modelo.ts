@@ -226,3 +226,97 @@ export function tituloDaConversa(primeiraPergunta: string): string {
   const limpo = primeiraPergunta.replace(/\s+/g, ' ').trim();
   return limpo.length <= LIMITE_TITULO ? limpo : `${limpo.slice(0, LIMITE_TITULO - 1).trimEnd()}…`;
 }
+
+/** Um arquivo para baixar: o formato, o nome que o navegador salva, o tamanho e o endereço (sempre `/api/arquivos/<id>`). */
+export interface ArquivoParaBaixar {
+  formato: 'xlsx' | 'docx' | 'pptx' | 'svg';
+  nome: string;
+  bytes: number;
+  url: string;
+  /** "Baixar planilha (.xlsx)" */
+  rotulo: string;
+}
+
+/** O material gerado (F8.10) como a tela o desenha: já validado, só texto e endereços do próprio servidor. */
+export interface MaterialGerado {
+  titulo: string;
+  unidade: string;
+  grafico: { url: string; descricao: string } | null;
+  colunas: string[];
+  linhas: string[][];
+  arquivos: ArquivoParaBaixar[];
+  removidos: number;
+}
+
+const ROTULO_DO_ARQUIVO: Record<ArquivoParaBaixar['formato'], string> = {
+  xlsx: 'Baixar planilha (.xlsx)',
+  docx: 'Baixar documento (.docx)',
+  pptx: 'Baixar apresentação (.pptx)',
+  svg: 'Baixar gráfico (.svg)',
+};
+/** Só o que a própria API serve: um endereço de outro lugar, `javascript:` ou `data:` nunca vira imagem nem link. */
+const ENDERECO_DE_ARQUIVO = /^\/api\/arquivos\/[A-Za-z0-9-]{1,64}$/;
+const LIMITE_LINHAS = 200;
+const LIMITE_COLUNAS = 6;
+
+const objeto = (x: unknown): x is Record<string, unknown> =>
+  typeof x === 'object' && x !== null && !Array.isArray(x);
+const texto = (x: unknown, max: number): string => (typeof x === 'string' ? x.slice(0, max) : '');
+
+/** `p. 9-10` → `9`; sem número → `null` (para a página da tabela abrir o visualizador). */
+export function paginaDaCelula(celula: string): string | null {
+  return /^p\.\s*(\d+)/.exec(celula)?.[1] ?? null;
+}
+
+/** O tamanho em palavras de gente: "812 bytes", "24 KB". */
+export function tamanhoEmTexto(bytes: number): string {
+  if (bytes < 1024) return `${bytes} bytes`;
+  return `${Math.max(1, Math.round(bytes / 1024))} KB`;
+}
+
+/**
+ * O evento `artefato` da resposta, validado: o que vem fora da forma é descartado (nunca quebra a tela), o endereço que não é do
+ * servidor some, e um formato desconhecido não vira link. `null` se a resposta não tem material ou ele não tem tabela.
+ */
+export function materialDaResposta(m: Mensagem): MaterialGerado | null {
+  const e = m.eventos.find((x) => x.evento === 'artefato');
+  if (e?.evento !== 'artefato') return null;
+  const d = e.dados;
+  const tabela = objeto(d['tabela']) ? d['tabela'] : null;
+  const colunas = tabela && Array.isArray(tabela['colunas']) ? tabela['colunas'] : [];
+  const linhas = tabela && Array.isArray(tabela['linhas']) ? tabela['linhas'] : [];
+  if (colunas.length === 0 || colunas.length > LIMITE_COLUNAS) return null;
+  const grafico = objeto(d['grafico']) ? d['grafico'] : null;
+  const urlDoGrafico = grafico && typeof grafico['url'] === 'string' ? grafico['url'] : '';
+  const arquivos: ArquivoParaBaixar[] = [];
+  for (const a of Array.isArray(d['arquivos']) ? d['arquivos'] : []) {
+    if (!objeto(a)) continue;
+    const formato = a['formato'];
+    const url = a['url'];
+    if (
+      (formato !== 'xlsx' && formato !== 'docx' && formato !== 'pptx' && formato !== 'svg') ||
+      typeof url !== 'string' ||
+      !ENDERECO_DE_ARQUIVO.test(url)
+    )
+      continue;
+    const bytes = typeof a['bytes'] === 'number' && a['bytes'] >= 0 ? Math.trunc(a['bytes']) : 0;
+    const nome = texto(a['nome'], 100).replace(/[^A-Za-z0-9._-]/g, '_') || `material.${formato}`;
+    arquivos.push({ formato, nome, bytes, url, rotulo: ROTULO_DO_ARQUIVO[formato] });
+  }
+  return {
+    titulo: texto(d['titulo'], 200),
+    unidade: texto(d['unidade'], 60),
+    grafico:
+      grafico && ENDERECO_DE_ARQUIVO.test(urlDoGrafico)
+        ? { url: urlDoGrafico, descricao: texto(grafico['descricao'], 1500) }
+        : null,
+    colunas: colunas.map((c) => texto(c, 80)),
+    linhas: linhas
+      .slice(0, LIMITE_LINHAS)
+      .filter((l): l is unknown[] => Array.isArray(l))
+      .map((l) => colunas.map((_, i) => texto(l[i], 120))),
+    arquivos,
+    removidos:
+      typeof d['removidos'] === 'number' && d['removidos'] > 0 ? Math.trunc(d['removidos']) : 0,
+  };
+}

@@ -1,5 +1,7 @@
 import type { OpcoesCiclo, ResultadoCiclo } from "../agente/ciclo.ts";
 import type { EntradaRedator, OpcoesRedator, RespostaRedator } from "../agente/redator.ts";
+import type { Armazem } from "../artefatos/armazem.ts";
+import type { EntradaArtefato, ResultadoArtefato } from "../artefatos/gerador.ts";
 import type { GrafoLeitura } from "../ferramentas/index.ts";
 import type { Registrador } from "../telemetria/registro.ts";
 
@@ -19,6 +21,10 @@ export interface DependenciasApp {
   /** O ciclo do agente (atualizador → roteador → executor → crítico). */
   ciclo?: (pergunta: string, opcoes: OpcoesCiclo) => Promise<ResultadoCiclo>;
   redator?: (entrada: EntradaRedator, opcoes: OpcoesRedator) => Promise<RespostaRedator>;
+  /** O material pedido (gráfico, tabela, planilha, documento, apresentação), depois do redator (F8.10). Sem ele o pedido é ignorado. */
+  artefatos?: (entrada: EntradaArtefato, opcoes: { signal?: AbortSignal }) => Promise<ResultadoArtefato>;
+  /** Onde os arquivos gerados ficam até serem baixados (`GET /api/arquivos/:id`). */
+  arquivos?: Armazem;
   grafo?: GrafoLeitura;
   llm?: SondaLlm;
   /** Caminho do PDF do Formulário de Referência. */
