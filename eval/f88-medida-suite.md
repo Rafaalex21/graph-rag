@@ -31,6 +31,12 @@ Cumprida só se **C1 a C6** valem. A regra não muda depois de rodar; se algum c
 - O trace de testes que passam só é gravado onde a configuração manda: sempre no projeto `ao-vivo`; no `interface`, `retain-on-failure` (para não gravar centenas de megabytes por execução), ou sempre, com `E2E_TRACE=on`.
 - A poda dos testes unitários do indexador (Python) segue como decisão à parte, só com confirmação do dono.
 
+## Errata 1 (10/11/2026, escrita ANTES de rodar o `@smoke` de novo; o texto acima fica como foi fixado)
+
+O item 3 de "O que muda" diz que a pergunta F01 do golden volta com o selo "Não consta no documento". **Isso estava errado**: o F01 é a saudação "Olá, tudo bem?" (`sem_consulta`, sem selo; já registrado na F8.9, `eval/resultados/f89-assistente.json`), e F02 a F05 (fora do escopo) também saem como `sem_consulta` nas medidas anteriores (F7.5, F7.11). Nenhuma pergunta do golden foi medida com o selo "Não consta no documento" ao vivo. O erro foi meu, achado na 3ª tentativa do `@smoke` (a tela mostrou a saudação, sem selo), e não é falha do sistema.
+
+Correção do passo 3 do `@smoke`: em vez de F01, a pergunta **F02** ("Qual foi o lucro líquido do Itaú Unibanco em 2025?", fora do documento, rota esperada `nenhuma`, já usada nas medidas F7.x) e a conferência passa a ser: a resposta termina sem erro, **sem nenhum selo de "encontrado"** (nem "Encontrado no documento" nem "Encontrei só em parte"), e o estado da conversa é "Resposta pronta.". O selo "Não consta no documento" continua provado pelos 3 testes `@fluxo-nao-consta` da suíte `interface` (API falsa) e, ao vivo, pelo pedido sem dado da F8.10 (D5); o `@smoke` não o exercita, e isso é um limite declarado. **Os critérios C1 a C6 não mudam.** As tentativas anteriores ficam contadas em "Execuções".
+
 ## Reprodução
 
 ```powershell
