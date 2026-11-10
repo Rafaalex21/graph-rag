@@ -7,6 +7,9 @@
   "scripts": {
     "test": "playwright test --project=interface",
     "test:ao-vivo": "playwright test --project=ao-vivo",
+    "smoke": "playwright test --project=ao-vivo --grep @smoke",
+    "resumo": "node resumo-da-suite.ts",
+    "resumo:smoke": "node resumo-da-suite.ts f88-smoke --smoke",
     "relatorio": "playwright show-report"
   },
   "devDependencies": {

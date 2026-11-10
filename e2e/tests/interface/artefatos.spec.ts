@@ -87,7 +87,7 @@ test.describe("arquivos do pacote Office", () => {
 });
 
 test.describe("o que o documento não tem, e o que o servidor tirou", () => {
-  test("pedido sem dado no documento: 'não consta', nenhum gráfico, tabela ou arquivo", async ({ page }) => {
+  test("pedido sem dado no documento: 'não consta', nenhum gráfico, tabela ou arquivo", { tag: "@fluxo-nao-consta" }, async ({ page }) => {
     const a = await pedir(page, "Faça um gráfico do lucro líquido do Santander");
     await expect(a.respostas.first()).toContainText("Não consta no documento");
     await expect(a.respostas.first().getByText("Não consta no documento", { exact: true })).toBeVisible(); // o selo

@@ -181,7 +181,7 @@ test.describe("ao vivo", () => {
 });
 
 test.describe("o documento não tem o dado", () => {
-  test("crítica 'ausente' sai com destaque neutro, sem alerta, e sem evidências", async ({ page }) => {
+  test("crítica 'ausente' sai com destaque neutro, sem alerta, e sem evidências", { tag: "@fluxo-nao-consta" }, async ({ page }) => {
     const chat = await perguntarRastro(page, "pergunta ausente do documento");
     await chat.esperarResposta();
     const c = item(page, /^Crítica/);

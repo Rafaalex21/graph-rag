@@ -114,7 +114,7 @@ test.describe("a resposta e o selo de estado", () => {
     await expect(a.fontes()).toHaveCount(0);
   });
 
-  test("com erro: selo 'Não consegui responder', a mensagem da API e 'Tentar de novo' refaz a pergunta", async ({ page }) => {
+  test("com erro: selo 'Não consegui responder', a mensagem da API e 'Tentar de novo' refaz a pergunta", { tag: "@fluxo-erro" }, async ({ page }) => {
     const a = new PaginaAssistente(page);
     const pedidos = a.gravarPedidos();
     await a.abrir();
@@ -185,7 +185,7 @@ test.describe("as fontes da resposta", () => {
     await expect(a.fontes()).toHaveCount(0);
   });
 
-  test("clicar no cartão abre o painel na página certa, com o desenho da página", async ({ page }) => {
+  test("clicar no cartão abre o painel na página certa, com o desenho da página", { tag: "@fluxo-citacao" }, async ({ page }) => {
     const a = await responder(page, "mostre as fontes");
     await expect(a.painel).toHaveCount(0);
     const cartao = a.cartao(/p\. 6/);
@@ -221,7 +221,7 @@ test.describe("as fontes da resposta", () => {
     await expect(a.painel).toHaveCount(0);
   });
 
-  test("a citação [p. 6] no texto da resposta também abre o painel na página 6", async ({ page }) => {
+  test("a citação [p. 6] no texto da resposta também abre o painel na página 6", { tag: "@fluxo-citacao" }, async ({ page }) => {
     const a = await responder(page);
     await a.respostas.first().getByRole("button", { name: "Abrir a página 6 do documento" }).click();
     await expect(a.painel).toBeVisible();
@@ -268,7 +268,7 @@ test.describe("Como cheguei a esta resposta", () => {
     await expect(a.passos()).toBeHidden();
   });
 
-  test("uma resposta ausente conta que o documento não traz o dado", async ({ page }) => {
+  test("uma resposta ausente conta que o documento não traz o dado", { tag: "@fluxo-nao-consta" }, async ({ page }) => {
     const a = await responder(page, "pergunta ausente");
     await a.botaoPassos().click();
     await expect(a.passos()).toContainText("Concluí que o documento não traz esse dado");

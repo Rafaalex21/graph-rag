@@ -13,16 +13,37 @@ Com o Node do projeto (`. .\infra\dev-env.ps1`), dentro de `e2e/`:
 
 ```bash
 npm ci
-npm test                  # projeto interface (sobe a API falsa e o ng serve sozinho)
-npm run test:ao-vivo      # projeto ao-vivo (suba antes Neo4j, llama-swap e a API)
+npm test                  # projeto interface (sobe a API falsa e o ng serve sozinho); é o mesmo que `npx playwright test`
+npm run resumo            # lê test-results/results.json e grava eval/resultados/f88-suite.json
+npm run smoke             # @smoke contra a pilha real (suba antes Neo4j, llama-swap e a API)
+npm run resumo:smoke      # resume o @smoke em eval/resultados/f88-smoke.json
+npm run test:ao-vivo      # todo o projeto ao-vivo (as medidas de aceite; chama o modelo de verdade)
 npm run relatorio         # abre o relatório HTML da última execução
 ```
+
+`npx playwright test` sem argumentos roda **só** o projeto `interface`; o `ao-vivo` só roda se pedido (`--project=ao-vivo`). A medida da suíte final está em `eval/f88-medida-suite.md`.
+
+## Fluxos exigidos pelo aceite da F8.8
+
+Os testes que cobrem cada fluxo levam uma etiqueta (`{ tag }`), e `npm run resumo` confere que cada etiqueta tem pelo menos 2 testes passando:
+
+| Etiqueta | Fluxo | Onde |
+|---|---|---|
+| `@fluxo-citacao` | a citação abre a página certa | `chat`, `assistente`, `fontes` |
+| `@fluxo-modo` | trocar o modo muda a rota no Rastro | `configuracoes` |
+| `@fluxo-nao-consta` | resposta "não consta" | `assistente`, `artefatos`, `rastro` |
+| `@fluxo-erro` | erro da API | `chat`, `assistente` |
+| `@smoke` | o caminho curto contra a pilha real | `tests/ao-vivo/smoke.spec.ts` |
+
+Por etiqueta: `npx playwright test --grep @fluxo-erro`.
 
 Sem `CI`, o Playwright usa o **Edge** que já vem no Windows (nada a baixar). No CI usa o Chromium do Playwright (`npx playwright install --with-deps chromium`).
 
 ## Artefatos
 
 `playwright-report/` (HTML), `test-results/results.json`, e em cada falha o `trace.zip` (`npx playwright show-trace <trace.zip>`) e a captura de tela. O vídeo está desligado de propósito: pede baixar o ffmpeg do Playwright.
+
+Política do trace: no projeto `interface` só é guardado quando o teste falha (`retain-on-failure`; com 222 testes, guardar todos custaria centenas de megabytes); com `E2E_TRACE=on` é guardado sempre. No projeto `ao-vivo` é guardado sempre. Cada execução do Playwright **sobrescreve** `test-results/` e `results.json`: resuma uma execução (`npm run resumo`) antes de começar a próxima.
 
 O `ao-vivo/primeiro-token.spec.ts` grava ainda `eval/resultados/f82-primeiro-token.json` (só ids e tempos, ADR-009).
 
@@ -38,6 +59,7 @@ O `ao-vivo/primeiro-token.spec.ts` grava ainda `eval/resultados/f82-primeiro-tok
 - `tests/interface/assistente.spec.ts`: a tela do usuário final (F8.9, `/assistente`, a inicial): selo de estado (encontrado, em parte, não consta, erro e a saudação sem selo), cartões de fonte que abrem o painel na página certa, "Como cheguei a esta resposta", nota e comentário, "Como buscar" e Completa/Rápida (a mesma escolha de Configurações), conversas recentes guardadas no navegador (restaurar, apagar, mesmo `conversationId`), estado do sistema, tema, link para o modo técnico, menu e folha da fonte no celular e o encaixe das peças na tela. Page Object: `paginas/assistente.ts`.
 - `tests/interface/artefatos.spec.ts`: o material gerado pelo assistente (F8.10): gráfico com texto alternativo, tabela com a página de cada valor (abre o visualizador), downloads de `.svg`, `.xlsx`, `.docx` e `.pptx`, "não consta" sem material, aviso de pontos removidos, HTML e endereços hostis, imagem que não carrega, conversa restaurada e celular. A API falsa serve também `GET /api/arquivos/:id`.
 - `tests/interface/shell.spec.ts`: rotas (a raiz leva a `/assistente`; `/chat` a `/chat/rastro`), 404, abas, título, marcos de acessibilidade, tema e largura de celular.
+- `tests/ao-vivo/smoke.spec.ts`: o `@smoke` da F8.8: pela tela `/assistente`, "Tudo funcionando", a pergunta T15 do golden com selo de resposta, o primeiro cartão de fonte abrindo a página citada com o PDF desenhado, e a pergunta F01 voltando como "Não consta no documento". Confere o selo e a página, não o texto do modelo.
 - `tests/ao-vivo/api.spec.ts`: validação do pedido (400), ausência de CORS, `/api/saude`, uma pergunta real em SSE com o primeiro evento em ≤ 1 s, e o 429 da terceira pergunta simultânea.
 - `tests/ao-vivo/rastro.spec.ts`: o Rastro de T15, N01 e G03 contra a pilha real; grava `eval/resultados/f83-rastro.json` (ids e tipos de passo).
 - `tests/ao-vivo/fontes.spec.ts`: o aceite da F8.4 (`eval/f84-medida-citacoes.md`): 10 citações sorteadas abrem na página certa no PDF real (grava `eval/resultados/f84-citacoes.json`) e o chip de uma resposta real (T15). Precisa de `data/avaliacao/f75-redator-detalhes.json` e `f712-redator-novas-detalhes.json`.

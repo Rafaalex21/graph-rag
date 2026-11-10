@@ -30,7 +30,7 @@ test.describe("abrir a página citada", () => {
     expect(pedidos).toHaveLength(0);
   });
 
-  test("pagina=6&fonte=p1 abre a página 6 e destaca o trecho citado", async ({ page }) => {
+  test("pagina=6&fonte=p1 abre a página 6 e destaca o trecho citado", { tag: "@fluxo-citacao" }, async ({ page }) => {
     await abrir(page, "?pagina=6&fonte=p1");
     await expect(estado(page)).toHaveText(`Página 6 de ${TOTAL}`);
     await expect(pagina(page)).toHaveAttribute("aria-label", "Página 6 do documento");

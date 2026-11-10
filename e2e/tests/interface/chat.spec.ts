@@ -116,7 +116,7 @@ test.describe("a resposta chega aos poucos", () => {
     await chat.esperarResposta();
   });
 
-  test("durante o streaming o [E1] é a marca 'fonte' e no fim vira o chip da página, que abre a aba Fontes", async ({ page }) => {
+  test("durante o streaming o [E1] é a marca 'fonte' e no fim vira o chip da página, que abre a aba Fontes", { tag: "@fluxo-citacao" }, async ({ page }) => {
     const chat = new PaginaChat(page);
     await chat.abrir();
     await chat.perguntar("pergunta lenta");
@@ -173,7 +173,7 @@ test.describe("HTML vindo do modelo ou do usuário nunca vira elemento", () => {
 });
 
 test.describe("quando algo dá errado", () => {
-  test("HTTP 429: mensagem da API num alerta e 'Tentar de novo' refaz a pergunta sem duplicar a bolha", async ({ page }) => {
+  test("HTTP 429: mensagem da API num alerta e 'Tentar de novo' refaz a pergunta sem duplicar a bolha", { tag: "@fluxo-erro" }, async ({ page }) => {
     const chat = new PaginaChat(page);
     const pedidos = chat.gravarPedidos();
     await chat.abrir();
@@ -187,7 +187,7 @@ test.describe("quando algo dá errado", () => {
     await expect(chat.perguntas).toHaveCount(1);
   });
 
-  test("502 com uma página HTML do proxy: mensagem nossa, sem o HTML nem o alert(1)", async ({ page }) => {
+  test("502 com uma página HTML do proxy: mensagem nossa, sem o HTML nem o alert(1)", { tag: "@fluxo-erro" }, async ({ page }) => {
     const chat = new PaginaChat(page);
     let dialogo = false;
     page.on("dialog", (d) => {
@@ -201,7 +201,7 @@ test.describe("quando algo dá errado", () => {
     expect(dialogo).toBe(false);
   });
 
-  test("evento de erro no meio mantém o texto parcial e mostra a mensagem", async ({ page }) => {
+  test("evento de erro no meio mantém o texto parcial e mostra a mensagem", { tag: "@fluxo-erro" }, async ({ page }) => {
     const chat = new PaginaChat(page);
     await chat.abrir();
     await chat.perguntar("pergunta com erro");

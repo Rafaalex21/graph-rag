@@ -155,13 +155,13 @@ test.describe("trocar o modo muda a rota no Rastro", () => {
     });
   }
 
-  test("no modo automático a rota é a do roteador e não tem a marca de modo forçado", async ({ page }) => {
+  test("no modo automático a rota é a do roteador e não tem a marca de modo forçado", { tag: "@fluxo-modo" }, async ({ page }) => {
     await perguntarNoModo(page, "Automático");
     await expect(passosDeRota(page).first()).toHaveAttribute("data-ferramentas", "buscar_trechos");
     await expect(passosDeRota(page).first()).not.toContainText("Modo forçado");
   });
 
-  test("as rotas dos cinco modos forçados são diferentes entre si e do automático", async ({ page }) => {
+  test("as rotas dos cinco modos forçados são diferentes entre si e do automático", { tag: "@fluxo-modo" }, async ({ page }) => {
     const rotas: string[] = [];
     for (const m of MODOS) {
       await perguntarNoModo(page, m.rotulo);
@@ -172,7 +172,7 @@ test.describe("trocar o modo muda a rota no Rastro", () => {
     expect(rotas.slice(2)).not.toContain(rotas[0]);
   });
 
-  test("trocar o modo no meio da conversa muda a rota da pergunta seguinte, e o Rastro mostra a mais recente", async ({ page }) => {
+  test("trocar o modo no meio da conversa muda a rota da pergunta seguinte, e o Rastro mostra a mais recente", { tag: "@fluxo-modo" }, async ({ page }) => {
     const chat = await perguntarNoModo(page, "Só tabelas");
     await expect(passosDeRota(page).first()).toHaveAttribute("data-ferramentas", "buscar_tabelas");
     await page.getByRole("link", { name: "Configurações" }).click();
