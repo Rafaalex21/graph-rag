@@ -9,6 +9,8 @@ prompt de resposta são os mesmos, de A1 em diante:
 * **A2**: o mesmo, com busca híbrida (vetor + full-text, RRF);
 * **A3**: híbrida, k×4 Filhos, até 24 Pais, rerank, 6 Pais (o pipeline do `ask`);
 * **A3r**: A3 com as duas reescritas da pergunta (step-back e HyDE, F2.8).
+
+A3ts e A4 a A6 (F9.1) são respondidos pelo agente em TypeScript; este módulo não os executa.
 """
 
 from __future__ import annotations
@@ -27,6 +29,8 @@ from indexer.busca import buscar
 from indexer.reescrita import llm_llama, reescrever
 
 DEGRAUS = ("a0", "a1", "a2", "a3", "a3r")
+# F9.1: degraus respondidos pelo agente em TypeScript (`npm run avaliar:ablacao`); aqui só se julga.
+DEGRAUS_DO_AGENTE = ("a3ts", "a4", "a5", "a6")
 K_FILHOS = 6  # o mesmo número de trechos que o A3 entrega ao LLM
 
 SISTEMA_A0 = (

@@ -146,9 +146,9 @@ function temRespostaDoAssistente(historico: Turno[] | undefined): boolean {
 }
 
 /** `resposta_ja_dada` só existe quando a conversa tem uma resposta do assistente para extrair. */
-export function ferramentasDisponiveis(historico: Turno[] = []): FerramentaAgente[] {
+export function ferramentasDisponiveis(historico: Turno[] = [], apenas?: readonly string[]): FerramentaAgente[] {
   const com = temRespostaDoAssistente(historico);
-  return CATALOGO.filter((f) => com || f.nome !== "resposta_ja_dada");
+  return CATALOGO.filter((f) => (com || f.nome !== "resposta_ja_dada") && (apenas === undefined || apenas.includes(f.nome)));
 }
 
 // ---------- tipos ----------
@@ -211,6 +211,11 @@ export interface OpcoesRoteador {
    * líquido" (nenhuma empresa citada) como assunto de fora.
    */
   pedidoDeMaterial?: boolean;
+  /**
+   * Restringe as ferramentas oferecidas ao roteador (F9.1, escada de ablações A4 e A5: o catálogo vai crescendo degrau a degrau).
+   * Só a medida usa; a API não passa. Deve conter `buscar_trechos`, que é o plano de reserva do roteador.
+   */
+  apenas?: readonly string[];
 }
 
 // ---------- prompt ----------
@@ -328,7 +333,7 @@ export async function rotear(llm: LlmDeFerramentas, perguntaAtual: string, opcoe
   if (original === "") return { ...base, rota: "nenhuma", chamadas: [], fallback: "pergunta_vazia", ms: ms() };
   if (original.length > MAX_PERGUNTA) return seguro("pergunta_muito_longa");
 
-  const oferecidas = ferramentasDisponiveis(opcoes.historico);
+  const oferecidas = ferramentasDisponiveis(opcoes.historico, opcoes.apenas);
   let resposta: RespostaFerramentas;
   try {
     resposta = await llm.chamarFerramentas(

@@ -35,7 +35,7 @@ from collections.abc import Callable
 from pathlib import Path
 from typing import Any
 
-from indexer.degraus import DEGRAUS
+from indexer.degraus import DEGRAUS, DEGRAUS_DO_AGENTE
 
 MODELO_JUIZ = "gemma4-26b-a4b-juiz"
 PONTUACAO = {"correta": 1.0, "parcial": 0.5, "incorreta": 0.0}
@@ -380,7 +380,12 @@ def main() -> None:
     ap.add_argument("--so-recorte", action="store_true", help="só as perguntas com no_recorte = sim")
     ap.add_argument("--limite", type=int, help="só as N primeiras (teste rápido)")
     ap.add_argument("--modo", default="hibrido-rrf")
-    ap.add_argument("--degrau", choices=DEGRAUS, default="a3", help="degrau da escada de ablações (F3.5)")
+    ap.add_argument(
+        "--degrau",
+        choices=(*DEGRAUS, *DEGRAUS_DO_AGENTE),
+        default="a3",
+        help="degrau da escada (F3.5); a3ts e a4 a a6 (F9.1) só julgam o respostas.jsonl do agente em TS",
+    )
     ap.add_argument("--metricas", nargs="+", choices=METRICAS, help="padrão: as três (no a0, só a correção)")
     ap.add_argument("--swap", default="http://127.0.0.1:8080")
     ap.add_argument("--raiz", type=Path, default=Path(".."))
@@ -411,7 +416,16 @@ def main() -> None:
         try:
             embute = embutidor_llama(a.swap, MODELO_CONSULTA)
             chat = chat_llama(a.swap)
-            if a.degrau == "a0":
+            if a.degrau in DEGRAUS_DO_AGENTE:
+                if not (pasta / "respostas.jsonl").exists():
+                    raise SystemExit(
+                        f"Rode antes `npm run avaliar:ablacao -- --degrau {a.degrau} --nome {a.nome}`."
+                    )
+
+                def sistema(caso):  # noqa: ANN001, ANN202
+                    raise RuntimeError(f"{caso['id']}: falta no respostas.jsonl do degrau {a.degrau}")
+
+            elif a.degrau == "a0":
                 sistema = sistema_a0(chat)
             elif a.degrau in ("a1", "a2"):
                 modo = "vetor" if a.degrau == "a1" else "hibrido-rrf"

@@ -134,6 +134,8 @@ export interface OpcoesAgente {
    * subpergunta (ver `modos.ts`), sem chamar o LLM do roteador.
    */
   modo?: Modo;
+  /** Restringe as ferramentas oferecidas ao roteador (só a medida da F9.1 usa; ver `OpcoesRoteador.apenas`). */
+  ferramentas?: readonly string[];
 }
 
 const SEM_COMPLEMENTO = new Set(["buscar_trechos", "resposta_ja_dada"]);
@@ -248,6 +250,7 @@ export async function executarAgente(llm: LlmDoAgente, executor: ExecutorDoAgent
     ...(opcoes.historico ? { historico: opcoes.historico } : {}),
     ...(opcoes.companhia ? { companhia: opcoes.companhia } : {}),
     ...(opcoes.complementarTabelas === true ? { pedidoDeMaterial: true } : {}),
+    ...(opcoes.ferramentas ? { apenas: opcoes.ferramentas } : {}),
     ...(opcoes.signal ? { signal: opcoes.signal } : {}),
     executar: async (sub: SubRoteada) => {
       const rot = sub.roteamento;
