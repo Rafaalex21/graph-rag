@@ -1,0 +1,61 @@
+{
+  "geral": {
+    "total": 444,
+    "passaram": 444,
+    "falharam": 0,
+    "flaky": 0,
+    "pulados": 0,
+    "duracaoMs": 126354
+  },
+  "porProjeto": {
+    "interface": {
+      "total": 444,
+      "passaram": 444,
+      "falharam": 0,
+      "flaky": 0,
+      "pulados": 0
+    }
+  },
+  "porFluxo": {
+    "@fluxo-citacao": {
+      "total": 8,
+      "passaram": 8,
+      "falharam": 0,
+      "flaky": 0,
+      "pulados": 0
+    },
+    "@fluxo-modo": {
+      "total": 6,
+      "passaram": 6,
+      "falharam": 0,
+      "flaky": 0,
+      "pulados": 0
+    },
+    "@fluxo-nao-consta": {
+      "total": 6,
+      "passaram": 6,
+      "falharam": 0,
+      "flaky": 0,
+      "pulados": 0
+    },
+    "@fluxo-erro": {
+      "total": 8,
+      "passaram": 8,
+      "falharam": 0,
+      "flaky": 0,
+      "pulados": 0
+    }
+  },
+  "smoke": {
+    "total": 0,
+    "passaram": 0,
+    "falharam": 0,
+    "flaky": 0,
+    "pulados": 0
+  },
+  "relatorioHtml": true,
+  "resultsJson": true,
+  "traces": 0,
+  "problemas": [],
+  "ok": true
+}

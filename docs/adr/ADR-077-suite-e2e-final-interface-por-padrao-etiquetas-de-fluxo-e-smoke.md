@@ -1,6 +1,6 @@
 # ADR-077 · Suíte E2E final: `interface` por padrão, etiquetas de fluxo, trace por projeto e `@smoke` ao vivo
 
-- **Estado:** proposta (F8.8); passa a aceita só se os critérios C1 a C6 de `eval/f88-medida-suite.md` valerem
+- **Estado:** aceita (10/11/2026); os critérios C1 a C6 de `eval/f88-medida-suite.md` valeram
 - **Data:** 2026-11-10
 - **Tarefa(s):** F8.8
 
@@ -30,6 +30,13 @@ A interface chegou à F8.8 com 222 testes E2E escritos etapa por etapa. Faltava 
 
 ## Evidência
 
-Ver `eval/f88-medida-suite.md` (seção Execuções) e `eval/resultados/f88-*.json`.
+Medida pré-registrada em `eval/f88-medida-suite.md` (com a errata 1 do passo 3 do `@smoke`) e resultados em `eval/resultados/f88-*.json`:
+
+- **C1** `npx playwright test`: 222 de 222 e, com `--repeat-each=2`, 444 de 444; 0 falha, 0 flaky (67 s e 128 s).
+- **C2/C3** relatório HTML e `results.json`; fluxos com 4, 3, 3 e 4 testes passando.
+- **C4** `@smoke` ao vivo: 4 execuções, 3 falhas por defeito meu (configuração dos processos de trabalho, seletor do selo, F01 que é saudação) e a 4ª passou, com `trace.zip`.
+- **C5** os resumos batem com o `results.json`. **C6** CI verde no commit 34bba39.
+
+Limites: o `@smoke` não exercita o selo "Não consta no documento"; n = 1 teste `@smoke` e uma execução aprovada; a suíte `interface` usa a API falsa.
 
 Reproduzir: `cd e2e; npx playwright test; npm run resumo`; e, com Neo4j, llama-swap e a API no ar, `npm run smoke; npm run resumo:smoke`.
