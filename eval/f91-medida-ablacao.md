@@ -70,6 +70,29 @@ cd ..\indexer; uv run python -m indexer.avaliar executar --nome v1n-a6 --degrau 
 uv run python -m indexer.tabela --v1
 ```
 
-## Execuções (preenchido depois de rodar; toda execução é contada)
+## Execuções (toda execução é contada)
 
-Execução de desenvolvimento, **fora da medida** (feita antes de fixar este documento, só para ver que a CLI e o juiz leem o `respostas.jsonl` do TypeScript): `v1-fumaca-a4`, A4, T01 e T02 (2 perguntas, 1 chamada de geração e 1 de juiz cada); resultado descartado, relatório e respostas apagados. Nenhuma outra execução até a pré-medida ser commitada.
+**Fora da medida:** `v1-fumaca-a4` (A4, T01 e T02: 2 respostas e 2 notas), feita antes de fixar este documento só para ver que a CLI e o juiz leem o `respostas.jsonl` do TypeScript; relatório e respostas apagados.
+
+**Da medida** (uma geração por degrau, nenhuma refeita; 10 relatórios em `eval/resultados/v1-*.json` e `v1n-*.json`, tabela em `eval/resultados/v1-ablacao.md`):
+
+| Relatório | Perguntas | Erros do sistema | Falhas do juiz |
+|---|---:|---:|---:|
+| `v1-a0`, `v1-a1`, `v1-a2`, `v1-a3`, `v1-a3ts`, `v1-a4`, `v1-a5`, `v1-a6` | 60 cada | 0 | 0 |
+| `v1n-a3`, `v1n-a6` (grupo novo) | 24 cada | 0 | 0 |
+
+**Linha do tempo e interrupções** (nenhuma alterou dados: cada resposta e cada nota é gravada ao terminar e o script pula o que já está gravado):
+
+1. 10/11, 07:41: início (A0 pronto às 07:54, A1 em seguida).
+2. ~08:35: parei o script para tentar **cortar o juiz à metade** (só a correção) porque entendi mal um pedido de tempo; escrevi uma errata, mas o Rafael explicou que queria poder **pausar**, não cortar. A errata **nunca foi commitada** e foi descartada; a medida rodou completa, como fixada. O A1 foi retomado das 95 notas já gravadas.
+3. 14:24: parei a pedido do Rafael (precisava do PC), com A5 em 81 de 180 notas; serviços parados; relatórios parciais commitados (aac9741).
+4. 11/11, 06:51: retomado; terminou às 09:35 ("TUDO PRONTO"). Ao retomar, o script reexecutou os passos já feitos (A0 a A4 e o A3ts), que só releram o que estava gravado e regravaram relatórios idênticos aos commitados (`git diff` vazio).
+5. O log `data/avaliacao/f91-rodadas.log` perdeu linhas na primeira janela (um `tail -F` do monitor segurava o arquivo e o `Add-Content` falhou); o andamento daquele trecho foi conferido pelos próprios `respostas.jsonl` e `juizo.jsonl`. Sem efeito nos dados.
+
+## Resultado por item da regra de aceite
+
+1. **Cumprido:** `eval/resultados/v1-ablacao.md` gerado por `uv run python -m indexer.tabela --v1`, com A0 a A6, o controle A3ts e as colunas da §13.2.
+2. **Cumprido:** 60 respostas por degrau, 0 erros do sistema.
+3. **Cumprido:** 0 falhas do juiz em todos (100% das chamadas respondidas).
+4. **Cumprido:** nada foi afinado entre as rodadas (prompts, ferramentas, limiares, golden e juiz ficaram como no commit 15321e4).
+5. **Cumprido:** a leitura está no ADR-078, inclusive o que **não** melhora.

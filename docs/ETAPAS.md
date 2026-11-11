@@ -435,9 +435,11 @@
 > entrega: tabela de ablações, bake-offs e v1 congelada
 > esforço: M
 
-- [ ] **F9.1** Rodar A4, A5 e A6
+- [x] **F9.1** Rodar A4, A5 e A6
   - aceite: `eval/resultados/v1-ablacao.md` com a escada completa
   - depende: F7.5, F3.5, F5.8
+  - resultado: ADR-078; `eval/resultados/v1-ablacao.md` (gerado por `uv run python -m indexer.tabela --v1`) com A0 a A6 e um controle A3ts (só `buscar_trechos` pelo pipeline do agente em TS, para separar o efeito da troca de pipeline), nas 60 perguntas e no documento inteiro; **medida pré-registrada (`eval/f91-medida-ablacao.md`, commit 15321e4), regra de aceite cumprida** (60 respostas por degrau, 0 erros do sistema, 0 falhas do juiz, nada afinado). Correção: A0 0,20; A1 0,54; A2 0,53; A3 0,54; A3ts 0,53; A4 0,54; A5 0,53; A6 0,59. **A1 a A5 empatam** (regra: < 0,05 é empate); o salto que vale é ter o documento (A0 → A1). O A6 fica +0,05, no limite da regra, e **não se repete no grupo novo** (24 perguntas fora do ajuste: A3 0,48, A6 0,46). Fatos e Text2Cypher sobem o acerto numérico (A3 0,24 → A4 0,38 → A6 0,48) e o multi-hop; agregação segue em 0,00 até o A5 (0,20 no A6); o pipeline do agente perde em factual e temática (0,90 → 0,70 a 0,77); busca local e global não ganham nada medido; A6 p50 22,9 s e p95 111,6 s.
+  - nota: uma execução por degrau (variância do Qwen e do juiz não medida); A4 a A6 foram ajustados olhando as 60 perguntas, então são otimistas nelas, e o grupo novo só tem A3 e A6; o A6 mistura crítico e `buscar_tabelas`; golden e rótulos do juiz são do Claude e a fidelidade não foi calibrada; a agregação 0,00 em A4 e A5, apesar de `consultar_grafo` ter sido chamado, não foi investigada. A execução teve uma pausa a pedido do dono e uma tentativa descartada de cortar o juiz (errata nunca commitada), todas contadas na medida. A tabela final do README (§13.3) sai daqui.
 - [ ] **F9.2** Bake-off do LLM principal: qualidade × latência × VRAM
   - aceite: ADR com a escolha final por papel
   - depende: F9.1
