@@ -267,8 +267,21 @@ def esquema_de_resposta() -> dict:
     return ExtracaoAberta.model_json_schema()
 
 
-def gerador_llama(base: str, modelo: str = MODELO_LLM, timeout: int = 900) -> Gerador:
+# F9.2 (bake-off): o LLM que extrai, por apelido da CLI -> (nome no llama-swap, chat_template_kwargs).
+# O padrão (`qwen`) é o da produção; os outros dois só existem para a comparação
+# de `eval/f92-medida-bakeoff.md`.
+MODELOS_DA_EXTRACAO: dict[str, tuple[str, dict]] = {
+    "qwen": (MODELO_LLM, {"enable_thinking": False}),
+    "gptoss": ("gpt-oss-20b", {"reasoning_effort": "low"}),
+    "gemma": ("gemma4-26b-a4b", {}),
+}
+
+
+def gerador_llama(
+    base: str, modelo: str = MODELO_LLM, timeout: int = 900, template_kwargs: dict | None = None
+) -> Gerador:
     """Função mensagens -> {conteudo, finish, tokens_prompt, tokens_saida}; o schema vai por gramática."""
+    kwargs = {"enable_thinking": False} if template_kwargs is None else template_kwargs
     esquema = esquema_de_resposta()
 
     def gera(mensagens: list[dict]) -> Resposta:
@@ -277,7 +290,7 @@ def gerador_llama(base: str, modelo: str = MODELO_LLM, timeout: int = 900) -> Ge
             "messages": mensagens,
             "temperature": 0.1,
             "max_tokens": MAX_TOKENS_SAIDA,
-            "chat_template_kwargs": {"enable_thinking": False},
+            "chat_template_kwargs": kwargs,
             "response_format": {
                 "type": "json_schema",
                 "json_schema": {"name": "extracao_aberta", "strict": True, "schema": esquema},
@@ -672,6 +685,10 @@ def main() -> None:  # pragma: no cover - orquestração de CLI; as peças acima
         p.add_argument("--saida", default="aberta", help="sufixo do arquivo: <prefixo>.<saida>.json")
         if nome == "executar":
             p.add_argument("--swap", default="http://127.0.0.1:8080")
+            p.add_argument("--modelo", choices=sorted(MODELOS_DA_EXTRACAO), default="qwen", help="LLM (F9.2)")
+            p.add_argument(
+                "--cache", type=Path, help="pasta do cache (padrão: aberta_cache ao lado do prefixo)"
+            )
             p.add_argument("--paralelismo", type=int, default=2)
             p.add_argument("--gleaning", type=int, choices=(0, 1), default=0, help="rodadas extras (0 ou 1)")
     a = ap.parse_args()
@@ -681,13 +698,15 @@ def main() -> None:  # pragma: no cover - orquestração de CLI; as peças acima
     if a.amostra:
         lista = amostrar(lista, a.amostra, a.semente, a.minimo, tuple(a.excluir))
     destino = Path(f"{a.prefixo}.{a.saida}.json")
-    cache = a.prefixo.parent / "aberta_cache"
+    cache = (a.cache if a.acao == "executar" and a.cache else None) or a.prefixo.parent / "aberta_cache"
     if a.acao == "resumo":
         resultados = json.loads(destino.read_text(encoding="utf-8"))
     else:
         resultados = extrair_todas(
             lista,
-            gerador_llama(a.swap),
+            gerador_llama(
+                a.swap, MODELOS_DA_EXTRACAO[a.modelo][0], template_kwargs=MODELOS_DA_EXTRACAO[a.modelo][1]
+            ),
             cache,
             a.paralelismo,
             log=lambda m: print(m, file=sys.stderr, flush=True),

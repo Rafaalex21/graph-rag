@@ -27,6 +27,7 @@ import { executarCiclo } from "../agente/ciclo.ts";
 import { redigir, selecionar, type EntradaRedator } from "../agente/redator.ts";
 import { GrafoNeo4j, criarExecutor } from "../ferramentas/index.ts";
 import { ClienteLlm } from "../llm/index.ts";
+import { PERFIS, type PerfilChat } from "../llm/perfis.ts";
 import { lerCsv } from "./busca.ts";
 
 const RAIZ = new URL("../../../", import.meta.url);
@@ -39,6 +40,19 @@ export const FERRAMENTAS_DO_DEGRAU: Record<string, readonly string[] | null> = {
   a6: null, // todas
 };
 
+/**
+ * Troca do LLM do agente e do redator (F9.2, `eval/f92-medida-bakeoff.md`). Tudo no pipeline usa o perfil "principal"
+ * (atualizador, roteador, executor, Text2Cypher, panorama, crítico, redator), então trocar o modelo é trocar esse perfil.
+ * Vale só para esta CLI: a API não passa por aqui. O padrão (`qwen`) é o perfil de produção, sem alteração.
+ */
+export const MODELOS_DO_BAKEOFF: Record<string, Partial<PerfilChat> | null> = {
+  qwen: null,
+  // perfil `consultar-rapido`; o raciocínio "low" é o que a F7.13 usou. Os tempos são os do Qwen, para a carga fria não contar como falha.
+  gptoss: { modelo: "gpt-oss-20b", chatTemplateKwargs: { reasoning_effort: "low" } },
+  // Gemma 4 26B-A4B em Vulkan, sem raciocínio (--reasoning-budget 0 no servidor); perfil `consultar-gemma`.
+  gemma: { modelo: "gemma4-26b-a4b", chatTemplateKwargs: {} },
+};
+
 const { values } = parseArgs({
   options: {
     degrau: { type: "string" },
@@ -47,13 +61,16 @@ const { values } = parseArgs({
     golden: { type: "string", default: "eval/golden.csv" },
     limite: { type: "string" },
     somente: { type: "string", description: "ids separados por vírgula" },
+    modelo: { type: "string", default: "qwen", description: "qwen (padrão) | gptoss | gemma" },
   },
 });
 const degrau = values.degrau ?? "";
-if (!(degrau in FERRAMENTAS_DO_DEGRAU) || !values.nome) {
-  console.error("Uso: npm run avaliar:ablacao -- --degrau a3ts|a4|a5|a6 --nome <nome> [--limite N] [--somente T01,T02]");
+if (!(degrau in FERRAMENTAS_DO_DEGRAU) || !values.nome || !((values.modelo as string) in MODELOS_DO_BAKEOFF)) {
+  console.error("Uso: npm run avaliar:ablacao -- --degrau a3ts|a4|a5|a6 --nome <nome> [--modelo qwen|gptoss|gemma] [--limite N] [--somente T01,T02]");
   process.exit(2);
 }
+const troca = MODELOS_DO_BAKEOFF[values.modelo as string];
+if (troca) Object.assign(PERFIS.principal, troca);
 const ferramentas = FERRAMENTAS_DO_DEGRAU[degrau];
 const pasta = new URL(`data/avaliacao/${values.nome}/`, RAIZ);
 const arquivo = new URL("respostas.jsonl", pasta);
@@ -126,6 +143,7 @@ for (const c of casos) {
       rodadas: r.rodadas,
       ferramentas: r.ferramentasUsadas,
       modo_do_redator: resposta.modo,
+      modelo: values.modelo,
     };
   } catch (e) {
     linha = { id, pergunta: c["pergunta"], resposta: "", contexto: [], citacoes: [], citacoes_invalidas: 0, erro: `${e instanceof Error ? e.constructor.name : "Erro"}: ${e instanceof Error ? e.message : String(e)}`.slice(0, 300) };

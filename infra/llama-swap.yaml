@@ -74,6 +74,16 @@ models:
       -m ${modelos}/text-to-cypher-Gemma-3-4B-Instruct-2025.04.0.Q8_0.gguf
       -c 16384 -ngl 99 -fa on --jinja
 
+  # F9.2 (candidato a LLM do agente e redator): Gemma 4 26B-A4B em Vulkan, sem raciocínio, com parte dos experts na CPU
+  # para sobrar VRAM para o reranker (os 14,4 GB do modelo sozinhos já encostam no teto da placa, ver o perfil `avaliar`).
+  # O valor de --n-cpu-moe saiu da calibração registrada em eval/f92-medida-bakeoff.md.
+  "gemma4-26b-a4b":
+    name: "Gemma 4 26B-A4B QAT Q4_0 (agente, Vulkan)"
+    cmd: |
+      "${vk}" --host 127.0.0.1 --port ${PORT}
+      -m ${modelos}/gemma-4-26B_q4_0-it.gguf
+      -c 32768 -np 2 -ngl 99 --n-cpu-moe 8 -fa on -ctk q8_0 -ctv q8_0 --jinja --reasoning-budget 0
+
 routing:
   router:
     use: matrix
@@ -87,6 +97,7 @@ routing:
           r:  qwen3-rerank-0.6b
           j:  gemma4-26b-a4b-juiz
           s:  gemma3-4b-text2cypher
+          m:  gemma4-26b-a4b
         # Modelos fora de qualquer conjunto rodam sozinhos (expulsam os demais): é o caso de el e j.
         sets:
           indexar:           "q"
@@ -95,3 +106,4 @@ routing:
           vetorizar:         "el"
           avaliar:           "j"
           especialista:      "s & e & r"
+          consultar-gemma:   "m & e & r"

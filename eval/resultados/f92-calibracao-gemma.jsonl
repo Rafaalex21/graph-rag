@@ -1,0 +1,5 @@
+﻿{"n_cpu_moe":0,"vram_repouso_mb":1288,"ok":true,"prompt_tokens":6108,"gerados":217,"segundos":10.1,"tok_s_geral":624.8,"prompt_tok_s":1153.2,"gen_tok_s":52.8,"vram_pico_mb":15817,"ram_pico_mb":23610}
+{"n_cpu_moe":6,"vram_repouso_mb":1282,"ok":true,"prompt_tokens":6108,"gerados":252,"segundos":10,"tok_s_geral":637.2,"prompt_tok_s":1073.1,"gen_tok_s":65.9,"vram_pico_mb":15247,"ram_pico_mb":22179}
+{"n_cpu_moe":10,"vram_repouso_mb":1282,"ok":true,"prompt_tokens":6108,"gerados":230,"segundos":14,"tok_s_geral":454.1,"prompt_tok_s":792.0,"gen_tok_s":49.2,"vram_pico_mb":13602,"ram_pico_mb":22101}
+{"n_cpu_moe":14,"vram_repouso_mb":1282,"ok":true,"prompt_tokens":6108,"gerados":252,"segundos":16,"tok_s_geral":398.6,"prompt_tok_s":634.2,"gen_tok_s":41.5,"vram_pico_mb":11960,"ram_pico_mb":22055}
+{"n_cpu_moe":8,"vram_repouso_mb":1309,"ok":true,"prompt_tokens":6108,"gerados":211,"segundos":12,"tok_s_geral":524.6,"prompt_tok_s":928.0,"gen_tok_s":54.3,"vram_pico_mb":14423,"ram_pico_mb":22147}
