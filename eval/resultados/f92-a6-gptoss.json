@@ -1,0 +1,1691 @@
+{
+ "perguntas": 60,
+ "falhas_do_juiz": 0,
+ "sem_afirmacoes_na_fidelidade": 18,
+ "geral": {
+  "recall_contexto": {
+   "n": 55,
+   "media": 0.5882
+  },
+  "fidelidade": {
+   "n": 60,
+   "media": 0.9667
+  },
+  "correcao": {
+   "n": 60,
+   "media": 0.5833
+  }
+ },
+ "so_no_recorte": {
+  "recall_contexto": {
+   "n": 49,
+   "media": 0.5582
+  },
+  "fidelidade": {
+   "n": 54,
+   "media": 0.963
+  },
+  "correcao": {
+   "n": 54,
+   "media": 0.5556
+  }
+ },
+ "por_categoria": {
+  "agregacao_filtro": {
+   "recall_contexto": {
+    "n": 10,
+    "media": 0.25
+   },
+   "fidelidade": {
+    "n": 10,
+    "media": 1.0
+   },
+   "correcao": {
+    "n": 10,
+    "media": 0.2
+   }
+  },
+  "factual_textual": {
+   "recall_contexto": {
+    "n": 15,
+    "media": 0.8444
+   },
+   "fidelidade": {
+    "n": 15,
+    "media": 1.0
+   },
+   "correcao": {
+    "n": 15,
+    "media": 0.8
+   }
+  },
+  "fora_do_escopo": {
+   "recall_contexto": {
+    "n": 0,
+    "media": null
+   },
+   "fidelidade": {
+    "n": 5,
+    "media": 0.8
+   },
+   "correcao": {
+    "n": 5,
+    "media": 1.0
+   }
+  },
+  "multi_hop": {
+   "recall_contexto": {
+    "n": 5,
+    "media": 0.5333
+   },
+   "fidelidade": {
+    "n": 5,
+    "media": 1.0
+   },
+   "correcao": {
+    "n": 5,
+    "media": 0.6
+   }
+  },
+  "numerica": {
+   "recall_contexto": {
+    "n": 15,
+    "media": 0.4667
+   },
+   "fidelidade": {
+    "n": 15,
+    "media": 0.9333
+   },
+   "correcao": {
+    "n": 15,
+    "media": 0.4
+   }
+  },
+  "tematica_global": {
+   "recall_contexto": {
+    "n": 10,
+    "media": 0.7517
+   },
+   "fidelidade": {
+    "n": 10,
+    "media": 1.0
+   },
+   "correcao": {
+    "n": 10,
+    "media": 0.7
+   }
+  }
+ },
+ "nome": "f92-a6-gptoss",
+ "degrau": "a6",
+ "erros_do_sistema": 0,
+ "mecanicas": {
+  "geral": {
+   "page_recall": {
+    "@1": {
+     "n": 55,
+     "media": 0.4909
+    },
+    "@3": {
+     "n": 55,
+     "media": 0.5515
+    },
+    "@6": {
+     "n": 55,
+     "media": 0.6
+    }
+   },
+   "acerto_pagina": {
+    "@1": {
+     "n": 55,
+     "media": 0.4909
+    },
+    "@3": {
+     "n": 55,
+     "media": 0.5636
+    },
+    "@6": {
+     "n": 55,
+     "media": 0.6182
+    }
+   },
+   "pagina_citada": {
+    "n": 55,
+    "media": 0.4727
+   },
+   "acerto_numerico": {
+    "n": 21,
+    "media": 0.381
+   },
+   "latencia_s": {
+    "n": 60,
+    "p50": 10.5,
+    "p95": 19.3,
+    "maximo": 22.1
+   }
+  },
+  "so_no_recorte": {
+   "page_recall": {
+    "@1": {
+     "n": 49,
+     "media": 0.449
+    },
+    "@3": {
+     "n": 49,
+     "media": 0.517
+    },
+    "@6": {
+     "n": 49,
+     "media": 0.5714
+    }
+   },
+   "acerto_pagina": {
+    "@1": {
+     "n": 49,
+     "media": 0.449
+    },
+    "@3": {
+     "n": 49,
+     "media": 0.5306
+    },
+    "@6": {
+     "n": 49,
+     "media": 0.5918
+    }
+   },
+   "pagina_citada": {
+    "n": 49,
+    "media": 0.4286
+   },
+   "acerto_numerico": {
+    "n": 20,
+    "media": 0.35
+   },
+   "latencia_s": {
+    "n": 54,
+    "p50": 10.8,
+    "p95": 18.98,
+    "maximo": 22.1
+   }
+  },
+  "por_categoria": {
+   "agregacao_filtro": {
+    "page_recall": {
+     "@1": {
+      "n": 10,
+      "media": 0.1
+     },
+     "@3": {
+      "n": 10,
+      "media": 0.1
+     },
+     "@6": {
+      "n": 10,
+      "media": 0.1
+     }
+    },
+    "acerto_pagina": {
+     "@1": {
+      "n": 10,
+      "media": 0.1
+     },
+     "@3": {
+      "n": 10,
+      "media": 0.1
+     },
+     "@6": {
+      "n": 10,
+      "media": 0.1
+     }
+    },
+    "pagina_citada": {
+     "n": 10,
+     "media": 0.2
+    },
+    "acerto_numerico": {
+     "n": 6,
+     "media": 0.1667
+    },
+    "latencia_s": {
+     "n": 10,
+     "p50": 15.3,
+     "p95": 20.84,
+     "maximo": 22.1
+    }
+   },
+   "factual_textual": {
+    "page_recall": {
+     "@1": {
+      "n": 15,
+      "media": 0.8667
+     },
+     "@3": {
+      "n": 15,
+      "media": 0.9333
+     },
+     "@6": {
+      "n": 15,
+      "media": 0.9333
+     }
+    },
+    "acerto_pagina": {
+     "@1": {
+      "n": 15,
+      "media": 0.8667
+     },
+     "@3": {
+      "n": 15,
+      "media": 0.9333
+     },
+     "@6": {
+      "n": 15,
+      "media": 0.9333
+     }
+    },
+    "pagina_citada": {
+     "n": 15,
+     "media": 0.7333
+    },
+    "acerto_numerico": {
+     "n": 0,
+     "media": null
+    },
+    "latencia_s": {
+     "n": 15,
+     "p50": 7.6,
+     "p95": 19.48,
+     "maximo": 19.9
+    }
+   },
+   "fora_do_escopo": {
+    "page_recall": {
+     "@1": {
+      "n": 0,
+      "media": null
+     },
+     "@3": {
+      "n": 0,
+      "media": null
+     },
+     "@6": {
+      "n": 0,
+      "media": null
+     }
+    },
+    "acerto_pagina": {
+     "@1": {
+      "n": 0,
+      "media": null
+     },
+     "@3": {
+      "n": 0,
+      "media": null
+     },
+     "@6": {
+      "n": 0,
+      "media": null
+     }
+    },
+    "pagina_citada": {
+     "n": 0,
+     "media": null
+    },
+    "acerto_numerico": {
+     "n": 0,
+     "media": null
+    },
+    "latencia_s": {
+     "n": 5,
+     "p50": 3.0,
+     "p95": 3.62,
+     "maximo": 3.7
+    }
+   },
+   "multi_hop": {
+    "page_recall": {
+     "@1": {
+      "n": 5,
+      "media": 0.0
+     },
+     "@3": {
+      "n": 5,
+      "media": 0.0
+     },
+     "@6": {
+      "n": 5,
+      "media": 0.2
+     }
+    },
+    "acerto_pagina": {
+     "@1": {
+      "n": 5,
+      "media": 0.0
+     },
+     "@3": {
+      "n": 5,
+      "media": 0.0
+     },
+     "@6": {
+      "n": 5,
+      "media": 0.4
+     }
+    },
+    "pagina_citada": {
+     "n": 5,
+     "media": 0.4
+    },
+    "acerto_numerico": {
+     "n": 0,
+     "media": null
+    },
+    "latencia_s": {
+     "n": 5,
+     "p50": 15.6,
+     "p95": 18.2,
+     "maximo": 18.4
+    }
+   },
+   "numerica": {
+    "page_recall": {
+     "@1": {
+      "n": 15,
+      "media": 0.4667
+     },
+     "@3": {
+      "n": 15,
+      "media": 0.5333
+     },
+     "@6": {
+      "n": 15,
+      "media": 0.6
+     }
+    },
+    "acerto_pagina": {
+     "@1": {
+      "n": 15,
+      "media": 0.4667
+     },
+     "@3": {
+      "n": 15,
+      "media": 0.5333
+     },
+     "@6": {
+      "n": 15,
+      "media": 0.6
+     }
+    },
+    "pagina_citada": {
+     "n": 15,
+     "media": 0.3333
+    },
+    "acerto_numerico": {
+     "n": 15,
+     "media": 0.4667
+    },
+    "latencia_s": {
+     "n": 15,
+     "p50": 10.4,
+     "p95": 14.71,
+     "maximo": 15.9
+    }
+   },
+   "tematica_global": {
+    "page_recall": {
+     "@1": {
+      "n": 10,
+      "media": 0.6
+     },
+     "@3": {
+      "n": 10,
+      "media": 0.7333
+     },
+     "@6": {
+      "n": 10,
+      "media": 0.8
+     }
+    },
+    "acerto_pagina": {
+     "@1": {
+      "n": 10,
+      "media": 0.6
+     },
+     "@3": {
+      "n": 10,
+      "media": 0.8
+     },
+     "@6": {
+      "n": 10,
+      "media": 0.8
+     }
+    },
+    "pagina_citada": {
+     "n": 10,
+     "media": 0.6
+    },
+    "acerto_numerico": {
+     "n": 0,
+     "media": null
+    },
+    "latencia_s": {
+     "n": 10,
+     "p50": 9.45,
+     "p95": 18.71,
+     "maximo": 18.8
+    }
+   }
+  }
+ },
+ "numerico_regra_x_juiz": {
+  "regra=certo|juiz=0.0": 1,
+  "regra=certo|juiz=1.0": 7,
+  "regra=errado|juiz=0.0": 13
+ },
+ "por_pergunta": {
+  "T01": {
+   "recall_contexto": 1.0,
+   "fidelidade": 1.0,
+   "correcao": 1.0,
+   "segundos": 7.2,
+   "page_recall": {
+    "@1": {
+     "recall": 0.0,
+     "acerto": 0.0
+    },
+    "@3": {
+     "recall": 1.0,
+     "acerto": 1.0
+    },
+    "@6": {
+     "recall": 1.0,
+     "acerto": 1.0
+    }
+   },
+   "pagina_citada": true
+  },
+  "T02": {
+   "recall_contexto": 1.0,
+   "fidelidade": 1.0,
+   "correcao": 1.0,
+   "segundos": 16.9,
+   "page_recall": {
+    "@1": {
+     "recall": 1.0,
+     "acerto": 1.0
+    },
+    "@3": {
+     "recall": 1.0,
+     "acerto": 1.0
+    },
+    "@6": {
+     "recall": 1.0,
+     "acerto": 1.0
+    }
+   },
+   "pagina_citada": true
+  },
+  "T03": {
+   "recall_contexto": 0.6666666666666666,
+   "fidelidade": 1.0,
+   "correcao": 0.0,
+   "segundos": 9.3,
+   "page_recall": {
+    "@1": {
+     "recall": 1.0,
+     "acerto": 1.0
+    },
+    "@3": {
+     "recall": 1.0,
+     "acerto": 1.0
+    },
+    "@6": {
+     "recall": 1.0,
+     "acerto": 1.0
+    }
+   },
+   "pagina_citada": false
+  },
+  "T04": {
+   "recall_contexto": 1.0,
+   "fidelidade": 1.0,
+   "correcao": 1.0,
+   "segundos": 13.9,
+   "page_recall": {
+    "@1": {
+     "recall": 1.0,
+     "acerto": 1.0
+    },
+    "@3": {
+     "recall": 1.0,
+     "acerto": 1.0
+    },
+    "@6": {
+     "recall": 1.0,
+     "acerto": 1.0
+    }
+   },
+   "pagina_citada": false
+  },
+  "T05": {
+   "recall_contexto": 1.0,
+   "fidelidade": 1.0,
+   "correcao": 1.0,
+   "segundos": 18.5,
+   "page_recall": {
+    "@1": {
+     "recall": 1.0,
+     "acerto": 1.0
+    },
+    "@3": {
+     "recall": 1.0,
+     "acerto": 1.0
+    },
+    "@6": {
+     "recall": 1.0,
+     "acerto": 1.0
+    }
+   },
+   "pagina_citada": true
+  },
+  "T06": {
+   "recall_contexto": 1.0,
+   "fidelidade": 1.0,
+   "correcao": 1.0,
+   "segundos": 7.1,
+   "page_recall": {
+    "@1": {
+     "recall": 1.0,
+     "acerto": 1.0
+    },
+    "@3": {
+     "recall": 1.0,
+     "acerto": 1.0
+    },
+    "@6": {
+     "recall": 1.0,
+     "acerto": 1.0
+    }
+   },
+   "pagina_citada": true
+  },
+  "T07": {
+   "recall_contexto": 1.0,
+   "fidelidade": 1.0,
+   "correcao": 1.0,
+   "segundos": 5.8,
+   "page_recall": {
+    "@1": {
+     "recall": 1.0,
+     "acerto": 1.0
+    },
+    "@3": {
+     "recall": 1.0,
+     "acerto": 1.0
+    },
+    "@6": {
+     "recall": 1.0,
+     "acerto": 1.0
+    }
+   },
+   "pagina_citada": true
+  },
+  "T08": {
+   "recall_contexto": 0.0,
+   "fidelidade": 1.0,
+   "correcao": 0.0,
+   "segundos": 19.9,
+   "page_recall": {
+    "@1": {
+     "recall": 1.0,
+     "acerto": 1.0
+    },
+    "@3": {
+     "recall": 1.0,
+     "acerto": 1.0
+    },
+    "@6": {
+     "recall": 1.0,
+     "acerto": 1.0
+    }
+   },
+   "pagina_citada": false
+  },
+  "T09": {
+   "recall_contexto": 1.0,
+   "fidelidade": 1.0,
+   "correcao": 1.0,
+   "segundos": 6.6,
+   "page_recall": {
+    "@1": {
+     "recall": 1.0,
+     "acerto": 1.0
+    },
+    "@3": {
+     "recall": 1.0,
+     "acerto": 1.0
+    },
+    "@6": {
+     "recall": 1.0,
+     "acerto": 1.0
+    }
+   },
+   "pagina_citada": true
+  },
+  "T10": {
+   "recall_contexto": 1.0,
+   "fidelidade": 1.0,
+   "correcao": 1.0,
+   "segundos": 6.8,
+   "page_recall": {
+    "@1": {
+     "recall": 1.0,
+     "acerto": 1.0
+    },
+    "@3": {
+     "recall": 1.0,
+     "acerto": 1.0
+    },
+    "@6": {
+     "recall": 1.0,
+     "acerto": 1.0
+    }
+   },
+   "pagina_citada": true
+  },
+  "T11": {
+   "recall_contexto": 1.0,
+   "fidelidade": 1.0,
+   "correcao": 1.0,
+   "segundos": 6.5,
+   "page_recall": {
+    "@1": {
+     "recall": 1.0,
+     "acerto": 1.0
+    },
+    "@3": {
+     "recall": 1.0,
+     "acerto": 1.0
+    },
+    "@6": {
+     "recall": 1.0,
+     "acerto": 1.0
+    }
+   },
+   "pagina_citada": true
+  },
+  "T12": {
+   "recall_contexto": 0.0,
+   "fidelidade": 1.0,
+   "correcao": 0.0,
+   "segundos": 16.7,
+   "page_recall": {
+    "@1": {
+     "recall": 0.0,
+     "acerto": 0.0
+    },
+    "@3": {
+     "recall": 0.0,
+     "acerto": 0.0
+    },
+    "@6": {
+     "recall": 0.0,
+     "acerto": 0.0
+    }
+   },
+   "pagina_citada": false
+  },
+  "T13": {
+   "recall_contexto": 1.0,
+   "fidelidade": 1.0,
+   "correcao": 1.0,
+   "segundos": 19.3,
+   "page_recall": {
+    "@1": {
+     "recall": 1.0,
+     "acerto": 1.0
+    },
+    "@3": {
+     "recall": 1.0,
+     "acerto": 1.0
+    },
+    "@6": {
+     "recall": 1.0,
+     "acerto": 1.0
+    }
+   },
+   "pagina_citada": true
+  },
+  "T14": {
+   "recall_contexto": 1.0,
+   "fidelidade": 1.0,
+   "correcao": 1.0,
+   "segundos": 7.6,
+   "page_recall": {
+    "@1": {
+     "recall": 1.0,
+     "acerto": 1.0
+    },
+    "@3": {
+     "recall": 1.0,
+     "acerto": 1.0
+    },
+    "@6": {
+     "recall": 1.0,
+     "acerto": 1.0
+    }
+   },
+   "pagina_citada": true
+  },
+  "T15": {
+   "recall_contexto": 1.0,
+   "fidelidade": 1.0,
+   "correcao": 1.0,
+   "segundos": 4.7,
+   "page_recall": {
+    "@1": {
+     "recall": 1.0,
+     "acerto": 1.0
+    },
+    "@3": {
+     "recall": 1.0,
+     "acerto": 1.0
+    },
+    "@6": {
+     "recall": 1.0,
+     "acerto": 1.0
+    }
+   },
+   "pagina_citada": true
+  },
+  "N01": {
+   "recall_contexto": 0.0,
+   "fidelidade": 1.0,
+   "correcao": 0.0,
+   "segundos": 11.7,
+   "page_recall": {
+    "@1": {
+     "recall": 0.0,
+     "acerto": 0.0
+    },
+    "@3": {
+     "recall": 0.0,
+     "acerto": 0.0
+    },
+    "@6": {
+     "recall": 1.0,
+     "acerto": 1.0
+    }
+   },
+   "pagina_citada": false,
+   "acerto_numerico": true
+  },
+  "N02": {
+   "recall_contexto": 1.0,
+   "fidelidade": 1.0,
+   "correcao": 1.0,
+   "segundos": 5.9,
+   "page_recall": {
+    "@1": {
+     "recall": 1.0,
+     "acerto": 1.0
+    },
+    "@3": {
+     "recall": 1.0,
+     "acerto": 1.0
+    },
+    "@6": {
+     "recall": 1.0,
+     "acerto": 1.0
+    }
+   },
+   "pagina_citada": true,
+   "acerto_numerico": true
+  },
+  "N03": {
+   "recall_contexto": 0.0,
+   "fidelidade": 1.0,
+   "correcao": 0.0,
+   "segundos": 14.2,
+   "page_recall": {
+    "@1": {
+     "recall": 0.0,
+     "acerto": 0.0
+    },
+    "@3": {
+     "recall": 1.0,
+     "acerto": 1.0
+    },
+    "@6": {
+     "recall": 1.0,
+     "acerto": 1.0
+    }
+   },
+   "pagina_citada": false,
+   "acerto_numerico": false
+  },
+  "N04": {
+   "recall_contexto": 1.0,
+   "fidelidade": 1.0,
+   "correcao": 1.0,
+   "segundos": 5.1,
+   "page_recall": {
+    "@1": {
+     "recall": 0.0,
+     "acerto": 0.0
+    },
+    "@3": {
+     "recall": 0.0,
+     "acerto": 0.0
+    },
+    "@6": {
+     "recall": 0.0,
+     "acerto": 0.0
+    }
+   },
+   "pagina_citada": false,
+   "acerto_numerico": true
+  },
+  "N05": {
+   "recall_contexto": 1.0,
+   "fidelidade": 1.0,
+   "correcao": 1.0,
+   "segundos": 5.1,
+   "page_recall": {
+    "@1": {
+     "recall": 1.0,
+     "acerto": 1.0
+    },
+    "@3": {
+     "recall": 1.0,
+     "acerto": 1.0
+    },
+    "@6": {
+     "recall": 1.0,
+     "acerto": 1.0
+    }
+   },
+   "pagina_citada": true,
+   "acerto_numerico": true
+  },
+  "N06": {
+   "recall_contexto": 1.0,
+   "fidelidade": 1.0,
+   "correcao": 0.0,
+   "segundos": 13.8,
+   "page_recall": {
+    "@1": {
+     "recall": 1.0,
+     "acerto": 1.0
+    },
+    "@3": {
+     "recall": 1.0,
+     "acerto": 1.0
+    },
+    "@6": {
+     "recall": 1.0,
+     "acerto": 1.0
+    }
+   },
+   "pagina_citada": false,
+   "acerto_numerico": false
+  },
+  "N07": {
+   "recall_contexto": 0.0,
+   "fidelidade": 1.0,
+   "correcao": 0.0,
+   "segundos": 9.1,
+   "page_recall": {
+    "@1": {
+     "recall": 0.0,
+     "acerto": 0.0
+    },
+    "@3": {
+     "recall": 0.0,
+     "acerto": 0.0
+    },
+    "@6": {
+     "recall": 0.0,
+     "acerto": 0.0
+    }
+   },
+   "pagina_citada": false,
+   "acerto_numerico": false
+  },
+  "N08": {
+   "recall_contexto": 0.0,
+   "fidelidade": 1.0,
+   "correcao": 0.0,
+   "segundos": 11.8,
+   "page_recall": {
+    "@1": {
+     "recall": 0.0,
+     "acerto": 0.0
+    },
+    "@3": {
+     "recall": 0.0,
+     "acerto": 0.0
+    },
+    "@6": {
+     "recall": 0.0,
+     "acerto": 0.0
+    }
+   },
+   "pagina_citada": false,
+   "acerto_numerico": false
+  },
+  "N09": {
+   "recall_contexto": 1.0,
+   "fidelidade": 1.0,
+   "correcao": 1.0,
+   "segundos": 10.2,
+   "page_recall": {
+    "@1": {
+     "recall": 1.0,
+     "acerto": 1.0
+    },
+    "@3": {
+     "recall": 1.0,
+     "acerto": 1.0
+    },
+    "@6": {
+     "recall": 1.0,
+     "acerto": 1.0
+    }
+   },
+   "pagina_citada": true,
+   "acerto_numerico": true
+  },
+  "N10": {
+   "recall_contexto": 0.0,
+   "fidelidade": 1.0,
+   "correcao": 0.0,
+   "segundos": 11.4,
+   "page_recall": {
+    "@1": {
+     "recall": 0.0,
+     "acerto": 0.0
+    },
+    "@3": {
+     "recall": 0.0,
+     "acerto": 0.0
+    },
+    "@6": {
+     "recall": 0.0,
+     "acerto": 0.0
+    }
+   },
+   "pagina_citada": false,
+   "acerto_numerico": false
+  },
+  "N11": {
+   "recall_contexto": 0.0,
+   "fidelidade": 0.0,
+   "correcao": 0.0,
+   "segundos": 15.9,
+   "page_recall": {
+    "@1": {
+     "recall": 0.0,
+     "acerto": 0.0
+    },
+    "@3": {
+     "recall": 0.0,
+     "acerto": 0.0
+    },
+    "@6": {
+     "recall": 0.0,
+     "acerto": 0.0
+    }
+   },
+   "pagina_citada": false,
+   "acerto_numerico": false
+  },
+  "N12": {
+   "recall_contexto": 0.0,
+   "fidelidade": 1.0,
+   "correcao": 0.0,
+   "segundos": 11,
+   "page_recall": {
+    "@1": {
+     "recall": 0.0,
+     "acerto": 0.0
+    },
+    "@3": {
+     "recall": 0.0,
+     "acerto": 0.0
+    },
+    "@6": {
+     "recall": 0.0,
+     "acerto": 0.0
+    }
+   },
+   "pagina_citada": false,
+   "acerto_numerico": false
+  },
+  "N13": {
+   "recall_contexto": 1.0,
+   "fidelidade": 1.0,
+   "correcao": 1.0,
+   "segundos": 5.3,
+   "page_recall": {
+    "@1": {
+     "recall": 1.0,
+     "acerto": 1.0
+    },
+    "@3": {
+     "recall": 1.0,
+     "acerto": 1.0
+    },
+    "@6": {
+     "recall": 1.0,
+     "acerto": 1.0
+    }
+   },
+   "pagina_citada": true,
+   "acerto_numerico": true
+  },
+  "N14": {
+   "recall_contexto": 0.0,
+   "fidelidade": 1.0,
+   "correcao": 0.0,
+   "segundos": 10.4,
+   "page_recall": {
+    "@1": {
+     "recall": 1.0,
+     "acerto": 1.0
+    },
+    "@3": {
+     "recall": 1.0,
+     "acerto": 1.0
+    },
+    "@6": {
+     "recall": 1.0,
+     "acerto": 1.0
+    }
+   },
+   "pagina_citada": false,
+   "acerto_numerico": false
+  },
+  "N15": {
+   "recall_contexto": 1.0,
+   "fidelidade": 1.0,
+   "correcao": 1.0,
+   "segundos": 8.5,
+   "page_recall": {
+    "@1": {
+     "recall": 1.0,
+     "acerto": 1.0
+    },
+    "@3": {
+     "recall": 1.0,
+     "acerto": 1.0
+    },
+    "@6": {
+     "recall": 1.0,
+     "acerto": 1.0
+    }
+   },
+   "pagina_citada": true,
+   "acerto_numerico": true
+  },
+  "G01": {
+   "recall_contexto": 0.25,
+   "fidelidade": 1.0,
+   "correcao": 0.0,
+   "segundos": 22.1,
+   "page_recall": {
+    "@1": {
+     "recall": 0.0,
+     "acerto": 0.0
+    },
+    "@3": {
+     "recall": 0.0,
+     "acerto": 0.0
+    },
+    "@6": {
+     "recall": 0.0,
+     "acerto": 0.0
+    }
+   },
+   "pagina_citada": false,
+   "acerto_numerico": false
+  },
+  "G02": {
+   "recall_contexto": 1.0,
+   "fidelidade": 1.0,
+   "correcao": 1.0,
+   "segundos": 18.5,
+   "page_recall": {
+    "@1": {
+     "recall": 0.0,
+     "acerto": 0.0
+    },
+    "@3": {
+     "recall": 0.0,
+     "acerto": 0.0
+    },
+    "@6": {
+     "recall": 0.0,
+     "acerto": 0.0
+    }
+   },
+   "pagina_citada": true
+  },
+  "G03": {
+   "recall_contexto": 0.25,
+   "fidelidade": 1.0,
+   "correcao": 0.0,
+   "segundos": 9.5,
+   "page_recall": {
+    "@1": {
+     "recall": 1.0,
+     "acerto": 1.0
+    },
+    "@3": {
+     "recall": 1.0,
+     "acerto": 1.0
+    },
+    "@6": {
+     "recall": 1.0,
+     "acerto": 1.0
+    }
+   },
+   "pagina_citada": false,
+   "acerto_numerico": false
+  },
+  "G04": {
+   "recall_contexto": 0.0,
+   "fidelidade": 1.0,
+   "correcao": 0.0,
+   "segundos": 19.3,
+   "page_recall": {
+    "@1": {
+     "recall": 0.0,
+     "acerto": 0.0
+    },
+    "@3": {
+     "recall": 0.0,
+     "acerto": 0.0
+    },
+    "@6": {
+     "recall": 0.0,
+     "acerto": 0.0
+    }
+   },
+   "pagina_citada": false
+  },
+  "G05": {
+   "recall_contexto": 1.0,
+   "fidelidade": 1.0,
+   "correcao": 1.0,
+   "segundos": 15.7,
+   "page_recall": {
+    "@1": {
+     "recall": 0.0,
+     "acerto": 0.0
+    },
+    "@3": {
+     "recall": 0.0,
+     "acerto": 0.0
+    },
+    "@6": {
+     "recall": 0.0,
+     "acerto": 0.0
+    }
+   },
+   "pagina_citada": true,
+   "acerto_numerico": true
+  },
+  "G06": {
+   "recall_contexto": 0.0,
+   "fidelidade": 1.0,
+   "correcao": 0.0,
+   "segundos": 13.6,
+   "page_recall": {
+    "@1": {
+     "recall": 0.0,
+     "acerto": 0.0
+    },
+    "@3": {
+     "recall": 0.0,
+     "acerto": 0.0
+    },
+    "@6": {
+     "recall": 0.0,
+     "acerto": 0.0
+    }
+   },
+   "pagina_citada": false,
+   "acerto_numerico": false
+  },
+  "G07": {
+   "recall_contexto": 0.0,
+   "fidelidade": 1.0,
+   "correcao": 0.0,
+   "segundos": 17.1,
+   "page_recall": {
+    "@1": {
+     "recall": 0.0,
+     "acerto": 0.0
+    },
+    "@3": {
+     "recall": 0.0,
+     "acerto": 0.0
+    },
+    "@6": {
+     "recall": 0.0,
+     "acerto": 0.0
+    }
+   },
+   "pagina_citada": false,
+   "acerto_numerico": false
+  },
+  "G08": {
+   "recall_contexto": 0.0,
+   "fidelidade": 1.0,
+   "correcao": 0.0,
+   "segundos": 14.9,
+   "page_recall": {
+    "@1": {
+     "recall": 0.0,
+     "acerto": 0.0
+    },
+    "@3": {
+     "recall": 0.0,
+     "acerto": 0.0
+    },
+    "@6": {
+     "recall": 0.0,
+     "acerto": 0.0
+    }
+   },
+   "pagina_citada": false,
+   "acerto_numerico": false
+  },
+  "G09": {
+   "recall_contexto": 0.0,
+   "fidelidade": 1.0,
+   "correcao": 0.0,
+   "segundos": 13.8,
+   "page_recall": {
+    "@1": {
+     "recall": 0.0,
+     "acerto": 0.0
+    },
+    "@3": {
+     "recall": 0.0,
+     "acerto": 0.0
+    },
+    "@6": {
+     "recall": 0.0,
+     "acerto": 0.0
+    }
+   },
+   "pagina_citada": false
+  },
+  "G10": {
+   "recall_contexto": 0.0,
+   "fidelidade": 1.0,
+   "correcao": 0.0,
+   "segundos": 13.7,
+   "page_recall": {
+    "@1": {
+     "recall": 0.0,
+     "acerto": 0.0
+    },
+    "@3": {
+     "recall": 0.0,
+     "acerto": 0.0
+    },
+    "@6": {
+     "recall": 0.0,
+     "acerto": 0.0
+    }
+   },
+   "pagina_citada": false
+  },
+  "P01": {
+   "recall_contexto": 0.2,
+   "fidelidade": 1.0,
+   "correcao": 0.0,
+   "segundos": 14.2,
+   "page_recall": {
+    "@1": {
+     "recall": 0.0,
+     "acerto": 0.0
+    },
+    "@3": {
+     "recall": 0.0,
+     "acerto": 0.0
+    },
+    "@6": {
+     "recall": 0.0,
+     "acerto": 0.0
+    }
+   },
+   "pagina_citada": false
+  },
+  "P02": {
+   "recall_contexto": 1.0,
+   "fidelidade": 1.0,
+   "correcao": 1.0,
+   "segundos": 8.3,
+   "page_recall": {
+    "@1": {
+     "recall": 1.0,
+     "acerto": 1.0
+    },
+    "@3": {
+     "recall": 1.0,
+     "acerto": 1.0
+    },
+    "@6": {
+     "recall": 1.0,
+     "acerto": 1.0
+    }
+   },
+   "pagina_citada": true
+  },
+  "P03": {
+   "recall_contexto": 1.0,
+   "fidelidade": 1.0,
+   "correcao": 0.5,
+   "segundos": 10.6,
+   "page_recall": {
+    "@1": {
+     "recall": 0.0,
+     "acerto": 0.0
+    },
+    "@3": {
+     "recall": 0.3333333333333333,
+     "acerto": 1.0
+    },
+    "@6": {
+     "recall": 1.0,
+     "acerto": 1.0
+    }
+   },
+   "pagina_citada": true
+  },
+  "P04": {
+   "recall_contexto": 1.0,
+   "fidelidade": 1.0,
+   "correcao": 1.0,
+   "segundos": 18.5,
+   "page_recall": {
+    "@1": {
+     "recall": 1.0,
+     "acerto": 1.0
+    },
+    "@3": {
+     "recall": 1.0,
+     "acerto": 1.0
+    },
+    "@6": {
+     "recall": 1.0,
+     "acerto": 1.0
+    }
+   },
+   "pagina_citada": true
+  },
+  "P05": {
+   "recall_contexto": 0.6666666666666666,
+   "fidelidade": 1.0,
+   "correcao": 0.5,
+   "segundos": 18.6,
+   "page_recall": {
+    "@1": {
+     "recall": 1.0,
+     "acerto": 1.0
+    },
+    "@3": {
+     "recall": 1.0,
+     "acerto": 1.0
+    },
+    "@6": {
+     "recall": 1.0,
+     "acerto": 1.0
+    }
+   },
+   "pagina_citada": false
+  },
+  "P06": {
+   "recall_contexto": 0.4,
+   "fidelidade": 1.0,
+   "correcao": 0.5,
+   "segundos": 18.8,
+   "page_recall": {
+    "@1": {
+     "recall": 0.0,
+     "acerto": 0.0
+    },
+    "@3": {
+     "recall": 1.0,
+     "acerto": 1.0
+    },
+    "@6": {
+     "recall": 1.0,
+     "acerto": 1.0
+    }
+   },
+   "pagina_citada": false
+  },
+  "P07": {
+   "recall_contexto": 1.0,
+   "fidelidade": 1.0,
+   "correcao": 1.0,
+   "segundos": 7.6,
+   "page_recall": {
+    "@1": {
+     "recall": 1.0,
+     "acerto": 1.0
+    },
+    "@3": {
+     "recall": 1.0,
+     "acerto": 1.0
+    },
+    "@6": {
+     "recall": 1.0,
+     "acerto": 1.0
+    }
+   },
+   "pagina_citada": true
+  },
+  "P08": {
+   "recall_contexto": 1.0,
+   "fidelidade": 1.0,
+   "correcao": 1.0,
+   "segundos": 6.6,
+   "page_recall": {
+    "@1": {
+     "recall": 1.0,
+     "acerto": 1.0
+    },
+    "@3": {
+     "recall": 1.0,
+     "acerto": 1.0
+    },
+    "@6": {
+     "recall": 1.0,
+     "acerto": 1.0
+    }
+   },
+   "pagina_citada": true
+  },
+  "P09": {
+   "recall_contexto": 0.25,
+   "fidelidade": 1.0,
+   "correcao": 0.5,
+   "segundos": 6.8,
+   "page_recall": {
+    "@1": {
+     "recall": 0.0,
+     "acerto": 0.0
+    },
+    "@3": {
+     "recall": 0.0,
+     "acerto": 0.0
+    },
+    "@6": {
+     "recall": 0.0,
+     "acerto": 0.0
+    }
+   },
+   "pagina_citada": false
+  },
+  "P10": {
+   "recall_contexto": 1.0,
+   "fidelidade": 1.0,
+   "correcao": 1.0,
+   "segundos": 7.3,
+   "page_recall": {
+    "@1": {
+     "recall": 1.0,
+     "acerto": 1.0
+    },
+    "@3": {
+     "recall": 1.0,
+     "acerto": 1.0
+    },
+    "@6": {
+     "recall": 1.0,
+     "acerto": 1.0
+    }
+   },
+   "pagina_citada": true
+  },
+  "M01": {
+   "recall_contexto": 0.0,
+   "fidelidade": 1.0,
+   "correcao": 0.0,
+   "segundos": 18.4,
+   "page_recall": {
+    "@1": {
+     "recall": 0.0,
+     "acerto": 0.0
+    },
+    "@3": {
+     "recall": 0.0,
+     "acerto": 0.0
+    },
+    "@6": {
+     "recall": 0.0,
+     "acerto": 0.0
+    }
+   },
+   "pagina_citada": false
+  },
+  "M02": {
+   "recall_contexto": 0.3333333333333333,
+   "fidelidade": 1.0,
+   "correcao": 0.5,
+   "segundos": 10.1,
+   "page_recall": {
+    "@1": {
+     "recall": 0.0,
+     "acerto": 0.0
+    },
+    "@3": {
+     "recall": 0.0,
+     "acerto": 0.0
+    },
+    "@6": {
+     "recall": 0.0,
+     "acerto": 0.0
+    }
+   },
+   "pagina_citada": false
+  },
+  "M03": {
+   "recall_contexto": 1.0,
+   "fidelidade": 1.0,
+   "correcao": 1.0,
+   "segundos": 15.6,
+   "page_recall": {
+    "@1": {
+     "recall": 0.0,
+     "acerto": 0.0
+    },
+    "@3": {
+     "recall": 0.0,
+     "acerto": 0.0
+    },
+    "@6": {
+     "recall": 0.5,
+     "acerto": 1.0
+    }
+   },
+   "pagina_citada": true
+  },
+  "M04": {
+   "recall_contexto": 1.0,
+   "fidelidade": 1.0,
+   "correcao": 1.0,
+   "segundos": 10.2,
+   "page_recall": {
+    "@1": {
+     "recall": 0.0,
+     "acerto": 0.0
+    },
+    "@3": {
+     "recall": 0.0,
+     "acerto": 0.0
+    },
+    "@6": {
+     "recall": 0.5,
+     "acerto": 1.0
+    }
+   },
+   "pagina_citada": true
+  },
+  "M05": {
+   "recall_contexto": 0.3333333333333333,
+   "fidelidade": 1.0,
+   "correcao": 0.5,
+   "segundos": 17.4,
+   "page_recall": {
+    "@1": {
+     "recall": 0.0,
+     "acerto": 0.0
+    },
+    "@3": {
+     "recall": 0.0,
+     "acerto": 0.0
+    },
+    "@6": {
+     "recall": 0.0,
+     "acerto": 0.0
+    }
+   },
+   "pagina_citada": false
+  },
+  "F01": {
+   "recall_contexto": null,
+   "fidelidade": 0.0,
+   "correcao": 1.0,
+   "segundos": 2.3
+  },
+  "F02": {
+   "recall_contexto": null,
+   "fidelidade": 1.0,
+   "correcao": 1.0,
+   "segundos": 3.3
+  },
+  "F03": {
+   "recall_contexto": null,
+   "fidelidade": 1.0,
+   "correcao": 1.0,
+   "segundos": 3
+  },
+  "F04": {
+   "recall_contexto": null,
+   "fidelidade": 1.0,
+   "correcao": 1.0,
+   "segundos": 2.4
+  },
+  "F05": {
+   "recall_contexto": null,
+   "fidelidade": 1.0,
+   "correcao": 1.0,
+   "segundos": 3.7
+  }
+ }
+}

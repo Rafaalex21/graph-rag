@@ -106,4 +106,25 @@ cd indexer; uv run python -m indexer.f92          # só a tabela e as regras, se
 
 **Calibração do `--n-cpu-moe`:** 4 execuções do `infra/calibrar-gemma-agente.ps1`. As 2 primeiras não deram dado por defeito meu no script (o texto lido do arquivo ia ao `/tokenize` como objeto e o servidor devolveu 400 nos 4 valores; conserto: converter para `string`; o arquivo de saída dessas duas, só com erros, foi apagado). A terceira mediu 0, 6, 10 e 14; a quarta mediu o 8 sozinho. Valor usado: 8.
 
-**Da medida:** a preencher conforme as execuções acontecerem.
+**Da medida** (uma execução por item, nenhuma refeita; roteiro `infra/rodar-f92.ps1` iniciado em 11/11 às 10:03 e terminado às 13:33, sem pausa):
+
+| Item | Relatório / arquivo | Perguntas ou Pais | Erros do sistema | Falhas do juiz |
+|---|---|---:|---:|---:|
+| Sondas de VRAM (A6, 8 perguntas) | `f92-sonda-qwen`, `-gptoss`, `-gemma` (só `data/`) | 8 cada | 0 | não julgadas |
+| Extração | `<doc>.f92_qwen.json`, `.f92_gptoss.json`, `.f92_gemma.json` | 30 cada | 0 inválidas | n/a |
+| Agente, golden | `f92-a6-gptoss`, `f92-a6-gemma` | 60 cada | 0 | 0 |
+| Agente, grupo novo | `f92n-a6-gptoss`, `f92n-a6-gemma` | 24 cada | 0 | 0 |
+
+O Qwen no agente é `v1-a6` e `v1n-a6` (F9.1), não refeitas. Resultados e a aplicação das regras: `eval/resultados/f92-bakeoff.md`; leitura: ADR-079.
+
+**Defeitos de infraestrutura meus, sem efeito nos resultados de qualidade:**
+
+1. O agregador de picos de VRAM do roteiro (`$arq | Get-Content`) falhou em tudo e gravou `null` em `f92-vram.json`; o passo final `tabela` saiu com código 1 por isso. Os CSVs de amostragem (a cada 3 s) estavam íntegros: o `f92-vram.json` foi regerado a partir deles com Python (máximo de cada CSV) e o roteiro foi corrigido (`Get-Content -LiteralPath`). Picos: sonda 11.699 / 12.887 / 14.775 MB (Qwen / gpt-oss / Gemma); rodada completa 12.995 (gpt-oss) e 15.004 MB (Gemma).
+2. O Qwen não teve rodada completa amostrada (reaproveita a F9.1), por isso a coluna de rodada completa dele é n/a.
+
+## Resultado por item do aceite
+
+- **Regras aplicadas como fixadas:** sim. Agente: nenhum desafiante substitui o Qwen (gpt-oss equivalente e mais rápido, mas falha página citada e acerto numérico; Gemma pior nas 60 e também falha as duas). Extração: nenhum candidato (entidades e relações por Pai abaixo de 90% do Qwen).
+- **ADR-079 com a escolha por papel e a evidência:** sim. Escolha: Qwen3.6 em extração, agente e redator e Text2Cypher; Gemma 4 (HIP) no juiz; os dois últimos citam evidência anterior, sem medida nova.
+- **Todas as execuções contadas:** sim (esta seção).
+

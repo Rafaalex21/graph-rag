@@ -42,7 +42,7 @@ function IniciarVram([string]$arq) {
 }
 function PicoVram([string]$arq) {
   if (-not (Test-Path $arq)) { return $null }
-  ($arq | Get-Content | ForEach-Object { [int]$_ } | Measure-Object -Maximum).Maximum
+  (Get-Content -LiteralPath $arq | ForEach-Object { [int]$_ } | Measure-Object -Maximum).Maximum
 }
 function GravarVram {
   $f = Join-Path $raiz "eval\resultados\f92-vram.json"

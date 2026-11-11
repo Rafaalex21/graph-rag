@@ -1,0 +1,47 @@
+{
+ "qwen": {
+  "pais": 30,
+  "validas": 30,
+  "validade_pct": 100.0,
+  "validas_na_primeira": 30,
+  "chamadas_por_pai": 1.0,
+  "entidades_por_pai": 12.67,
+  "relacoes_por_pai": 10.53,
+  "sem_lastro_de_nome_pct": 7.1,
+  "nomes_repetidos": 0,
+  "no_teto_de_entidades": 0,
+  "tokens_saida_por_pai": 1389,
+  "segundos_por_pai": 59.1,
+  "invalidas": []
+ },
+ "gptoss": {
+  "pais": 30,
+  "validas": 30,
+  "validade_pct": 100.0,
+  "validas_na_primeira": 26,
+  "chamadas_por_pai": 1.2,
+  "entidades_por_pai": 11.17,
+  "relacoes_por_pai": 8.97,
+  "sem_lastro_de_nome_pct": 8.4,
+  "nomes_repetidos": 1,
+  "no_teto_de_entidades": 0,
+  "tokens_saida_por_pai": 1244,
+  "segundos_por_pai": 28.6,
+  "invalidas": []
+ },
+ "gemma": {
+  "pais": 30,
+  "validas": 30,
+  "validade_pct": 100.0,
+  "validas_na_primeira": 30,
+  "chamadas_por_pai": 1.0,
+  "entidades_por_pai": 11.27,
+  "relacoes_por_pai": 6.9,
+  "sem_lastro_de_nome_pct": 5.6,
+  "nomes_repetidos": 0,
+  "no_teto_de_entidades": 0,
+  "tokens_saida_por_pai": 1081,
+  "segundos_por_pai": 30.5,
+  "invalidas": []
+ }
+}

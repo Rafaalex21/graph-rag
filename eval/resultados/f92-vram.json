@@ -1,0 +1,14 @@
+{
+ "qwen": {
+  "sonda_pico_mb": 11699,
+  "completa_pico_mb": null
+ },
+ "gptoss": {
+  "sonda_pico_mb": 12887,
+  "completa_pico_mb": 12995
+ },
+ "gemma": {
+  "sonda_pico_mb": 14775,
+  "completa_pico_mb": 15004
+ }
+}
