@@ -19,8 +19,8 @@ import type { EstadoDoCiclo } from "./ciclo.ts";
 import { declaracaoDeAusencia, dividirAfirmacoes, formatoNaoBrasileiro, numeroTemLastro, numerosDoTexto, type NumeroEncontrado } from "./numeros.ts";
 
 export const MAX_EVIDENCIAS = 10;
-const MAX_CARACTERES_EVIDENCIA = 900;
-const MAX_CARACTERES_DAS_EVIDENCIAS = 9_000;
+const MAX_CARACTERES_EVIDENCIA = 3_000;
+const MAX_CARACTERES_DAS_EVIDENCIAS = 24_000;
 const MAX_PERGUNTA = 2_000;
 const MAX_TOKENS = 700;
 const TEMPERATURA = 0.2;

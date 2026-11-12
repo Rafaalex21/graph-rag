@@ -22,8 +22,8 @@ export const MAX_PERGUNTAS_EXTRAS = 3;
 const MIN_PERGUNTA = 8;
 const MAX_FALTANDO = 300;
 const MAX_EVIDENCIAS_POR_SUB = 4;
-const MAX_CARACTERES_EVIDENCIA = 350;
-const MAX_CARACTERES_DAS_EVIDENCIAS = 7_000;
+const MAX_CARACTERES_EVIDENCIA = 1_200;
+const MAX_CARACTERES_DAS_EVIDENCIAS = 14_000;
 const MAX_PERGUNTA = 2_000;
 const TIMEOUT_MS = 30_000;
 const MAX_TOKENS = 400;
@@ -156,7 +156,7 @@ function blocoDeEvidencias(subs: SubParaCritica[], maxCaracteres: number): strin
 
 export function montarMensagensCritico(entrada: EntradaCritico): Mensagem[] {
   let bloco = "";
-  for (const limite of [MAX_CARACTERES_EVIDENCIA, 220, 140, 80]) {
+  for (const limite of [MAX_CARACTERES_EVIDENCIA, 600, 300, 150]) {
     bloco = blocoDeEvidencias(entrada.subperguntas, limite);
     if (bloco.length <= MAX_CARACTERES_DAS_EVIDENCIAS) break;
   }

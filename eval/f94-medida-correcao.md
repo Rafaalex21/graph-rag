@@ -1,0 +1,77 @@
+# F9.4: ciclo de correção das falhas recorrentes (definição fixada ANTES de rodar)
+
+Aceite da etapa: "falhas das categorias mais fracas reduzidas à metade". A F9.1 mediu o A6 (agente completo) nas 60 perguntas do `eval/golden.csv` e nas 24 do `eval/golden_novas.csv`. Esta etapa é o ciclo do cap. 8: ler as falhas, achar a causa, corrigir, medir de novo.
+
+## O que é "falha" e quais são as categorias mais fracas
+
+- **Falha de uma categoria = 1 − correção média** da categoria (pontos perdidos por pergunta; correção do juiz: 1, 0,5 ou 0), no **A6**, que é o sistema entregue.
+- **Linha de base: o A6 da F9.1 como está** (`v1-a6` nas 60, `v1n-a6` nas 24), mesmo Qwen3.6, mesmo juiz (Gemma 4 26B-A4B), mesmo índice. Não é refeita.
+- **As mais fracas** são as duas de maior falha nas 60 (a base de decisão): **agregação e filtro (falha 0,80; correção 0,20; n = 10)** e **numérica (falha 0,50; n = 15)**. As seguintes são multi-hop (0,40; n = 5), factual (0,30) e temática (0,25). Fora do escopo está em 0,00 e tem de ficar assim.
+
+## Diagnóstico (feito só nas 60; sem juiz)
+
+Li as respostas do A6 das perguntas com correção < 1 nas 60 (`data/avaliacao/v1-a6/respostas.jsonl`, fora do git). O contexto que o redator e o crítico veem não é o texto das evidências: é **cortado** (`selecionar` no redator: 900 caracteres por evidência e 9.000 no total; crítico: 350 por evidência e 7.000 no total). Um Pai tem cerca de 1.200 tokens e uma tabela do documento passa de 900 caracteres, então a frase ou a linha da tabela que traz o valor é cortada, o redator escreve "não encontrei" e o crítico pede mais uma busca (uma rodada a mais: 2 rodadas em 7 das 8 falhas de agregação). Exemplos nas 60: G10 (a tabela de remuneração da p. 352 é cortada antes da linha "maior remuneração"), G05 (célula da tabela de cor ou raça), G06, N11, N14, T03, T14.
+
+Dois sinais de fora disso: o A3 em Python, que entrega o Pai inteiro, acerta **0,90** em factual e 0,90 em temática, e o A6, com o corte, **0,70 e 0,75**; e a causa se vê no próprio texto entregue (o contexto gravado na rodada termina em "…" antes da célula que o gabarito pede).
+
+**Rodada de diagnóstico, fora da medida** (`f94-diag`, A6 com os limites abaixo nas 23 perguntas das 60 que falharam no A6 da F9.1: G02, G03, G05 a G10, N03, N06, N07, N08, N10, N11, N12, N14, T03, T08, T12, T14, M01, M02, M05; sem juiz, 23 respostas, ~22 min, `data/avaliacao/f94-diag/`): pela minha leitura contra o gabarito, **8 passaram a trazer o valor certo** (T03, T14, N06, N11, N14, G05, G06, G10) e 15 seguem sem trazer (G02, G03, G07, G08, G09, N03, N07, N08, N10, N12, T08, T12, M01, M02, M05), por causas **outras** (o valor não está nas evidências recuperadas ou no grafo; G09: a série do lucro só devolveu 2025). Essa leitura é minha, não do juiz, e foi feita nas 60 (conjunto de ajuste); não é um resultado, só a razão da mudança.
+
+## A mudança da rodada 1 (a única)
+
+Só os **limites** de texto, em `api/src/agente/redator.ts` e `api/src/agente/critico.ts`:
+
+| Constante | Antes | Rodada 1 |
+|---|---:|---:|
+| redator: caracteres por evidência | 900 | 3.000 |
+| redator: caracteres das evidências no total | 9.000 | 24.000 (a escada de redução, que divide o limite por evidência por 2 até caber, fica) |
+| crítico: caracteres por evidência | 350 | 1.200 |
+| crítico: caracteres no total | 7.000 | 14.000 (escada 1.200, 600, 300, 150) |
+
+A janela do `consultar` é de 16.384 tokens por vaga (`-c 32768 -np 2`); 24.000 caracteres são cerca de 7 mil tokens, mais o prompt e 700 de saída. Cabe. O custo esperado é mais tempo de processamento do prompt por resposta, que a medida registra.
+
+**Nada mais muda**: prompts, templates, roteador, Text2Cypher, golden, juiz e índice ficam como no commit da F9.3 (`55190ed`).
+
+## Rodadas
+
+- **r1** = a mudança acima. É medida inteira (A6 nas 60 e nas 24), sempre contada.
+- Se o aceite não for cumprido na r1, uma **r2** (e no máximo uma **r3**) pode acrescentar correções (novos *few-shots*, templates, limites) **decididas olhando as falhas que sobraram nas 60**, escritas como errata neste arquivo **e commitadas antes de rodar**. As rodadas anteriores ficam no relatório; **a rodada que passa não substitui a que falhou**. Sem r3, a F9.4 fica `[~]` com o resultado como saiu.
+
+## O que se mede e a regra de aceite (por rodada)
+
+A6 completo (agente, crítico e redator), **60 perguntas** e **24 do grupo novo**, uma execução (`f94r1-a6`, `f94r1n-a6`), as mesmas métricas da F9.1; tabela em `eval/resultados/f94-correcao.md`, **gerada por comando** (`uv run python -m indexer.f94`, que aplica a regra abaixo).
+
+A rodada cumpre o aceite se **tudo** valer:
+
+1. **Metade da falha nas duas mais fracas, nas 60:** agregação com falha ≤ 0,40 (correção ≥ 0,60) **e** numérica com falha ≤ 0,25 (correção ≥ 0,75).
+2. **Sem regressão nas 60:** nenhuma categoria (fora do escopo à parte) perde 0,10 ou mais de correção contra a F9.1.
+3. **Fora do escopo segue em 1,00** nas 60 e nas 24 (contexto maior não pode fazer o redator responder o que não consta).
+4. **Fidelidade geral ≥ 0,95** nas 60 (era 0,97).
+5. **Grupo novo (24, fora do ajuste): a correção geral não cai mais de 0,05** (base 0,46). Só é escrito "confirmado fora do ajuste" se subir **0,05 ou mais**; se ficar entre, o ganho é descrito como visto só nas 60, o conjunto em que as falhas foram diagnosticadas.
+6. Cada rodada responde as 60 e as 24 perguntas; erro do sistema conta como incorreta e **não se refaz**; o juiz responde pelo menos 95% das chamadas; **nada é afinado entre a geração e a nota** de uma rodada.
+
+**Informativo, não reprova:** a latência p50 e p95 do A6 (F9.1: 22,9 e 111,6 s; o relatório diz se ficou dentro de 125%), o recall de contexto (o contexto entregue ao juiz agora é maior, então **não é comparável 1 a 1** com a F9.1), página citada e acerto numérico.
+
+Não há aceite pós-hoc de algo que falhou. Se a rodada não cumprir, o resultado é escrito como saiu e a decisão é do dono.
+
+## Limites já sabidos
+
+- **A base de decisão são as mesmas 60** em que os prompts, os templates e o roteador foram ajustados nas etapas anteriores; o diagnóstico acima também foi feito nelas. O resultado nelas é **otimista**. O grupo novo (24) é a checagem, e é pequeno: uma pergunta vale 0,042, e as categorias do grupo novo têm 3 a 6 perguntas.
+- **Sobre o grupo novo:** ao escolher as categorias vi o **id e a nota** das falhas do A6 no grupo novo (`v1n-a6`), não o conteúdo das respostas nem das evidências; ele não foi usado no diagnóstico e não será lido pergunta a pergunta antes da r1.
+- **Uma execução por rodada** (variância do Qwen a 0,2 e do juiz não medida). Diferença menor que 0,05 vale como empate. Com n = 10 (agregação) e n = 15 (numérica), uma pergunta vale 0,10 e 0,067 de correção: a meta de agregação é 4 perguntas a mais corretas (de 2 para 6) e a da numérica é 4 a mais (de 7,5 para 11,25), com meias notas.
+- **Golden e rótulos do juiz são do Claude** (ADR-027, ADR-030); o juiz e o gerador não são a mesma família, mas o Gemma continua sendo juiz de respostas do Qwen.
+- **A causa dominante é uma só (o corte de texto); as 15 falhas restantes têm causas diferentes** (G09: série incompleta no grafo; G03: separar duas áreas dentro de uma linha da tabela; N12 e M05: capital autorizado fora das evidências). A r1 não promete resolvê-las.
+- **A latência pode piorar** (mais texto por chamada): é custo da mudança, e o RNF-2 já estava em aberto (F9.2: p95 de 112 s).
+- A falha do reranker `-c 4096` achada na F9.3 (3 em 240 chamadas do A3 em Python) **não** é tratada aqui: o agente em TS usa outro caminho e a dívida segue aberta.
+
+## Reprodução
+
+```powershell
+# serviços no ar: .\infra\neo4j.ps1 iniciar ; .\infra\swap.ps1
+.\infra\rodar-f94.ps1 -Rodada r1        # gera A6 nas 60 e nas 24, julga e gera a tabela (~3 h, quase tudo juiz)
+```
+
+## Execuções (toda execução é contada)
+
+**Fora da medida:** `f94-diag` (diagnóstico acima, 23 respostas sem nota, limites da r1; relatório não gerado; respostas em `data/avaliacao/f94-diag/`).
+
+**Da medida:** a preencher.
