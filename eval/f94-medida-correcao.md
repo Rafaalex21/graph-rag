@@ -74,4 +74,26 @@ Não há aceite pós-hoc de algo que falhou. Se a rodada não cumprir, o resulta
 
 **Fora da medida:** `f94-diag` (diagnóstico acima, 23 respostas sem nota, limites da r1; relatório não gerado; respostas em `data/avaliacao/f94-diag/`).
 
-**Da medida:** a preencher.
+**Da medida:**
+
+| Rodada | Relatórios | Perguntas | Erros do sistema | Falhas do juiz | Geração e juiz |
+|---|---|---:|---:|---:|---|
+| r1 (só os limites de texto) | `f94r1-a6`, `f94r1n-a6` | 60 e 24 | 0 e 0 | 0 e 0 | 12/11, 16:20 a 18:50 (geração 31 min, juiz 2 h) |
+
+Nenhuma resposta ou nota foi refeita; o roteiro rodou de uma vez (`infra/rodar-f94.ps1 -Rodada r1`). A tabela é `eval/resultados/f94-correcao.md`.
+
+## Resultado da rodada 1 por item da regra
+
+**O aceite NÃO foi cumprido** (itens 1 e 2 falharam; os demais valem):
+
+1. **Não.** Agregação: falha 0,80 → 0,60 (meta ≤ 0,40; correção 0,20 → 0,40). Numérica: falha 0,50 → 0,37 (meta ≤ 0,25; correção 0,50 → 0,63).
+2. **Não, por pouco:** multi-hop perdeu 0,10 de correção (0,60 → 0,50; n = 5, uma meia nota). A regra diz "0,10 ou mais", então reprova; as outras categorias subiram (factual 0,70 → 0,83, temática 0,75 → 0,80).
+3. **Sim.** Fora do escopo seguiu em 1,00 nas 60 e nas 24.
+4. **Sim.** Fidelidade 0,99 (era 0,97).
+5. **Sim, e confirmado fora do ajuste:** grupo novo 0,46 → 0,58 (+0,13); factual 0,42 → 0,92 no grupo novo, numérica, agregação, temática e multi-hop sem mudança.
+6. **Sim.** 0 erros do sistema e 0 falhas do juiz.
+
+**Informativo:** latência p50 / p95 do A6 **melhorou**, 22,9 / 111,6 → 16,9 / 55,9 s (com o texto inteiro, o crítico pede menos buscas extras); acerto numérico 0,48 → 0,62; página citada 0,60 → 0,67; recall de contexto 0,63 → 0,75 (contexto maior, não comparável 1 a 1).
+
+**Leitura:** o corte de texto era a causa dominante de factual e de parte da numérica e da agregação, e consertá-lo ganhou 0,10 de correção geral nas 60 e 0,12 no grupo novo, sem custo de latência. Mas as duas categorias mais fracas não chegaram à metade da falha: sobram as falhas de outra causa (valor fora das evidências recuperadas ou do grafo). A r1 fica no relatório e **não é substituída**. A r2 depende de ler as falhas que sobraram nas 60 e será escrita como errata, commitada antes de rodar.
+
