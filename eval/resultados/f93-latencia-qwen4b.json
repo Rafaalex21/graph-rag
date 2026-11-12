@@ -1,0 +1,7 @@
+{
+ "candidato": "qwen4b",
+ "consultas": 60,
+ "p50_ms": 288.9,
+ "p95_ms": 323.0,
+ "maximo_ms": 880.8
+}

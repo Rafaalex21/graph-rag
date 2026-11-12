@@ -1,0 +1,12 @@
+{
+ "candidato": "gemma2",
+ "filhos": 1041,
+ "tokens_dos_filhos": 242206,
+ "embutidos_agora": 1041,
+ "segundos_agora": 8.0,
+ "filhos_por_segundo_amostra_de_200": 163.0,
+ "filhos_por_segundo_na_carga": 129.8,
+ "dims": 768,
+ "mb_dos_vetores": 3.2,
+ "arquivo_mb": 310
+}

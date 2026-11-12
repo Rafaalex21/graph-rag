@@ -1,0 +1,12 @@
+{
+ "candidato": "bgem3",
+ "filhos": 1041,
+ "tokens_dos_filhos": 242206,
+ "embutidos_agora": 1041,
+ "segundos_agora": 10.0,
+ "filhos_por_segundo_amostra_de_200": 128.1,
+ "filhos_por_segundo_na_carga": 104.2,
+ "dims": 1024,
+ "mb_dos_vetores": 4.3,
+ "arquivo_mb": 635
+}

@@ -1,0 +1,12 @@
+{
+ "candidato": "qwen06",
+ "filhos": 1041,
+ "tokens_dos_filhos": 242206,
+ "embutidos_agora": 0,
+ "segundos_agora": 0.0,
+ "filhos_por_segundo_amostra_de_200": 105.5,
+ "filhos_por_segundo_na_carga": null,
+ "dims": 1024,
+ "mb_dos_vetores": 4.3,
+ "arquivo_mb": 639
+}

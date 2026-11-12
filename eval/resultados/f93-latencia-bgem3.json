@@ -1,0 +1,7 @@
+{
+ "candidato": "bgem3",
+ "consultas": 60,
+ "p50_ms": 56.2,
+ "p95_ms": 76.9,
+ "maximo_ms": 86.1
+}

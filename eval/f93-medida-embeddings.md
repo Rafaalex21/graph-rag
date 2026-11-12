@@ -75,4 +75,33 @@ cd indexer; uv run python -m indexer.f93    # só a tabela e a regra, sem LLM
 
 **Fora da medida:** o teste técnico de carga dos três candidatos no llama-swap (12/11, 3 frases sem relação com o golden: dimensões, norma e a ordem de semelhança de "lucro líquido" contra "receita de juros" e "gato"; os três carregaram). Nenhuma pergunta do golden foi rodada antes de fixar este documento.
 
-**Da medida:** a preencher conforme as execuções acontecerem.
+**Da medida** (uma execução por item; roteiro `infra/rodar-f93.ps1` de 12/11, 10:43 a 15:47, sem pausa; nada foi afinado entre as rodadas):
+
+| Item | Relatórios / arquivos | Perguntas | Erros do sistema |
+|---|---|---:|---|
+| Embutir os Filhos (vazão) | `f93-embutir-<tag>.json` (4) | 1.041 Filhos (200 na vazão) | 0 |
+| Latência da consulta na CPU | `f93-latencia-<tag>.json` (4) | 60 consultas | 0 |
+| Recuperação r1, r2, r3, golden de 60 | `f93-<tag>-r1/r2/r3.json` (12) | 60 cada | r3: `qwen06` M05, `qwen4b` T10, `gemma2` P02 (HTTP 500 do reranker) |
+| Recuperação r1, r2, r3, grupo novo | `f93n-<tag>-r1/r2/r3.json` (12) | 24 cada | 0 |
+| Juiz (recall de contexto, só r1 e r3) | `juizo.jsonl` de cada um (fora do git) | 168 por candidato | 0 falhas do juiz |
+
+**Errata 1 aplicada** (commit ff16130 escrito antes): as 3 chamadas foram refeitas **uma vez** e **falharam de novo, com o mesmo erro**. Diagnóstico depois da repetição, rodando a chamada à mão para a M05 com o `qwen06`: o `/v1/rerank` devolve `500 "Context size has been exceeded"` quando os 24 Pais do pedido somam ~70 mil caracteres (o reranker roda com `-c 4096`). Ou seja, é um **limite do reranker de produção para certos conjuntos de Pais** (3 de 240 chamadas, 1,3%), não uma falha passageira, e não depende do embedding em si (o conjunto de Pais depende, e por isso a pergunta que falha muda de candidato para candidato; o `bgem3` não teve nenhuma). O A3 da F9.1 não teve erro nessas perguntas com o mesmo código, e a diferença não foi explicada. Pela errata, as 3 contam como **contexto vazio** no page recall; no recall de contexto o harness grava nota nula (a pergunta fica de fora da média: `n = 54` no lugar de 55 nesses três candidatos), o que **difere do "recall 0" da errata**; por isso a análise de sensibilidade abaixo. As linhas originais com erro estão em `erros_originais.jsonl` (fora do git). O relatório da primeira passada ficou em `eval/resultados/f93-embeddings-antes-da-errata.md` e é **igual** ao final em duas casas decimais.
+
+**Análise de sensibilidade** (feita depois do resultado, só para ver se a regra depende dessas 3 perguntas; **não altera a tabela nem a regra**), recall de contexto no r3 nas 60:
+
+| Candidato | Publicado (n) | Sem M05, T10 e P02 em todos (n = 52) | As 3 contando 0 (n = 55) |
+|---|---:|---:|---:|
+| Qwen3-Embedding-0.6B | 0,580 (54) | 0,564 | 0,570 |
+| Qwen3-Embedding-4B | 0,568 (54) | 0,564 | 0,558 |
+| EmbeddingGemma 2 | 0,559 (54) | 0,555 | 0,549 |
+| bge-m3 | 0,576 (55) | 0,564 | 0,576 |
+
+Nas três leituras a maior diferença para o incumbente é de 0,02 (Gemma 2), bem abaixo da margem de 0,05; o page recall@6 do r3 sem as 3 é **0,625 nos quatro candidatos**.
+
+## Resultado por item do aceite
+
+- **`eval/resultados/f93-embeddings.md` gerado por `uv run python -m indexer.f93`, que aplica a regra:** sim.
+- **Validação do harness:** cumprida, e exata: o `qwen06` refeito dá page recall@6 de 0,5848 (r1) e 0,6273 (r3), idênticos ao A1 e ao A3 da F9.1 (diferença 0,0000).
+- **Regra aplicada como fixada:** sim. Os três candidatos saem **equivalentes** ao Qwen3-0.6B (Δ recall de contexto no r3: 4B −0,01 nas 60 e 0,00 nas 24; Gemma 2 −0,02 e 0,00; bge-m3 −0,00 e 0,00); **nenhum é "melhor"**, então nenhum substitui. Os três ficam elegíveis pela latência (a menor é a do Gemma 2, 48 ms; a maior, 289 ms no 4B).
+- **ADR-080 com recall de contexto e page recall@k de cada candidato:** sim.
+- **Todas as execuções contadas:** sim (esta seção).

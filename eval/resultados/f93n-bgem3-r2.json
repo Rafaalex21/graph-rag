@@ -1,0 +1,878 @@
+{
+ "perguntas": 24,
+ "falhas_do_juiz": 0,
+ "sem_afirmacoes_na_fidelidade": 0,
+ "geral": {
+  "recall_contexto": {
+   "n": 0,
+   "media": null
+  },
+  "fidelidade": {
+   "n": 0,
+   "media": null
+  },
+  "correcao": {
+   "n": 0,
+   "media": null
+  }
+ },
+ "so_no_recorte": {
+  "recall_contexto": {
+   "n": 0,
+   "media": null
+  },
+  "fidelidade": {
+   "n": 0,
+   "media": null
+  },
+  "correcao": {
+   "n": 0,
+   "media": null
+  }
+ },
+ "por_categoria": {
+  "agregacao_filtro": {
+   "recall_contexto": {
+    "n": 0,
+    "media": null
+   },
+   "fidelidade": {
+    "n": 0,
+    "media": null
+   },
+   "correcao": {
+    "n": 0,
+    "media": null
+   }
+  },
+  "factual_textual": {
+   "recall_contexto": {
+    "n": 0,
+    "media": null
+   },
+   "fidelidade": {
+    "n": 0,
+    "media": null
+   },
+   "correcao": {
+    "n": 0,
+    "media": null
+   }
+  },
+  "fora_do_escopo": {
+   "recall_contexto": {
+    "n": 0,
+    "media": null
+   },
+   "fidelidade": {
+    "n": 0,
+    "media": null
+   },
+   "correcao": {
+    "n": 0,
+    "media": null
+   }
+  },
+  "multi_hop": {
+   "recall_contexto": {
+    "n": 0,
+    "media": null
+   },
+   "fidelidade": {
+    "n": 0,
+    "media": null
+   },
+   "correcao": {
+    "n": 0,
+    "media": null
+   }
+  },
+  "numerica": {
+   "recall_contexto": {
+    "n": 0,
+    "media": null
+   },
+   "fidelidade": {
+    "n": 0,
+    "media": null
+   },
+   "correcao": {
+    "n": 0,
+    "media": null
+   }
+  },
+  "tematica_global": {
+   "recall_contexto": {
+    "n": 0,
+    "media": null
+   },
+   "fidelidade": {
+    "n": 0,
+    "media": null
+   },
+   "correcao": {
+    "n": 0,
+    "media": null
+   }
+  }
+ },
+ "nome": "f93n-bgem3-r2",
+ "degrau": "r2",
+ "erros_do_sistema": 0,
+ "mecanicas": {
+  "geral": {
+   "page_recall": {
+    "@1": {
+     "n": 21,
+     "media": 0.4762
+    },
+    "@3": {
+     "n": 21,
+     "media": 0.6667
+    },
+    "@6": {
+     "n": 21,
+     "media": 0.7619
+    }
+   },
+   "acerto_pagina": {
+    "@1": {
+     "n": 21,
+     "media": 0.5714
+    },
+    "@3": {
+     "n": 21,
+     "media": 0.7143
+    },
+    "@6": {
+     "n": 21,
+     "media": 0.7619
+    }
+   },
+   "pagina_citada": {
+    "n": 21,
+    "media": 0.0
+   },
+   "acerto_numerico": {
+    "n": 10,
+    "media": 0.0
+   },
+   "latencia_s": {
+    "n": 24,
+    "p50": 0.0,
+    "p95": 0.0,
+    "maximo": 0.0
+   }
+  },
+  "so_no_recorte": {
+   "page_recall": {
+    "@1": {
+     "n": 2,
+     "media": 0.0
+    },
+    "@3": {
+     "n": 2,
+     "media": 0.0
+    },
+    "@6": {
+     "n": 2,
+     "media": 0.0
+    }
+   },
+   "acerto_pagina": {
+    "@1": {
+     "n": 2,
+     "media": 0.0
+    },
+    "@3": {
+     "n": 2,
+     "media": 0.0
+    },
+    "@6": {
+     "n": 2,
+     "media": 0.0
+    }
+   },
+   "pagina_citada": {
+    "n": 2,
+    "media": 0.0
+   },
+   "acerto_numerico": {
+    "n": 2,
+    "media": 0.0
+   },
+   "latencia_s": {
+    "n": 5,
+    "p50": 0.0,
+    "p95": 0.0,
+    "maximo": 0.0
+   }
+  },
+  "por_categoria": {
+   "agregacao_filtro": {
+    "page_recall": {
+     "@1": {
+      "n": 3,
+      "media": 0.1667
+     },
+     "@3": {
+      "n": 3,
+      "media": 0.6667
+     },
+     "@6": {
+      "n": 3,
+      "media": 0.6667
+     }
+    },
+    "acerto_pagina": {
+     "@1": {
+      "n": 3,
+      "media": 0.3333
+     },
+     "@3": {
+      "n": 3,
+      "media": 0.6667
+     },
+     "@6": {
+      "n": 3,
+      "media": 0.6667
+     }
+    },
+    "pagina_citada": {
+     "n": 3,
+     "media": 0.0
+    },
+    "acerto_numerico": {
+     "n": 3,
+     "media": 0.0
+    },
+    "latencia_s": {
+     "n": 3,
+     "p50": 0.0,
+     "p95": 0.0,
+     "maximo": 0.0
+    }
+   },
+   "factual_textual": {
+    "page_recall": {
+     "@1": {
+      "n": 6,
+      "media": 1.0
+     },
+     "@3": {
+      "n": 6,
+      "media": 1.0
+     },
+     "@6": {
+      "n": 6,
+      "media": 1.0
+     }
+    },
+    "acerto_pagina": {
+     "@1": {
+      "n": 6,
+      "media": 1.0
+     },
+     "@3": {
+      "n": 6,
+      "media": 1.0
+     },
+     "@6": {
+      "n": 6,
+      "media": 1.0
+     }
+    },
+    "pagina_citada": {
+     "n": 6,
+     "media": 0.0
+    },
+    "acerto_numerico": {
+     "n": 1,
+     "media": 0.0
+    },
+    "latencia_s": {
+     "n": 6,
+     "p50": 0.0,
+     "p95": 0.0,
+     "maximo": 0.0
+    }
+   },
+   "fora_do_escopo": {
+    "page_recall": {
+     "@1": {
+      "n": 0,
+      "media": null
+     },
+     "@3": {
+      "n": 0,
+      "media": null
+     },
+     "@6": {
+      "n": 0,
+      "media": null
+     }
+    },
+    "acerto_pagina": {
+     "@1": {
+      "n": 0,
+      "media": null
+     },
+     "@3": {
+      "n": 0,
+      "media": null
+     },
+     "@6": {
+      "n": 0,
+      "media": null
+     }
+    },
+    "pagina_citada": {
+     "n": 0,
+     "media": null
+    },
+    "acerto_numerico": {
+     "n": 0,
+     "media": null
+    },
+    "latencia_s": {
+     "n": 3,
+     "p50": 0.0,
+     "p95": 0.0,
+     "maximo": 0.0
+    }
+   },
+   "multi_hop": {
+    "page_recall": {
+     "@1": {
+      "n": 3,
+      "media": 0.5
+     },
+     "@3": {
+      "n": 3,
+      "media": 0.6667
+     },
+     "@6": {
+      "n": 3,
+      "media": 1.0
+     }
+    },
+    "acerto_pagina": {
+     "@1": {
+      "n": 3,
+      "media": 1.0
+     },
+     "@3": {
+      "n": 3,
+      "media": 1.0
+     },
+     "@6": {
+      "n": 3,
+      "media": 1.0
+     }
+    },
+    "pagina_citada": {
+     "n": 3,
+     "media": 0.0
+    },
+    "acerto_numerico": {
+     "n": 0,
+     "media": null
+    },
+    "latencia_s": {
+     "n": 3,
+     "p50": 0.0,
+     "p95": 0.0,
+     "maximo": 0.0
+    }
+   },
+   "numerica": {
+    "page_recall": {
+     "@1": {
+      "n": 6,
+      "media": 0.1667
+     },
+     "@3": {
+      "n": 6,
+      "media": 0.5
+     },
+     "@6": {
+      "n": 6,
+      "media": 0.6667
+     }
+    },
+    "acerto_pagina": {
+     "@1": {
+      "n": 6,
+      "media": 0.1667
+     },
+     "@3": {
+      "n": 6,
+      "media": 0.5
+     },
+     "@6": {
+      "n": 6,
+      "media": 0.6667
+     }
+    },
+    "pagina_citada": {
+     "n": 6,
+     "media": 0.0
+    },
+    "acerto_numerico": {
+     "n": 6,
+     "media": 0.0
+    },
+    "latencia_s": {
+     "n": 6,
+     "p50": 0.0,
+     "p95": 0.0,
+     "maximo": 0.0
+    }
+   },
+   "tematica_global": {
+    "page_recall": {
+     "@1": {
+      "n": 3,
+      "media": 0.3333
+     },
+     "@3": {
+      "n": 3,
+      "media": 0.3333
+     },
+     "@6": {
+      "n": 3,
+      "media": 0.3333
+     }
+    },
+    "acerto_pagina": {
+     "@1": {
+      "n": 3,
+      "media": 0.3333
+     },
+     "@3": {
+      "n": 3,
+      "media": 0.3333
+     },
+     "@6": {
+      "n": 3,
+      "media": 0.3333
+     }
+    },
+    "pagina_citada": {
+     "n": 3,
+     "media": 0.0
+    },
+    "acerto_numerico": {
+     "n": 0,
+     "media": null
+    },
+    "latencia_s": {
+     "n": 3,
+     "p50": 0.0,
+     "p95": 0.0,
+     "maximo": 0.0
+    }
+   }
+  }
+ },
+ "numerico_regra_x_juiz": {},
+ "por_pergunta": {
+  "Q01": {
+   "segundos": 0.0,
+   "page_recall": {
+    "@1": {
+     "recall": 1.0,
+     "acerto": 1.0
+    },
+    "@3": {
+     "recall": 1.0,
+     "acerto": 1.0
+    },
+    "@6": {
+     "recall": 1.0,
+     "acerto": 1.0
+    }
+   },
+   "pagina_citada": false
+  },
+  "Q02": {
+   "segundos": 0.0,
+   "page_recall": {
+    "@1": {
+     "recall": 1.0,
+     "acerto": 1.0
+    },
+    "@3": {
+     "recall": 1.0,
+     "acerto": 1.0
+    },
+    "@6": {
+     "recall": 1.0,
+     "acerto": 1.0
+    }
+   },
+   "pagina_citada": false
+  },
+  "Q03": {
+   "segundos": 0.0,
+   "page_recall": {
+    "@1": {
+     "recall": 1.0,
+     "acerto": 1.0
+    },
+    "@3": {
+     "recall": 1.0,
+     "acerto": 1.0
+    },
+    "@6": {
+     "recall": 1.0,
+     "acerto": 1.0
+    }
+   },
+   "pagina_citada": false
+  },
+  "Q04": {
+   "segundos": 0.0,
+   "page_recall": {
+    "@1": {
+     "recall": 1.0,
+     "acerto": 1.0
+    },
+    "@3": {
+     "recall": 1.0,
+     "acerto": 1.0
+    },
+    "@6": {
+     "recall": 1.0,
+     "acerto": 1.0
+    }
+   },
+   "pagina_citada": false,
+   "acerto_numerico": false
+  },
+  "Q05": {
+   "segundos": 0.0,
+   "page_recall": {
+    "@1": {
+     "recall": 1.0,
+     "acerto": 1.0
+    },
+    "@3": {
+     "recall": 1.0,
+     "acerto": 1.0
+    },
+    "@6": {
+     "recall": 1.0,
+     "acerto": 1.0
+    }
+   },
+   "pagina_citada": false
+  },
+  "Q06": {
+   "segundos": 0.0,
+   "page_recall": {
+    "@1": {
+     "recall": 1.0,
+     "acerto": 1.0
+    },
+    "@3": {
+     "recall": 1.0,
+     "acerto": 1.0
+    },
+    "@6": {
+     "recall": 1.0,
+     "acerto": 1.0
+    }
+   },
+   "pagina_citada": false
+  },
+  "Q07": {
+   "segundos": 0.0,
+   "page_recall": {
+    "@1": {
+     "recall": 0.0,
+     "acerto": 0.0
+    },
+    "@3": {
+     "recall": 0.0,
+     "acerto": 0.0
+    },
+    "@6": {
+     "recall": 0.0,
+     "acerto": 0.0
+    }
+   },
+   "pagina_citada": false,
+   "acerto_numerico": false
+  },
+  "Q08": {
+   "segundos": 0.0,
+   "page_recall": {
+    "@1": {
+     "recall": 1.0,
+     "acerto": 1.0
+    },
+    "@3": {
+     "recall": 1.0,
+     "acerto": 1.0
+    },
+    "@6": {
+     "recall": 1.0,
+     "acerto": 1.0
+    }
+   },
+   "pagina_citada": false,
+   "acerto_numerico": false
+  },
+  "Q09": {
+   "segundos": 0.0,
+   "page_recall": {
+    "@1": {
+     "recall": 0.0,
+     "acerto": 0.0
+    },
+    "@3": {
+     "recall": 1.0,
+     "acerto": 1.0
+    },
+    "@6": {
+     "recall": 1.0,
+     "acerto": 1.0
+    }
+   },
+   "pagina_citada": false,
+   "acerto_numerico": false
+  },
+  "Q10": {
+   "segundos": 0.0,
+   "page_recall": {
+    "@1": {
+     "recall": 0.0,
+     "acerto": 0.0
+    },
+    "@3": {
+     "recall": 0.0,
+     "acerto": 0.0
+    },
+    "@6": {
+     "recall": 1.0,
+     "acerto": 1.0
+    }
+   },
+   "pagina_citada": false,
+   "acerto_numerico": false
+  },
+  "Q11": {
+   "segundos": 0.0,
+   "page_recall": {
+    "@1": {
+     "recall": 0.0,
+     "acerto": 0.0
+    },
+    "@3": {
+     "recall": 0.0,
+     "acerto": 0.0
+    },
+    "@6": {
+     "recall": 0.0,
+     "acerto": 0.0
+    }
+   },
+   "pagina_citada": false,
+   "acerto_numerico": false
+  },
+  "Q12": {
+   "segundos": 0.0,
+   "page_recall": {
+    "@1": {
+     "recall": 0.0,
+     "acerto": 0.0
+    },
+    "@3": {
+     "recall": 1.0,
+     "acerto": 1.0
+    },
+    "@6": {
+     "recall": 1.0,
+     "acerto": 1.0
+    }
+   },
+   "pagina_citada": false,
+   "acerto_numerico": false
+  },
+  "Q13": {
+   "segundos": 0.0,
+   "page_recall": {
+    "@1": {
+     "recall": 0.0,
+     "acerto": 0.0
+    },
+    "@3": {
+     "recall": 1.0,
+     "acerto": 1.0
+    },
+    "@6": {
+     "recall": 1.0,
+     "acerto": 1.0
+    }
+   },
+   "pagina_citada": false,
+   "acerto_numerico": false
+  },
+  "Q14": {
+   "segundos": 0.0,
+   "page_recall": {
+    "@1": {
+     "recall": 0.5,
+     "acerto": 1.0
+    },
+    "@3": {
+     "recall": 1.0,
+     "acerto": 1.0
+    },
+    "@6": {
+     "recall": 1.0,
+     "acerto": 1.0
+    }
+   },
+   "pagina_citada": false,
+   "acerto_numerico": false
+  },
+  "Q15": {
+   "segundos": 0.0,
+   "page_recall": {
+    "@1": {
+     "recall": 0.0,
+     "acerto": 0.0
+    },
+    "@3": {
+     "recall": 0.0,
+     "acerto": 0.0
+    },
+    "@6": {
+     "recall": 0.0,
+     "acerto": 0.0
+    }
+   },
+   "pagina_citada": false,
+   "acerto_numerico": false
+  },
+  "Q16": {
+   "segundos": 0.0,
+   "page_recall": {
+    "@1": {
+     "recall": 0.0,
+     "acerto": 0.0
+    },
+    "@3": {
+     "recall": 0.0,
+     "acerto": 0.0
+    },
+    "@6": {
+     "recall": 0.0,
+     "acerto": 0.0
+    }
+   },
+   "pagina_citada": false
+  },
+  "Q17": {
+   "segundos": 0.0,
+   "page_recall": {
+    "@1": {
+     "recall": 1.0,
+     "acerto": 1.0
+    },
+    "@3": {
+     "recall": 1.0,
+     "acerto": 1.0
+    },
+    "@6": {
+     "recall": 1.0,
+     "acerto": 1.0
+    }
+   },
+   "pagina_citada": false
+  },
+  "Q18": {
+   "segundos": 0.0,
+   "page_recall": {
+    "@1": {
+     "recall": 0.0,
+     "acerto": 0.0
+    },
+    "@3": {
+     "recall": 0.0,
+     "acerto": 0.0
+    },
+    "@6": {
+     "recall": 0.0,
+     "acerto": 0.0
+    }
+   },
+   "pagina_citada": false
+  },
+  "Q19": {
+   "segundos": 0.0,
+   "page_recall": {
+    "@1": {
+     "recall": 0.5,
+     "acerto": 1.0
+    },
+    "@3": {
+     "recall": 0.5,
+     "acerto": 1.0
+    },
+    "@6": {
+     "recall": 1.0,
+     "acerto": 1.0
+    }
+   },
+   "pagina_citada": false
+  },
+  "Q20": {
+   "segundos": 0.0,
+   "page_recall": {
+    "@1": {
+     "recall": 0.5,
+     "acerto": 1.0
+    },
+    "@3": {
+     "recall": 1.0,
+     "acerto": 1.0
+    },
+    "@6": {
+     "recall": 1.0,
+     "acerto": 1.0
+    }
+   },
+   "pagina_citada": false
+  },
+  "Q21": {
+   "segundos": 0.0,
+   "page_recall": {
+    "@1": {
+     "recall": 0.5,
+     "acerto": 1.0
+    },
+    "@3": {
+     "recall": 0.5,
+     "acerto": 1.0
+    },
+    "@6": {
+     "recall": 1.0,
+     "acerto": 1.0
+    }
+   },
+   "pagina_citada": false
+  },
+  "Q22": {
+   "segundos": 0.0
+  },
+  "Q23": {
+   "segundos": 0.0
+  },
+  "Q24": {
+   "segundos": 0.0
+  }
+ }
+}

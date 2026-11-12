@@ -1,0 +1,7 @@
+{
+ "candidato": "gemma2",
+ "consultas": 60,
+ "p50_ms": 47.8,
+ "p95_ms": 53.8,
+ "maximo_ms": 67.8
+}

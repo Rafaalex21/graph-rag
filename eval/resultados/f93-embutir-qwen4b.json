@@ -1,0 +1,12 @@
+{
+ "candidato": "qwen4b",
+ "filhos": 1041,
+ "tokens_dos_filhos": 242206,
+ "embutidos_agora": 1041,
+ "segundos_agora": 47.7,
+ "filhos_por_segundo_amostra_de_200": 23.4,
+ "filhos_por_segundo_na_carga": 21.8,
+ "dims": 2560,
+ "mb_dos_vetores": 10.7,
+ "arquivo_mb": 4280
+}
