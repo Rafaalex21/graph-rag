@@ -57,6 +57,12 @@ Cada candidato contra o `qwen06`, no **r3** (o pipeline de produção). Δ = can
 - **Latência na CPU:** depende do que o Windows estiver fazendo; é uma medida do dia, com 60 consultas.
 - O pooling de bge-m3 e Gemma 2 vem do GGUF; a sanidade foi conferida só com três frases (sem golden). Se um deles tiver o pooling errado, a pior colocação dele seria um defeito de configuração, não do modelo; isso será dito se o resultado for estranho.
 
+## Errata 1 (12/11/2026, escrita ANTES de qualquer conserto ou nova rodada)
+
+Na primeira passada, **3 das 240 chamadas de recuperação do r3 nas 60 perguntas falharam com `HTTP 500` do `/v1/rerank`** (o llama-swap registrou o 500 uma vez em cada um dos perfis do `qwen06`, `qwen4b` e `gemma2`; no `bgem3` nenhum): `M05` no `qwen06`, `T10` no `qwen4b` e `P02` no `gemma2`. A causa não foi achada (o 500 vem logo depois de o reranker ser carregado no perfil; o A3 da F9.1 não teve nenhum com o mesmo código). O reranker é um componente **comum a todos os candidatos**, então o erro não mede o embedding.
+
+Esta medida não tinha regra para erro de infraestrutura na recuperação; fica fixada agora: **só essas 3 chamadas são refeitas, uma vez**, com o mesmo código, e as linhas originais com erro são guardadas em `erros_originais.jsonl` ao lado do `respostas.jsonl` (fora do git) e **contadas na seção Execuções**. Se uma refeita falhar de novo, ela conta como contexto vazio (recall 0) e é escrita. Nenhuma outra pergunta é refeita, nem por resultado ruim. Opção `medir --refazer-erros`.
+
 ## Reprodução
 
 ```powershell

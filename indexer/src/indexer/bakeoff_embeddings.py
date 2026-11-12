@@ -209,8 +209,46 @@ def sistema(driver: Any, cand: Candidato, degrau: str, embute, notas):
     return responde
 
 
-def medir(driver: Any, cand: Candidato, swap: str, raiz: Path) -> None:
+def separar_erros(cand: Candidato, raiz: Path) -> int:
+    """Errata 1 de `eval/f93-medida-embeddings.md`: tira do `respostas.jsonl` (e das notas) as linhas com erro de
+    infraestrutura, guardando as originais em `erros_originais.jsonl`; o `gerar` retomável refaz só essas."""
+    refeitas = 0
+    for grupo in GOLDENS:
+        for degrau in DEGRAUS_DA_MEDIDA:
+            pasta = raiz / "data" / "avaliacao" / nome_da_execucao(cand, degrau, grupo)
+            arq = pasta / "respostas.jsonl"
+            linhas = [json.loads(x) for x in arq.read_text(encoding="utf-8").splitlines()]
+            erros = [x for x in linhas if x["erro"]]
+            if not erros:
+                continue
+            with (pasta / "erros_originais.jsonl").open("a", encoding="utf-8") as f:
+                for x in erros:
+                    f.write(json.dumps(x, ensure_ascii=False) + "\n")
+            arq.write_text(
+                "".join(json.dumps(x, ensure_ascii=False) + "\n" for x in linhas if not x["erro"]),
+                encoding="utf-8",
+            )
+            ids = {x["id"] for x in erros}
+            notas = pasta / "juizo.jsonl"
+            if notas.exists():
+                mantidas = [
+                    x
+                    for x in notas.read_text(encoding="utf-8").splitlines()
+                    if json.loads(x)["id"] not in ids
+                ]
+                notas.write_text("".join(x + "\n" for x in mantidas), encoding="utf-8")
+            refeitas += len(erros)
+    return refeitas
+
+
+def medir(driver: Any, cand: Candidato, swap: str, raiz: Path, refazer_erros: bool = False) -> None:
     from indexer.avaliar import gerar
+
+    if refazer_erros:
+        print(
+            f"{cand.tag}: {separar_erros(cand, raiz)} chamada(s) com erro separada(s) para refazer",
+            flush=True,
+        )
 
     busca.INDICE_VETORIAL = cand.indice
     busca.FORMATADOR_DA_CONSULTA = cand.consulta
@@ -255,6 +293,9 @@ def main() -> None:
     ap.add_argument("--candidato", required=True, choices=sorted(CANDIDATOS))
     ap.add_argument("--swap", default="http://127.0.0.1:8080")
     ap.add_argument("--raiz", type=Path, default=Path(".."))
+    ap.add_argument(
+        "--refazer-erros", action="store_true", help="errata 1: refaz só as chamadas que deram erro"
+    )
     a = ap.parse_args()
     cand = CANDIDATOS[a.candidato]
     if a.acao == "julgar":
@@ -268,7 +309,7 @@ def main() -> None:
             perguntas = [c["pergunta"] for c in ler_golden(Path(GOLDENS["60"]))]
             print(json.dumps(latencia_cpu(cand, a.swap, a.raiz, perguntas), ensure_ascii=False, indent=1))
         else:
-            medir(driver, cand, a.swap, a.raiz)
+            medir(driver, cand, a.swap, a.raiz, a.refazer_erros)
     finally:
         driver.close()
 
