@@ -43,10 +43,20 @@ CRIAR_INDICE_FT = (
     "CREATE FULLTEXT INDEX child_ft IF NOT EXISTS FOR (n:Child) ON EACH [n.text] "
     "OPTIONS {indexConfig: {`fulltext.analyzer`: 'brazilian'}}"
 )
-CONSULTA_VETOR = (
-    "CALL db.index.vector.queryNodes('child_vec', $k, $v) YIELD node, score "
-    "RETURN node.id AS id, score ORDER BY score DESC"
-)
+# F9.3 (bake-off de embeddings): a medida troca estes dois ganchos para buscar em outro índice vetorial e
+# formatar a consulta como o modelo candidato pede. Os padrões são os da produção; nada fora da medida
+# os altera.
+INDICE_VETORIAL = "child_vec"
+FORMATADOR_DA_CONSULTA = formatar_consulta
+
+
+def consulta_vetor() -> str:
+    return (
+        f"CALL db.index.vector.queryNodes('{INDICE_VETORIAL}', $k, $v) YIELD node, score "
+        "RETURN node.id AS id, score ORDER BY score DESC"
+    )
+
+
 CONSULTA_TEXTO = (
     "CALL db.index.fulltext.queryNodes('child_ft', $q, {limit: $k}) YIELD node, score "
     "RETURN node.id AS id, score ORDER BY score DESC"
@@ -110,7 +120,7 @@ def fundir_variantes(rankings: list[list[tuple[str, float]]], k: int = RRF_K) ->
 
 def busca_vetorial(driver: Any, vetor: list[float], n: int, banco: str = "neo4j") -> list[tuple[str, float]]:
     """Vizinhos de um vetor já calculado em `child_vec` (usado pelo HyDE, que embute um trecho hipotético)."""
-    r, _, _ = driver.execute_query(CONSULTA_VETOR, {"k": n, "v": vetor}, database_=banco)
+    r, _, _ = driver.execute_query(consulta_vetor(), {"k": n, "v": vetor}, database_=banco)
     return [(x["id"], x["score"]) for x in r]
 
 
@@ -133,8 +143,8 @@ def listas(
     vetor: list[tuple[str, float]] = []
     texto: list[tuple[str, float]] = []
     if modo in ("vetor", "hibrido-max", "hibrido-rrf"):
-        (v,) = embute_consulta([formatar_consulta(pergunta)])
-        r, _, _ = driver.execute_query(CONSULTA_VETOR, {"k": n, "v": v}, database_=banco)
+        (v,) = embute_consulta([FORMATADOR_DA_CONSULTA(pergunta)])
+        r, _, _ = driver.execute_query(consulta_vetor(), {"k": n, "v": v}, database_=banco)
         vetor = [(x["id"], x["score"]) for x in r]
     if modo in ("texto", "hibrido-max", "hibrido-rrf"):
         q = escapar_lucene(pergunta)

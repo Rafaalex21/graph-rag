@@ -195,5 +195,37 @@
       }
     ],
     "nota": "o modo fast do TableFormer (145,5 MB) não foi baixado"
-  }
+  },
+  "candidatos_embeddings_f93": [
+    {
+      "tag": "qwen4b",
+      "repo": "Qwen/Qwen3-Embedding-4B-GGUF",
+      "arquivo": "Qwen3-Embedding-4B-Q8_0.gguf",
+      "quantizacao": "Q8_0",
+      "bytes": 4279660224,
+      "sha256": "b60ae5ce2dd6a0b77f82cadf21def1f310a3e10cde380ad0081b07a9d416949d",
+      "dimensoes": 2560,
+      "licenca": "Apache-2.0"
+    },
+    {
+      "tag": "gemma2",
+      "repo": "ggml-org/embeddinggemma-2-GGUF",
+      "arquivo": "embeddinggemma-2-Q8_0.gguf",
+      "quantizacao": "Q8_0",
+      "bytes": 309855456,
+      "sha256": "2188ac1deca4b77dffefd603c2776a9d76d9d74ec01841392982ebb840b09135",
+      "dimensoes": 768,
+      "licenca": "Apache-2.0"
+    },
+    {
+      "tag": "bgem3",
+      "repo": "ggml-org/bge-m3-Q8_0-GGUF",
+      "arquivo": "bge-m3-q8_0.gguf",
+      "quantizacao": "Q8_0",
+      "bytes": 634553760,
+      "sha256": "aa473d51f451a22f0fcf39ba3330c14bed38a385712b1113440f69df4047a173",
+      "dimensoes": 1024,
+      "licenca": "MIT"
+    }
+  ]
 }

@@ -84,6 +84,45 @@ models:
       -m ${modelos}/gemma-4-26B_q4_0-it.gguf
       -c 32768 -np 2 -ngl 99 --n-cpu-moe 8 -fa on -ctk q8_0 -ctv q8_0 --jinja --reasoning-budget 0
 
+  # F9.3 (bake-off de embeddings): candidatos. `-lote` roda na GPU (embute os Filhos e as consultas da medida);
+  # o outro roda na CPU, como a consulta de produção (usado só para medir a latência de uma consulta).
+  "qwen3-embed-4b-lote":
+    name: "Qwen3-Embedding-4B Q8_0 (GPU)"
+    cmd: |
+      "${vk}" --host 127.0.0.1 --port ${PORT}
+      -m ${modelos}/Qwen3-Embedding-4B-Q8_0.gguf
+      --embedding --pooling last -ngl 99 -c 8192 -ub 8192
+  "qwen3-embed-4b":
+    name: "Qwen3-Embedding-4B Q8_0 (CPU)"
+    cmd: |
+      "${vk}" --host 127.0.0.1 --port ${PORT}
+      -m ${modelos}/Qwen3-Embedding-4B-Q8_0.gguf
+      --embedding --pooling last -ngl 0 -c 8192 -ub 8192
+  "embeddinggemma-2-lote":
+    name: "EmbeddingGemma 2 Q8_0 (GPU)"
+    cmd: |
+      "${vk}" --host 127.0.0.1 --port ${PORT}
+      -m ${modelos}/embeddinggemma-2-Q8_0.gguf
+      --embedding -ngl 99 -c 8192 -ub 8192
+  "embeddinggemma-2":
+    name: "EmbeddingGemma 2 Q8_0 (CPU)"
+    cmd: |
+      "${vk}" --host 127.0.0.1 --port ${PORT}
+      -m ${modelos}/embeddinggemma-2-Q8_0.gguf
+      --embedding -ngl 0 -c 8192 -ub 8192
+  "bge-m3-lote":
+    name: "bge-m3 Q8_0 (GPU)"
+    cmd: |
+      "${vk}" --host 127.0.0.1 --port ${PORT}
+      -m ${modelos}/bge-m3-q8_0.gguf
+      --embedding -ngl 99 -c 8192 -ub 8192
+  "bge-m3":
+    name: "bge-m3 Q8_0 (CPU)"
+    cmd: |
+      "${vk}" --host 127.0.0.1 --port ${PORT}
+      -m ${modelos}/bge-m3-q8_0.gguf
+      --embedding -ngl 0 -c 8192 -ub 8192
+
 routing:
   router:
     use: matrix
@@ -98,6 +137,9 @@ routing:
           j:  gemma4-26b-a4b-juiz
           s:  gemma3-4b-text2cypher
           m:  gemma4-26b-a4b
+          e4: qwen3-embed-4b-lote
+          eg: embeddinggemma-2-lote
+          eb: bge-m3-lote
         # Modelos fora de qualquer conjunto rodam sozinhos (expulsam os demais): é o caso de el e j.
         sets:
           indexar:           "q"
@@ -107,3 +149,7 @@ routing:
           avaliar:           "j"
           especialista:      "s & e & r"
           consultar-gemma:   "m & e & r"
+          f93-qwen4b:        "e4 & r"
+          f93-gemma2:        "eg & r"
+          f93-bgem3:         "eb & r"
+          f93-qwen06:        "el & r"

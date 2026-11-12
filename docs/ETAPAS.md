@@ -445,9 +445,10 @@
   - depende: F9.1
   - resultado: ADR-079; `eval/resultados/f92-bakeoff.md` (gerado por `uv run python -m indexer.f92`, que aplica as regras de `eval/f92-medida-bakeoff.md`, commitadas antes de rodar). **Escolha final: Qwen3.6 em extração, agente e redator e Text2Cypher; Gemma 4 (HIP) no juiz**; os dois últimos com a evidência anterior, sem medida nova. Agente (A6, 60 / 24 perguntas): Qwen 0,59 / 0,46, gpt-oss 0,58 / 0,42, Gemma 0,53 / 0,50. O gpt-oss empata em correção e é mais rápido (p50 10,5 s, p95 19,3 s contra 22,9 e 111,6), mas falha página citada (0,47 contra 0,60) e acerto numérico (0,38 contra 0,48); o Gemma é pior nas 60 (−0,06) e também falha as duas. Extração (30 Pais, só mecânica): nenhum desafiante passa (entidades e relações por Pai abaixo de 90% do Qwen), embora levem metade do tempo. VRAM pico da sonda: 11,7 / 12,9 / 14,8 GB; a rodada completa do Gemma tocou 15,0 GB.
   - nota: uma execução por LLM; o Gemma é juiz e candidato (autopreferência possível); a extração mede forma e custo, não acerto; a causa da queda em página citada e da agregação 0,00 do Gemma não foi investigada; defeito meu no agregador de VRAM do roteiro (dados íntegros, regerados dos CSV), contado na medida. Perfil `consultar-gemma` (`--n-cpu-moe 8`, 14,4 GB) só para a avaliação.
-- [ ] **F9.3** Bake-off de embeddings (reindexação completa por candidato)
+- [~] **F9.3** Bake-off de embeddings (reindexação completa por candidato)
   - aceite: ADR com recall de contexto e page recall@k de cada candidato
   - depende: F9.1
+  - nota: candidatos baixados com o aval do dono (12/11): Qwen3-Embedding-4B, EmbeddingGemma 2 e bge-m3, contra o Qwen3-Embedding-0.6B. Mede-se a recuperação (A1, A2, A3 sem LLM de resposta) nas 60 + 24 perguntas, com os mesmos Filhos, full-text, reranker e juiz; **só os vetores dos Filhos são trocados** (segmentação e os outros três índices vetoriais não são refeitos, limite declarado). Definição e regra de decisão em `eval/f93-medida-embeddings.md`, commitadas antes de rodar.
 - [ ] **F9.4** Corrigir as falhas recorrentes: novos *few-shots*, templates e limites (ciclo do cap. 8)
   - aceite: falhas das categorias mais fracas reduzidas à metade
   - depende: F9.2
