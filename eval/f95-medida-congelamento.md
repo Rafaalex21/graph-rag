@@ -63,7 +63,21 @@ Não há aceite pós-hoc de algo que falhou. Se a parte A ou o item 3 ou 5 não 
 
 ## Execuções (toda execução é contada)
 
-(preenchido durante e depois das rodadas)
+**Fora da medida (preparo):** a primeira tentativa de subir o llama-swap por um `Start-Process` falhou por causa do espaço no caminho da pasta ("Graph Rag") e foi refeita com aspas; o mesmo defeito estava no roteiro, no trecho que inicia o amostrador de recursos, e foi consertado e commitado (db0ea64) **antes** de qualquer medida. Nada foi medido com esses defeitos. A auditoria de rede do código (`indexer.f95 rede`) foi rodada uma vez como teste da ferramenta (mesma saída, arquivo apagado) e de novo pelo roteiro; é determinística.
+
+**Fase "metas"** (`.\infra\rodar-f95.ps1 -Fase metas`, 13/11, 12:34 a 13:34; log em `data/avaliacao/f95-rodadas.log`, fora do git), uma execução de cada, nenhuma refeita:
+
+| Medida | Relatório | Resultado da execução |
+|---|---|---|
+| RNF-1 (a) auditoria do código | `f95-rede.json` | 111 arquivos varridos; 5 URLs fora de loopback, todas documentais (espaço de nomes do SVG, `$schema` e `$id` dos esquemas JSON); 0 candidatas |
+| RNF-7 (a) `verify_models.ps1` | `f95-verify.json` | saída 0 (todos os hashes conferem) |
+| RNF-7 (b) e (c) YAML x lock, prompts | `f95-repro.json` | 3 modelos do YAML sem entrada no lock, todos do bake-off da F9.3 (fora da v1); 22 arquivos de prompt com sha256 gravados em `models.lock.json` |
+| RNF-1 (b) e RNF-8 amostragem | `f95-recursos.json` | 448 amostras (a cada 2 s, 12:35 a 12:59); 0 conexões remotas fora de loopback; pico de VRAM 11.789 MB; pico de RAM usada 32.341 MB (primeira amostra, antes de qualquer modelo: 8.775 MB) |
+| RNF-2 e RNF-3 pela API (SSE) | `f95-latencia.json` | 1 aquecimento descartado + 30 perguntas × 2 perfis + 10 temáticas, todas HTTP 200 e terminando em `fim` (24 min) |
+| RNF-6 nas 60 | `f95-redator.json` | 60 respostas, 0 exceções, 0 erros de infraestrutura (26 min); a CLI sai com código 1 quando sobra frase numérica sem citação, como projetada |
+| RNF-6 nas 24 | `f95n-redator.json` | 24 respostas, 0 exceções, 0 erros de infraestrutura (9 min), saída 0 |
+
+Os resultados e os vereditos pela regra da tabela estão em `eval/resultados/v1.md` (gerado depois da escada) e abaixo, em "Resultado por item da regra".
 
 ## Resultado por item da regra
 

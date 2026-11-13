@@ -227,5 +227,32 @@
       "dimensoes": 1024,
       "licenca": "MIT"
     }
-  ]
+  ],
+  "prompts": {
+    "_nota": "F9.5: sha256 (fins de linha normalizados para LF) dos arquivos que contêm prompts e a configuração dos perfis; gerado por `uv run python -m indexer.f95 repro --gravar`; a tag v1.0.0 fixa o conteúdo",
+    "arquivos": {
+      "api/src/agente/agente.ts": "983be12214ee4f45871767a7ffd3fb10af6c0764e60bc4028eabc12b4b942dae",
+      "api/src/agente/atualizador.ts": "11a5de15c9f0a9c1a501a2e28ab1d1898f95b257f5803d0ea3bc1e41c05f5eee",
+      "api/src/agente/roteador.ts": "ec0114102a5f0e929825f206f49e5755c29fc115fa26b29938315b7625763cb7",
+      "api/src/agente/critico.ts": "6a590819004ee9293233f6def62206712f134e988818c5daa607a385945fad50",
+      "api/src/agente/redator.ts": "422703aa0bc9182f755705d9f42217fd7ccbfd35394373c903db125fa88dd254",
+      "api/src/ferramentas/busca.ts": "deb90195eb91044c9e8e0b1768e6d092b8930fce9696b10127143a704c13f292",
+      "api/src/ferramentas/consultar.ts": "26deb4029aa9c76c7e7efa5f0a5d6b64fb4d11adb2f34cddf0548395ba5a36bf",
+      "api/src/ferramentas/panorama.ts": "b0f0c56d32fea9254b53e945db5ddd509c6824bab62a29b6b13f252f25f64f65",
+      "api/src/artefatos/gerador.ts": "a279a02102d1c18f3c55a91368a5a59305b6f3b308bf390708638137e4bd363e",
+      "api/src/llm/perfis.ts": "d3f7a19e979b7de478535ad7e75c025fa8cde6909d769ae21dd6299216a8fede",
+      "indexer/src/indexer/extrair.py": "f557fb655e9e7f9ce3c0d2c25897ce027089031de38958013165d69b19b7751f",
+      "indexer/src/indexer/extracao_aberta.py": "8735c8f4d4f9d8e90eabd15c079a614255bbf08909d19121f8c1b149af815cf0",
+      "indexer/src/indexer/resumos.py": "b91bc85d2f2a9d9f2606d5aaa717dceede14307042ce6fa92e2389a01fab407b",
+      "indexer/src/indexer/relatorios.py": "4f86011ae2d566837fe6bb44d79b261e8d0c1924c2d88a736615cf50e708cf7e",
+      "indexer/src/indexer/text2cypher.py": "d409d5e47fbfb75b96a1bcccd034c1dd3a4a0fc4f9d7541d954409c9411f95f4",
+      "indexer/src/indexer/reescrita.py": "09525514cd6828fe0481f734540ac49f4cf784063c426f4f94599777fd6d60f5",
+      "indexer/src/indexer/ask.py": "8ea52806f265c7426e1700ca9d8218f97145755758d597a3d54e69abd4ecad7e",
+      "indexer/src/indexer/busca_global.py": "55decd8ccb418a714d620c5c997b1ac29b722ee35212fa020380900fb725f84e",
+      "indexer/src/indexer/metricas.py": "701ddcfea707f2b4785465c92580cf000788cff152aa186d0381c353e980f0f3",
+      "contracts/extraction.schema.json": "fcfcbbed230bd9be65edb50ee002b63c6f9ef6f97a94ffe405881e78d38492ea",
+      "contracts/open_extraction.schema.json": "14b1f9e9d8a48eebb283fb6d30031673a4ef13f39f30493e675542bd65da93a7",
+      "infra/llama-swap.yaml": "fece1db12d7cbb3f4e8460a65749d4adc1e09af9afe7fb32d21bbb7d0e597ac8"
+    }
+  }
 }

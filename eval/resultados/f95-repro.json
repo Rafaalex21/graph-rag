@@ -1,0 +1,19 @@
+{
+  "yaml_sem_entrada_no_lock": [
+    "Qwen3-Embedding-4B-Q8_0.gguf",
+    "bge-m3-q8_0.gguf",
+    "embeddinggemma-2-Q8_0.gguf"
+  ],
+  "fora_da_v1_no_yaml": [
+    "Qwen3-Embedding-4B-Q8_0.gguf",
+    "bge-m3-q8_0.gguf",
+    "embeddinggemma-2-Q8_0.gguf"
+  ],
+  "yaml_sem_lock_nao_explicado": [],
+  "prompts_no_lock": 22,
+  "prompts_iguais_ao_arquivo_atual": true,
+  "verify_models": {
+    "exit_code": 0,
+    "hora": "2026-11-13T12:35:09"
+  }
+}

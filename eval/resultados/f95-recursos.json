@@ -1,0 +1,20 @@
+﻿{
+    "nome":  "f95-recursos",
+    "inicio":  "2026-11-13T12:35:13",
+    "fim":  "2026-11-13T12:59:27",
+    "amostras":  448,
+    "intervalo_s":  2,
+    "vram_primeira_mb":  1343,
+    "vram_pico_mb":  11789,
+    "ram_usada_primeira_mb":  8775,
+    "ram_usada_pico_mb":  32341,
+    "conexoes_remotas_fora_de_loopback":  [
+
+                                          ],
+    "processos_vigiados":  [
+                               "node",
+                               "llama-server",
+                               "llama-swap",
+                               "java"
+                           ]
+}

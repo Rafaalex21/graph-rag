@@ -1,0 +1,47 @@
+{
+  "arquivos_varridos": 111,
+  "achados": [
+    {
+      "arquivo": "api/src/artefatos/svg.ts",
+      "linha": 51,
+      "host": "www.w3.org",
+      "url": "http://www.w3.org/2000/svg",
+      "tipo": "documental",
+      "contexto": "partes.push(`<svg xmlns=\"http://www.w3.org/2000/svg\" viewBox=\"0 0 ${LARGURA} ${ALTURA}\" width=\"${LARGURA}\" height=\"${ALTURA}\" role=\"img\" font-family=\"Inter, 'Se"
+    },
+    {
+      "arquivo": "contracts/extraction.schema.json",
+      "linha": 2,
+      "host": "json-schema.org",
+      "url": "https://json-schema.org/draft/2020-12/schema",
+      "tipo": "documental",
+      "contexto": "\"$schema\": \"https://json-schema.org/draft/2020-12/schema\","
+    },
+    {
+      "arquivo": "contracts/extraction.schema.json",
+      "linha": 3,
+      "host": "graphrag.local",
+      "url": "https://graphrag.local/contracts/extraction.schema.json",
+      "tipo": "documental",
+      "contexto": "\"$id\": \"https://graphrag.local/contracts/extraction.schema.json\","
+    },
+    {
+      "arquivo": "contracts/open_extraction.schema.json",
+      "linha": 2,
+      "host": "json-schema.org",
+      "url": "https://json-schema.org/draft/2020-12/schema",
+      "tipo": "documental",
+      "contexto": "\"$schema\": \"https://json-schema.org/draft/2020-12/schema\","
+    },
+    {
+      "arquivo": "contracts/open_extraction.schema.json",
+      "linha": 3,
+      "host": "graphrag.local",
+      "url": "https://graphrag.local/contracts/open_extraction.schema.json",
+      "tipo": "documental",
+      "contexto": "\"$id\": \"https://graphrag.local/contracts/open_extraction.schema.json\","
+    }
+  ],
+  "candidatos": [],
+  "regra": "candidato = URL fora de loopback que não está em comentário nem em chave documental ($schema, $id, xmlns, externalDocs, license, contact, description, homepage, repository)"
+}
