@@ -21,11 +21,11 @@ import { chave, type LlmDeJson } from "./atualizador.ts";
 export const MAX_PERGUNTAS_EXTRAS = 3;
 const MIN_PERGUNTA = 8;
 const MAX_FALTANDO = 300;
-const MAX_EVIDENCIAS_POR_SUB = 4;
-const MAX_CARACTERES_EVIDENCIA = 1_200;
-const MAX_CARACTERES_DAS_EVIDENCIAS = 14_000;
+const MAX_EVIDENCIAS_POR_SUB = 8;
+const MAX_CARACTERES_EVIDENCIA = 2_500;
+const MAX_CARACTERES_DAS_EVIDENCIAS = 22_000;
 const MAX_PERGUNTA = 2_000;
-const TIMEOUT_MS = 30_000;
+const TIMEOUT_MS = 60_000;
 const MAX_TOKENS = 400;
 
 export type DecisaoBruta = "suficiente" | "buscar_mais" | "ausente";
@@ -135,6 +135,12 @@ function blindar(texto: string): string {
   return texto.replace(/<\/?(?:evidencias|pergunta|ja_perguntado)\s*>/gi, "[tag]");
 }
 
+/** Como `cortar`, mas **mantém as quebras de linha** (uma tabela em Markdown tem uma linha por linha da tabela; achatada, o crítico não acha a célula e pede busca de um valor que já veio). */
+function cortarLinhas(texto: string, maximo: number): string {
+  const t = texto.replace(/[ \t\f\v]+/g, " ").replace(/ ?\r?\n ?/g, "\n").replace(/\n{2,}/g, "\n").trim();
+  return t.length > maximo ? `${t.slice(0, maximo).trimEnd()}…` : t;
+}
+
 function cortar(texto: string, maximo: number): string {
   const t = compacta(texto);
   return t.length > maximo ? `${t.slice(0, maximo).trimEnd()}…` : t;
@@ -146,7 +152,7 @@ function blocoDeEvidencias(subs: SubParaCritica[], maxCaracteres: number): strin
     linhas.push(`Subpergunta ${i + 1}: ${blindar(cortar(s.pergunta, 400))}`);
     if (s.evidencias.length === 0) linhas.push("(nenhuma evidência)");
     for (const e of s.evidencias.slice(0, MAX_EVIDENCIAS_POR_SUB)) {
-      const texto = cortar(e.texto, maxCaracteres);
+      const texto = cortarLinhas(e.texto, maxCaracteres);
       linhas.push(`[${e.paginas || "sem página"}] ${blindar(texto === "" ? `(${e.tipo} sem texto)` : texto)}`);
     }
     for (const erro of s.erros) linhas.push(`Erro da ferramenta: ${blindar(cortar(erro, 160))}`);
@@ -156,7 +162,7 @@ function blocoDeEvidencias(subs: SubParaCritica[], maxCaracteres: number): strin
 
 export function montarMensagensCritico(entrada: EntradaCritico): Mensagem[] {
   let bloco = "";
-  for (const limite of [MAX_CARACTERES_EVIDENCIA, 600, 300, 150]) {
+  for (const limite of [MAX_CARACTERES_EVIDENCIA, 1_200, 600, 300, 150]) {
     bloco = blocoDeEvidencias(entrada.subperguntas, limite);
     if (bloco.length <= MAX_CARACTERES_DAS_EVIDENCIAS) break;
   }

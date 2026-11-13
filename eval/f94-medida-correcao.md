@@ -137,3 +137,31 @@ Nenhuma resposta ou nota foi refeita (`.\infra\rodar-f94.ps1 -Rodada r2`, de uma
 
 **A F9.4 NÃO está cumprida.** Pela regra desta medida, a r2 não substitui nem apaga a r1 nem vira aceite pós-hoc: o aceite pedia metade da falha nas duas categorias mais fracas e só a numérica chegou perto (0,27 contra 0,25). A decisão do que fazer (uma r3 por errata antes de rodar, ou encerrar a F9.4 com o resultado como saiu) é do dono.
 
+## Errata 2: rodada 3 (escrita e commitada ANTES de rodar; 13/11)
+
+A r2 não cumpriu o aceite (agregação 0,60 e numérica 0,27 de falha; metas 0,40 e 0,25). O dono mandou fazer a r3. O que segue vem de ler **só as falhas das 60** na r2 e de rodar o agente nelas (o grupo novo continua sem ser lido pergunta a pergunta).
+
+**Diagnóstico (nas 60, sem juiz).** Em 5 das falhas numéricas e de agregação o valor **estava no contexto do redator** (N03, N07, N08, G06, G10), e mesmo assim a resposta dizia "não encontrei". Rodando o ciclo com o crítico impresso, a causa apareceu: o **crítico** só vê 4 evidências por subpergunta, cada uma cortada em 1.200 caracteres e com as quebras de linha achatadas (`compacta`), então uma tabela larga vira uma linha só e ele não acha a célula; responde "o valor não foi encontrado nas evidências", o ciclo termina `incompleta` e a instrução do redator para esse estado é **dizer "Não encontrei nos trechos consultados"**. O redator recusa mesmo com a tabela inteira na mão. Outro defeito do mesmo tipo: o redator também achatava as quebras de linha das tabelas e só recebia 10 evidências, e com a busca de tabelas junto (r2) a tabela certa, que vem depois das de trechos, ficava na 15ª posição e era descartada (G06).
+
+**Rodadas de diagnóstico, fora da medida** (nas falhas das 60, 14, 11 e 14 respostas, sem juiz, lidas por mim contra o gabarito; `data/avaliacao/f94-diag3`, `f94-diag4`, `f94-diag5`): `diag3` (quebras de linha e 16 evidências no redator) acertou N03 e G10 e não mexeu no resto; `diag4` (mais uma regra de leitura de tabela no prompt do redator) não mudou nada sozinha; `diag5` (com o crítico corrigido, abaixo) passou a trazer a resposta certa em N03, N07, N08, N12, G06, G09, G10 e M02, e melhorou M01 e T12. Ficam sem resposta T08, G02, G07 e G08. É leitura minha, não nota do juiz, e foi nas 60 (conjunto de ajuste): é a razão da mudança, não um resultado.
+
+**A mudança da r3** (r1 e r2 continuam valendo; a r3 = r2 + isto):
+
+| Onde | Antes (r2) | r3 |
+|---|---|---|
+| crítico: evidências por subpergunta | 4 | 8 |
+| crítico: caracteres por evidência | 1.200 | 2.500 (escada 2.500, 1.200, 600, 300, 150) |
+| crítico: caracteres no total | 14.000 | 22.000 |
+| crítico: quebras de linha da tabela | achatadas | mantidas |
+| crítico: tempo-limite por chamada | 30 s | 60 s (o prompt é maior) |
+| redator: máximo de evidências | 10 | 16 (o total de 24.000 caracteres e a escada de redução ficam) |
+| redator: quebras de linha da tabela | achatadas | mantidas |
+| redator: regra 6 do prompt | não havia | como ler tabela em Markdown (cruzar o rótulo da linha com o cabeçalho da coluna; "Observado" é o resultado do período; se o valor está na célula, responder com ele; para soma, diferença ou contagem, achar cada valor e mostrar a conta) |
+
+Nada mais muda (roteador, templates, Text2Cypher, golden, juiz e índice como na F9.3; `tabelasJuntas` da r2 fica).
+
+**Regra da r3: a mesma, sem mudança**, contra a F9.1 (`uv run python -m indexer.f94 --rodadas r1 r2 r3`). As rodadas anteriores continuam contadas e **a r3 não as substitui**.
+
+**Riscos declarados:** (1) um crítico que vê mais e diz "suficiente" com mais frequência pode deixar passar o que deveria virar "ausente" ou "não consta": a regra exige fora do escopo em 1,00 (60 e 24) e fidelidade ≥ 0,95. (2) O prompt do crítico é maior (até 22.000 caracteres): o tempo por chamada sobe e o tempo-limite foi dobrado; a latência dirá. (3) São quatro mudanças juntas, então a r3 não diz qual delas fez o ganho; o aceite é a meta de falha, não a atribuição. (4) Se a r3 também não cumprir: nova decisão do dono; sem aceite pós-hoc.
+
+**Execuções da r3:** `f94r3-a6` e `f94r3n-a6` (`.\infra\rodar-f94.ps1 -Rodada r3`); a preencher abaixo depois de rodar.
