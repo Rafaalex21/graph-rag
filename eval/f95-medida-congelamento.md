@@ -106,4 +106,4 @@ O A6 da v1 é a r3 da F9.4 (`f94r3-a6`, 60; `f94r3n-a6`, 24), **não** foi refei
 | RNF-7 | **atingida** em (a), (b) e (c); (d) abaixo | `verify_models` 0; 3 modelos do YAML fora do lock, todos do bake-off da F9.3; 22 prompts com sha256 |
 | RNF-8 | **desvio** | VRAM 11,51 GB (ok); RAM usada 31,58 GB contra 28 GB |
 
-**Item 3 (v1.md por comando):** cumprido. **Item 4 (ADR-082 com os desvios):** cumprido. **Item 5 (tag `v1.0.0`):** ver abaixo, escrito depois de criar a tag.
+**Item 3 (v1.md por comando):** cumprido. **Item 4 (ADR-082 com os desvios):** cumprido. **Item 5 (tag `v1.0.0`): cumprido.** A tag anotada aponta para `c7b642c` (o commit com o `v1.md`, o ADR-082, a ETAPAS e o `models.lock.json` com os 22 prompts); `git diff 5a5266d -- api/src contracts web/src infra/llama-swap.yaml` vazio; `uv run python -m indexer.f95 repro --tag v1.0.0`: 0 arquivos de prompt divergentes do lock na tag, `ok: true`, o que fecha o item (d) do RNF-7. **Veredito final: a F9.5 cumpre o aceite** (parte A, 8 metas com número e veredito, `v1.md` por comando, ADR com os 3 desvios, tag); os desvios não impedem o congelamento.
