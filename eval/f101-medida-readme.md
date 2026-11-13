@@ -58,7 +58,21 @@ Ao conferir o link do PDF (ADR-009) para o README, descobri que ele **agora entr
 
 ## Execuções (toda rodada é contada)
 
-(preenchido durante e depois das rodadas)
+**Nota sobre o enunciado (vale para todas as rodadas):** além do texto fixo e da frase da errata 0, o subagente recebe um parágrafo de "notas práticas do ambiente", que não fala do projeto: os comandos do README são de PowerShell e cada chamada da ferramenta é uma janela nova (variáveis e `cd` não persistem), comandos de mais de 2 minutos vão em segundo plano, janelas abertas por `Start-Process` ficam em segundo plano, trabalhar só dentro do clone (fora dele, só o que o README mandar, como `C:\modelos`) e deixar no ar os serviços que subiu, dizendo quais. Isso descreve a ferramenta, não o projeto, e é igual em todas as rodadas.
+
+| Rodada | Fase | Clone (commit) | Início | Resultado | Atritos |
+|---|---|---|---|---|---|
+| c1 | curta | `C:\Users\Rafael\graphrag-teste-c1` (`8fcf886`) | 13/11 17:50 | **chegou ao fim da fase curta sem intervenção** (~17,5 min: instalar 2,3 min com os GGUF aproveitados, parse 12,5 min, chunks 30 s; parou 40 s depois de a indexação começar `tabelas-gerar`); git do clone limpo | 7 (abaixo) |
+
+**Atritos da c1** (do relatório do subagente; nenhum o impediu de seguir):
+
+1. O README faz `cd graph-rag`; o clone de teste tinha outro nome de pasta. Sem impacto.
+2. Com a saída do instalador redirecionada (`*>&1`), o PowerShell 5.1 transforma o progresso do `curl` (stderr) em erro e o script para (`NativeCommandError`). Sem redirecionar, funcionou. O README não avisa.
+3. Mensagens do instalador com acentos quebrados ("configuraÃ§Ã£o"): o `instalar.ps1` foi salvo sem BOM e o PowerShell 5.1 o lê como ANSI. Só visual.
+4. O `npm ci` da `web` avisou que 4 pacotes têm scripts de instalação não liberados (esbuild, @parcel/watcher, lmdb, msgpackr-extract); não se sabe se isso quebra o `npm start` do passo 7 (não testado na fase curta).
+5. O README não diz que valores esperar no passo 5 (cobertura do `sections` 0,93 com 7 divergências; avisos do Docling sobre células de tabela).
+6. O README não lista as etapas da indexação, quais usam o LLM, quanto cada uma leva, nem os nomes que `-De` aceita; nos primeiros 40 s o `f58.log` ficou vazio e o estado dizia só `tabelas-gerar`.
+7. O passo 7 só é alcançável depois das 8 a 9 h de indexação (esperado; é a fase completa).
 
 ## Resultado por item da regra
 
