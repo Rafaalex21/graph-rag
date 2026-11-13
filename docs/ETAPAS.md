@@ -468,9 +468,9 @@
 > entrega: README com números, scripts de subida, demonstração gravada
 > esforço: P
 
-- [ ] **F10.1** README com arquitetura, tabela de ablações e GIF de demonstração
+- [~] **F10.1** README com arquitetura, tabela de ablações e GIF de demonstração
   - aceite: alguém de fora sobe o projeto seguindo só o README
-  - nota: antes de publicar trechos do documento (GIF, vídeo, artigo), pedir autorização à RI do Banco do Brasil (ADR-009)
+  - nota: trechos curtos do documento podem ser publicados com a fonte citada, sem autorização prévia da RI (decisão do dono, revisão de 13/11/2026 do ADR-009)
   - depende: F9.5
 - [ ] **F10.2** Scripts `infra/up.ps1` (sobe tudo) e `indexer run-all` (indexação completa)
   - aceite: máquina limpa → assistente respondendo com dois comandos (fora o download dos modelos)

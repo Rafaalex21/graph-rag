@@ -75,6 +75,7 @@ Usar o **Formulário de Referência 2026 (ano-base 2025) do Banco do Brasil S.A.
 - **Dados estruturados da CVM:** licença **ODbL** (atribuição e compartilhamento sob a mesma licença das bases derivadas).
 - **O PDF:** documento público protocolado na CVM. O site de RI do BB **não declara condições de uso** (só uma política de privacidade, que não li). O arquivo fica **fora do git**, para uso interno do projeto.
 - **Divulgação (F10):** README com GIF, vídeo e artigo exibirão trechos do documento. **Antes de publicar qualquer trecho, pedir autorização à RI do Banco do Brasil**; esta pendência fica registrada na F10.1.
+- **Revisão de 13/11/2026 (F10.1), decisão do dono do projeto:** a autorização prévia da RI **não** será pedida. O documento é público (protocolado na CVM e distribuído pelo próprio RI do BB) e o projeto é de portfólio, sem fins comerciais. Podem ser publicados **trechos curtos** do documento no README, no GIF, no vídeo e no artigo, **sempre com a fonte citada** ("Banco do Brasil S.A., Formulário de Referência 2026, v7, protocolado na CVM"). Continua **fora do git** o PDF inteiro e tudo o que é derivado dele em volume (Docling, chunks, caches, respostas, `data/`, dump do Neo4j). Se o emissor pedir a retirada, os trechos saem.
 
 ### Por que este documento
 
