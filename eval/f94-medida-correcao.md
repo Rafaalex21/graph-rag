@@ -118,7 +118,7 @@ A r1 não cumpriu o aceite (agregação 0,60 e numérica 0,37 de falha; metas 0,
 |---|---|---:|---:|---:|---|
 | r2 (limites + `tabelasJuntas`) | `f94r2-a6`, `f94r2n-a6` | 60 e 24 | 0 e 0 | 0 e 0 | 13/11, 06:42 a 08:53 (geração 36 min, juiz 1 h 35) |
 
-Nenhuma resposta ou nota foi refeita (`.\infraodar-f94.ps1 -Rodada r2`, de uma vez); tabela com r1 e r2 em `eval/resultados/f94-correcao.md` (`uv run python -m indexer.f94 --rodadas r1 r2`). O agente usou `buscar_tabelas` em 49 das 60 respostas.
+Nenhuma resposta ou nota foi refeita (`.\infra\rodar-f94.ps1 -Rodada r2`, de uma vez); tabela com r1 e r2 em `eval/resultados/f94-correcao.md` (`uv run python -m indexer.f94 --rodadas r1 r2`). O agente usou `buscar_tabelas` em 49 das 60 respostas.
 
 ## Resultado da rodada 2 por item da regra
 
