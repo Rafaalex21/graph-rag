@@ -112,4 +112,28 @@ A r1 não cumpriu o aceite (agregação 0,60 e numérica 0,37 de falha; metas 0,
 
 **Riscos declarados:** mais evidência por pergunta (uma tabela de até 10.000 caracteres por chamada, cortada em 3.000 pelo redator) pode diluir as respostas factuais que a r1 já acertava, e custa uma chamada de busca a mais por subpergunta (busca vetorial, sem LLM); a latência e a regressão por categoria dizem. Multi-hop tem n = 5 e já perdeu 0,10 na r1 por uma meia nota. Se a r2 também não cumprir, vale a mesma regra: no máximo uma r3, também por errata antes de rodar; sem r3, a F9.4 fica `[~]` com o resultado como saiu.
 
-**Execuções da r2:** `f94r2-a6` e `f94r2n-a6` (`.\infraodar-f94.ps1 -Rodada r2`); a preencher abaixo depois de rodar.
+**Execuções da r2:**
+
+| Rodada | Relatórios | Perguntas | Erros do sistema | Falhas do juiz | Geração e juiz |
+|---|---|---:|---:|---:|---|
+| r2 (limites + `tabelasJuntas`) | `f94r2-a6`, `f94r2n-a6` | 60 e 24 | 0 e 0 | 0 e 0 | 13/11, 06:42 a 08:53 (geração 36 min, juiz 1 h 35) |
+
+Nenhuma resposta ou nota foi refeita (`.\infraodar-f94.ps1 -Rodada r2`, de uma vez); tabela com r1 e r2 em `eval/resultados/f94-correcao.md` (`uv run python -m indexer.f94 --rodadas r1 r2`). O agente usou `buscar_tabelas` em 49 das 60 respostas.
+
+## Resultado da rodada 2 por item da regra
+
+**O aceite NÃO foi cumprido** (itens 1 e 1b; a regressão da r1 sumiu):
+
+1. **Não, nas duas.** Agregação: falha 0,80 → 0,60 (meta ≤ 0,40; **igual à r1**). Numérica: falha 0,50 → 0,27 (meta ≤ 0,25; **faltou 0,02, meia nota em 15 perguntas**).
+2. **Sim.** Nenhuma categoria perdeu correção contra a F9.1 (multi-hop voltou a 0,60).
+3. **Sim.** Fora do escopo em 1,00 nas 60 e nas 24.
+4. **Sim.** Fidelidade 0,98.
+5. **Sim, e confirmado fora do ajuste:** grupo novo 0,46 → 0,67 (+0,21): factual 0,42 → 1,00, numérica 0,33 → 0,50, agregação 0,67 → 0,83; temática e multi-hop sem mudança.
+6. **Sim.** 0 erros do sistema e 0 falhas do juiz.
+
+**Informativo:** correção geral 0,59 → 0,72 nas 60 (r1: 0,69); latência p50 / p95 22,1 / 61,8 s (F9.1: 22,9 / 111,6; r1: 16,9 / 55,9: o p50 voltou ao da F9.1 por causa da busca de tabelas a mais, o p95 segue bem abaixo); acerto numérico 0,48 → 0,67; página citada 0,60 → 0,78; recall de contexto 0,63 → 0,88 (contexto maior, não comparável 1 a 1).
+
+**Leitura:** a busca de tabelas junto de toda rota consertou o que o diagnóstico previa nas numéricas (N10 0 → 1, N08 0 → 0,5; mais factuais e temáticas melhoraram junto) e subiu muito o grupo novo. Mas a agregação ficou em 0,40 de correção, **igual à r1**, porque o que ela ganhou de um lado perdeu do outro: G01, G03 e G05 estão certas e G06 e G10, que estavam certas na r1, erraram na r2 (mesma pergunta, mais evidência; uma execução só, então parte disso é variância do Qwen a 0,2 e do juiz, não medida). As falhas que sobram em agregação são as que o diagnóstico já dizia que não eram de busca: G02, G07, G08, G09 (soma ou contagem sobre linhas de tabela e a série do lucro que o grafo traz só com 2025) e G06/G10 (comparação entre três órgãos). Numérica: N03, N07, N12 (e meia nota em N06 e N08).
+
+**A F9.4 NÃO está cumprida.** Pela regra desta medida, a r2 não substitui nem apaga a r1 nem vira aceite pós-hoc: o aceite pedia metade da falha nas duas categorias mais fracas e só a numérica chegou perto (0,27 contra 0,25). A decisão do que fazer (uma r3 por errata antes de rodar, ou encerrar a F9.4 com o resultado como saiu) é do dono.
+

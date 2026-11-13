@@ -12,6 +12,7 @@ from __future__ import annotations
 
 import argparse
 import json
+import sys
 from pathlib import Path
 
 CATEGORIAS = (
@@ -203,7 +204,10 @@ def montar(res: Path, rodadas: list[str]) -> str:
         else:
             veredito = f"**Aceite da rodada {r}: NÃO cumprido.**"
         out += ["", veredito, ""]
-    out += ["Regerar: `uv run python -m indexer.f94 --rodadas r1` (a partir de `indexer/`, sem LLM).", ""]
+    out += [
+        f"Regerar: `uv run python -m indexer.f94 --rodadas {' '.join(rodadas)}` (a partir de `indexer/`, sem LLM).",
+        "",
+    ]
     return "\n".join(out)
 
 
@@ -215,6 +219,7 @@ def main() -> None:
     res = a.raiz / "eval" / "resultados"
     texto = montar(res, a.rodadas)
     (res / "f94-correcao.md").write_text(texto, encoding="utf-8")
+    sys.stdout.reconfigure(encoding="utf-8")  # type: ignore[union-attr]
     print(texto)
 
 
