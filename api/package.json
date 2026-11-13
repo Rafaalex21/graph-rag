@@ -24,6 +24,7 @@
     "avaliar:rapido": "node src/avaliacao/cli-rapido.ts",
     "avaliar:ablacao": "node src/avaliacao/cli-ablacao.ts",
     "avaliar:api": "node test/http/medir-api.ts",
+    "avaliar:latencia": "node test/http/medir-latencia.ts",
     "avaliar:telemetria": "node test/http/medir-telemetria.ts",
     "relatorio:telemetria": "node src/telemetria/cli-relatorio.ts",
     "telemetria:diaria": "node src/telemetria/cli-diaria.ts"
