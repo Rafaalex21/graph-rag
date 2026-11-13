@@ -49,6 +49,13 @@ Se a fase completa não passar sem intervenção, a F10.1 fica `[~]` com os atri
 - O reaproveitamento dos GGUF de `C:\modelos` evita baixar de novo ~24 GB (os três modelos obrigatórios; os opcionais somam mais ~31 GB); o download é testado só pelo caminho do script (tamanho e sha256), não pela velocidade da rede.
 - A indexação no clone é uma execução nova do LLM: o grafo sai parecido com o da v1, não igual (o Qwen a 0,2 não é determinístico).
 
+## Errata 0 (13/11/2026, antes de qualquer rodada): o documento
+
+Ao conferir o link do PDF (ADR-009) para o README, descobri que ele **agora entrega outra versão** do Formulário de Referência (criada em 11/11/2026, 8.695.992 bytes), não a v7 indexada (21/09/2026, 8.719.214 bytes, SHA-256 `b0d17566…`); não há cópia arquivada pública da v7. Decisão do dono: o projeto continua na **v7**, **o PDF não é publicado** (nem em release), e o README explica as duas saídas (copiar a v7 que a pessoa tiver, conferindo o hash, ou baixar a versão atual sabendo que o índice sai parecido, não igual). Para o teste de fora:
+
+- **O PDF da v7 é posto em `<clone>\data\raw\banco_do_brasil_formulario_referencia_2026.pdf` antes da rodada**, como os GGUF em `C:\modelos`: é um insumo de fora do README. O subagente segue o ramo "se você tem o arquivo da versão 7" do README e confere o hash. **Não conta como intervenção.** O enunciado fixo ganha uma frase, igual em todas as rodadas: "Você já tem o PDF da versão 7: ele está em `data\raw\banco_do_brasil_formulario_referencia_2026.pdf` dentro do clone."
+- O ramo "baixar a versão atual" **não é testado** pelo subagente (só a resposta do link foi conferida por mim: HTTP 200, `application/pdf`). Fica como limite.
+
 ## Execuções (toda rodada é contada)
 
 (preenchido durante e depois das rodadas)

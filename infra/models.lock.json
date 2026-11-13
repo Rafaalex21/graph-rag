@@ -129,6 +129,16 @@
     "dados": "infra/neo4j/data",
     "script": "infra/neo4j.ps1"
   },
+  "jdk": {
+    "versao": "21.0.12.1+1",
+    "distribuicao": "Eclipse Temurin (Adoptium)",
+    "arquivo": "OpenJDK21U-jdk_x64_windows_hotspot_21.0.12.1_1.zip",
+    "bytes": 205073461,
+    "sha256": "f9d6e191ab098c0d416e7d588a24420a8621cd2f4720dab2459b8b7b2d2d8b4e",
+    "fonte": "https://github.com/adoptium/temurin21-binaries/releases/download/jdk-21.0.12.1%2B1/OpenJDK21U-jdk_x64_windows_hotspot_21.0.12.1_1.zip",
+    "pasta": "infra/bin/jdk-21.0.12.1+1",
+    "nota": "só para o Neo4j (JAVA_HOME no processo do infra/neo4j.ps1)"
+  },
   "node": {
     "versao": "24.22.1",
     "arquivo": "node-v24.22.1-win-x64.zip",
