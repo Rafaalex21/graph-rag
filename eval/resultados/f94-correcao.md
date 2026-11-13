@@ -80,4 +80,43 @@ Mesmo Qwen3.6, mesmo juiz (Gemma 4 26B-A4B), mesmo índice, mesmas perguntas; s�
 
 **Aceite da rodada r2: NÃO cumprido.**
 
-Regerar: `uv run python -m indexer.f94 --rodadas r1 r2` (a partir de `indexer/`, sem LLM).
+## Rodada r3
+
+### Correção e falha por categoria
+
+| Categoria | Correção F9.1 (60) | Correção agora (60) | Falha F9.1 | Falha agora | Correção F9.1 (24) | Correção agora (24) |
+|---|---:|---:|---:|---:|---:|---:|
+| **Factual** | 0,70 | 0,90 | 0,30 | 0,10 | 0,42 | 0,92 |
+| **Numérica** (fraca) | 0,50 | 0,90 | 0,50 | 0,10 | 0,33 | 0,67 |
+| **Agregação** (fraca) | 0,20 | 0,70 | 0,80 | 0,30 | 0,67 | 1,00 |
+| **Temática** | 0,75 | 0,90 | 0,25 | 0,10 | 0,17 | 0,50 |
+| **Multi-hop** | 0,60 | 0,80 | 0,40 | 0,20 | 0,33 | 0,50 |
+| **Fora do escopo** | 1,00 | 1,00 | 0,00 | 0,00 | 1,00 | 1,00 |
+| **Geral** | 0,59 | 0,87 | 0,41 | 0,13 | 0,46 | 0,77 |
+
+### Outras métricas (60 perguntas)
+
+| | F9.1 | Agora |
+|---|---:|---:|
+| Fidelidade | 0,97 | 0,97 |
+| Recall de contexto (o contexto agora é maior: não comparável 1 a 1) | 0,63 | 0,95 |
+| Página citada | 0,60 | 0,89 |
+| Acerto numérico | 0,48 | 0,86 |
+| Latência p50 / p95 (s) | 22,9 / 111,6 | 17,4 / 70,1 |
+
+### Aplicação da regra
+
+| Item | Resultado | Vale |
+|---|---|---|
+| Falha de agregação ≤ metade da F9.1 (≤ 0,40) | 0,30 (era 0,80) | **sim** |
+| Falha de numérica ≤ metade da F9.1 (≤ 0,25) | 0,10 (era 0,50) | **sim** |
+| Nenhuma categoria perde ≥ 0,10 de correção nas 60 | quedas: nenhuma queda | **sim** |
+| Fora do escopo segue em 1,00 (60 e 24) | 1,00 / 1,00 | **sim** |
+| Fidelidade ≥ 0,95 | 0,97 | **sim** |
+| Grupo novo: correção geral não cai mais de 0,05 | 0,46 → 0,77 (0,31) | **sim** |
+| Latência p50 / p95 dentro de 125% da F9.1 (informativo) | 17,4 / 70,1 s | sim |
+| Erros do sistema (60; 24) / falhas do juiz (60; 24) | 0; 0 / 0; 0 | — |
+
+**Aceite da rodada r3: CUMPRIDO**; confirmado fora do ajuste (grupo novo +0,05 ou mais).
+
+Regerar: `uv run python -m indexer.f94 --rodadas r1 r2 r3` (a partir de `indexer/`, sem LLM).

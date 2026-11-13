@@ -164,4 +164,30 @@ Nada mais muda (roteador, templates, Text2Cypher, golden, juiz e índice como na
 
 **Riscos declarados:** (1) um crítico que vê mais e diz "suficiente" com mais frequência pode deixar passar o que deveria virar "ausente" ou "não consta": a regra exige fora do escopo em 1,00 (60 e 24) e fidelidade ≥ 0,95. (2) O prompt do crítico é maior (até 22.000 caracteres): o tempo por chamada sobe e o tempo-limite foi dobrado; a latência dirá. (3) São quatro mudanças juntas, então a r3 não diz qual delas fez o ganho; o aceite é a meta de falha, não a atribuição. (4) Se a r3 também não cumprir: nova decisão do dono; sem aceite pós-hoc.
 
-**Execuções da r3:** `f94r3-a6` e `f94r3n-a6` (`.\infra\rodar-f94.ps1 -Rodada r3`); a preencher abaixo depois de rodar.
+**Execuções da r3:**
+
+| Rodada | Relatórios | Perguntas | Erros do sistema | Falhas do juiz | Geração e juiz |
+|---|---|---:|---:|---:|---|
+| r3 (r2 + crítico e redator corrigidos) | `f94r3-a6`, `f94r3n-a6` | 60 e 24 | 0 e 0 | 0 e 0 | 13/11, 10:06 a 12:17 (geração 35 min, juiz 1 h 36) |
+
+Nenhuma resposta ou nota foi refeita (`.\infra\rodar-f94.ps1 -Rodada r3`, de uma vez); tabela com r1, r2 e r3 em `eval/resultados/f94-correcao.md` (`uv run python -m indexer.f94 --rodadas r1 r2 r3`). Três rodadas de diagnóstico sem nota ficam fora da medida (`f94-diag3`, `f94-diag4`, `f94-diag5`, 39 respostas nas falhas das 60), além da `f94-diag` da r1.
+
+## Resultado da rodada 3 por item da regra
+
+**O aceite FOI cumprido** (todos os itens), e é a **terceira** rodada: a r1 e a r2 não cumpriram e continuam no relatório, **a r3 não as substitui**.
+
+1. **Sim.** Agregação: falha 0,80 → **0,30** (meta ≤ 0,40; correção 0,20 → 0,70). Numérica: falha 0,50 → **0,10** (meta ≤ 0,25; correção 0,50 → 0,90).
+2. **Sim.** Nenhuma categoria perdeu correção; todas subiram nas 60 (factual 0,70 → 0,90, temática 0,75 → 0,90, multi-hop 0,60 → 0,80).
+3. **Sim.** Fora do escopo em 1,00 nas 60 e nas 24 (o crítico que aceita mais cedo não deixou de recusar o que não consta).
+4. **Sim.** Fidelidade 0,97 nas 60 (era 0,97) e 1,00 nas 24.
+5. **Sim, e confirmado fora do ajuste:** grupo novo 0,46 → **0,77** (+0,31): agregação 0,67 → 1,00, factual 0,42 → 0,92, numérica 0,33 → 0,67, temática 0,17 → 0,50, multi-hop 0,33 → 0,50.
+6. **Sim.** 0 erros do sistema e 0 falhas do juiz nas duas.
+
+**Informativo:** correção geral 0,59 → 0,87 nas 60; acerto numérico 0,48 → 0,86; página citada 0,60 → 0,89; recall de contexto 0,63 → 0,95 (contexto maior, não comparável 1 a 1); latência p50 / p95 17,4 / 70,1 s (F9.1: 22,9 / 111,6). O ciclo com o crítico terminou `incompleta` em **28 das 60** respostas da F9.1 e em **5** na r3 (e usou 2 rodadas em 10 das 60, contra 32), e é aí que está a maior parte do ganho: o crítico dizia "valor não encontrado" sobre evidências que tinham o valor, e isso levava o redator a recusar.
+
+**O que ainda falha nas 60** (12 com correção < 1): T08 (a evidência traz o texto, mas o redator responde com outro órgão), G02, G07 e G08 (agregação sobre lista ou soma de linhas de tabela), e meias notas em T13, N03, N06, N08, P03, P09, M01 e M02. No grupo novo, 7 com correção < 1 (Q01, Q10, Q11, Q16, Q17, Q19, Q21), sem diagnóstico (o grupo novo continua sem ser lido pergunta a pergunta).
+
+**Leitura:** a F9.4 cumpre o aceite ("falhas das categorias mais fracas reduzidas à metade") na terceira rodada, e bem além: de 0,80 e 0,50 para 0,30 e 0,10. Pela ordem em que as coisas aconteceram, o aceite **só cumpriu na r3**, depois de duas rodadas que falharam e de um diagnóstico novo feito nas 60; o resultado nas 60 é, portanto, otimista (é o conjunto em que as falhas foram lidas), e o grupo novo, que não foi lido, é a checagem: subiu 0,31, então o ganho não é só sobreajuste. Quatro mudanças entraram juntas na r3 (crítico, redator, regra de leitura de tabela, limite de evidências), então a medida **não diz qual delas** fez o ganho. O conserto de maior efeito é o do crítico (28 de 60 respostas `incompleta` para 5). Uma execução por rodada; a variância do Qwen a 0,2 e do juiz não foi medida.
+
+**Consequência para a escada (a levar à F9.5):** as mudanças da r1 a r3 estão no código (`redator.ts`, `critico.ts`, `agente.ts`). Os degraus A3ts, A4 e A5 da F9.1 (`v1-ablacao.md`) foram medidos com o redator anterior (corte de 900 caracteres, tabelas achatadas, 10 evidências); só o A6 foi refeito aqui. A tabela da escada deve ser refeita antes de ser congelada na v1.
+
