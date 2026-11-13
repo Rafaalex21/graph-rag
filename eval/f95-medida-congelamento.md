@@ -79,6 +79,31 @@ Não há aceite pós-hoc de algo que falhou. Se a parte A ou o item 3 ou 5 não 
 
 Os resultados e os vereditos pela regra da tabela estão em `eval/resultados/v1.md` (gerado depois da escada) e abaixo, em "Resultado por item da regra".
 
+**Fase "escada"** (`.\infra\rodar-f95.ps1 -Fase escada`, 13/11, 13:34 a 17:16, sem interrupção; uma execução por degrau, nenhuma refeita):
+
+| Relatório | Perguntas | Geração (TS) | Juiz | Erros do sistema | Falhas do juiz |
+|---|---:|---:|---:|---:|---:|
+| `f95-a3ts` | 60 | 11 min | 61 min | 0 | 0 |
+| `f95-a4` | 60 | 12 min | 60 min | 0 | 0 |
+| `f95-a5` | 60 | 16 min | 61 min | 0 | 0 |
+
+O A6 da v1 é a r3 da F9.4 (`f94r3-a6`, 60; `f94r3n-a6`, 24), **não** foi refeito, como fixado. `eval/resultados/v1.md` foi gerado por `.\infra\rodar-f95.ps1 -Fase tabela` (`uv run python -m indexer.f95 v1`) às 17:16. Nenhum código do produto mudou entre o commit `5a5266d` e a tag.
+
 ## Resultado por item da regra
 
-(preenchido depois das rodadas)
+**Parte A: cumprida.** Três degraus, 60 respostas cada, 0 erros do sistema, 0 falhas do juiz, nada afinado entre as rodadas (só mudou o redator, que já estava no código desde a F9.4). Lido como saiu (`v1.md`): com o redator novo, A3ts, A4 e A5 sobem de 0,53, 0,54 e 0,53 para **0,57, 0,61 e 0,58** (A3 era 0,54); o acerto numérico **não** mudou (0,29, 0,38, 0,38). Entre degraus vizinhos a diferença fica abaixo de 0,05 (empate); só A4 contra A3 passa de 0,05 (+0,07, dois passos). O salto está no A6 (0,87, +0,29 sobre o A5), que é o degrau com o crítico e a busca de tabelas junto, justamente o que A3ts a A5 não têm por construção.
+
+**Parte B: as 8 metas, vereditos pela regra da tabela (nenhum trocado depois do resultado):**
+
+| Meta | Veredito | Número |
+|---|---|---|
+| RNF-1 | **atingida** | 0 candidatas no código; 0 endereços remotos fora de loopback em 448 amostras |
+| RNF-2 | **desvio** | 0 de 30 (regra: ≥ 27); 1º token ≤ 5 s em 0; completa ≤ 20 s em 24 |
+| RNF-3 | **atingida** | 10 de 10 em ≤ 90 s (máx. 85,7 s), progresso em 10 de 10 |
+| RNF-4 | **atingida** | 0,97 (60) e 1,00 (24) |
+| RNF-5 | **atingida** | A6 0,87 e 0,77 contra A3 0,54 e 0,48 (+33 e +29 p.p.) |
+| RNF-6 | **desvio** | 60: 58 de 63 (92,06%); 24: 29 de 29 |
+| RNF-7 | **atingida** em (a), (b) e (c); (d) abaixo | `verify_models` 0; 3 modelos do YAML fora do lock, todos do bake-off da F9.3; 22 prompts com sha256 |
+| RNF-8 | **desvio** | VRAM 11,51 GB (ok); RAM usada 31,58 GB contra 28 GB |
+
+**Item 3 (v1.md por comando):** cumprido. **Item 4 (ADR-082 com os desvios):** cumprido. **Item 5 (tag `v1.0.0`):** ver abaixo, escrito depois de criar a tag.
