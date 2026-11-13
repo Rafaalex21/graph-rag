@@ -119,6 +119,16 @@ export interface OpcoesAgente {
    */
   complementarTabelas?: boolean;
   /**
+   * F9.4 (r2): acrescenta uma busca de tabelas (`buscar_tabelas`) a toda subpergunta roteada para uma ferramenta, em paralelo
+   * e **depois** das evidências da ferramenta escolhida, também a quem só chamou `buscar_trechos`: o valor pedido está numa
+   * tabela do documento em muitas das perguntas numéricas e de agregação, e o roteador escolhe só trechos em parte delas
+   * (nas 60 do golden, as falhas com o valor em tabela indexada usaram só trechos). Não se aplica a quem já chama
+   * `buscar_tabelas` ou `resposta_ja_dada`, nem às rotas descritivas `panorama` e `entidade`, nem aos modos forçados pelo
+   * usuário nem às execuções com ferramentas restritas (`ferramentas`, os degraus A3ts a A5 da escada). Diferente de
+   * `complementarTabelas`, não muda o prompt do roteador. Padrão: ligado.
+   */
+  tabelasJuntas?: boolean;
+  /**
    * Na lista plana `evidencias`, as evidências com página vêm antes das sem página (ordem estável dentro de cada grupo),
    * porque o redator só cita página e o `panorama` e alguns caminhos de grafo devolvem evidência sem ela. Não reordena
    * as evidências de cada subpergunta. Padrão: ligado (v3 do ADR-059, decidida depois de ver as rodadas 1 e 2).
@@ -139,6 +149,7 @@ export interface OpcoesAgente {
 }
 
 const SEM_COMPLEMENTO = new Set(["buscar_trechos", "resposta_ja_dada"]);
+const SEM_TABELAS_JUNTAS = new Set(["buscar_tabelas", "resposta_ja_dada", "panorama", "entidade"]);
 
 const MAX_EVIDENCIAS_NO_RESUMO = 3;
 const MAX_CARACTERES_POR_EVIDENCIA = 180;
@@ -260,8 +271,9 @@ export async function executarAgente(llm: LlmDoAgente, executor: ExecutorDoAgent
         (opcoes.complementar ?? true) && rot.chamadas.length > 0 && !rot.chamadas.some((c) => SEM_COMPLEMENTO.has(c.nome))
           ? [{ nome: "buscar_trechos", argumentos: { pergunta: sub.pergunta } } satisfies ChamadaRoteada]
           : [];
+      const tabelasJuntas = (opcoes.tabelasJuntas ?? true) && modo === "auto" && !opcoes.ferramentas && rot.chamadas.length > 0 && !rot.chamadas.some((c) => SEM_TABELAS_JUNTAS.has(c.nome));
       const complementoDeTabelas =
-        opcoes.complementarTabelas === true && rot.chamadas.length > 0 && !rot.chamadas.some((c) => c.nome === "buscar_tabelas" || c.nome === "resposta_ja_dada")
+        (opcoes.complementarTabelas === true || tabelasJuntas) && rot.chamadas.length > 0 && !rot.chamadas.some((c) => c.nome === "buscar_tabelas" || c.nome === "resposta_ja_dada")
           ? [{ nome: "buscar_tabelas", argumentos: { pergunta: sub.pergunta } } satisfies ChamadaRoteada]
           : [];
       const feitas = await Promise.all([
