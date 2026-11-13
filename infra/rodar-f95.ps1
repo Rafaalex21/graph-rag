@@ -1,8 +1,8 @@
-<#
+﻿<#
 .SYNOPSIS
-  F9.5 (eval/f95-medida-congelamento.md): refaz a escada A3ts, A4 e A5 e mede as metas da §1.3 no código congelado.
-  Serviços no ar antes: .\infra\neo4j.ps1 iniciar ; .\infra\swap.ps1 (em outra janela). Retomável: as CLIs pulam o que já está gravado
-  (a medida de latência e a do redator recomeçam do zero se interrompidas: são curtas).
+  F9.5 (eval/f95-medida-congelamento.md): refaz a escada A3ts, A4 e A5 e mede as metas da Â§1.3 no cÃ³digo congelado.
+  ServiÃ§os no ar antes: .\infra\neo4j.ps1 iniciar ; .\infra\swap.ps1 (em outra janela). RetomÃ¡vel: as CLIs pulam o que jÃ¡ estÃ¡ gravado
+  (a medida de latÃªncia e a do redator recomeÃ§am do zero se interrompidas: sÃ£o curtas).
 
 .EXAMPLE
   .\infra\rodar-f95.ps1 -Fase metas      # RNF-1, 2, 3, 7, 8 (API) e RNF-6 (redator, 60 e 24)
@@ -29,7 +29,7 @@ function Passo([string]$nome, [string]$dir, [string]$comando) {
 }
 
 if ($Fase -in "tudo", "metas") {
-  # RNF-1 (a): auditoria do código
+  # RNF-1 (a): auditoria do cÃ³digo
   Passo "rede (auditoria do codigo)" "indexer" "uv run python -m indexer.f95 rede"
   # RNF-7 (a): hashes dos modelos
   $t = Get-Date
@@ -44,7 +44,7 @@ if ($Fase -in "tudo", "metas") {
   # RNF-1 (b), RNF-2, RNF-3 e RNF-8: API real + amostrador de recursos
   Passo "build da API" "api" "npm run build"
   $parada = Join-Path $raiz "data\avaliacao\f95-parar.txt"
-  $amostrador = Start-Process powershell -ArgumentList "-NoProfile", "-File", (Join-Path $PSScriptRoot "amostrar-recursos.ps1"), "-Parada", $parada -PassThru -WindowStyle Hidden
+  $amostrador = Start-Process powershell -ArgumentList "-NoProfile", "-File", ("`"" + (Join-Path $PSScriptRoot "amostrar-recursos.ps1") + "`""), "-Parada", ("`"" + $parada + "`"") -PassThru -WindowStyle Hidden
   Registrar "amostrador de recursos no ar (pid $($amostrador.Id))"
   $api = Start-Process node -ArgumentList "dist/server.js" -WorkingDirectory (Join-Path $raiz "api") -PassThru -WindowStyle Hidden -RedirectStandardOutput (Join-Path $raiz "data\avaliacao\f95-api.out.log") -RedirectStandardError (Join-Path $raiz "data\avaliacao\f95-api.err.log")
   Registrar "API no ar (pid $($api.Id))"
@@ -57,7 +57,7 @@ if ($Fase -in "tudo", "metas") {
   $amostrador.WaitForExit(30000) | Out-Null
   Registrar "API parada e amostrador encerrado"
 
-  # RNF-6: o redator nas 60 e nas 24 (a API já está parada: o pipeline roda no processo da CLI)
+  # RNF-6: o redator nas 60 e nas 24 (a API jÃ¡ estÃ¡ parada: o pipeline roda no processo da CLI)
   Passo "redator nas 60 (RNF-6)" "api" "npm run avaliar:redator -- --nome f95-redator"
   Passo "redator nas 24 (RNF-6)" "api" "npm run avaliar:redator -- --golden eval/golden_novas.csv --nome f95n-redator"
 }
@@ -75,3 +75,4 @@ if ($Fase -in "tudo", "tabela") {
   Passo "v1.md" "indexer" "uv run python -m indexer.f95 v1"
 }
 Registrar "FASE $Fase PRONTA"
+
