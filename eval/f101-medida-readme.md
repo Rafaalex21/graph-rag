@@ -62,6 +62,7 @@ Ao conferir o link do PDF (ADR-009) para o README, descobri que ele **agora entr
 
 | Rodada | Fase | Clone (commit) | Início | Resultado | Atritos |
 |---|---|---|---|---|---|
+| p1 | completa | `C:\Users\Rafael\graphrag-teste-p1` (`bc2f2c3`) | 14/11 08:47 | **interrompida** às ~16:00, a pedido do dono (precisava do PC): **não vale para o aceite** (intervenção). Até ali, sem atrito que a parasse: instalação, leitura do PDF e indexação até o início de `resolver-planejar` (15:44); `tabelas-gerar` 48,8 min, `extrair` 157,8 min, `catalogo-mapear` 29,8 min, `aberta` ~2 h 39, carga no Neo4j ~4 min, ou seja, ~1,7× os tempos da v1 nas etapas com LLM | sem relatório (subagente parado) |
 | c1 | curta | `C:\Users\Rafael\graphrag-teste-c1` (`8fcf886`) | 13/11 17:50 | **chegou ao fim da fase curta sem intervenção** (~17,5 min: instalar 2,3 min com os GGUF aproveitados, parse 12,5 min, chunks 30 s; parou 40 s depois de a indexação começar `tabelas-gerar`); git do clone limpo | 7 (abaixo) |
 
 **Atritos da c1** (do relatório do subagente; nenhum o impediu de seguir):
