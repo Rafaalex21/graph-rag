@@ -1,4 +1,4 @@
-<#
+﻿<#
 .SYNOPSIS
   Instala tudo o que o projeto usa, nas versões de infra\models.lock.json, sem tocar no sistema: baixa cada arquivo,
   confere tamanho e SHA-256 contra o lock e extrai em infra\bin. Os modelos GGUF vão para a pasta dir_modelos do lock
@@ -27,6 +27,13 @@ New-Item -ItemType Directory -Force $dl | Out-Null
 $lock = Get-Content (Join-Path $PSScriptRoot "models.lock.json") -Raw -Encoding UTF8 | ConvertFrom-Json
 
 function Passo([string]$t) { Write-Host "`n== $t" -ForegroundColor Cyan }
+# Programas externos (curl, tar, uv, npm, pip) escrevem progresso no stderr. Com a saída redirecionada (`*>&1`, `Tee-Object`),
+# o PowerShell 5.1 transforma cada linha do stderr num erro e, com ErrorActionPreference = Stop, para o script. Aqui eles rodam
+# com Continue, e o que decide se deu certo é o código de saída ($LASTEXITCODE), conferido logo depois de cada chamada.
+function Nativo([scriptblock]$b) {
+  $velho = $ErrorActionPreference; $ErrorActionPreference = "Continue"
+  try { & $b } finally { $ErrorActionPreference = $velho }
+}
 function Hash([string]$arq) { (Get-FileHash $arq -Algorithm SHA256).Hash.ToLower() }
 
 # Baixa $url em $destino (curl com retomada) e confere tamanho e sha256; não baixa se o arquivo já confere.
@@ -37,7 +44,7 @@ function Baixar([string]$url, [string]$destino, [string]$sha, $bytes) {
     }
   }
   Write-Host "   baixando $(Split-Path $destino -Leaf)…"
-  & curl.exe -L --fail --retry 3 -C - -o $destino $url
+  Nativo { & curl.exe -L --fail --retry 3 --progress-bar -C - -o $destino $url }
   if ($LASTEXITCODE -ne 0) { throw "Falhou o download de $url (curl $LASTEXITCODE)." }
   $h = Hash $destino
   if ($h -ne $sha.ToLower()) { throw "SHA-256 diverge em $destino`n  esperado $sha`n  obtido   $h`nApague o arquivo e rode de novo." }
@@ -48,7 +55,7 @@ function Baixar([string]$url, [string]$destino, [string]$sha, $bytes) {
 function Extrair([string]$zip, [string]$destino, [string]$confere) {
   if (Test-Path $confere) { Write-Host "   ok (já extraído): $confere"; return }
   New-Item -ItemType Directory -Force $destino | Out-Null
-  & tar.exe -xf $zip -C $destino
+  Nativo { & tar.exe -xf $zip -C $destino }
   if ($LASTEXITCODE -ne 0 -or -not (Test-Path $confere)) { throw "Falhou ao extrair $zip em $destino." }
 }
 
@@ -98,8 +105,8 @@ if ($ComHip) {
   Baixar "https://github.com/ggml-org/llama.cpp/releases/download/$($lock.llama_cpp.versao)/$($h.arquivo)" $z $h.sha256 $null
   Extrair $z (Join-Path $raiz $h.pasta) (Join-Path $raiz "$($h.pasta)\llama-server.exe")
   $venv = Join-Path $raiz $h.rocm_wheels.venv
-  if (-not (Test-Path "$venv\Scripts\python.exe")) { & py -3.12 -m venv $venv; if ($LASTEXITCODE -ne 0) { throw "Falhou ao criar $venv (precisa do Python 3.12)." } }
-  & "$venv\Scripts\python.exe" -m pip install --quiet --index-url $h.rocm_wheels.indice $h.rocm_wheels.pacotes
+  if (-not (Test-Path "$venv\Scripts\python.exe")) { Nativo { & py -3.12 -m venv $venv }; if ($LASTEXITCODE -ne 0) { throw "Falhou ao criar $venv (precisa do Python 3.12)." } }
+  Nativo { & "$venv\Scripts\python.exe" -m pip install --quiet --index-url $h.rocm_wheels.indice $h.rocm_wheels.pacotes }
   if ($LASTEXITCODE -ne 0) { throw "Falhou a instalação das bibliotecas ROCm." }
 }
 
@@ -117,11 +124,11 @@ foreach ($m in $lock.modelos) {
 . (Join-Path $PSScriptRoot "dev-env.ps1") | Out-Null
 Passo "indexer: dependências Python (com o grupo parse, do Docling)"
 Push-Location (Join-Path $raiz "indexer")
-& uv sync --group parse
+Nativo { & uv sync --group parse }
 if ($LASTEXITCODE -ne 0) { Pop-Location; throw "uv sync falhou (o Python 3.12 está instalado?)." }
 Passo "Modelos do Docling (layout e TableFormer)"
 $md = Join-Path $raiz $lock.docling.pasta_modelos
-& uv run --group parse docling-tools models download layout tableformer -o $md
+Nativo { & uv run --group parse docling-tools models download layout tableformer -o $md }
 if ($LASTEXITCODE -ne 0) { Pop-Location; throw "Falhou o download dos modelos do Docling." }
 Pop-Location
 foreach ($dm in $lock.docling.modelos) {
@@ -130,9 +137,9 @@ foreach ($dm in $lock.docling.modelos) {
   Write-Host "   ok: $($dm.papel) confere com o lock"
 }
 foreach ($app in "api", "web") {
-  Passo "${app}: npm ci"
+  Passo "${app}: npm ci (o aviso 'install-scripts … not yet covered by allowScripts' é esperado e não atrapalha)"
   Push-Location (Join-Path $raiz $app)
-  & npm ci --no-fund --no-audit
+  Nativo { & npm ci --no-fund --no-audit }
   if ($LASTEXITCODE -ne 0) { Pop-Location; throw "npm ci falhou em $app." }
   Pop-Location
 }

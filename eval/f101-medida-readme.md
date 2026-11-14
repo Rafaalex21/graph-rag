@@ -74,6 +74,14 @@ Ao conferir o link do PDF (ADR-009) para o README, descobri que ele **agora entr
 6. O README não lista as etapas da indexação, quais usam o LLM, quanto cada uma leva, nem os nomes que `-De` aceita; nos primeiros 40 s o `f58.log` ficou vazio e o estado dizia só `tabelas-gerar`.
 7. O passo 7 só é alcançável depois das 8 a 9 h de indexação (esperado; é a fase completa).
 
+## Errata 1 (14/11/2026, antes da rodada seguinte): consertos dos atritos da c1
+
+- **Atrito 2 (saída redirecionada):** no `infra/instalar.ps1`, os programas externos (curl, tar, uv, npm, pip) passam a rodar com `ErrorActionPreference = Continue` e o resultado é decidido pelo código de saída; o curl mostra uma barra de progresso. Conferido no clone c1 (fora de rodada): com `*>&1 | Tee-Object`, saída 0 em 49 s, tudo já instalado. O README mostra como guardar a saída num arquivo.
+- **Atrito 3 (acentos):** o `infra/instalar.ps1` passa a ser salvo com BOM UTF-8, como os outros scripts. O BOM do `f58_estado.txt` fica (é do `Set-Content` do PowerShell 5.1; não atrapalha a leitura).
+- **Atrito 4 (aviso do npm):** conferi no clone c1 (fora de rodada): `ng build` da `web` e `tsc` da `api` passam; o aviso também aparece no projeto principal. O instalador e o README dizem que é esperado.
+- **Atritos 1, 5 e 6:** o README diz que o nome da pasta pode ser outro, o que é normal na saída do passo 5 (as contagens do Docling, do `sections` e do `chunks`), e ganha a tabela das etapas da indexação com os nomes aceitos por `-De`, quais usam o LLM e quanto cada uma levou na v1, além de como acompanhar o andamento. O tempo estimado da indexação passa a "8 a 10 h".
+- **Próxima rodada:** vai direto para a **fase completa** (a regra não exige outra rodada curta); clone novo `C:\Users\Rafael\graphrag-teste-p1`, subagente novo, mesmo enunciado. No enunciado da fase completa, "a pergunta T01" vem com o texto dela (é o critério de "subido" desta medida, não informação do projeto).
+
 ## Resultado por item da regra
 
 (preenchido no fim)

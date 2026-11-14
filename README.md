@@ -87,7 +87,7 @@ Detalhes: [`docs/ARQUITETURA.md`](docs/ARQUITETURA.md); cada decisão tem um ADR
 | RAM | 32 GB (o LLM principal deixa parte dos *experts* na RAM) |
 | Disco | ~30 GB para os modelos obrigatórios (em `C:\modelos`) + ~3 GB para o projeto |
 | Programas | [Git](https://git-scm.com/download/win) e [Python 3.12](https://www.python.org/downloads/) (marque "Add python.exe to PATH"). O resto (Node, uv, llama.cpp, llama-swap, Java, Neo4j) é baixado pelo instalador para dentro de `infra\bin`, sem mexer no sistema |
-| Tempo | ~1 h para instalar (com os ~24 GB de modelos), ~12 min para ler o PDF e **8 a 9 h para indexar** o documento (uma vez) |
+| Tempo | ~1 h para instalar (com os ~24 GB de modelos), ~12 min para ler o PDF e **8 a 10 h para indexar** o documento (uma vez) |
 
 ## Subir do zero
 
@@ -101,16 +101,16 @@ Set-ExecutionPolicy -Scope Process -ExecutionPolicy Bypass
 
 ```powershell
 git clone https://github.com/Rafaalex21/graph-rag.git
-cd graph-rag
+cd graph-rag      # ou o nome que você deu à pasta do clone
 ```
 
 **2. Instalar** (baixa e confere pelo SHA-256 cada arquivo listado em `infra\models.lock.json`; repetir só refaz o que falta)
 
 ```powershell
-.\infra\instalar.ps1
+.\infra\instalar.ps1                                   # ou, guardando a saída: .\infra\instalar.ps1 *>&1 | Tee-Object instalar.log
 ```
 
-Os modelos GGUF vão para `C:\modelos`. Se você já os tiver lá, o instalador confere o tamanho e o hash e não baixa de novo. Para usar outra pasta, mude `dir_modelos` em `infra\models.lock.json` e a macro `modelos` em `infra\llama-swap.yaml`. O instalador também cria o `.env` com uma senha gerada para o Neo4j (o `.env` não vai para o git).
+Termina com "Tudo instalado." Com os modelos já baixados, leva uns 3 minutos; baixando tudo, depende da sua conexão (~25 GB). O `npm ci` avisa que 4 pacotes têm "install scripts not yet covered by allowScripts": é esperado e não atrapalha. Os modelos GGUF vão para `C:\modelos`. Se você já os tiver lá, o instalador confere o tamanho e o hash e não baixa de novo. Para usar outra pasta, mude `dir_modelos` em `infra\models.lock.json` e a macro `modelos` em `infra\llama-swap.yaml`. O instalador também cria o `.env` com uma senha gerada para o Neo4j (o `.env` não vai para o git).
 
 **3. O documento.** A v1 indexou a **versão 7** do Formulário de Referência 2026 do Banco do Brasil (de 21/09/2026, 423 páginas, SHA-256 `B0D175661531FDD672A0DB7ABD44931CB43B05A122264A33CBE9E6186E3432B4`). O documento não é redistribuído aqui, e o site de Relações com Investidores do BB passou a entregar, no mesmo link, uma versão mais nova (de 11/11/2026).
 
@@ -150,13 +150,31 @@ uv run python -m indexer.chunks ..\data\parsed\banco_do_brasil_formulario_refere
 cd ..
 ```
 
-**6. Indexar** (8 a 9 h com a GPU ocupada; deixe rodando, de preferência à noite):
+O que é normal aqui: o Docling avisa sobre células de tabela descartadas e termina com 423 páginas, todas com texto, e 412 tabelas; o `sections` compara a árvore de seções com o sumário do PDF e dá uma taxa perto de 0,93, com uns 7 títulos divergentes; o `chunks` gera 477 Pais e 1.041 Filhos, sem órfãos.
+
+**6. Indexar** (8 a 10 h com a GPU ocupada; deixe rodando, de preferência à noite):
 
 ```powershell
 .\infra\indexar-documento.ps1
 ```
 
-O andamento fica em `data\logs\f58_estado.txt` (uma linha) e `data\logs\f58_etapas.log`. Se parar no meio (queda, PC desligado), rode de novo com `-De <etapa>` a partir da etapa que falhou: as chamadas ao LLM ficam em cache e não se repetem. Termina com a linha `pronto`.
+As etapas, na ordem (os tempos são os da indexação da v1, nesta máquina; "LLM" = o Qwen3.6 trabalhando em lote):
+
+| Etapa (`-De`) | O que faz | LLM | Tempo |
+|---|---|---|---|
+| `tabelas-gerar` | descrição e perguntas hipotéticas de cada tabela | sim | ~1 h |
+| `extrair` | fatos financeiros por Pai e por tabela | sim | ~1,5 h |
+| `lastro` | descarta fatos cujo valor não está na evidência | não | segundos |
+| `catalogo-mapear` | liga os fatos às métricas canônicas | sim | ~15 min |
+| `aberta` | entidades e relações (extração aberta) | sim | ~2 h |
+| `neo4j-limpar`, `grafo`, `embeddings`, `indice-busca`, `tabelas-carregar`, `importar`, `catalogo-medir` | carga no Neo4j, vetores e índices | não (só embeddings) | ~5 min |
+| `resolver` | resolução de entidades (confirmação pelo LLM) | sim | ~2 h 10 |
+| `resumos` | resumo de entidades e relações | sim | ~20 min |
+| `comunidades` | Leiden no GDS | não | ~1 min |
+| `relatorios` | relatório de cada comunidade e vetores | sim | ~1 h 15 |
+| `entidades-vec` | vetores e índice de texto das entidades | não | ~10 min |
+
+O andamento fica em `data\logs\f58_estado.txt` (uma linha com a etapa atual e os minutos desde o início) e em `data\logs\f58_etapas.log` (início e fim de cada etapa); a saída detalhada dos comandos vai para `data\logs\f58.log`, que pode passar muitos minutos sem linha nova enquanto o LLM trabalha. Leia esses arquivos de vez em quando, sem deixá-los abertos com `Get-Content -Wait` (isso trava a escrita do log). Se a indexação parar no meio (queda, PC desligado), rode `.\infra\indexar-documento.ps1 -De <etapa>` com a etapa em que parou: as chamadas ao LLM ficam em cache e não se repetem. Cada etapa é tentada até 3 vezes antes de desistir. Termina com a linha `pronto` no `f58_etapas.log`.
 
 **7. Subir a API e a interface**, cada uma na sua janela:
 
