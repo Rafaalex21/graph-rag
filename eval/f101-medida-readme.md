@@ -62,6 +62,15 @@ Ao conferir o link do PDF (ADR-009) para o README, descobri que ele **agora entr
 - **Pausa:** a p1 foi perdida porque o dono precisou do PC no meio da indexação, e a regra só aceitava uma rodada sem parar. A partir da p2, **uma pausa pedida pelo dono não é intervenção**, com estas condições: eu paro o subagente e os processos (como na p1), registro a hora e a etapa; para retomar, entra **um subagente novo, no mesmo clone, com o mesmo enunciado e mais uma frase igual em todas as retomadas**: "Este clone já seguiu parte do README numa sessão anterior que foi interrompida porque o PC precisou ser usado; descubra pelo README e pelos logs que ele indica onde parou e continue até o fim." Ele não recebe de mim nenhuma informação sobre a etapa ou o comando. Isso **testa o caminho de retomada do README**, que quem indexa em casa vai usar. Cada pausa é registrada; ajuda minha além disso continua sendo intervenção.
 - A p1 continua contada como interrompida (a regra da pausa não existia quando ela parou).
 
+## Errata 3 (18/11/2026, antes da rodada p3): endereço da interface e leitura do log
+
+A p2 chegou à resposta da T01, mas o critério de "subido" falhou como escrito: a interface escutava só em `::1` (`ng serve` sem `host`) e o critério pede `127.0.0.1:4200`. **O critério não muda**; quem muda é o projeto, para ficar coerente com ele e com o resto da pilha (API, llama-swap e Neo4j já escutam em `127.0.0.1`, e o projeto `ao-vivo` do Playwright já subia o `ng serve` com `--host 127.0.0.1`). Decisão do dono (18/11): errata 3 e **rodada p3 completa num clone novo**; a p2 não é reaproveitada.
+
+- `web/angular.json`: `serve.options` ganha `"host": "127.0.0.1"` e `"port": 4200`. Conferido por mim no projeto principal: `GET http://127.0.0.1:4200/` 200 e `http://localhost:4200/` 200 (o cliente cai para o IPv4); `[::1]:4200` deixa de responder.
+- `README.md`, passo 7: abrir `http://127.0.0.1:4200`. Passo 6: o aviso sobre o log passa a valer para qualquer leitura contínua (`Get-Content -Wait`, `tail -f`/`-F`, editor que mantém o arquivo aberto), não só `Get-Content -Wait` (atrito 2 da p2). A tabela das etapas troca os tempos da v1 (com *) pelos medidos na p2: `resolver` ~2 h 35, `resumos` ~25 min, `relatorios` ~2 h 15, `entidades-vec` ~11 min.
+- `web/README.md`: o endereço do `ng serve` passa a `127.0.0.1:4200`.
+- O enunciado e as regras de pausa (errata 2) não mudam. O atrito 5 da p2 (corpo do `POST /api/chat`) é do critério, não do README: fica como está.
+
 ## Execuções (toda rodada é contada)
 
 **Nota sobre o enunciado (vale para todas as rodadas):** além do texto fixo e da frase da errata 0, o subagente recebe um parágrafo de "notas práticas do ambiente", que não fala do projeto: os comandos do README são de PowerShell e cada chamada da ferramenta é uma janela nova (variáveis e `cd` não persistem), comandos de mais de 2 minutos vão em segundo plano, janelas abertas por `Start-Process` ficam em segundo plano, trabalhar só dentro do clone (fora dele, só o que o README mandar, como `C:\modelos`) e deixar no ar os serviços que subiu, dizendo quais. Isso descreve a ferramenta, não o projeto, e é igual em todas as rodadas.

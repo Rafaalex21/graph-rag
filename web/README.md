@@ -13,5 +13,5 @@ npm install
 npx ng test --watch=false
 npx ng lint
 npx ng build
-npx ng serve                # http://localhost:4200
+npx ng serve                # http://127.0.0.1:4200
 ```

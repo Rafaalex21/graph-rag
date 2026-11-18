@@ -158,7 +158,7 @@ O que é normal aqui: o Docling avisa sobre células de tabela descartadas e ter
 .\infra\indexar-documento.ps1
 ```
 
-As etapas, na ordem ("LLM" = o Qwen3.6 trabalhando em lote; tempos medidos nesta máquina num clone limpo em 14/11/2026, e os marcados com * são da indexação da v1, que pode ter aproveitado cache, então conte com mais):
+As etapas, na ordem ("LLM" = o Qwen3.6 trabalhando em lote; tempos medidos nesta máquina em clones limpos, de 14 a 18/11/2026):
 
 | Etapa (`-De`) | O que faz | LLM | Tempo |
 |---|---|---|---|
@@ -168,13 +168,13 @@ As etapas, na ordem ("LLM" = o Qwen3.6 trabalhando em lote; tempos medidos nesta
 | `catalogo-mapear` | liga os fatos às métricas canônicas | sim | ~30 min |
 | `aberta` | entidades e relações (extração aberta) | sim | ~2 h 40 |
 | `neo4j-limpar`, `grafo`, `embeddings`, `indice-busca`, `tabelas-carregar`, `importar`, `catalogo-medir` | carga no Neo4j, vetores e índices | não (só embeddings) | ~4 min |
-| `resolver` | resolução de entidades (confirmação pelo LLM) | sim | ~2 h 10* |
-| `resumos` | resumo de entidades e relações | sim | ~20 min* |
+| `resolver` | resolução de entidades (confirmação pelo LLM) | sim | ~2 h 35 |
+| `resumos` | resumo de entidades e relações | sim | ~25 min |
 | `comunidades` | Leiden no GDS | não | ~1 min |
-| `relatorios` | relatório de cada comunidade e vetores | sim | ~1 h 15* |
-| `entidades-vec` | vetores e índice de texto das entidades | não | ~10 min* |
+| `relatorios` | relatório de cada comunidade e vetores | sim | ~2 h 15 |
+| `entidades-vec` | vetores e índice de texto das entidades | não | ~11 min |
 
-O andamento fica em `data\logs\f58_estado.txt` (uma linha com a etapa atual e os minutos desde o início) e em `data\logs\f58_etapas.log` (início e fim de cada etapa); a saída detalhada dos comandos vai para `data\logs\f58.log`, que pode passar muitos minutos sem linha nova enquanto o LLM trabalha. Leia esses arquivos de vez em quando, sem deixá-los abertos com `Get-Content -Wait` (isso trava a escrita do log). **Se parar no meio** (queda, PC desligado, ou você precisou do PC): suba de novo o Neo4j e o llama-swap como no passo 4 e rode `.\infra\indexar-documento.ps1 -De <etapa>`, com a etapa da última linha `inicio` do `data\logs\f58_etapas.log` que não tem `fim` (nas etapas compostas, use o nome da tabela acima: por exemplo, `resolver-planejar` vira `-De resolver`). As chamadas ao LLM ficam em cache e não se repetem: dá para indexar em várias partes. Cada etapa é tentada até 3 vezes antes de desistir. Termina com a linha `pronto` no `f58_etapas.log`.
+O andamento fica em `data\logs\f58_estado.txt` (uma linha com a etapa atual e os minutos desde o início) e em `data\logs\f58_etapas.log` (início e fim de cada etapa); a saída detalhada dos comandos vai para `data\logs\f58.log`, que pode passar muitos minutos sem linha nova enquanto o LLM trabalha. Leia esses arquivos de vez em quando (`Get-Content` sem `-Wait`, ou abrir e fechar) e **não os deixe abertos em leitura contínua** (`Get-Content -Wait`, `tail -f`/`-F` ou um editor que os mantenha abertos): isso trava a escrita, e as linhas novas deixam de ser gravadas. **Se parar no meio** (queda, PC desligado, ou você precisou do PC): suba de novo o Neo4j e o llama-swap como no passo 4 e rode `.\infra\indexar-documento.ps1 -De <etapa>`, com a etapa da última linha `inicio` do `data\logs\f58_etapas.log` que não tem `fim` (nas etapas compostas, use o nome da tabela acima: por exemplo, `resolver-planejar` vira `-De resolver`). As chamadas ao LLM ficam em cache e não se repetem: dá para indexar em várias partes. Cada etapa é tentada até 3 vezes antes de desistir. Termina com a linha `pronto` no `f58_etapas.log`.
 
 **7. Subir a API e a interface**, cada uma na sua janela:
 
@@ -183,7 +183,7 @@ Start-Process powershell -ArgumentList "-NoExit", "-ExecutionPolicy", "Bypass", 
 Start-Process powershell -ArgumentList "-NoExit", "-ExecutionPolicy", "Bypass", "-Command", ". .\infra\dev-env.ps1; cd web; npm start"
 ```
 
-Abra **http://localhost:4200** e pergunte, por exemplo: *"Quem é o acionista controlador do Banco do Brasil e qual percentual do capital ele detém?"* A primeira resposta demora mais (o modelo de 22 GB é carregado na primeira pergunta).
+Abra **http://127.0.0.1:4200** (a interface escuta só nesse endereço, como a API e o llama-swap) e pergunte, por exemplo: *"Quem é o acionista controlador do Banco do Brasil e qual percentual do capital ele detém?"* A primeira resposta demora mais (o modelo de 22 GB é carregado na primeira pergunta).
 
 Conferir sem navegador:
 
