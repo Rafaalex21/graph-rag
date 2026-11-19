@@ -174,7 +174,7 @@ As etapas, na ordem ("LLM" = o Qwen3.6 trabalhando em lote; tempos medidos nesta
 | `relatorios` | relatório de cada comunidade e vetores | sim | ~2 h 15 |
 | `entidades-vec` | vetores e índice de texto das entidades | não | ~11 min |
 
-O andamento fica em `data\logs\f58_estado.txt` (uma linha com a etapa atual e os minutos desde o início) e em `data\logs\f58_etapas.log` (início e fim de cada etapa); a saída detalhada dos comandos vai para `data\logs\f58.log`, que pode passar muitos minutos sem linha nova enquanto o LLM trabalha. Leia esses arquivos de vez em quando (`Get-Content` sem `-Wait`, ou abrir e fechar) e **não os deixe abertos em leitura contínua** (`Get-Content -Wait`, `tail -f`/`-F` ou um editor que os mantenha abertos): isso trava a escrita, e as linhas novas deixam de ser gravadas. **Se parar no meio** (queda, PC desligado, ou você precisou do PC): suba de novo o Neo4j e o llama-swap como no passo 4 e rode `.\infra\indexar-documento.ps1 -De <etapa>`, com a etapa da última linha `inicio` do `data\logs\f58_etapas.log` que não tem `fim` (nas etapas compostas, use o nome da tabela acima: por exemplo, `resolver-planejar` vira `-De resolver`). As chamadas ao LLM ficam em cache e não se repetem: dá para indexar em várias partes. Cada etapa é tentada até 3 vezes antes de desistir. Termina com a linha `pronto` no `f58_etapas.log`.
+O andamento fica em `data\logs\f58_estado.txt` (uma linha com a etapa atual e os minutos desde o início da indexação, contados quando a etapa começou: durante uma etapa longa o número não muda) e em `data\logs\f58_etapas.log` (início e fim de cada etapa); a saída detalhada dos comandos vai para `data\logs\f58.log`, que pode passar muitos minutos sem linha nova enquanto o LLM trabalha. Leia esses arquivos de vez em quando (`Get-Content` sem `-Wait`, ou abrir e fechar) e **não os deixe abertos em leitura contínua** (`Get-Content -Wait`, `tail -f`/`-F` ou um editor que os mantenha abertos): isso trava a escrita, e as linhas novas deixam de ser gravadas. **Se parar no meio** (queda, PC desligado, ou você precisou do PC): suba de novo o Neo4j e o llama-swap como no passo 4 e rode `.\infra\indexar-documento.ps1 -De <etapa>`, com a etapa da última linha `inicio` do `data\logs\f58_etapas.log` que não tem `fim` (nas etapas compostas, use o nome da tabela acima: por exemplo, `resolver-planejar` vira `-De resolver`). As chamadas ao LLM ficam em cache e não se repetem: dá para indexar em várias partes. Cada etapa é tentada até 3 vezes antes de desistir. Termina com a linha `pronto` no `f58_etapas.log`.
 
 **7. Subir a API e a interface**, cada uma na sua janela:
 
@@ -189,7 +189,16 @@ Conferir sem navegador:
 
 ```powershell
 curl.exe -s http://127.0.0.1:3000/api/saude
+'{"conversationId":"teste-1","message":"Quem é o acionista controlador do Banco do Brasil e qual percentual do capital ele detém?"}' | Set-Content pergunta.json -Encoding UTF8
+curl.exe -s -N -X POST http://127.0.0.1:4200/api/chat -H "Content-Type: application/json" --data-binary "@pergunta.json"
 ```
+
+A segunda chamada devolve um fluxo SSE que termina no evento `fim`, com a resposta e as citações.
+
+**Se algo der errado:**
+
+- **A resposta vem "Não consegui redigir a resposta agora…" (sem citações), ou uma etapa da indexação termina em `ERRO`:** o modelo de linguagem não respondeu. O `/api/saude` mostra só que o llama-swap está no ar, não que o Qwen3.6 consegue carregar. Veja o motivo na janela do llama-swap ou em http://127.0.0.1:8080/logs (procure `failed to allocate` ou `exiting due to model loading error`). A causa mais comum é **falta de memória**: o Qwen3.6 usa boa parte dos 32 GB de RAM (com tudo no ar, o pico medido foi 31,6 GB). Feche os programas que estiverem usando muita memória (Gerenciador de Tarefas → Detalhes, coluna "Confirmação"), suba o llama-swap de novo e repita. Na indexação, rode `.\infra\indexar-documento.ps1 -De <etapa>` com a etapa que deu `ERRO`.
+- **Uma etapa termina em `ERRO` por outro motivo:** a saída detalhada está no fim do `data\logs\f58.log`.
 
 **Para parar:** feche as janelas da API, da interface e do llama-swap, e rode `.\infra\neo4j.ps1 parar`.
 
