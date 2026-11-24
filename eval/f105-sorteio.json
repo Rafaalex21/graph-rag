@@ -1,0 +1,1188 @@
+{
+ "semente": 105,
+ "cotas": {
+  "factual_textual": 38,
+  "numerica": 38,
+  "agregacao_filtro": 25,
+  "tematica_global": 25,
+  "multi_hop": 12,
+  "fora_do_escopo": 12
+ },
+ "regra_minima": ">= 400 caracteres de texto ou ao menos uma tabela",
+ "conjuntos_excluidos": [
+  "golden",
+  "golden_novas",
+  "golden_agregacao",
+  "golden_entidades"
+ ],
+ "candidatas": 384,
+ "usadas_excluidas": 50,
+ "universo": 334,
+ "atribuicoes": [
+  {
+   "n": 1,
+   "categoria": "numerica",
+   "paginas": [
+    257
+   ]
+  },
+  {
+   "n": 2,
+   "categoria": "factual_textual",
+   "paginas": [
+    298
+   ]
+  },
+  {
+   "n": 3,
+   "categoria": "tematica_global",
+   "paginas": [
+    137
+   ]
+  },
+  {
+   "n": 4,
+   "categoria": "agregacao_filtro",
+   "paginas": [
+    294
+   ]
+  },
+  {
+   "n": 5,
+   "categoria": "multi_hop",
+   "paginas": [
+    229,
+    359
+   ]
+  },
+  {
+   "n": 6,
+   "categoria": "numerica",
+   "paginas": [
+    269
+   ]
+  },
+  {
+   "n": 7,
+   "categoria": "numerica",
+   "paginas": [
+    179
+   ]
+  },
+  {
+   "n": 8,
+   "categoria": "tematica_global",
+   "paginas": [
+    115
+   ]
+  },
+  {
+   "n": 9,
+   "categoria": "multi_hop",
+   "paginas": [
+    16,
+    211
+   ]
+  },
+  {
+   "n": 10,
+   "categoria": "factual_textual",
+   "paginas": [
+    413
+   ]
+  },
+  {
+   "n": 11,
+   "categoria": "agregacao_filtro",
+   "paginas": [
+    164
+   ]
+  },
+  {
+   "n": 12,
+   "categoria": "factual_textual",
+   "paginas": [
+    138
+   ]
+  },
+  {
+   "n": 13,
+   "categoria": "factual_textual",
+   "paginas": [
+    290
+   ]
+  },
+  {
+   "n": 14,
+   "categoria": "factual_textual",
+   "paginas": [
+    376
+   ]
+  },
+  {
+   "n": 15,
+   "categoria": "numerica",
+   "paginas": [
+    233
+   ]
+  },
+  {
+   "n": 16,
+   "categoria": "tematica_global",
+   "paginas": [
+    33
+   ]
+  },
+  {
+   "n": 17,
+   "categoria": "numerica",
+   "paginas": [
+    388
+   ]
+  },
+  {
+   "n": 18,
+   "categoria": "factual_textual",
+   "paginas": [
+    326
+   ]
+  },
+  {
+   "n": 19,
+   "categoria": "numerica",
+   "paginas": [
+    130
+   ]
+  },
+  {
+   "n": 20,
+   "categoria": "numerica",
+   "paginas": [
+    172
+   ]
+  },
+  {
+   "n": 21,
+   "categoria": "factual_textual",
+   "paginas": [
+    395
+   ]
+  },
+  {
+   "n": 22,
+   "categoria": "factual_textual",
+   "paginas": [
+    127
+   ]
+  },
+  {
+   "n": 23,
+   "categoria": "numerica",
+   "paginas": [
+    193
+   ]
+  },
+  {
+   "n": 24,
+   "categoria": "multi_hop",
+   "paginas": [
+    328,
+    106
+   ]
+  },
+  {
+   "n": 25,
+   "categoria": "factual_textual",
+   "paginas": [
+    400
+   ]
+  },
+  {
+   "n": 26,
+   "categoria": "tematica_global",
+   "paginas": [
+    145
+   ]
+  },
+  {
+   "n": 27,
+   "categoria": "numerica",
+   "paginas": [
+    174
+   ]
+  },
+  {
+   "n": 28,
+   "categoria": "tematica_global",
+   "paginas": [
+    339
+   ]
+  },
+  {
+   "n": 29,
+   "categoria": "numerica",
+   "paginas": [
+    46
+   ]
+  },
+  {
+   "n": 30,
+   "categoria": "agregacao_filtro",
+   "paginas": [
+    134
+   ]
+  },
+  {
+   "n": 31,
+   "categoria": "numerica",
+   "paginas": [
+    411
+   ]
+  },
+  {
+   "n": 32,
+   "categoria": "numerica",
+   "paginas": [
+    392
+   ]
+  },
+  {
+   "n": 33,
+   "categoria": "tematica_global",
+   "paginas": [
+    146
+   ]
+  },
+  {
+   "n": 34,
+   "categoria": "numerica",
+   "paginas": [
+    250
+   ]
+  },
+  {
+   "n": 35,
+   "categoria": "factual_textual",
+   "paginas": [
+    271
+   ]
+  },
+  {
+   "n": 36,
+   "categoria": "tematica_global",
+   "paginas": [
+    315
+   ]
+  },
+  {
+   "n": 37,
+   "categoria": "tematica_global",
+   "paginas": [
+    377
+   ]
+  },
+  {
+   "n": 38,
+   "categoria": "multi_hop",
+   "paginas": [
+    291,
+    101
+   ]
+  },
+  {
+   "n": 39,
+   "categoria": "agregacao_filtro",
+   "paginas": [
+    38
+   ]
+  },
+  {
+   "n": 40,
+   "categoria": "factual_textual",
+   "paginas": [
+    66
+   ]
+  },
+  {
+   "n": 41,
+   "categoria": "factual_textual",
+   "paginas": [
+    97
+   ]
+  },
+  {
+   "n": 42,
+   "categoria": "factual_textual",
+   "paginas": [
+    348
+   ]
+  },
+  {
+   "n": 43,
+   "categoria": "multi_hop",
+   "paginas": [
+    69,
+    213
+   ]
+  },
+  {
+   "n": 44,
+   "categoria": "factual_textual",
+   "paginas": [
+    136
+   ]
+  },
+  {
+   "n": 45,
+   "categoria": "numerica",
+   "paginas": [
+    393
+   ]
+  },
+  {
+   "n": 46,
+   "categoria": "numerica",
+   "paginas": [
+    287
+   ]
+  },
+  {
+   "n": 47,
+   "categoria": "factual_textual",
+   "paginas": [
+    28
+   ]
+  },
+  {
+   "n": 48,
+   "categoria": "factual_textual",
+   "paginas": [
+    157
+   ]
+  },
+  {
+   "n": 49,
+   "categoria": "agregacao_filtro",
+   "paginas": [
+    309
+   ]
+  },
+  {
+   "n": 50,
+   "categoria": "factual_textual",
+   "paginas": [
+    188
+   ]
+  },
+  {
+   "n": 51,
+   "categoria": "numerica",
+   "paginas": [
+    337
+   ]
+  },
+  {
+   "n": 52,
+   "categoria": "numerica",
+   "paginas": [
+    183
+   ]
+  },
+  {
+   "n": 53,
+   "categoria": "numerica",
+   "paginas": [
+    265
+   ]
+  },
+  {
+   "n": 54,
+   "categoria": "tematica_global",
+   "paginas": [
+    43
+   ]
+  },
+  {
+   "n": 55,
+   "categoria": "numerica",
+   "paginas": [
+    242
+   ]
+  },
+  {
+   "n": 56,
+   "categoria": "agregacao_filtro",
+   "paginas": [
+    35
+   ]
+  },
+  {
+   "n": 57,
+   "categoria": "factual_textual",
+   "paginas": [
+    110
+   ]
+  },
+  {
+   "n": 58,
+   "categoria": "tematica_global",
+   "paginas": [
+    310
+   ]
+  },
+  {
+   "n": 59,
+   "categoria": "agregacao_filtro",
+   "paginas": [
+    182
+   ]
+  },
+  {
+   "n": 60,
+   "categoria": "multi_hop",
+   "paginas": [
+    31,
+    410
+   ]
+  },
+  {
+   "n": 61,
+   "categoria": "factual_textual",
+   "paginas": [
+    150
+   ]
+  },
+  {
+   "n": 62,
+   "categoria": "tematica_global",
+   "paginas": [
+    336
+   ]
+  },
+  {
+   "n": 63,
+   "categoria": "numerica",
+   "paginas": [
+    54
+   ]
+  },
+  {
+   "n": 64,
+   "categoria": "numerica",
+   "paginas": [
+    192
+   ]
+  },
+  {
+   "n": 65,
+   "categoria": "numerica",
+   "paginas": [
+    321
+   ]
+  },
+  {
+   "n": 66,
+   "categoria": "agregacao_filtro",
+   "paginas": [
+    357
+   ]
+  },
+  {
+   "n": 67,
+   "categoria": "factual_textual",
+   "paginas": [
+    108
+   ]
+  },
+  {
+   "n": 68,
+   "categoria": "factual_textual",
+   "paginas": [
+    153
+   ]
+  },
+  {
+   "n": 69,
+   "categoria": "multi_hop",
+   "paginas": [
+    283,
+    301
+   ]
+  },
+  {
+   "n": 70,
+   "categoria": "tematica_global",
+   "paginas": [
+    314
+   ]
+  },
+  {
+   "n": 71,
+   "categoria": "tematica_global",
+   "paginas": [
+    347
+   ]
+  },
+  {
+   "n": 72,
+   "categoria": "factual_textual",
+   "paginas": [
+    22
+   ]
+  },
+  {
+   "n": 73,
+   "categoria": "numerica",
+   "paginas": [
+    117
+   ]
+  },
+  {
+   "n": 74,
+   "categoria": "multi_hop",
+   "paginas": [
+    143,
+    139
+   ]
+  },
+  {
+   "n": 75,
+   "categoria": "factual_textual",
+   "paginas": [
+    237
+   ]
+  },
+  {
+   "n": 76,
+   "categoria": "numerica",
+   "paginas": [
+    147
+   ]
+  },
+  {
+   "n": 77,
+   "categoria": "agregacao_filtro",
+   "paginas": [
+    307
+   ]
+  },
+  {
+   "n": 78,
+   "categoria": "tematica_global",
+   "paginas": [
+    349
+   ]
+  },
+  {
+   "n": 79,
+   "categoria": "factual_textual",
+   "paginas": [
+    141
+   ]
+  },
+  {
+   "n": 80,
+   "categoria": "numerica",
+   "paginas": [
+    87
+   ]
+  },
+  {
+   "n": 81,
+   "categoria": "numerica",
+   "paginas": [
+    270
+   ]
+  },
+  {
+   "n": 82,
+   "categoria": "agregacao_filtro",
+   "paginas": [
+    246
+   ]
+  },
+  {
+   "n": 83,
+   "categoria": "factual_textual",
+   "paginas": [
+    389
+   ]
+  },
+  {
+   "n": 84,
+   "categoria": "agregacao_filtro",
+   "paginas": [
+    197
+   ]
+  },
+  {
+   "n": 85,
+   "categoria": "numerica",
+   "paginas": [
+    387
+   ]
+  },
+  {
+   "n": 86,
+   "categoria": "numerica",
+   "paginas": [
+    415
+   ]
+  },
+  {
+   "n": 87,
+   "categoria": "factual_textual",
+   "paginas": [
+    114
+   ]
+  },
+  {
+   "n": 88,
+   "categoria": "multi_hop",
+   "paginas": [
+    245,
+    186
+   ]
+  },
+  {
+   "n": 89,
+   "categoria": "tematica_global",
+   "paginas": [
+    61
+   ]
+  },
+  {
+   "n": 90,
+   "categoria": "agregacao_filtro",
+   "paginas": [
+    251
+   ]
+  },
+  {
+   "n": 91,
+   "categoria": "numerica",
+   "paginas": [
+    323
+   ]
+  },
+  {
+   "n": 92,
+   "categoria": "tematica_global",
+   "paginas": [
+    84
+   ]
+  },
+  {
+   "n": 93,
+   "categoria": "tematica_global",
+   "paginas": [
+    70
+   ]
+  },
+  {
+   "n": 94,
+   "categoria": "tematica_global",
+   "paginas": [
+    72
+   ]
+  },
+  {
+   "n": 95,
+   "categoria": "factual_textual",
+   "paginas": [
+    401
+   ]
+  },
+  {
+   "n": 96,
+   "categoria": "agregacao_filtro",
+   "paginas": [
+    50
+   ]
+  },
+  {
+   "n": 97,
+   "categoria": "tematica_global",
+   "paginas": [
+    267
+   ]
+  },
+  {
+   "n": 98,
+   "categoria": "numerica",
+   "paginas": [
+    370
+   ]
+  },
+  {
+   "n": 99,
+   "categoria": "multi_hop",
+   "paginas": [
+    63,
+    327
+   ]
+  },
+  {
+   "n": 100,
+   "categoria": "tematica_global",
+   "paginas": [
+    280
+   ]
+  },
+  {
+   "n": 101,
+   "categoria": "factual_textual",
+   "paginas": [
+    56
+   ]
+  },
+  {
+   "n": 102,
+   "categoria": "numerica",
+   "paginas": [
+    277
+   ]
+  },
+  {
+   "n": 103,
+   "categoria": "numerica",
+   "paginas": [
+    260
+   ]
+  },
+  {
+   "n": 104,
+   "categoria": "factual_textual",
+   "paginas": [
+    181
+   ]
+  },
+  {
+   "n": 105,
+   "categoria": "agregacao_filtro",
+   "paginas": [
+    299
+   ]
+  },
+  {
+   "n": 106,
+   "categoria": "factual_textual",
+   "paginas": [
+    51
+   ]
+  },
+  {
+   "n": 107,
+   "categoria": "tematica_global",
+   "paginas": [
+    99
+   ]
+  },
+  {
+   "n": 108,
+   "categoria": "tematica_global",
+   "paginas": [
+    124
+   ]
+  },
+  {
+   "n": 109,
+   "categoria": "agregacao_filtro",
+   "paginas": [
+    318
+   ]
+  },
+  {
+   "n": 110,
+   "categoria": "numerica",
+   "paginas": [
+    402
+   ]
+  },
+  {
+   "n": 111,
+   "categoria": "agregacao_filtro",
+   "paginas": [
+    241
+   ]
+  },
+  {
+   "n": 112,
+   "categoria": "factual_textual",
+   "paginas": [
+    360
+   ]
+  },
+  {
+   "n": 113,
+   "categoria": "factual_textual",
+   "paginas": [
+    394
+   ]
+  },
+  {
+   "n": 114,
+   "categoria": "multi_hop",
+   "paginas": [
+    295,
+    59
+   ]
+  },
+  {
+   "n": 115,
+   "categoria": "numerica",
+   "paginas": [
+    268
+   ]
+  },
+  {
+   "n": 116,
+   "categoria": "numerica",
+   "paginas": [
+    165
+   ]
+  },
+  {
+   "n": 117,
+   "categoria": "factual_textual",
+   "paginas": [
+    249
+   ]
+  },
+  {
+   "n": 118,
+   "categoria": "agregacao_filtro",
+   "paginas": [
+    95
+   ]
+  },
+  {
+   "n": 119,
+   "categoria": "agregacao_filtro",
+   "paginas": [
+    167
+   ]
+  },
+  {
+   "n": 120,
+   "categoria": "tematica_global",
+   "paginas": [
+    144
+   ]
+  },
+  {
+   "n": 121,
+   "categoria": "factual_textual",
+   "paginas": [
+    163
+   ]
+  },
+  {
+   "n": 122,
+   "categoria": "agregacao_filtro",
+   "paginas": [
+    231
+   ]
+  },
+  {
+   "n": 123,
+   "categoria": "agregacao_filtro",
+   "paginas": [
+    227
+   ]
+  },
+  {
+   "n": 124,
+   "categoria": "tematica_global",
+   "paginas": [
+    248
+   ]
+  },
+  {
+   "n": 125,
+   "categoria": "multi_hop",
+   "paginas": [
+    361,
+    44
+   ]
+  },
+  {
+   "n": 126,
+   "categoria": "factual_textual",
+   "paginas": [
+    358
+   ]
+  },
+  {
+   "n": 127,
+   "categoria": "numerica",
+   "paginas": [
+    220
+   ]
+  },
+  {
+   "n": 128,
+   "categoria": "numerica",
+   "paginas": [
+    42
+   ]
+  },
+  {
+   "n": 129,
+   "categoria": "tematica_global",
+   "paginas": [
+    285
+   ]
+  },
+  {
+   "n": 130,
+   "categoria": "agregacao_filtro",
+   "paginas": [
+    154
+   ]
+  },
+  {
+   "n": 131,
+   "categoria": "numerica",
+   "paginas": [
+    126
+   ]
+  },
+  {
+   "n": 132,
+   "categoria": "agregacao_filtro",
+   "paginas": [
+    32
+   ]
+  },
+  {
+   "n": 133,
+   "categoria": "factual_textual",
+   "paginas": [
+    350
+   ]
+  },
+  {
+   "n": 134,
+   "categoria": "factual_textual",
+   "paginas": [
+    37
+   ]
+  },
+  {
+   "n": 135,
+   "categoria": "agregacao_filtro",
+   "paginas": [
+    171
+   ]
+  },
+  {
+   "n": 136,
+   "categoria": "agregacao_filtro",
+   "paginas": [
+    362
+   ]
+  },
+  {
+   "n": 137,
+   "categoria": "factual_textual",
+   "paginas": [
+    222
+   ]
+  },
+  {
+   "n": 138,
+   "categoria": "agregacao_filtro",
+   "paginas": [
+    180
+   ]
+  }
+ ],
+ "reserva": [
+  403,
+  142,
+  374,
+  132,
+  276,
+  262,
+  353,
+  36,
+  412,
+  187,
+  300,
+  65,
+  151,
+  111,
+  53,
+  221,
+  24,
+  2,
+  159,
+  64,
+  160,
+  386,
+  317,
+  289,
+  149,
+  234,
+  116,
+  235,
+  41,
+  399,
+  319,
+  185,
+  26,
+  288,
+  27,
+  297,
+  266,
+  332,
+  293,
+  39,
+  98,
+  312,
+  385,
+  45,
+  324,
+  397,
+  135,
+  225,
+  404,
+  68,
+  13,
+  128,
+  264,
+  125,
+  259,
+  230,
+  306,
+  305,
+  118,
+  148,
+  252,
+  226,
+  30,
+  279,
+  375,
+  73,
+  311,
+  55,
+  238,
+  322,
+  198,
+  11,
+  256,
+  158,
+  177,
+  176,
+  372,
+  236,
+  274,
+  162,
+  304,
+  303,
+  102,
+  100,
+  273,
+  218,
+  75,
+  173,
+  398,
+  67,
+  391,
+  396,
+  48,
+  253,
+  86,
+  381,
+  286,
+  107,
+  29,
+  255,
+  88,
+  40,
+  123,
+  390,
+  282,
+  284,
+  334,
+  417,
+  416,
+  83,
+  62,
+  199,
+  272,
+  247,
+  161,
+  178,
+  216,
+  354,
+  58,
+  57,
+  34,
+  121,
+  380,
+  292,
+  278,
+  223,
+  421,
+  47,
+  140,
+  133,
+  25,
+  243,
+  382,
+  308,
+  356,
+  82,
+  96,
+  175,
+  190,
+  384,
+  275,
+  379,
+  89,
+  329,
+  189,
+  254,
+  325,
+  313,
+  371,
+  320,
+  335,
+  261,
+  131,
+  244,
+  85,
+  228,
+  49,
+  166,
+  331,
+  414,
+  129,
+  152,
+  316,
+  296,
+  258,
+  281,
+  122,
+  240,
+  263,
+  71,
+  109,
+  120,
+  419,
+  119,
+  191,
+  232,
+  373,
+  330,
+  219,
+  8,
+  80,
+  378,
+  239,
+  383
+ ],
+ "pulos": []
+}

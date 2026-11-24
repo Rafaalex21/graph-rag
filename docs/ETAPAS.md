@@ -482,6 +482,10 @@
 - [ ] **F10.4** Artigo técnico: "GraphRAG 100% local numa GPU de 16 GB", com os números medidos
   - aceite: rascunho revisado
   - depende: F10.1
+- [~] **F10.5** Bateria final de precisão: 150 perguntas novas sobre páginas sorteadas, medidas no A3 (busca vetorial) e no A6 (agente completo), com intervalo de confiança
+  - aceite: `eval/golden_f105.csv` congelado (commit com sha256) antes de qualquer execução; `eval/resultados/f105-bateria.md` gerado por comando; números no README, quaisquer que sejam
+  - nota (24/11/2026): pedida pelo dono para fechar a F10 com uma medida maior que as 24 do grupo novo e servir de base a um post no LinkedIn (o post é publicado por ele). Medida em `eval/f105-medida-bateria.md`, fixada antes de escrever as perguntas. Roda depois da F10.2 e da gravação do vídeo (mesma GPU)
+  - depende: F9.5
 
 ## Matriz de modelos
 
