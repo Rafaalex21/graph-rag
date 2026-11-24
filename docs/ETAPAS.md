@@ -473,6 +473,7 @@
   - nota: trechos curtos do documento podem ser publicados com a fonte citada, sem autorização prévia da RI (decisão do dono, revisão de 13/11/2026 do ADR-009)
   - depende: F9.5
   - nota (18/11/2026): o dono vai viajar de 19 a 23/11 e deixou o PC ligado com acesso remoto. À pergunta "Você autoriza agora as etapas F10.2 a F10.4, uma após a outra, enquanto viaja?", respondeu "Sim, pode seguir"; em seguida esclareceu que ainda desliga o PC em 18/11 e que a autorização **só passa a valer quando ele avisar que está saindo de viagem** ("depois eu vou te avisar que estou saindo de viagem e aí sim você pode seguir tudo"). **Aviso dado em 19/11/2026:** "pronto, agora eu vou deixar meu pc ligado e depois ir viajar, pode fazer até o final". A partir desse aviso, vale como o "vai" de cada uma dessas etapas, **só depois do aceite cumprido da anterior** (F10.1 → F10.2 → F10.3 → F10.4); uma etapa que não cumprir o aceite para a sequência até o dono decidir. Não autoriza publicar nada fora do repositório (o vídeo da F10.3 é publicado pelo dono, na conta dele)
+  - andamento (24/11/2026): rodadas p2 e p3 do teste "de fora" falharam (erratas em `eval/f101-medida-readme.md`); a p4 roda num clone limpo desde 07:44, na indexação completa (tabelas-gerar em 46,4 min; extrair desde 08:47)
 - [~] **F10.2** Scripts `infra/up.ps1` (sobe tudo) e `indexer run-all` (indexação completa)
   - aceite: máquina limpa → assistente respondendo com dois comandos (fora o download dos modelos)
   - depende: F9.5
@@ -485,6 +486,7 @@
 - [~] **F10.5** Bateria final de precisão: 150 perguntas novas sobre páginas sorteadas, medidas no A3 (busca vetorial) e no A6 (agente completo), com intervalo de confiança
   - aceite: `eval/golden_f105.csv` congelado (commit com sha256) antes de qualquer execução; `eval/resultados/f105-bateria.md` gerado por comando; números no README, quaisquer que sejam
   - nota (24/11/2026): pedida pelo dono para fechar a F10 com uma medida maior que as 24 do grupo novo e servir de base a um post no LinkedIn (o post é publicado por ele). Medida em `eval/f105-medida-bateria.md`, fixada antes de escrever as perguntas. Roda depois da F10.2 e da gravação do vídeo (mesma GPU)
+  - andamento (24/11/2026): 150 perguntas congeladas em cfd7197 (38 numéricas, 38 factuais, 25 de agregação, 25 temáticas, 12 multi-hop e 12 fora do escopo; sha256 `6efb5316…5019c`), validadas contra o texto do PDF; 74 páginas puladas pela regra, com motivo. Falta rodar o A3 e o A6 (~4 h cada) e gerar o relatório
   - depende: F9.5
 
 ## Matriz de modelos
