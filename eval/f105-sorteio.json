@@ -23,7 +23,7 @@
    "n": 1,
    "categoria": "numerica",
    "paginas": [
-    257
+    403
    ]
   },
   {
@@ -44,7 +44,7 @@
    "n": 4,
    "categoria": "agregacao_filtro",
    "paginas": [
-    294
+    142
    ]
   },
   {
@@ -59,14 +59,14 @@
    "n": 6,
    "categoria": "numerica",
    "paginas": [
-    269
+    374
    ]
   },
   {
    "n": 7,
    "categoria": "numerica",
    "paginas": [
-    179
+    36
    ]
   },
   {
@@ -81,7 +81,7 @@
    "categoria": "multi_hop",
    "paginas": [
     16,
-    211
+    412
    ]
   },
   {
@@ -123,7 +123,7 @@
    "n": 15,
    "categoria": "numerica",
    "paginas": [
-    233
+    187
    ]
   },
   {
@@ -151,14 +151,14 @@
    "n": 19,
    "categoria": "numerica",
    "paginas": [
-    130
+    151
    ]
   },
   {
    "n": 20,
    "categoria": "numerica",
    "paginas": [
-    172
+    65
    ]
   },
   {
@@ -179,7 +179,7 @@
    "n": 23,
    "categoria": "numerica",
    "paginas": [
-    193
+    159
    ]
   },
   {
@@ -187,7 +187,7 @@
    "categoria": "multi_hop",
    "paginas": [
     328,
-    106
+    317
    ]
   },
   {
@@ -208,7 +208,7 @@
    "n": 27,
    "categoria": "numerica",
    "paginas": [
-    174
+    2
    ]
   },
   {
@@ -229,14 +229,14 @@
    "n": 30,
    "categoria": "agregacao_filtro",
    "paginas": [
-    134
+    160
    ]
   },
   {
    "n": 31,
    "categoria": "numerica",
    "paginas": [
-    411
+    41
    ]
   },
   {
@@ -257,7 +257,7 @@
    "n": 34,
    "categoria": "numerica",
    "paginas": [
-    250
+    116
    ]
   },
   {
@@ -343,7 +343,7 @@
    "n": 46,
    "categoria": "numerica",
    "paginas": [
-    287
+    399
    ]
   },
   {
@@ -385,14 +385,14 @@
    "n": 52,
    "categoria": "numerica",
    "paginas": [
-    183
+    319
    ]
   },
   {
    "n": 53,
    "categoria": "numerica",
    "paginas": [
-    265
+    185
    ]
   },
   {
@@ -406,7 +406,7 @@
    "n": 55,
    "categoria": "numerica",
    "paginas": [
-    242
+    26
    ]
   },
   {
@@ -456,7 +456,7 @@
    "n": 62,
    "categoria": "tematica_global",
    "paginas": [
-    336
+    39
    ]
   },
   {
@@ -470,14 +470,14 @@
    "n": 64,
    "categoria": "numerica",
    "paginas": [
-    192
+    27
    ]
   },
   {
    "n": 65,
    "categoria": "numerica",
    "paginas": [
-    321
+    332
    ]
   },
   {
@@ -513,7 +513,7 @@
    "n": 70,
    "categoria": "tematica_global",
    "paginas": [
-    314
+    98
    ]
   },
   {
@@ -534,7 +534,7 @@
    "n": 73,
    "categoria": "numerica",
    "paginas": [
-    117
+    385
    ]
   },
   {
@@ -563,7 +563,7 @@
    "n": 77,
    "categoria": "agregacao_filtro",
    "paginas": [
-    307
+    45
    ]
   },
   {
@@ -591,14 +591,14 @@
    "n": 81,
    "categoria": "numerica",
    "paginas": [
-    270
+    324
    ]
   },
   {
    "n": 82,
    "categoria": "agregacao_filtro",
    "paginas": [
-    246
+    397
    ]
   },
   {
@@ -612,7 +612,7 @@
    "n": 84,
    "categoria": "agregacao_filtro",
    "paginas": [
-    197
+    135
    ]
   },
   {
@@ -655,14 +655,14 @@
    "n": 90,
    "categoria": "agregacao_filtro",
    "paginas": [
-    251
+    225
    ]
   },
   {
    "n": 91,
    "categoria": "numerica",
    "paginas": [
-    323
+    404
    ]
   },
   {
@@ -704,7 +704,7 @@
    "n": 97,
    "categoria": "tematica_global",
    "paginas": [
-    267
+    68
    ]
   },
   {
@@ -726,7 +726,7 @@
    "n": 100,
    "categoria": "tematica_global",
    "paginas": [
-    280
+    13
    ]
   },
   {
@@ -740,14 +740,14 @@
    "n": 102,
    "categoria": "numerica",
    "paginas": [
-    277
+    128
    ]
   },
   {
    "n": 103,
    "categoria": "numerica",
    "paginas": [
-    260
+    230
    ]
   },
   {
@@ -761,7 +761,7 @@
    "n": 105,
    "categoria": "agregacao_filtro",
    "paginas": [
-    299
+    125
    ]
   },
   {
@@ -803,7 +803,7 @@
    "n": 111,
    "categoria": "agregacao_filtro",
    "paginas": [
-    241
+    306
    ]
   },
   {
@@ -832,7 +832,7 @@
    "n": 115,
    "categoria": "numerica",
    "paginas": [
-    268
+    148
    ]
   },
   {
@@ -895,7 +895,7 @@
    "n": 124,
    "categoria": "tematica_global",
    "paginas": [
-    248
+    375
    ]
   },
   {
@@ -917,7 +917,7 @@
    "n": 127,
    "categoria": "numerica",
    "paginas": [
-    220
+    226
    ]
   },
   {
@@ -931,21 +931,21 @@
    "n": 129,
    "categoria": "tematica_global",
    "paginas": [
-    285
+    30
    ]
   },
   {
    "n": 130,
    "categoria": "agregacao_filtro",
    "paginas": [
-    154
+    73
    ]
   },
   {
    "n": 131,
    "categoria": "numerica",
    "paginas": [
-    126
+    158
    ]
   },
   {
@@ -994,85 +994,11 @@
    "n": 138,
    "categoria": "agregacao_filtro",
    "paginas": [
-    180
+    322
    ]
   }
  ],
  "reserva": [
-  403,
-  142,
-  374,
-  132,
-  276,
-  262,
-  353,
-  36,
-  412,
-  187,
-  300,
-  65,
-  151,
-  111,
-  53,
-  221,
-  24,
-  2,
-  159,
-  64,
-  160,
-  386,
-  317,
-  289,
-  149,
-  234,
-  116,
-  235,
-  41,
-  399,
-  319,
-  185,
-  26,
-  288,
-  27,
-  297,
-  266,
-  332,
-  293,
-  39,
-  98,
-  312,
-  385,
-  45,
-  324,
-  397,
-  135,
-  225,
-  404,
-  68,
-  13,
-  128,
-  264,
-  125,
-  259,
-  230,
-  306,
-  305,
-  118,
-  148,
-  252,
-  226,
-  30,
-  279,
-  375,
-  73,
-  311,
-  55,
-  238,
-  322,
-  198,
-  11,
-  256,
-  158,
   177,
   176,
   372,
@@ -1182,7 +1108,600 @@
   80,
   378,
   239,
-  383
+  383,
+  257,
+  294,
+  269,
+  179,
+  211,
+  132,
+  276,
+  262,
+  353,
+  233,
+  130,
+  172,
+  300,
+  193,
+  106,
+  111,
+  53,
+  174,
+  221,
+  24,
+  134,
+  64,
+  386,
+  411,
+  250,
+  289,
+  149,
+  234,
+  235,
+  287,
+  183,
+  265,
+  242,
+  336,
+  192,
+  321,
+  288,
+  297,
+  266,
+  293,
+  314,
+  117,
+  312,
+  307,
+  270,
+  246,
+  197,
+  251,
+  323,
+  267,
+  280,
+  277,
+  260,
+  299,
+  264,
+  259,
+  241,
+  268,
+  305,
+  118,
+  248,
+  220,
+  285,
+  252,
+  279,
+  154,
+  126,
+  180,
+  311,
+  55,
+  238,
+  198,
+  11,
+  256
  ],
- "pulos": []
+ "pulos": [
+  {
+   "n": 1,
+   "categoria": "numerica",
+   "pulada": 257,
+   "nova": 403,
+   "motivo": "currículo de administrador: sem quantidade para pergunta numérica"
+  },
+  {
+   "n": 4,
+   "categoria": "agregacao_filtro",
+   "pulada": 294,
+   "nova": 142,
+   "motivo": "currículo de membro de comitê: nada a somar ou filtrar"
+  },
+  {
+   "n": 6,
+   "categoria": "numerica",
+   "pulada": 269,
+   "nova": 374,
+   "motivo": "currículo de diretor: sem quantidade financeira"
+  },
+  {
+   "n": 7,
+   "categoria": "numerica",
+   "pulada": 179,
+   "nova": 132,
+   "motivo": "lista qualitativa de riscos: sem número"
+  },
+  {
+   "n": 9,
+   "categoria": "multi_hop",
+   "pulada": 211,
+   "nova": 276,
+   "motivo": "atribuições do Conselho de Administração: sem ligação com a página 16 (UBS BB, captações)"
+  },
+  {
+   "n": 7,
+   "categoria": "numerica",
+   "pulada": 132,
+   "nova": 262,
+   "motivo": "fatores de risco de clientes: sem número"
+  },
+  {
+   "n": 9,
+   "categoria": "multi_hop",
+   "pulada": 276,
+   "nova": 353,
+   "motivo": "currículo de diretor: sem ligação com a página 16"
+  },
+  {
+   "n": 7,
+   "categoria": "numerica",
+   "pulada": 262,
+   "nova": 36,
+   "motivo": "currículo de diretor: sem quantidade financeira"
+  },
+  {
+   "n": 9,
+   "categoria": "multi_hop",
+   "pulada": 353,
+   "nova": 412,
+   "motivo": "quarentena de ex-diretores: sem ligação com a página 16"
+  },
+  {
+   "n": 15,
+   "categoria": "numerica",
+   "pulada": 233,
+   "nova": 187,
+   "motivo": "canais de denúncia e extra-auditoria: sem número"
+  },
+  {
+   "n": 19,
+   "categoria": "numerica",
+   "pulada": 130,
+   "nova": 300,
+   "motivo": "riscos de M&A e corrupção: sem número"
+  },
+  {
+   "n": 20,
+   "categoria": "numerica",
+   "pulada": 172,
+   "nova": 65,
+   "motivo": "taxonomia de riscos: sem número"
+  },
+  {
+   "n": 19,
+   "categoria": "numerica",
+   "pulada": 300,
+   "nova": 151,
+   "motivo": "currículo de membro de comitê: sem quantidade financeira"
+  },
+  {
+   "n": 23,
+   "categoria": "numerica",
+   "pulada": 193,
+   "nova": 111,
+   "motivo": "relatório de controles internos: sem número"
+  },
+  {
+   "n": 24,
+   "categoria": "multi_hop",
+   "pulada": 106,
+   "nova": 53,
+   "motivo": "itens fora do balanço: sem ligação com a remuneração do Coris (p. 328)"
+  },
+  {
+   "n": 23,
+   "categoria": "numerica",
+   "pulada": 111,
+   "nova": 221,
+   "motivo": "conceitos dos indicadores de projeção: sem valor"
+  },
+  {
+   "n": 24,
+   "categoria": "multi_hop",
+   "pulada": 53,
+   "nova": 24,
+   "motivo": "cadastro positivo e SPB: sem ligação com a remuneração do Coris (p. 328)"
+  },
+  {
+   "n": 27,
+   "categoria": "numerica",
+   "pulada": 174,
+   "nova": 2,
+   "motivo": "gestão de riscos: sem número"
+  },
+  {
+   "n": 23,
+   "categoria": "numerica",
+   "pulada": 221,
+   "nova": 159,
+   "motivo": "comitês de clima: sem número"
+  },
+  {
+   "n": 24,
+   "categoria": "multi_hop",
+   "pulada": 24,
+   "nova": 64,
+   "motivo": "órgãos reguladores: sem ligação com a remuneração do Coris (p. 328)"
+  },
+  {
+   "n": 30,
+   "categoria": "agregacao_filtro",
+   "pulada": 134,
+   "nova": 160,
+   "motivo": "riscos de garantias e BNDU: nada a somar ou filtrar"
+  },
+  {
+   "n": 24,
+   "categoria": "multi_hop",
+   "pulada": 64,
+   "nova": 386,
+   "motivo": "temas materiais ASG: sem ligação com a remuneração do Coris (p. 328)"
+  },
+  {
+   "n": 24,
+   "categoria": "multi_hop",
+   "pulada": 386,
+   "nova": 317,
+   "motivo": "FDNE (parte relacionada): sem ligação com a remuneração do Coris (p. 328)"
+  },
+  {
+   "n": 31,
+   "categoria": "numerica",
+   "pulada": 411,
+   "nova": 289,
+   "motivo": "listagem de EMTN no exterior: sem quantidade"
+  },
+  {
+   "n": 34,
+   "categoria": "numerica",
+   "pulada": 250,
+   "nova": 149,
+   "motivo": "currículo de conselheiro fiscal: sem quantidade financeira"
+  },
+  {
+   "n": 31,
+   "categoria": "numerica",
+   "pulada": 289,
+   "nova": 234,
+   "motivo": "currículo de conselheiro: sem quantidade financeira"
+  },
+  {
+   "n": 34,
+   "categoria": "numerica",
+   "pulada": 149,
+   "nova": 116,
+   "motivo": "capital de subsidiárias no exterior: sem número"
+  },
+  {
+   "n": 31,
+   "categoria": "numerica",
+   "pulada": 234,
+   "nova": 235,
+   "motivo": "currículo de conselheira: sem quantidade"
+  },
+  {
+   "n": 31,
+   "categoria": "numerica",
+   "pulada": 235,
+   "nova": 41,
+   "motivo": "currículo de conselheiro: tabela de mandato ambígua entre duas pessoas"
+  },
+  {
+   "n": 46,
+   "categoria": "numerica",
+   "pulada": 287,
+   "nova": 399,
+   "motivo": "currículo de membro de comitê: sem quantidade"
+  },
+  {
+   "n": 52,
+   "categoria": "numerica",
+   "pulada": 183,
+   "nova": 319,
+   "motivo": "atribuições de fóruns de risco: sem quantidade"
+  },
+  {
+   "n": 53,
+   "categoria": "numerica",
+   "pulada": 265,
+   "nova": 185,
+   "motivo": "currículo de diretor: sem quantidade"
+  },
+  {
+   "n": 55,
+   "categoria": "numerica",
+   "pulada": 242,
+   "nova": 26,
+   "motivo": "currículo da presidente: sem quantidade financeira"
+  },
+  {
+   "n": 62,
+   "categoria": "tematica_global",
+   "pulada": 336,
+   "nova": 288,
+   "motivo": "quadro de remuneração variável com 'Não há' em todos os campos: sem conteúdo para pergunta temática"
+  },
+  {
+   "n": 64,
+   "categoria": "numerica",
+   "pulada": 192,
+   "nova": 27,
+   "motivo": "linhas de defesa: sem quantidade"
+  },
+  {
+   "n": 65,
+   "categoria": "numerica",
+   "pulada": 321,
+   "nova": 297,
+   "motivo": "lista de cursos: sem quantidade"
+  },
+  {
+   "n": 62,
+   "categoria": "tematica_global",
+   "pulada": 288,
+   "nova": 266,
+   "motivo": "currículo de membro de comitê: sem tema"
+  },
+  {
+   "n": 65,
+   "categoria": "numerica",
+   "pulada": 297,
+   "nova": 332,
+   "motivo": "currículos de membros de comitê: sem quantidade"
+  },
+  {
+   "n": 62,
+   "categoria": "tematica_global",
+   "pulada": 266,
+   "nova": 293,
+   "motivo": "currículos de diretoras: sem tema"
+  },
+  {
+   "n": 62,
+   "categoria": "tematica_global",
+   "pulada": 293,
+   "nova": 39,
+   "motivo": "currículo de membro do Coris: sem tema"
+  },
+  {
+   "n": 70,
+   "categoria": "tematica_global",
+   "pulada": 314,
+   "nova": 98,
+   "motivo": "lista de formação acadêmica de pessoas: sem tema"
+  },
+  {
+   "n": 73,
+   "categoria": "numerica",
+   "pulada": 117,
+   "nova": 312,
+   "motivo": "introdução dos fatores de risco: sem quantidade"
+  },
+  {
+   "n": 73,
+   "categoria": "numerica",
+   "pulada": 312,
+   "nova": 385,
+   "motivo": "lista de formação acadêmica de pessoas: sem quantidade"
+  },
+  {
+   "n": 77,
+   "categoria": "agregacao_filtro",
+   "pulada": 307,
+   "nova": 45,
+   "motivo": "lista de relações de administradores que continua em outras páginas: contagem não se fecha na página"
+  },
+  {
+   "n": 81,
+   "categoria": "numerica",
+   "pulada": 270,
+   "nova": 324,
+   "motivo": "currículo de diretor: sem quantidade"
+  },
+  {
+   "n": 82,
+   "categoria": "agregacao_filtro",
+   "pulada": 246,
+   "nova": 397,
+   "motivo": "currículo de conselheiro fiscal: sem agregação"
+  },
+  {
+   "n": 84,
+   "categoria": "agregacao_filtro",
+   "pulada": 197,
+   "nova": 135,
+   "motivo": "texto sobre PLD sem itens para agregar"
+  },
+  {
+   "n": 90,
+   "categoria": "agregacao_filtro",
+   "pulada": 251,
+   "nova": 225,
+   "motivo": "currículo de vice-presidente: sem agregação"
+  },
+  {
+   "n": 91,
+   "categoria": "numerica",
+   "pulada": 323,
+   "nova": 404,
+   "motivo": "política de remuneração do CA: sem quantidade"
+  },
+  {
+   "n": 97,
+   "categoria": "tematica_global",
+   "pulada": 267,
+   "nova": 68,
+   "motivo": "currículo de diretora: sem tema"
+  },
+  {
+   "n": 100,
+   "categoria": "tematica_global",
+   "pulada": 280,
+   "nova": 13,
+   "motivo": "currículo de diretor: sem tema"
+  },
+  {
+   "n": 102,
+   "categoria": "numerica",
+   "pulada": 277,
+   "nova": 128,
+   "motivo": "currículo de diretora: sem quantidade"
+  },
+  {
+   "n": 103,
+   "categoria": "numerica",
+   "pulada": 260,
+   "nova": 264,
+   "motivo": "currículo de vice-presidente: sem quantidade"
+  },
+  {
+   "n": 105,
+   "categoria": "agregacao_filtro",
+   "pulada": 299,
+   "nova": 125,
+   "motivo": "currículos de membros de comitê: sem agregação"
+  },
+  {
+   "n": 103,
+   "categoria": "numerica",
+   "pulada": 264,
+   "nova": 259,
+   "motivo": "currículo de diretor: sem quantidade"
+  },
+  {
+   "n": 103,
+   "categoria": "numerica",
+   "pulada": 259,
+   "nova": 230,
+   "motivo": "currículo de vice-presidente: sem quantidade"
+  },
+  {
+   "n": 111,
+   "categoria": "agregacao_filtro",
+   "pulada": 241,
+   "nova": 306,
+   "motivo": "currículo da presidente: sem agregação"
+  },
+  {
+   "n": 115,
+   "categoria": "numerica",
+   "pulada": 268,
+   "nova": 305,
+   "motivo": "currículos de diretores: sem quantidade"
+  },
+  {
+   "n": 115,
+   "categoria": "numerica",
+   "pulada": 305,
+   "nova": 118,
+   "motivo": "relações de administradores com pessoas relacionadas: sem quantidade"
+  },
+  {
+   "n": 115,
+   "categoria": "numerica",
+   "pulada": 118,
+   "nova": 148,
+   "motivo": "segurança cibernética e LGPD: só datas e números de lei, sem quantidade"
+  },
+  {
+   "n": 124,
+   "categoria": "tematica_global",
+   "pulada": 248,
+   "nova": 252,
+   "motivo": "currículos de conselheiros fiscais: sem tema"
+  },
+  {
+   "n": 127,
+   "categoria": "numerica",
+   "pulada": 220,
+   "nova": 226,
+   "motivo": "política de indicação e PRSAC: sem quantidade"
+  },
+  {
+   "n": 129,
+   "categoria": "tematica_global",
+   "pulada": 285,
+   "nova": 30,
+   "motivo": "currículo de diretora: sem tema"
+  },
+  {
+   "n": 124,
+   "categoria": "tematica_global",
+   "pulada": 252,
+   "nova": 279,
+   "motivo": "currículos de vice-presidentes: sem tema"
+  },
+  {
+   "n": 124,
+   "categoria": "tematica_global",
+   "pulada": 279,
+   "nova": 375,
+   "motivo": "currículo de diretora: sem tema"
+  },
+  {
+   "n": 130,
+   "categoria": "agregacao_filtro",
+   "pulada": 154,
+   "nova": 73,
+   "motivo": "direitos de titulares de ADS: sem itens para agregar"
+  },
+  {
+   "n": 131,
+   "categoria": "numerica",
+   "pulada": 126,
+   "nova": 311,
+   "motivo": "fundos e programas governamentais: sem quantidade"
+  },
+  {
+   "n": 138,
+   "categoria": "agregacao_filtro",
+   "pulada": 180,
+   "nova": 55,
+   "motivo": "lista de competências que continua em outra página: agregação não se fecha"
+  },
+  {
+   "n": 131,
+   "categoria": "numerica",
+   "pulada": 311,
+   "nova": 238,
+   "motivo": "formação acadêmica da Diretoria: sem quantidade"
+  },
+  {
+   "n": 138,
+   "categoria": "agregacao_filtro",
+   "pulada": 55,
+   "nova": 322,
+   "motivo": "Compe: número já dado no texto, sem agregação"
+  },
+  {
+   "n": 131,
+   "categoria": "numerica",
+   "pulada": 238,
+   "nova": 198,
+   "motivo": "currículo de conselheiro: sem quantidade"
+  },
+  {
+   "n": 131,
+   "categoria": "numerica",
+   "pulada": 198,
+   "nova": 11,
+   "motivo": "auditoria interna e Código de Ética: sem quantidade"
+  },
+  {
+   "n": 131,
+   "categoria": "numerica",
+   "pulada": 11,
+   "nova": 256,
+   "motivo": "descrição dos segmentos que começa e termina em outras páginas: sem quantidade na página"
+  },
+  {
+   "n": 131,
+   "categoria": "numerica",
+   "pulada": 256,
+   "nova": 158,
+   "motivo": "currículo de vice-presidente: sem quantidade"
+  }
+ ]
 }

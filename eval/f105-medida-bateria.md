@@ -50,6 +50,15 @@ Mesmas colunas de `eval/golden.csv`. Mesma proporção de categorias das 60:
 - Uma execução por degrau: a variância do Qwen (temperatura 0,2) e do juiz não é medida. O IC por bootstrap mede a incerteza da amostra de perguntas, não a do modelo.
 - Mesma máquina e mesmo índice da v1. A latência vale para esta máquina.
 
+## Congelamento (24/11/2026)
+
+- `eval/golden_f105.csv`: 150 perguntas (38/38/25/25/12/12), sha256 `6efb5316d37a80f95126b0ceb94ca0f2d99fffcb8cdf2a55ce3e72245ed5019c`. Daqui em diante o arquivo não muda; gabarito errado vira errata.
+- Validação mecânica antes do congelamento: `uv run --no-project --with pypdfium2 python -I eval/validar_golden.py --csv eval/golden_f105.csv --novas` com `erros: []`. A evidência de cada pergunta casa com o texto das páginas citadas no PDF e a `ausencia` das 12 fora do escopo não aparece no PDF.
+- Páginas puladas pela regra: 74, registradas com o motivo em `eval/f105-sorteio.json` (numérica 44, agregação 11, temática 11, multi-hop 8). A maior parte eram currículos de administradores, que não têm quantidade para uma numérica nem tema para uma temática. Efeito: as numéricas caíram mais em páginas de tabelas e transações com partes relacionadas. Isso vai como ressalva no relatório.
+- Desvio de procedimento: além do leitor `indexer.f105 pagina`, li as páginas pelo texto do próprio PDF (pypdfium2, o mesmo que o validador usa). Nenhum dos dois mostra a descrição nem as perguntas geradas pelo LLM na indexação.
+- Nenhuma das 150 perguntas foi rodada no sistema antes deste commit.
+- Relatório: `uv run python -m indexer.f105 relatorio` (lê `eval/resultados/f105-a3.json` e `f105-a6.json` e as pastas em `data/avaliacao/`), testado antes com notas sintéticas fora do repositório.
+
 ## Execuções (toda rodada é contada)
 
 | Rodada | Degrau | Início | Resultado | Notas |
