@@ -1,7 +1,8 @@
 <#
 .SYNOPSIS
   F5.8: indexa o documento inteiro (423 páginas) com o pipeline das fases F2 a F5, em etapas retomáveis.
-  Parse, normalização, seções e chunks (F1/F2.1) já saem de comandos próprios; aqui ficam as etapas com LLM e o Neo4j.
+  F10.2 ("run-all"): começa pela leitura do PDF (parse, normalize, sections, chunks); cada uma dessas é pulada se o
+  arquivo que ela gera já existe em data\parsed, então quem já rodou o passo 5 do README à mão não paga de novo.
 
 .DESCRIPTION
   Cada etapa grava uma linha em data\logs\f58.log e o estado em data\logs\f58_estado.txt (uma linha, cabe no celular).
@@ -14,7 +15,7 @@
   .\infra\indexar-documento.ps1 -De importar           # retoma de uma etapa
 #>
 param(
-  [string]$De = "tabelas-gerar",
+  [string]$De = "parse",
   [string]$Ate = "fim",
   [switch]$Esvaziar
 )
@@ -36,6 +37,7 @@ $doc = "bb-fre-2026-v7"
 $inicio = Get-Date
 
 $etapas = @(
+  "parse", "normalize", "sections", "chunks",
   "tabelas-gerar", "extrair", "lastro", "catalogo-mapear", "aberta",
   "neo4j-limpar", "grafo", "embeddings", "indice-busca", "tabelas-carregar", "importar", "catalogo-medir",
   "resolver", "resumos", "comunidades", "relatorios", "entidades-vec", "fim"
@@ -79,6 +81,24 @@ foreach ($e in $etapas) {
   if ($e -eq $De) { $ativa = $true }
   if (-not $ativa) { continue }
   switch ($e) {
+    "parse" {
+      $pdf = "../data/raw/banco_do_brasil_formulario_referencia_2026.pdf"
+      if (-not (Test-Path $pdf)) { throw "Nao achei data\raw\banco_do_brasil_formulario_referencia_2026.pdf (veja o passo 3 do README)." }
+      if (Test-Path "$p.docling.json") { Registrar "pulado  parse (ja existe $p.docling.json)" }
+      else { Rodar $e "uv run --group parse python -m indexer.parse $pdf --artefatos ../infra/bin/modelos-docling --saida ../data/parsed" }
+    }
+    "normalize" {
+      if (Test-Path "$p.normalizado.json") { Registrar "pulado  normalize (ja existe)" }
+      else { Rodar $e "uv run python -m indexer.normalize $p.docling.json --saida ../data/parsed" }
+    }
+    "sections" {
+      if (Test-Path "$p.secoes.json") { Registrar "pulado  sections (ja existe)" }
+      else { Rodar $e "uv run --group parse python -m indexer.sections $p.normalizado.json --pdf-original ../data/raw/banco_do_brasil_formulario_referencia_2026.pdf --saida ../data/parsed" }
+    }
+    "chunks" {
+      if (Test-Path "$p.chunks.json") { Registrar "pulado  chunks (ja existe)" }
+      else { Rodar $e "uv run python -m indexer.chunks $p.normalizado.json $p.secoes.json --saida ../data/parsed" }
+    }
     "tabelas-gerar" {
       Rodar $e "uv run python -m indexer.tabelas gerar $p.docling.json $p.normalizado.json $p.secoes.json --doc-id $doc"
     }

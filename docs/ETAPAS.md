@@ -473,7 +473,7 @@
   - nota: trechos curtos do documento podem ser publicados com a fonte citada, sem autorização prévia da RI (decisão do dono, revisão de 13/11/2026 do ADR-009)
   - depende: F9.5
   - nota (18/11/2026): o dono vai viajar de 19 a 23/11 e deixou o PC ligado com acesso remoto. À pergunta "Você autoriza agora as etapas F10.2 a F10.4, uma após a outra, enquanto viaja?", respondeu "Sim, pode seguir"; em seguida esclareceu que ainda desliga o PC em 18/11 e que a autorização **só passa a valer quando ele avisar que está saindo de viagem** ("depois eu vou te avisar que estou saindo de viagem e aí sim você pode seguir tudo"). **Aviso dado em 19/11/2026:** "pronto, agora eu vou deixar meu pc ligado e depois ir viajar, pode fazer até o final". A partir desse aviso, vale como o "vai" de cada uma dessas etapas, **só depois do aceite cumprido da anterior** (F10.1 → F10.2 → F10.3 → F10.4); uma etapa que não cumprir o aceite para a sequência até o dono decidir. Não autoriza publicar nada fora do repositório (o vídeo da F10.3 é publicado pelo dono, na conta dele)
-- [ ] **F10.2** Scripts `infra/up.ps1` (sobe tudo) e `indexer run-all` (indexação completa)
+- [~] **F10.2** Scripts `infra/up.ps1` (sobe tudo) e `indexer run-all` (indexação completa)
   - aceite: máquina limpa → assistente respondendo com dois comandos (fora o download dos modelos)
   - depende: F9.5
 - [ ] **F10.3** Vídeo de até 3 minutos mostrando rota, Cypher e citações
