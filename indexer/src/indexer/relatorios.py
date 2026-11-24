@@ -402,8 +402,9 @@ def gerar(driver: Any, gera: Gerador, cache: Path, paralelismo: int = 2, banco: 
     linhas, falhas, de_rede, chamadas, tokens, omitidas = [], [], [], 0, 0, 0
     for grupo, r in resultados:
         if isinstance(r, Exception):
-            # OSError = rede ou llama-server fora do ar (HTTP 502 quando o modelo cai): não é um relatório ruim,
-            # é uma chamada que não aconteceu; vai para `falhas_de_rede` e faz a etapa falhar no fim (errata 4 da F10.1)
+            # OSError = rede ou llama-server fora do ar (HTTP 502 quando o modelo cai): não é um
+            # relatório ruim, é uma chamada que não aconteceu; vai para `falhas_de_rede` e faz a
+            # etapa falhar no fim (errata 4 da F10.1)
             alvo = de_rede if isinstance(r, OSError) else falhas
             alvo += [{"id": c["id"], "nivel": c["nivel"], "erro": str(r)} for c in grupo]
             continue
@@ -552,8 +553,9 @@ def main() -> None:  # pragma: no cover - orquestração de CLI; a lógica tem t
     finally:
         driver.close()
     if a.acao == "gerar" and r["falhas_de_rede"]:
-        # os relatórios que deram certo já estão gravados e no cache: a nova tentativa do indexar-documento.ps1
-        # só refaz o que faltou; se o modelo continuar fora do ar, a indexação para com ERRO em vez de dizer "pronto"
+        # os relatórios que deram certo já estão gravados e no cache: a nova tentativa do
+        # indexar-documento.ps1 só refaz o que faltou; se o modelo continuar fora do ar, a
+        # indexação para com ERRO em vez de dizer "pronto"
         raise SystemExit(
             f"{len(r['falhas_de_rede'])} comunidades sem relatório por falha de rede/LLM "
             f"(ex.: {r['falhas_de_rede'][0]['erro'][:120]}); veja a janela do llama-swap"
