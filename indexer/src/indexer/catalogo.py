@@ -29,6 +29,7 @@ from collections.abc import Callable
 from pathlib import Path
 from typing import Any
 
+from indexer import cache_json
 from indexer.importar import normalizar
 from indexer.lastro import ACEITO, _pedidos
 
@@ -306,11 +307,10 @@ def mapear(
             continue
         pedido = montar_pedido(rotulo, contexto[rotulo])
         arq = cache / f"{_chave_de_cache(sistema, pedido, modelo)}.json"
-        if arq.exists():
-            r = json.loads(arq.read_text(encoding="utf-8"))
-        else:
+        r = cache_json.ler(arq)  # ausente ou corrompido (queda de luz) = refazer
+        if r is None:
             r = juiz([{"role": "system", "content": sistema}, {"role": "user", "content": pedido}])
-            arq.write_text(json.dumps(r, ensure_ascii=False, indent=1), encoding="utf-8")
+            cache_json.gravar(arq, r)
         metrica = r["metrica"] if r["metrica"] in ids else NENHUMA
         qualificador = r["qualificador"] if r["qualificador"] in QUALIFICADORES else "nenhum"
         dimensao = _dimensao(r.get("dimensao")) if metrica != NENHUMA else None

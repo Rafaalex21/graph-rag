@@ -22,7 +22,6 @@ from __future__ import annotations
 import argparse
 import hashlib
 import json
-import os
 import sys
 import time
 import urllib.error
@@ -34,6 +33,7 @@ from typing import Any
 
 from pydantic import ValidationError
 
+from indexer import cache_json
 from indexer.schemas import MAX_FATOS, ExtracaoDirigida
 from indexer.schemas import VERSAO as VERSAO_DO_SCHEMA
 from indexer.schemas.extracao import PONTOS_BASE
@@ -297,11 +297,9 @@ def chave_de_cache(unidade: dict, modelo: str = MODELO_LLM) -> str:
     return hashlib.sha1(base.encode("utf-8")).hexdigest()[:20]
 
 
-def _gravar(arq: Path, dados: dict) -> None:
+def _gravar(arq: Path, dados: object) -> None:
     """Escrita atômica: uma interrupção no meio nunca deixa um arquivo pela metade."""
-    tmp = arq.with_suffix(".tmp")
-    tmp.write_text(json.dumps(dados, ensure_ascii=False, indent=1), encoding="utf-8")
-    os.replace(tmp, arq)
+    cache_json.gravar(arq, dados)
 
 
 def extrair_todas(
@@ -312,13 +310,10 @@ def extrair_todas(
 
     def uma(u: dict) -> dict:
         arq = cache / f"{chave_de_cache(u, modelo)}.json"
-        if arq.exists():
-            guardada = json.loads(arq.read_text(encoding="utf-8"))
-            if guardada.get("valida"):
-                r = {**guardada, "do_cache": True, "chamadas": 0}  # o cache guarda o que o LLM devolveu
-                tag = "cache"
-            else:
-                r = None
+        guardada = cache_json.ler(arq)  # ausente ou corrompido (queda de luz) = refazer
+        if guardada and guardada.get("valida"):
+            r = {**guardada, "do_cache": True, "chamadas": 0}  # o cache guarda o que o LLM devolveu
+            tag = "cache"
         else:
             r = None
         if r is None:

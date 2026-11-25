@@ -32,6 +32,7 @@ from collections.abc import Callable
 from pathlib import Path
 from typing import Any
 
+from indexer import cache_json
 from indexer.importar import TIPO_DA_ENTIDADE, carregar, contagens, entradas, impressao_digital, normalizar
 
 MODELO_LLM = "qwen36-35b-a3b"
@@ -337,11 +338,10 @@ def julgar(
             continue
         pedido = montar_pedido(a, b)
         arq = cache / f"{_chave_de_cache(pedido, modelo)}.json"
-        if arq.exists():
-            r = json.loads(arq.read_text(encoding="utf-8"))
-        else:
+        r = cache_json.ler(arq)  # ausente ou corrompido (queda de luz) = refazer
+        if r is None:
             r = juiz([{"role": "system", "content": SISTEMA}, {"role": "user", "content": pedido}])
-            arq.write_text(json.dumps(r, ensure_ascii=False, indent=1), encoding="utf-8")
+            cache_json.gravar(arq, r)
         saida.append(
             {**p, "decisao": bool(r["mesma_entidade"]), "por": "llm", "justificativa": r["justificativa"]}
         )

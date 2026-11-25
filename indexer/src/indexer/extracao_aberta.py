@@ -40,6 +40,7 @@ from typing import Any
 
 from pydantic import ValidationError
 
+from indexer import cache_json
 from indexer.extrair import DOCUMENTO, MODELO_LLM, PEDIDO_PAI, _gravar, _paginas
 from indexer.schemas import TIPOS_DE_ENTIDADE, VERSAO_ABERTA, ExtracaoAberta
 from indexer.schemas.aberta import MAX_ENTIDADES, MAX_RELACOES, normalizar_nome
@@ -483,10 +484,9 @@ def chave_de_cache(unidade: dict, modelo: str = MODELO_LLM) -> str:
 
 def _com_cache(arq: Path, fazer: Callable[[], dict]) -> tuple[dict, bool]:
     """(resultado, veio do cache). Só entrada válida do cache vale; toda execução nova é gravada."""
-    if arq.exists():
-        guardada = json.loads(arq.read_text(encoding="utf-8"))
-        if guardada.get("valida"):
-            return guardada, True
+    guardada = cache_json.ler(arq)  # ausente ou corrompido (queda de luz) = refazer
+    if guardada and guardada.get("valida"):
+        return guardada, True
     r = fazer()
     _gravar(arq, r)
     return r, False

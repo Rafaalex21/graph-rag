@@ -24,6 +24,7 @@ from concurrent.futures import ThreadPoolExecutor
 from pathlib import Path
 from typing import Any
 
+from indexer import cache_json
 from indexer.chunks import blocos_por_secao
 from indexer.numeros import detectar_escala
 
@@ -274,12 +275,11 @@ def gerar_todas(
             :20
         ]
         arq = cache / f"{chave}.json"
-        if arq.exists():
-            guardada = json.loads(arq.read_text(encoding="utf-8"))
-            if guardada.get("valida"):  # entrada inválida não é reaproveitada: tenta de novo
-                return {**t, **guardada, "do_cache": True}
+        guardada = cache_json.ler(arq)  # ausente ou corrompido (queda de luz) = refazer
+        if guardada and guardada.get("valida"):  # entrada inválida não é reaproveitada: tenta de novo
+            return {**t, **guardada, "do_cache": True}
         r = descrever(t, gera, documento)
-        arq.write_text(json.dumps(r, ensure_ascii=False, indent=1), encoding="utf-8")
+        cache_json.gravar(arq, r)
         return {**t, **r, "do_cache": False}
 
     with ThreadPoolExecutor(max_workers=paralelismo) as pool:

@@ -174,7 +174,7 @@ As etapas, na ordem ("LLM" = o Qwen3.6 trabalhando em lote; tempos medidos nesta
 | `relatorios` | relatório de cada comunidade e vetores | sim | ~2 h 15 |
 | `entidades-vec` | vetores e índice de texto das entidades | não | ~11 min |
 
-O andamento fica em `data\logs\f58_estado.txt` (uma linha com a etapa atual e os minutos desde o início da indexação, contados quando a etapa começou: durante uma etapa longa o número não muda) e em `data\logs\f58_etapas.log` (início e fim de cada etapa); a saída detalhada dos comandos vai para `data\logs\f58.log`, que pode passar muitos minutos sem linha nova enquanto o LLM trabalha. Leia esses arquivos de vez em quando (`Get-Content` sem `-Wait`, ou abrir e fechar) e **não os deixe abertos em leitura contínua** (`Get-Content -Wait`, `tail -f`/`-F` ou um editor que os mantenha abertos): isso trava a escrita, e as linhas novas deixam de ser gravadas. **Se parar no meio** (queda, PC desligado, ou você precisou do PC): suba de novo o Neo4j e o llama-swap como no passo 4 e rode `.\infra\indexar-documento.ps1 -De <etapa>`, com a etapa da última linha `inicio` do `data\logs\f58_etapas.log` que não tem `fim` (nas etapas compostas, use o nome da tabela acima: por exemplo, `resolver-planejar` vira `-De resolver`). As chamadas ao LLM ficam em cache e não se repetem: dá para indexar em várias partes. Cada etapa é tentada até 3 vezes antes de desistir. Termina com a linha `pronto` no `f58_etapas.log`.
+O andamento fica em `data\logs\f58_estado.txt` (uma linha com a etapa atual e os minutos desde o início desta execução do roteiro, contados quando a etapa começou: durante uma etapa longa o número não muda, e numa retomada com `-De` a contagem recomeça do zero) e em `data\logs\f58_etapas.log` (início e fim de cada etapa); a saída detalhada dos comandos vai para `data\logs\f58.log`, que pode passar muitos minutos sem linha nova enquanto o LLM trabalha (no `resolver`, mais de 2 h). Para ver que não travou, abra http://127.0.0.1:8080/running, que lista o modelo em uso, ou veja no Gerenciador de Tarefas o `llama-server` ocupando CPU e GPU. O `f58.log` também traz avisos longos do Neo4j, como `property key does not exist` para `absorbedIds` ou `ticker`. Eles são normais: são propriedades que o grafo ainda não tem. Leia esses arquivos de vez em quando (`Get-Content` sem `-Wait`, ou abrir e fechar) e **não os deixe abertos em leitura contínua** (`Get-Content -Wait`, `tail -f`/`-F` ou um editor que os mantenha abertos): isso trava a escrita, e as linhas novas deixam de ser gravadas. **Se parar no meio** (queda, PC desligado, ou você precisou do PC): suba de novo o Neo4j e o llama-swap como no passo 4 e rode `.\infra\indexar-documento.ps1 -De <etapa>`, com a etapa da última linha `inicio` do `data\logs\f58_etapas.log` que não tem `fim` (nas etapas compostas, use o nome da tabela acima: por exemplo, `resolver-planejar` vira `-De resolver`). Só essa linha importa. Depois de várias retomadas o log terá linhas `inicio` repetidas, um `falhou` antigo de uma etapa que depois terminou com `fim`, ou uma linha em branco ou com caracteres estranhos, que sobra de uma queda de luz: tudo isso pode ser ignorado. As chamadas ao LLM ficam em cache e não se repetem, então dá para indexar em várias partes. Um arquivo de cache estragado por uma queda de luz é refeito sozinho. Cada etapa é tentada até 3 vezes antes de desistir. Termina com a linha `pronto` no `f58_etapas.log`.
 
 **7. Subir a API e a interface**, cada uma na sua janela:
 
@@ -183,14 +183,14 @@ Start-Process powershell -ArgumentList "-NoExit", "-ExecutionPolicy", "Bypass", 
 Start-Process powershell -ArgumentList "-NoExit", "-ExecutionPolicy", "Bypass", "-Command", ". .\infra\dev-env.ps1; cd web; npm start"
 ```
 
-Abra **http://127.0.0.1:4200** (a interface escuta só nesse endereço, como a API e o llama-swap) e pergunte, por exemplo: *"Quem é o acionista controlador do Banco do Brasil e qual percentual do capital ele detém?"* A primeira resposta demora mais (o modelo de 22 GB é carregado na primeira pergunta).
+Abra **http://127.0.0.1:4200** (a interface escuta só nesse endereço, como a API e o llama-swap) e pergunte, por exemplo: *"Quem é o acionista controlador do Banco do Brasil e qual percentual do capital ele detém?"* A primeira resposta demora mais se o modelo de 22 GB ainda não estiver carregado: ele é carregado na primeira pergunta. Logo depois da indexação, ele já está.
 
 Conferir sem navegador:
 
 ```powershell
 curl.exe -s http://127.0.0.1:3000/api/saude
-'{"conversationId":"teste-1","message":"Quem é o acionista controlador do Banco do Brasil e qual percentual do capital ele detém?"}' | Set-Content pergunta.json -Encoding UTF8
-curl.exe -s -N -X POST http://127.0.0.1:4200/api/chat -H "Content-Type: application/json" --data-binary "@pergunta.json"
+'{"conversationId":"teste-1","message":"Quem é o acionista controlador do Banco do Brasil e qual percentual do capital ele detém?"}' | Set-Content "$env:TEMP\pergunta.json" -Encoding UTF8
+curl.exe -s -N -X POST http://127.0.0.1:4200/api/chat -H "Content-Type: application/json" --data-binary "@$env:TEMP\pergunta.json"
 ```
 
 A segunda chamada devolve um fluxo SSE que termina no evento `fim`, com a resposta e as citações.

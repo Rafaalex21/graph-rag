@@ -33,6 +33,7 @@ from concurrent.futures import ThreadPoolExecutor
 from pathlib import Path
 from typing import Any
 
+from indexer import cache_json
 from indexer.extrair import MODELO_LLM
 from indexer.importar import normalizar
 
@@ -142,16 +143,15 @@ def _chave(pedido: str, modelo: str) -> str:
 def _um_pedido(nome: str, tipo: str, lote: list[str], gera: Gerador, cache: Path, modelo: str) -> dict:
     pedido = montar_pedido(nome, tipo, lote)
     arq = cache / f"{_chave(pedido, modelo)}.json"
-    if arq.exists():
-        dado = json.loads(arq.read_text(encoding="utf-8"))
+    dado = cache_json.ler(arq)  # ausente ou corrompido (queda de luz) = refazer
+    if dado and dado.get("summary"):
         return {**dado, "summary": aparar(dado["summary"]), "chamou": False}
     for _ in range(2):
         r = gera([{"role": "system", "content": SISTEMA}, {"role": "user", "content": pedido}])
         resumo = aparar((r.get("summary") or "").strip())
         if resumo:
             dado = {"summary": resumo, "tokens_prompt": r.get("tokens_prompt", 0)}
-            cache.mkdir(parents=True, exist_ok=True)
-            arq.write_text(json.dumps(dado, ensure_ascii=False, indent=1), encoding="utf-8")
+            cache_json.gravar(arq, dado)
             return {**dado, "chamou": True}
     raise ValueError(f"resumo vazio para {nome!r} depois de duas tentativas")
 

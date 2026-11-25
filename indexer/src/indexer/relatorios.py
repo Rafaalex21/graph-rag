@@ -40,6 +40,7 @@ from concurrent.futures import ThreadPoolExecutor
 from pathlib import Path
 from typing import Any
 
+from indexer import cache_json
 from indexer.embeddings import (
     DIMENSOES,
     MODELO_CONSULTA,
@@ -262,8 +263,8 @@ def gerar_relatorio(
     maximo = maximo_de_achados(len(contexto["entidades"]))
     pedido = PEDIDO.format(n=len(entidades), minimo=minimo, maximo=maximo, contexto=contexto["texto"])
     arq = cache / f"{_chave(pedido, [e['id'] for e in entidades], modelo)}.json"
-    if arq.exists():
-        dado = json.loads(arq.read_text(encoding="utf-8"))
+    dado = cache_json.ler(arq)  # ausente ou corrompido (queda de luz) = refazer
+    if dado and "relatorio" in dado:
         return {
             **dado,
             "chamadas": 0,
@@ -283,8 +284,7 @@ def gerar_relatorio(
             erro = str(e)
             continue
         dado = {"relatorio": relatorio, "tokens_prompt": r.get("tokens_prompt", 0)}
-        cache.mkdir(parents=True, exist_ok=True)
-        arq.write_text(json.dumps(dado, ensure_ascii=False, indent=1), encoding="utf-8")
+        cache_json.gravar(arq, dado)
         return {**dado, "chamadas": chamadas, "omitidas": contexto["omitidas"],
                 "chars_contexto": len(contexto["texto"])}  # fmt: skip
     raise RelatorioInvalido(erro)
