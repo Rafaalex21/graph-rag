@@ -51,3 +51,4 @@ A F10.1 fechou com a p4 (ADR-083). A rodada mostrou um defeito do projeto que ta
 
 | Rodada | Clone (commit) | Início | Resultado | Notas |
 |---|---|---|---|---|
+| r1 | `C:\Users\Rafael\graphrag-teste-f102` (`7643520`) | 25/11 12:58 | em andamento | Antes da rodada: pilha da p4 parada (portas 4200, 3000, 7474, 7687 e 8080 livres); RAM livre 24,0 GB, commit livre 41,7 de 69,9 GB; SignalRGB fechado; PDF v7 conferido (`B0D17566`). Comando 1 rodado na ferramenta PowerShell. Comando 2 rodado numa janela própria do PowerShell (`-ExecutionPolicy Bypass`), com `Start-Transcript` para o registro, porque o Neo4j e o llama-swap ficam no ar e prenderiam a saída da ferramenta. |
