@@ -44,7 +44,13 @@ if ($Parar) {
     Where-Object { $_.CommandLine -like "*graphrag llama-swap*" -or $_.CommandLine -like "*graphrag api*" -or $_.CommandLine -like "*graphrag web*" } |
     ForEach-Object { $_.ProcessId })
   $pids += @(Get-NetTCPConnection -State Listen -LocalPort 4200, 3000, 8080 -ErrorAction SilentlyContinue | ForEach-Object { $_.OwningProcess })
-  foreach ($id in ($pids | Sort-Object -Unique)) { & taskkill.exe /PID $id /T /F 2>$null | Out-Null }
+  # um id da lista pode já ter caído junto com o pai (/T); o "não foi encontrado" do taskkill no stderr não pode
+  # virar erro fatal (no PowerShell 5.1, com Stop, viraria e o Neo4j ficaria no ar: achado na r2 da F10.2)
+  foreach ($id in ($pids | Sort-Object -Unique)) {
+    if (Get-Process -Id $id -ErrorAction SilentlyContinue) {
+      & { $ErrorActionPreference = "Continue"; & taskkill.exe /PID $id /T /F 2>&1 | Out-Null }
+    }
+  }
   Passo "parando o Neo4j"
   & (Join-Path $PSScriptRoot "neo4j.ps1") parar
   Passo "tudo parado"

@@ -297,9 +297,9 @@ def chave_de_cache(unidade: dict, modelo: str = MODELO_LLM) -> str:
     return hashlib.sha1(base.encode("utf-8")).hexdigest()[:20]
 
 
-def _gravar(arq: Path, dados: object) -> None:
-    """Escrita atômica: uma interrupção no meio nunca deixa um arquivo pela metade."""
-    cache_json.gravar(arq, dados)
+def _gravar(arq: Path, dados: object):
+    """Escrita atômica e sem metades soltas de par UTF-16; devolve o dado limpo (ver `cache_json`)."""
+    return cache_json.gravar(arq, dados)
 
 
 def extrair_todas(
@@ -317,8 +317,7 @@ def extrair_todas(
         else:
             r = None
         if r is None:
-            r = extrair(u, gera)
-            _gravar(arq, r)
+            r = _gravar(arq, extrair(u, gera))
             r = {**r, "do_cache": False, "chamadas": r["tentativas"]}
             tag = "ok" if r["valida"] else "INVÁLIDA"
         r["ajustes"] = ajustar_fatos(r["resposta"]) if r["valida"] else {}

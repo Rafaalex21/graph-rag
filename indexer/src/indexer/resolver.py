@@ -341,7 +341,7 @@ def julgar(
         r = cache_json.ler(arq)  # ausente ou corrompido (queda de luz) = refazer
         if r is None:
             r = juiz([{"role": "system", "content": SISTEMA}, {"role": "user", "content": pedido}])
-            cache_json.gravar(arq, r)
+            r = cache_json.gravar(arq, r)
         saida.append(
             {**p, "decisao": bool(r["mesma_entidade"]), "por": "llm", "justificativa": r["justificativa"]}
         )

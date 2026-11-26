@@ -279,7 +279,7 @@ def gerar_todas(
         if guardada and guardada.get("valida"):  # entrada inválida não é reaproveitada: tenta de novo
             return {**t, **guardada, "do_cache": True}
         r = descrever(t, gera, documento)
-        cache_json.gravar(arq, r)
+        r = cache_json.gravar(arq, r)
         return {**t, **r, "do_cache": False}
 
     with ThreadPoolExecutor(max_workers=paralelismo) as pool:

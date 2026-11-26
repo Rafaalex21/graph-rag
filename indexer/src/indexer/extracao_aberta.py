@@ -487,8 +487,7 @@ def _com_cache(arq: Path, fazer: Callable[[], dict]) -> tuple[dict, bool]:
     guardada = cache_json.ler(arq)  # ausente ou corrompido (queda de luz) = refazer
     if guardada and guardada.get("valida"):
         return guardada, True
-    r = fazer()
-    _gravar(arq, r)
+    r = _gravar(arq, fazer())
     return r, False
 
 

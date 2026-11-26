@@ -310,7 +310,7 @@ def mapear(
         r = cache_json.ler(arq)  # ausente ou corrompido (queda de luz) = refazer
         if r is None:
             r = juiz([{"role": "system", "content": sistema}, {"role": "user", "content": pedido}])
-            cache_json.gravar(arq, r)
+            r = cache_json.gravar(arq, r)
         metrica = r["metrica"] if r["metrica"] in ids else NENHUMA
         qualificador = r["qualificador"] if r["qualificador"] in QUALIFICADORES else "nenhum"
         dimensao = _dimensao(r.get("dimensao")) if metrica != NENHUMA else None

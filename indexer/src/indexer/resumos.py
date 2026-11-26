@@ -151,7 +151,7 @@ def _um_pedido(nome: str, tipo: str, lote: list[str], gera: Gerador, cache: Path
         resumo = aparar((r.get("summary") or "").strip())
         if resumo:
             dado = {"summary": resumo, "tokens_prompt": r.get("tokens_prompt", 0)}
-            cache_json.gravar(arq, dado)
+            dado = cache_json.gravar(arq, dado)
             return {**dado, "chamou": True}
     raise ValueError(f"resumo vazio para {nome!r} depois de duas tentativas")
 

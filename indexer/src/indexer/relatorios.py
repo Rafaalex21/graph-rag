@@ -284,7 +284,7 @@ def gerar_relatorio(
             erro = str(e)
             continue
         dado = {"relatorio": relatorio, "tokens_prompt": r.get("tokens_prompt", 0)}
-        cache_json.gravar(arq, dado)
+        dado = cache_json.gravar(arq, dado)
         return {**dado, "chamadas": chamadas, "omitidas": contexto["omitidas"],
                 "chars_contexto": len(contexto["texto"])}  # fmt: skip
     raise RelatorioInvalido(erro)
