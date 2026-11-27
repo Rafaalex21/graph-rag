@@ -30,25 +30,27 @@ const VIDEO = new URL("../../data/video/", import.meta.url);
 const QUADROS = new URL("quadros/", VIDEO);
 const { intervaloMs, marcas } = JSON.parse(readFileSync(new URL("marcas.json", QUADROS), "utf-8")) as {
   intervaloMs: number;
-  marcas: { quadro: number; cena: number; legenda: string }[];
+  marcas: { quadro: number; cena: number; legenda: string; segurarS?: number }[];
 };
 const arquivos = readdirSync(QUADROS)
   .filter((f) => f.endsWith(".jpg"))
   .sort();
 if (arquivos.length === 0) throw new Error("Sem quadros em data/video/quadros: rode antes o @video.");
 
-// 1) quadros iguais em sequência viram um só; a pausa máxima vale para cada quadro
-const legendaDo = (i: number) => [...marcas].reverse().find((m) => m.quadro <= i)?.legenda ?? "";
-const unicos: { arquivo: string; ms: number; legenda: string }[] = [];
+// 1) quadros iguais em sequência (da mesma marca) viram um só; a pausa máxima vale para cada quadro: o `segurarS` da marca
+//    (espera feita para o espectador ler, errata 1 do roteiro) ou, sem ele, `--pausa`
+const marcaDo = (i: number) => marcas.findLastIndex((m) => m.quadro <= i);
+const unicos: { arquivo: string; ms: number; legenda: string; marca: number }[] = [];
 let anterior: Buffer | null = null;
 arquivos.forEach((arquivo, i) => {
   const bytes = readFileSync(new URL(arquivo, QUADROS));
   const ultimo = unicos.at(-1);
-  if (anterior && ultimo && bytes.equals(anterior) && legendaDo(i) === ultimo.legenda) ultimo.ms += intervaloMs;
-  else unicos.push({ arquivo, ms: intervaloMs, legenda: legendaDo(i) });
+  const marca = marcaDo(i);
+  if (anterior && ultimo && bytes.equals(anterior) && marca === ultimo.marca) ultimo.ms += intervaloMs;
+  else unicos.push({ arquivo, ms: intervaloMs, legenda: marcas[marca]?.legenda ?? "", marca });
   anterior = bytes;
 });
-for (const u of unicos) u.ms = Math.min(u.ms, PAUSA_S * 1000);
+for (const u of unicos) u.ms = Math.min(u.ms, (marcas[u.marca]?.segurarS ?? PAUSA_S) * 1000);
 
 // 2) aceleração uniforme até caber no alvo
 const realS = unicos.reduce((s, u) => s + u.ms, 0) / 1000;
@@ -92,7 +94,10 @@ await pagina.evaluate(
       g.fillStyle = claro;
       g.textAlign = "center";
       linhas.forEach((t, i) => {
-        g.font = i === 0 ? "600 52px 'Segoe UI', sans-serif" : "28px 'Segoe UI', sans-serif";
+        // diminui a fonte até a linha caber, com 60 px de margem de cada lado (errata 1: o título da g1 passava das bordas)
+        let px = i === 0 ? 52 : 28;
+        do g.font = `${i === 0 ? "600 " : ""}${px}px 'Segoe UI', sans-serif`;
+        while (g.measureText(t).width > L - 120 && --px > 12);
         g.fillText(t, L / 2, (A + FAIXA) / 2 - 60 + i * 64);
       });
       g.textAlign = "left";

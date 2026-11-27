@@ -48,8 +48,15 @@ test("vídeo: rota, Cypher e citações em três perguntas", { tag: "@video" }, 
 
   let n = 0;
   let gravando = true;
-  const marcas: { quadro: number; cena: number; legenda: string }[] = [];
+  const marcas: { quadro: number; cena: number; legenda: string; segurarS?: number }[] = [];
   const marcar = (cena: number, legenda: string) => marcas.push({ quadro: n, cena, legenda });
+  // espera feita para o espectador ler: marca própria, e o montador não a encurta (errata 1 do roteiro)
+  const segurar = async (segundos: number) => {
+    const ultima = marcas.at(-1)!;
+    marcas.push({ quadro: n, cena: ultima.cena, legenda: ultima.legenda, segurarS: segundos });
+    await page.waitForTimeout(segundos * 1000);
+    marcas.push({ quadro: n, cena: ultima.cena, legenda: ultima.legenda });
+  };
   const gravar = (async () => {
     while (gravando) {
       const t0 = Date.now();
@@ -67,7 +74,8 @@ test("vídeo: rota, Cypher e citações em três perguntas", { tag: "@video" }, 
   marcar(1, "Pergunta em linguagem natural · o Rastro mostra a rota escolhida pelo agente, as ferramentas e a crítica");
   await page.waitForTimeout(1_500);
   checagens["t01Estado"] = await perguntar(page, chat, "T01");
-  checagens["t01Uniao"] = /Uni[aã]o/.test(await chat.respostas.last().innerText());
+  checagens["t01Resposta"] = await chat.respostas.last().innerText();
+  checagens["t01Uniao"] = /Uni[aã]o/.test(checagens["t01Resposta"] as string);
   checagens["rotas"] = await lista.locator('li[data-tipo="rota"]').allInnerTexts();
   await lista.locator('li[data-tipo="rota"]').first().scrollIntoViewIfNeeded();
   await page.waitForTimeout(3_000);
@@ -77,12 +85,13 @@ test("vídeo: rota, Cypher e citações em três perguntas", { tag: "@video" }, 
   await chip.click();
   await expect(page.getByRole("status").filter({ hasText: new RegExp(`^Página ${pagina} de \\d+$`) })).toBeVisible({ timeout: 60_000 });
   checagens["paginaAberta"] = pagina;
-  await page.waitForTimeout(4_000);
+  await segurar(4);
 
   // ---- cena 2: modo forçado Cypher; G03; a consulta gerada fica à vista
   marcar(2, "Modo forçado \"Consulta ao grafo\": o modelo escreve Cypher só de leitura e o Neo4j responde");
   await escolherModo(page, "Consulta ao grafo (Cypher)");
   checagens["g03Estado"] = await perguntar(page, chat, "G03");
+  checagens["g03Resposta"] = await chat.respostas.last().innerText();
   await page.getByRole("navigation", { name: "Painel" }).getByRole("link", { name: "Rastro" }).click();
   const cypher = lista.locator('li[data-tipo="cypher"]').first();
   checagens["cypherVisto"] = (await cypher.count()) > 0;
@@ -91,18 +100,19 @@ test("vídeo: rota, Cypher e citações em três perguntas", { tag: "@video" }, 
     await cypher.getByText("Ver a consulta").click();
     await cypher.scrollIntoViewIfNeeded();
     checagens["cypher"] = await cypher.locator("code").innerText();
-    await page.waitForTimeout(6_000);
+    await segurar(6);
   }
   await escolherModo(page, "Automático");
 
   // ---- cena 3: E07 no automático; resposta com citação e o subgrafo da resposta
   marcar(3, "Pergunta sobre uma entidade · resposta citada e, na aba Grafo, o subgrafo usado");
   checagens["e07Estado"] = await perguntar(page, chat, "E07");
+  checagens["e07Resposta"] = await chat.respostas.last().innerText();
   await page.waitForTimeout(2_000);
   await page.getByRole("navigation", { name: "Painel" }).getByRole("link", { name: "Grafo" }).click();
   const subgrafo = page.getByRole("group", { name: "Subgrafo da resposta" });
   checagens["subgrafo"] = await subgrafo.waitFor({ timeout: 10_000 }).then(() => true, () => false);
-  await page.waitForTimeout(5_000);
+  await segurar(5);
 
   gravando = false;
   await gravar;

@@ -158,6 +158,8 @@ const DECISOES: Record<string, string> = { suficiente: 'suficiente', buscar_mais
       margin: 0.35rem 0 0;
       padding: 0.5rem;
       overflow-x: auto;
+      white-space: pre-wrap;
+      overflow-wrap: anywhere;
       background: color-mix(in srgb, var(--borda) 30%, transparent);
       border-radius: var(--raio);
       font-size: 0.8rem;
