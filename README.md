@@ -107,8 +107,10 @@ cd graph-rag      # ou o nome que você deu à pasta do clone
 **2. Instalar** (baixa e confere pelo SHA-256 cada arquivo listado em `infra\models.lock.json`; repetir só refaz o que falta)
 
 ```powershell
-.\infra\instalar.ps1                                   # ou, guardando a saída: .\infra\instalar.ps1 *>&1 | Tee-Object instalar.log
+.\infra\instalar.ps1
 ```
+
+Para guardar a saída, rode antes `Start-Transcript instalar.log` (e `Stop-Transcript` no fim). **Não use `*>&1` nem `2>&1`:** no PowerShell 5.1, o redirecionamento transforma em erro fatal o aviso que o Neo4j escreve no stderr, e o instalador para no meio.
 
 Termina com "Tudo instalado." Com os modelos já baixados, leva uns 3 minutos; baixando tudo, depende da sua conexão (~25 GB). O `npm ci` avisa que 4 pacotes têm "install scripts not yet covered by allowScripts": é esperado e não atrapalha. Os modelos GGUF vão para `C:\modelos`. Se você já os tiver lá, o instalador confere o tamanho e o hash e não baixa de novo. Para usar outra pasta, mude `dir_modelos` em `infra\models.lock.json` e a macro `modelos` em `infra\llama-swap.yaml`. O instalador também cria o `.env` com uma senha gerada para o Neo4j (o `.env` não vai para o git).
 
@@ -128,6 +130,14 @@ Termina com "Tudo instalado." Com os modelos já baixados, leva uns 3 minutos; b
   New-Item -ItemType Directory -Force data\raw | Out-Null
   curl.exe -L -o data\raw\banco_do_brasil_formulario_referencia_2026.pdf "https://api.mziq.com/mzfilemanager/v2/d/5760dff3-15e1-4962-9e81-322a0b3d0bbd/8ddd4264-6e9d-e147-24c6-8941de61c467?origin=2"
   ```
+
+**Atalho: os passos 4 a 7 num comando só.** Depois dos passos 1 a 3, o comando abaixo faz o resto sozinho. Ele sobe o Neo4j e o llama-swap, este numa janela minimizada. Se o documento ainda não estiver indexado, roda a indexação completa, com as mesmas etapas e os mesmos tempos do passo 6. No fim, compila e sobe a API e a interface e espera as duas responderem:
+
+```powershell
+.\infra\up.ps1
+```
+
+Termina com "Pronto: abra http://127.0.0.1:4200" e deixa tudo no ar. **Se parar no meio** (PC desligado, queda de luz), rode `.\infra\up.ps1` de novo: ele retoma pela última etapa que começou e não terminou, e as respostas do LLM que já estão no cache não se repetem. Para parar tudo: `.\infra\up.ps1 -Parar`. Medido em 26 e 27/11/2026, num clone limpo: o instalador e este comando bastaram, com ~11 h 35 de trabalho do `up.ps1`, uma pausa e uma repetição (`eval/f102-medida-subida.md`). Os passos 4 a 7 abaixo são o mesmo caminho, feito à mão.
 
 **4. Subir o Neo4j e os modelos** (o llama-swap fica numa janela própria; feche-a para parar)
 
@@ -200,7 +210,7 @@ A segunda chamada devolve um fluxo SSE que termina no evento `fim`, com a respos
 - **A resposta vem "Não consegui redigir a resposta agora…" (sem citações), ou uma etapa da indexação termina em `ERRO`:** o modelo de linguagem não respondeu. O `/api/saude` mostra só que o llama-swap está no ar, não que o Qwen3.6 consegue carregar. Veja o motivo na janela do llama-swap ou em http://127.0.0.1:8080/logs (procure `failed to allocate` ou `exiting due to model loading error`). A causa mais comum é **falta de memória**: o Qwen3.6 usa boa parte dos 32 GB de RAM (com tudo no ar, o pico medido foi 31,6 GB). Feche os programas que estiverem usando muita memória (Gerenciador de Tarefas → Detalhes, coluna "Confirmação"), suba o llama-swap de novo e repita. Na indexação, rode `.\infra\indexar-documento.ps1 -De <etapa>` com a etapa que deu `ERRO`.
 - **Uma etapa termina em `ERRO` por outro motivo:** a saída detalhada está no fim do `data\logs\f58.log`.
 
-**Para parar:** feche as janelas da API, da interface e do llama-swap, e rode `.\infra\neo4j.ps1 parar`.
+**Para parar:** feche as janelas da API, da interface e do llama-swap, e rode `.\infra\neo4j.ps1 parar` (ou, de uma vez, `.\infra\up.ps1 -Parar`).
 
 ## Reproduzir os números
 
