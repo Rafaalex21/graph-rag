@@ -34,3 +34,4 @@ O LLM não é determinístico: as respostas do vídeo podem diferir das do golde
 
 | Gravação | Commit | Data | Duração | Resultado | Notas |
 |---|---|---|---|---|---|
+| g1 | `9518d3e` (scripts iguais aos de `bb72104`) | 27/11/2026 | — | em andamento | Pilha do repositório principal (indexado na v1; o `f58_etapas.log` termina em `pronto`), subida com `.\infra\up.ps1` depois de parar a pilha da r3 da F10.2. Portas 4200, 3000, 7474, 7687 e 8080 livres; RAM livre 18,7 GB. Comandos, rodados em `e2e/`: `npx playwright test --project=ao-vivo --grep @video`, `node ferramentas/montar-video.ts` e `node ferramentas/conferir-video.ts`. |
