@@ -87,10 +87,11 @@ test("vídeo: rota, Cypher e citações em três perguntas", { tag: "@video" }, 
   checagens["paginaAberta"] = pagina;
   await segurar(4);
 
-  // ---- cena 2: modo forçado Cypher; G03; a consulta gerada fica à vista
-  marcar(2, "Modo forçado \"Consulta ao grafo\": o modelo escreve Cypher só de leitura e o Neo4j responde");
-  await escolherModo(page, "Consulta ao grafo (Cypher)");
+  // ---- cena 2: G03 no automático (errata 2 do roteiro: no modo forçado a resposta saía errada); o roteador escolhe o grafo
+  // e a consulta gerada fica à vista
+  marcar(2, "Pergunta de soma: o roteador escolhe consultar o grafo, o modelo escreve Cypher só de leitura e o Neo4j responde");
   checagens["g03Estado"] = await perguntar(page, chat, "G03");
+  checagens["g03Rotas"] = await lista.locator('li[data-tipo="rota"]').allInnerTexts();
   checagens["g03Resposta"] = await chat.respostas.last().innerText();
   await page.getByRole("navigation", { name: "Painel" }).getByRole("link", { name: "Rastro" }).click();
   const cypher = lista.locator('li[data-tipo="cypher"]').first();
@@ -102,7 +103,6 @@ test("vídeo: rota, Cypher e citações em três perguntas", { tag: "@video" }, 
     checagens["cypher"] = await cypher.locator("code").innerText();
     await segurar(6);
   }
-  await escolherModo(page, "Automático");
 
   // ---- cena 3: E07 no automático; resposta com citação e o subgrafo da resposta
   marcar(3, "Pergunta sobre uma entidade · resposta citada e, na aba Grafo, o subgrafo usado");
