@@ -14,6 +14,7 @@ import {
   type Mensagem,
 } from '../chat/chat.service';
 import { RespostaMarkdown } from '../chat/resposta-markdown';
+import { tempoTecnico } from './bastidores';
 import { MaterialGeradoComponent } from './material-gerado';
 import {
   cartoesDeFonte,
@@ -111,6 +112,20 @@ const TRECHO_MAXIMO = 110;
           }
         </div>
       </section>
+    }
+
+    @if (dev()) {
+      <div class="tecnico">
+        @if (m().metricas; as mt) {
+          <ul class="resumo-tecnico" aria-label="Resumo técnico">
+            <li><span class="rotulo">Ferramentas</span> {{ mt.rota.length === 0 ? 'nenhuma' : mt.rota.join(' → ') }}</li>
+            <li><span class="rotulo">Tempo</span> {{ tempo(mt.latenciaMs) }}</li>
+            <li><span class="rotulo">Tokens</span> {{ numero(mt.tokensEntrada) }} tokens de entrada · {{ numero(mt.tokensSaida) }} de saída</li>
+            <li><span class="rotulo">Estado</span> {{ mt.estado }}</li>
+          </ul>
+        }
+        <button type="button" class="ver-bastidores" [attr.aria-pressed]="bastidoresDesta()" (click)="verBastidores.emit()">Ver bastidores</button>
+      </div>
     }
 
     @if (m().estado === 'pronta' && m().mensagemId) {
@@ -303,6 +318,61 @@ const TRECHO_MAXIMO = 110;
       overflow-wrap: anywhere;
     }
 
+    .tecnico {
+      display: flex;
+      flex-wrap: wrap;
+      align-items: center;
+      justify-content: space-between;
+      gap: 0.5rem;
+      padding: 0.6rem 0.7rem;
+      background: var(--a-leve);
+      border: 1px dashed var(--a-linha);
+      border-radius: 0.8rem;
+    }
+
+    .resumo-tecnico {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 0.35rem;
+      min-width: 0;
+      margin: 0;
+      padding: 0;
+      list-style: none;
+    }
+
+    .resumo-tecnico li {
+      padding: 0.2rem 0.55rem;
+      font-family: 'Cascadia Mono', Consolas, ui-monospace, monospace;
+      font-size: 0.75rem;
+      color: var(--texto);
+      overflow-wrap: anywhere;
+      background: var(--superficie);
+      border: 1px solid var(--a-linha);
+      border-radius: 0.5rem;
+    }
+
+    .resumo-tecnico .rotulo {
+      margin-right: 0.2rem;
+      font-family: 'Space Grotesk Variable', system-ui, sans-serif;
+      font-weight: 600;
+      color: var(--a-marca-forte);
+    }
+
+    .ver-bastidores {
+      min-height: 2.25rem;
+      padding: 0 0.8rem;
+      font-size: 0.8125rem;
+      font-weight: 600;
+      color: var(--a-marca-forte);
+      background: var(--a-marca-fundo);
+      border: 1px solid transparent;
+      border-radius: 0.7rem;
+    }
+
+    .ver-bastidores[aria-pressed='true'] {
+      border-color: var(--a-marca);
+    }
+
     .rodape {
       display: flex;
       flex-wrap: wrap;
@@ -430,6 +500,11 @@ export class CartaoResposta {
   readonly abrirFonte = output<CartaoFonte>();
   readonly abrirPagina = output<string>();
   readonly tentarDeNovo = output<void>();
+  /** A visão dev está ligada (F8.11): o cartão mostra o resumo técnico e o botão dos Bastidores. */
+  readonly dev = input(false);
+  /** Os Bastidores abertos mostram esta resposta. */
+  readonly bastidoresDesta = input(false);
+  readonly verBastidores = output<void>();
 
   protected readonly ocupado = this.chat.ocupado;
   protected readonly limiteComentario = LIMITE_COMENTARIO;
@@ -443,6 +518,8 @@ export class CartaoResposta {
   );
 
   protected readonly nomeDoTipo = nomeDoTipoDeFonte;
+  protected readonly tempo = tempoTecnico;
+  protected readonly numero = (n: number) => new Intl.NumberFormat('pt-BR').format(n);
 
   protected trecho(c: CartaoFonte): string {
     const t = c.trecho.replace(/\s+/g, ' ').trim();

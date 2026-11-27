@@ -11,11 +11,13 @@ import {
   viewChild,
 } from '@angular/core';
 import { BarraLateral } from '../../assistente/barra-lateral';
+import { Bastidores } from '../../assistente/bastidores';
 import { CartaoResposta } from '../../assistente/cartao-resposta';
 import { Compositor } from '../../assistente/compositor';
 import { HistoricoService } from '../../assistente/historico.service';
 import { nomeDoTipoDeFonte, SUGESTOES, type CartaoFonte } from '../../assistente/modelo';
-import { ChatService } from '../../chat/chat.service';
+import { VisaoDevService } from '../../assistente/visao-dev.service';
+import { ChatService, type Mensagem } from '../../chat/chat.service';
 import { primeiraPagina } from '../../chat/rastro';
 import {
   ConfiguracoesService,
@@ -44,7 +46,7 @@ const PERFIS_DA_TELA: readonly { valor: Perfil; rotulo: string }[] = [
 @Component({
   selector: 'app-assistente-page',
   changeDetection: ChangeDetectionStrategy.OnPush,
-  imports: [BarraLateral, CartaoResposta, Compositor, VisualizadorFonte],
+  imports: [BarraLateral, Bastidores, CartaoResposta, Compositor, VisualizadorFonte],
   host: { class: 'assistente', '(keydown.escape)': 'aoApertarEscape()' },
   template: `
     <app-barra-lateral
@@ -94,6 +96,21 @@ const PERFIS_DA_TELA: readonly { valor: Perfil; rotulo: string }[] = [
             </button>
           }
         </div>
+        <button
+          type="button"
+          role="switch"
+          class="interruptor"
+          aria-label="Visão dev"
+          title="Mostrar o que acontece por trás de cada resposta"
+          [attr.aria-checked]="dev.ligada()"
+          (click)="dev.alternar()"
+        >
+          <svg viewBox="0 0 24 24" width="18" height="18" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+            <path d="M8 7l-5 5 5 5M16 7l5 5-5 5" />
+          </svg>
+          <span class="interruptor-texto" aria-hidden="true">Visão dev</span>
+          <span class="trilho" aria-hidden="true"><span class="bolinha"></span></span>
+        </button>
       </header>
 
       <p role="status" class="so-leitor">{{ avisoDeEstado() }}</p>
@@ -130,6 +147,9 @@ const PERFIS_DA_TELA: readonly { valor: Perfil; rotulo: string }[] = [
                 [m]="m"
                 [ultima]="ultima"
                 [fonteAberta]="fonte()?.fonteId ?? null"
+                [dev]="dev.ligada()"
+                [bastidoresDesta]="bastidoresVisiveis() && m.id === escolhida()?.id"
+                (verBastidores)="dev.verBastidores(m.id)"
                 (abrirFonte)="abrirFonte($event)"
                 (abrirPagina)="abrirPagina($event, m.citacoes)"
                 (tentarDeNovo)="chat.tentarDeNovo()"
@@ -155,6 +175,13 @@ const PERFIS_DA_TELA: readonly { valor: Perfil; rotulo: string }[] = [
           (paginaEscolhida)="irParaPagina($event)"
         />
       </aside>
+    } @else if (bastidoresVisiveis()) {
+      <app-bastidores
+        [m]="escolhida()"
+        [ehAUltima]="escolhida()?.id === ultimaResposta()?.id"
+        (fechar)="dev.fechar()"
+        (abrirPagina)="abrirEvidencia($event.pagina, $event.fonteId)"
+      />
     }
   `,
   styles: `
@@ -354,6 +381,63 @@ const PERFIS_DA_TELA: readonly { valor: Perfil; rotulo: string }[] = [
       border-radius: 0.7rem;
     }
 
+    .interruptor {
+      flex: none;
+      display: flex;
+      align-items: center;
+      gap: 0.45rem;
+      min-height: 2.75rem;
+      padding: 0 0.7rem;
+      font-size: 0.875rem;
+      font-weight: 600;
+      color: var(--texto-suave);
+      background: var(--superficie);
+      border: 1px solid var(--borda);
+      border-radius: 0.8rem;
+    }
+
+    .interruptor[aria-checked='true'] {
+      color: var(--a-marca-forte);
+      border-color: var(--a-marca);
+      background: var(--a-marca-fundo);
+    }
+
+    .trilho {
+      position: relative;
+      width: 2rem;
+      height: 1.15rem;
+      background: var(--a-linha);
+      border-radius: 999px;
+      transition: background 0.15s;
+    }
+
+    .bolinha {
+      position: absolute;
+      top: 0.15rem;
+      left: 0.15rem;
+      width: 0.85rem;
+      height: 0.85rem;
+      background: var(--superficie);
+      border-radius: 50%;
+      box-shadow: 0 1px 2px rgb(0 0 0 / 0.25);
+      transition: transform 0.15s;
+    }
+
+    .interruptor[aria-checked='true'] .trilho {
+      background: var(--a-marca);
+    }
+
+    .interruptor[aria-checked='true'] .bolinha {
+      transform: translateX(0.85rem);
+    }
+
+    @media (prefers-reduced-motion: reduce) {
+      .trilho,
+      .bolinha {
+        transition: none;
+      }
+    }
+
     .cortina {
       position: fixed;
       inset: 0;
@@ -384,6 +468,25 @@ const PERFIS_DA_TELA: readonly { valor: Perfil; rotulo: string }[] = [
         display: none;
       }
 
+      .interruptor-texto,
+      .trilho {
+        display: none;
+      }
+
+      .interruptor {
+        padding: 0;
+        width: 2.75rem;
+        justify-content: center;
+      }
+
+      .segmento button {
+        padding: 0 0.6rem;
+      }
+
+      .topo {
+        gap: 0.5rem;
+      }
+
       h1 {
         font-size: 1.125rem;
       }
@@ -398,6 +501,7 @@ export class AssistentePage {
   protected readonly chat = inject(ChatService);
   protected readonly config = inject(ConfiguracoesService);
   private readonly historico = inject(HistoricoService);
+  protected readonly dev = inject(VisaoDevService);
 
   protected readonly perfis = PERFIS_DA_TELA;
   protected readonly sugestoes = SUGESTOES;
@@ -408,6 +512,19 @@ export class AssistentePage {
   /** O leitor está no fim da lista: só então a lista acompanha os tokens novos. */
   private colado = true;
   private quantas = 0;
+
+  protected readonly ultimaResposta = computed<Mensagem | null>(
+    () => [...this.chat.mensagens()].reverse().find((m) => m.papel === 'assistente') ?? null,
+  );
+
+  /** A resposta que os Bastidores mostram: a escolhida em "Ver bastidores" ou, sem escolha (ou se ela saiu da tela), a mais recente. */
+  protected readonly escolhida = computed<Mensagem | null>(() => {
+    const id = this.dev.escolhida();
+    const achada = id === null ? undefined : this.chat.mensagens().find((m) => m.id === id && m.papel === 'assistente');
+    return achada ?? this.ultimaResposta();
+  });
+
+  protected readonly bastidoresVisiveis = computed(() => this.dev.ligada() && this.dev.painelAberto());
 
   protected readonly avisoDeEstado = computed(() => {
     if (this.chat.ocupado()) return 'Gerando a resposta…';
@@ -429,6 +546,14 @@ export class AssistentePage {
     // uma conversa vazia (nova, ou a aberta foi apagada) não tem fonte aberta
     effect(() => {
       if (this.chat.mensagens().length === 0) untracked(() => this.fonte.set(null));
+    });
+
+    // uma pergunta nova (mais mensagens) ou outra conversa: os Bastidores voltam a acompanhar a resposta mais recente
+    let antes = 0;
+    effect(() => {
+      const n = this.chat.mensagens().length;
+      if (n > antes || n === 0) untracked(() => this.dev.acompanharAUltima());
+      antes = n;
     });
 
     afterRenderEffect(() => {
@@ -492,6 +617,11 @@ export class AssistentePage {
 
   protected irParaPagina(n: number): void {
     this.fonte.update((f) => (f ? { ...f, pagina: String(n), titulo: `Página ${n}` } : f));
+  }
+
+  /** A página de uma evidência nos Bastidores: abre a fonte por cima deles; fechar a fonte volta aos Bastidores. */
+  protected abrirEvidencia(pagina: string, fonteId: string): void {
+    this.fonte.set({ pagina, fonteId, titulo: `Página ${pagina}` });
   }
 
   protected fecharFonte(): void {
