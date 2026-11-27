@@ -279,7 +279,8 @@ const rodadaDe = (p: PassoRastro): number | null => ('rodada' in p ? p.rodada : 
       --grafo-destaque-borda: var(--borda);
       --grafo-raio: 0.7rem;
       --grafo-fundo: var(--a-leve);
-      --grafo-altura: 20rem;
+      /* o subgrafo ocupa a altura que sobra no painel: numa caixa baixa, 17 entidades viravam um borrão sem rótulos legíveis */
+      --grafo-altura: max(20rem, calc(100dvh - 20rem));
       --grafo-botao-padding: 0.35rem 0.8rem;
     }
 
