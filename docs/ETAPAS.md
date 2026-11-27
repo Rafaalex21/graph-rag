@@ -479,9 +479,10 @@
   - aceite: máquina limpa → assistente respondendo com dois comandos (fora o download dos modelos)
   - depende: F9.5
   - resultado (27/11/2026): **aceite cumprido na rodada r3** (medida em `eval/f102-medida-subida.md`, fixada antes do código). Num clone limpo, `.\infra\instalar.ps1` e `.\infra\up.ps1` bastaram: o segundo indexou tudo e terminou sozinho com a API e a interface no ar. `GET /` 200; a T01 terminou em `fim` com 2 citações (p. 6 e p. 145) e "União Federal, que detém 50,0%", conferido por mim. ~11 h 35 de `up.ps1`, com uma pausa a pedido do dono e uma repetição do comando 2. Rodadas: r1 invalidada por erro meu de operação (`*>&1` no PowerShell 5.1); r2 falhou em `resolver-planejar` por um defeito latente (metade solta de par UTF-16 vinda do LLM derrubava a gravação do cache), consertado na errata 1 junto com o `up.ps1 -Parar`. README com o atalho. ADR-084
-- [ ] **F10.3** Vídeo de até 3 minutos mostrando rota, Cypher e citações
+- [~] **F10.3** Vídeo de até 3 minutos mostrando rota, Cypher e citações
   - aceite: publicado e linkado no README
   - depende: F10.1
+  - andamento (27/11/2026): vídeo pronto na gravação g3, com 1 min 7 s e as 6 checagens do roteiro (`eval/f103-roteiro-video.md`, fixado antes) conferidas por mim. O arquivo está em `data/video/graphrag-local.webm`, fora do git. Antes dela, duas gravações foram contadas como falhas. A g1 falhou pela resposta errada da G03 no modo forçado Cypher e por defeitos do montador: o cartão final estava cortado e as esperas de leitura eram encurtadas. A g2 falhou pela mesma resposta errada. Errata 1: esperas de leitura e cartão do montador; Cypher com quebra de linha no Rastro. Errata 2: a G03 passou para o modo automático, onde o roteador escolhe o grafo. O defeito do modo forçado ficou registrado como dívida da v1. README com o lugar do link. **Falta o dono publicar o vídeo e pôr o link**
 - [ ] **F10.4** Artigo técnico: "GraphRAG 100% local numa GPU de 16 GB", com os números medidos
   - aceite: rascunho revisado
   - depende: F10.1
