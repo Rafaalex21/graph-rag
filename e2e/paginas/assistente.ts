@@ -93,6 +93,31 @@ export class PaginaAssistente {
     return this.fontes(i).getByRole("button", { name: nome });
   }
 
+  /** O interruptor da visão dev (F8.11). */
+  get visaoDev(): Locator {
+    return this.page.getByRole("switch", { name: "Visão dev" });
+  }
+
+  /** O painel "Bastidores" da visão dev (F8.11). */
+  get bastidores(): Locator {
+    return this.page.getByRole("complementary", { name: "Bastidores" });
+  }
+
+  /** Uma aba dos Bastidores: "Caminho", "Evidências" ou "Grafo". */
+  abaDosBastidores(rotulo: "Caminho" | "Evidências" | "Grafo"): Locator {
+    return this.bastidores.getByRole("tab", { name: rotulo });
+  }
+
+  /** A linha do tempo da resposta nos Bastidores. */
+  get caminho(): Locator {
+    return this.bastidores.getByRole("list", { name: "Caminho da resposta" });
+  }
+
+  /** O resumo técnico no cartão da resposta de posição `i` (só com a visão dev ligada). */
+  resumoTecnico(i = 0): Locator {
+    return this.respostas.nth(i).getByRole("list", { name: "Resumo técnico" });
+  }
+
   /** Anota o corpo de cada pedido ao /api/chat que o navegador fizer daqui em diante. */
   gravarPedidos(): Record<string, unknown>[] {
     const corpos: Record<string, unknown>[] = [];

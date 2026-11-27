@@ -51,6 +51,20 @@ As perguntas, as cenas, as legendas e as outras checagens não mudam. A g2 roda 
 
 Testes da errata, fora da contagem (não são gravações): o `tests/interface/rastro.spec.ts` passou inteiro (20/20, inclusive "em 375 px o Cypher e o trecho longos não geram rolagem horizontal"); e montei de novo os quadros da g1 com o montador consertado: o cartão final aparece inteiro, com "0,54 → agente com grafo 0,87". As esperas de propósito não puderam ser testadas assim, porque os quadros da g1 não têm as marcas novas: a g2 é que mostra.
 
+## Errata 3 (27/11/2026, depois da g3, antes da g4): a tela do assistente com a visão dev
+
+**Por quê:** pedido do dono depois de ver a g3: o vídeo usou o modo técnico (`/chat`), e não a tela do usuário (`/assistente`, F8.9), que tem o design escolhido. Ele pediu uma "visão dev" que liga e desliga nessa tela (F8.11) e o vídeo regravado com ela, mostrando tudo o que a g3 mostra. A g3 continua contada como cumprida. A g4 a substitui como o vídeo a publicar se também cumprir as checagens; se não cumprir, a g3 continua valendo.
+
+**O que muda (g4 em diante):** as três cenas são gravadas no `/assistente` com a visão dev ligada, cada pergunta numa conversa nova:
+
+| Cena | O que aparece |
+|---|---|
+| 1 | liga o interruptor "Visão dev" e pergunta a T01; o painel "Bastidores" se enche ao vivo (pergunta reescrita, **rota**, ferramentas, crítica); a resposta sai com as páginas; clica a citação e a página abre ao lado (4 s) |
+| 2 | conversa nova, G03 no automático; nos Bastidores, a **consulta Cypher** que o roteador escolheu fica à vista (6 s) |
+| 3 | conversa nova, E07; aba "Grafo" dos Bastidores com o subgrafo da resposta (5 s) |
+
+Os cartões de abertura e de fim, as legendas no espírito das anteriores (ajustadas aos nomes da tela nova), o rodapé, as perguntas e as **checagens 1 a 6 não mudam**. Na checagem 2, "um passo Rota" e "um bloco Consulta Cypher" passam a ser procurados nos Bastidores. As respostas continuam conferidas contra o golden, como diz a errata 1.
+
 ## Errata 2 (27/11/2026, depois da g2, antes da g3)
 
 **Diagnóstico.** A G03 no modo forçado "Consulta ao grafo" saiu errada duas vezes com o mesmo texto, então refazer sem mudar nada daria o mesmo resultado. O Cypher gerado está certo: ele soma as duas métricas e devolve `total_empregados = 1096`, p. 368. O erro é do redator, que leu o apelido `total_empregados` como o total de empregados do Banco. No modo forçado, o ciclo só roda o `consultar_grafo`, e a evidência é só a soma, sem as duas parcelas. Rodei duas sondas pelo `POST /api/chat` (diagnóstico, fora da contagem) com a mesma pergunta no modo **automático**. Nas duas, o roteador escolheu sozinho o `consultar_grafo`, gerou o mesmo Cypher (evento `cypher` presente) e o ciclo também trouxe trechos e tabelas. As duas respostas foram certas e iguais: "Somando os 398 empregados da Auditoria Interna [p. 368] e os 698 empregados de Riscos Corporativos [p. 368], o total é de 1.096 empregados nessas duas áreas."
