@@ -6,7 +6,10 @@ Baseado em *Essential GraphRAG* (Bratanič & Hane, Manning, 2025). Cada camada s
 
 ![Demonstração: pergunta, resposta com páginas citadas, Rastro e a página aberta no visualizador](docs/img/demo.gif)
 
-**Vídeo (1 min 7 s):** a rota escolhida pelo agente, a consulta Cypher gerada e as citações abrindo o documento na página, em três perguntas reais contra a pilha local: <!-- LINK-DO-VIDEO: o dono publica e põe o link aqui (F10.3) --> *(link em breve)*. Roteiro e checagens fixados antes de gravar em [`eval/f103-roteiro-video.md`](eval/f103-roteiro-video.md).
+**Vídeos:**
+
+- [Demonstração (1 min 8 s)](docs/video/demonstracao-rotas-cypher.webm): três perguntas reais contra a pilha local, na tela do assistente com a visão dev ligada. Mostra a rota que o agente escolhe, a consulta Cypher gerada e as citações abrindo o documento na página. O roteiro e as checagens foram fixados antes de gravar, em [`eval/f103-roteiro-video.md`](eval/f103-roteiro-video.md).
+- [Arquitetura (6 min 50 s)](docs/video/arquitetura.mp4): vídeo didático, narrado, que percorre a indexação, as três camadas do grafo, o agente com o crítico, os modelos e a escada de ablações A0–A6.
 
 <sub>Trechos exibidos: Banco do Brasil S.A., *Formulário de Referência 2026*, versão 7, protocolado na CVM. O documento não está neste repositório (ver [ADR-009](docs/adr/ADR-009-documento.md)).</sub>
 
